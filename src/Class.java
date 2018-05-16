@@ -7,10 +7,7 @@ import java.util.ArrayList;
  * @author Rajahsow Parajuli
  */
 public class Class {
-    public static void main(String[] args) {
 
-        System.out.print(1);
-    }
 
     final private int CRN;
     private String professor, name, department;
