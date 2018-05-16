@@ -5,6 +5,7 @@ CREATE TABLE MCBook (
     `department` VARCHAR(4) CHARACTER SET utf8,
     `book` VARCHAR(71) CHARACTER SET utf8,
     `latest` VARCHAR(71) CHARACTER SET utf8
+    PRIMARY KEY ("CRN")
 );
 INSERT INTO MCBook VALUES (1,'Webb','204','CMSC','Data Structures and Algorithms Using Java 1st Edition','Data Structures and Algorithms Using Java 1st Edition');
 INSERT INTO MCBook VALUES (2,'Thai','204','CMSC','Data Structures and Algorithms Using Java 1st Edition','Data Structures and Algorithms Using Java 1st Edition');
