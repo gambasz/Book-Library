@@ -11,7 +11,7 @@ public class Class {
 
     final private int CRN;
     private String professor, name, department;
-    private ArrayList<String> books;
+    private ArrayList<Book> books;
 
     /**
      * The no arg constructor set the crn to -1, and all the other information of the class to null.
@@ -31,7 +31,7 @@ public class Class {
      * @param department is the deparatment code
      * @param books      is a string list of books that is required for the course
      */
-    public Class(int CRN, String professor, String name, String department, ArrayList<String> books) {
+    public Class(int CRN, String professor, String name, String department, ArrayList<Book> books) {
         this.CRN = CRN;
         this.professor = professor;
         this.name = name;
@@ -107,7 +107,7 @@ public class Class {
      *
      * @return books is a string list of books that is required for the course
      */
-    public ArrayList<String> getBooks() {
+    public ArrayList<Book> getBooks() {
         return books;
     }
 
@@ -116,7 +116,7 @@ public class Class {
      *
      * @param books is a string list of books that is required for the course
      */
-    public void setBooks(ArrayList<String> books) {
+    public void setBooks(ArrayList<Book> books) {
         this.books = books;
     }
 
