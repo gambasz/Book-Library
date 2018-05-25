@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *
  * @author Rajahsow Parajuli
  */
-public class Class {
+public class Course {
 
 
     final private int CRN;
@@ -16,7 +16,7 @@ public class Class {
     /**
      * The no arg constructor set the crn to -1, and all the other information of the class to null.
      */
-    public Class() {
+    public Course() {
         CRN = -1;
         professor = name = department = null;
     }
@@ -31,7 +31,7 @@ public class Class {
      * @param department is the deparatment code
      * @param books      is a string list of books that is required for the course
      */
-    public Class(int CRN, String professor, String name, String department, ArrayList<String> books) {
+    public Course(int CRN, String professor, String name, String department, ArrayList<String> books) {
         this.CRN = CRN;
         this.professor = professor;
         this.name = name;
@@ -127,8 +127,8 @@ public class Class {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
-        Class aClass = (Class) object;
-        return CRN == aClass.CRN;
+        Course aCourse = (Course) object;
+        return CRN == aCourse.CRN;
     }
 
     /**
@@ -143,7 +143,7 @@ public class Class {
 
     @java.lang.Override
     public java.lang.String toString() {
-        return "Class{" +
+        return "Course{" +
                 "CRN=" + CRN +
                 ", professor='" + professor + '\'' +
                 ", name='" + name + '\'' +

@@ -16,7 +16,7 @@
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="CRN" textAlignment="CENTER" underline="true" />
-                  <TextField alignment="CENTER" />
+                  <TextField fx:id="crnTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -25,7 +25,7 @@
             <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" underline="true" />
-                  <TextField alignment="CENTER" />
+                  <TextField fx:id="profTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -33,8 +33,8 @@
             </VBox>
             <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Class' Name" textAlignment="CENTER" underline="true" />
-                  <TextField alignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" underline="true" />
+                  <TextField fx:id="courseTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -43,7 +43,7 @@
             <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" underline="true" />
-                  <TextField alignment="CENTER" />
+                  <TextField fx:id="departTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -51,8 +51,8 @@
             </VBox>
             <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Book" textAlignment="CENTER" underline="true" />
-                  <TextField alignment="CENTER" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" underline="true" />
+                  <TextField fx:id="resourceTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -68,14 +68,13 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <TableView>
+      <TableView fx:id="tableTV">
         <columns>
           <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
           <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />
-            <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Class" />
+            <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Course" />
             <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" text="Department" />
-            <TableColumn maxWidth="-1.0" minWidth="250.0" prefWidth="-1.0" text="Current Books" />
-            <TableColumn maxWidth="-1.0" minWidth="250.0" prefWidth="-1.0" text="Latest Book" />
+            <TableColumn maxWidth="-1.0" minWidth="500.0" prefWidth="-1.0" text="Current Resources" />
         </columns>
          <VBox.margin>
             <Insets />
