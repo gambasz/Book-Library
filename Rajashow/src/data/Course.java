@@ -1,3 +1,8 @@
+package data;
+
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 import java.util.ArrayList;
 
 /**
@@ -9,33 +14,26 @@ import java.util.ArrayList;
 public class Course {
 
 
-    final private int CRN;
-    private String professor, name, department;
+    final private SimpleIntegerProperty CRN;
+    private SimpleStringProperty professor, name, department;
     private ArrayList<String> books;
 
-    /**
-     * The no arg constructor set the crn to -1, and all the other information of the class to null.
-     */
-    public Course() {
-        CRN = -1;
-        professor = name = department = null;
-    }
 
     /**
      * The constructor takes a CRN, the name of the prof., the name of the class, the department code, and the books to
-     * return a class object represnting all the infomation about the class
+     * return a class object representing all the information about the class
      *
-     * @param CRN        is the Course regestation number. it is unquie for all classes
+     * @param CRN        is the data.Course regestation number. it is unquie for all classes
      * @param professor  name of the professor teaching the class
      * @param name       of the class
-     * @param department is the deparatment code
+     * @param department is the department's code
      * @param books      is a string list of books that is required for the course
      */
     public Course(int CRN, String professor, String name, String department, ArrayList<String> books) {
-        this.CRN = CRN;
-        this.professor = professor;
-        this.name = name;
-        this.department = department;
+        this.CRN =  new SimpleIntegerProperty(CRN);
+        this.professor = new SimpleStringProperty(professor);
+        this.name = new SimpleStringProperty (name);
+        this.department = new SimpleStringProperty (department);
         this.books = books;
     }
 
@@ -45,7 +43,7 @@ public class Course {
      * @return CRN of the class
      */
     public int getCRN() {
-        return CRN;
+        return CRN.get();
     }
 
     /**
@@ -54,7 +52,7 @@ public class Course {
      * @return professor 's name teaching the class
      */
     public String getProfessor() {
-        return professor;
+        return professor.get();
     }
 
     /**
@@ -63,7 +61,7 @@ public class Course {
      * @param professor name of the professor teaching the class
      */
     public void setProfessor(String professor) {
-        this.professor = professor;
+        this.professor = new SimpleStringProperty(professor);
     }
 
     /**
@@ -72,7 +70,7 @@ public class Course {
      * @return name of the class
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -81,7 +79,7 @@ public class Course {
      * @param name of the professor teaching the class
      */
     public void setName(String name) {
-        this.name = name;
+        this.name = new SimpleStringProperty (name);
     }
 
     /**
@@ -90,7 +88,7 @@ public class Course {
      * @return deparatment 's code
      */
     public String getDepartment() {
-        return department;
+        return department.get();
     }
 
     /**
@@ -99,7 +97,7 @@ public class Course {
      * @param department 's code
      */
     public void setDepartment(String department) {
-        this.department = department;
+        this.department = new SimpleStringProperty(department);
     }
 
     /**
@@ -143,12 +141,20 @@ public class Course {
 
     @java.lang.Override
     public java.lang.String toString() {
-        return "Course{" +
-                "CRN=" + CRN +
-                ", professor='" + professor + '\'' +
-                ", name='" + name + '\'' +
-                ", department='" + department + '\'' +
-                ", books=" + books +
+        return "data.Course{" +
+                "CRN=" + CRN.getValue() +
+                ", professor='" + professor.getValue() + '\'' +
+                ", name='" + name.getValue() + '\'' +
+                ", department='" + department.getValue() + '\'' +
+                ", books=" + books.toString() +
                 '}';
+    }
+    public static void main(String[] args){
+        String test = new String("bob");
+        ArrayList<String> books =  new ArrayList<>();
+        int numb =  10;
+        books.add("major");
+        Course bob = new Course(numb,test,test,test,books);
+        System.out.print(bob);
     }
 }

@@ -1,11 +1,15 @@
+import data.Course;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import java.util.ArrayList;
 
 public class Controller {
+    ArrayList<Course> table_data;
     @FXML
     TextField crnTF;
     @FXML
@@ -20,27 +24,67 @@ public class Controller {
     Button searchBtn;
     @FXML
     TableView tableTV;
+    @FXML
+    TableColumn<Course, Integer> crnCol;
+    @FXML
+    TableColumn<Course, String> profCol;
+    @FXML
+    TableColumn<Course, String> courseCol;
+    @FXML
+    TableColumn<Course, String> departCol;
+    @FXML
+    TableColumn<Course, ArrayList> resourceCol;
+
 
     public void exit() {
         System.exit(0);
     }
 
     public void search() {
-
+        ArrayList<Course> temp_table = new ArrayList<>();
         String crn = crnTF.getText();
         String professor = profTF.getText();
         String department = departTF.getText();
         String course = courseTF.getText();
         String resourse = resourceTF.getText();
 
+        crnCol.setCellValueFactory(
+                new PropertyValueFactory<Course, Integer>("CRN"));
+        profCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("professor"));
+        courseCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("name"));
+        departCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("department"));
+        resourceCol.setCellValueFactory(
+                new PropertyValueFactory<Course, ArrayList>("books"));
+
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
         System.out.print(crn + "||" + professor + "||" + department + "||" + course + "||" + resourse);
 
         // make sure the resulting sql query is turned into array list of courses
-        ArrayList<Course> result;
 
+//        ResultSet rs= st.executeQuery(query1);
+//        while(rs.next()) {
+//        data.Course temp = new data.Course();
+//        tableTV.getItems().add(temp);
+        //     }
+
+        ArrayList<String> books =  new ArrayList<>();
+        books.add("major");
+        Course temp = new Course(10,"bob","bob","bob",books);
+        tableTV.getItems().add(temp);
+
+         temp = new Course(10,"cat","bob","bob",books);
+        tableTV.getItems().add(temp);
 
         System.out.print(tableTV.getColumns());
+
+        updateTable(temp_table);
+
+    }
+
+    private void updateTable(ArrayList<Course> temp_table) {
 
     }
 
@@ -51,7 +95,7 @@ public class Controller {
         VBox textFieldsPane = new VBox(4);
         Dialog dlg = new Dialog();
 
-        ImageView icon = new ImageView(this.getClass().getResource("/Media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
 
@@ -62,17 +106,17 @@ public class Controller {
 
         Label crnLbl = new Label("CRN: ");
         Label profLbl = new Label("Professor's Name: ");
-        Label classLbl = new Label("Course' Name: ");
+        Label classLbl = new Label("data.Course' Name: ");
         Label bookLbl = new Label("Book: ");
 
-        ButtonType addNewClass = new ButtonType("Add The New Course", ButtonBar.ButtonData.OK_DONE);
+        ButtonType addNewClass = new ButtonType("Add The New data.Course", ButtonBar.ButtonData.OK_DONE);
 
         labelsPane.getChildren().addAll(crnLbl, profLbl, classLbl, bookLbl);
         textFieldsPane.getChildren().addAll(crnTF, profTF, classTF, bookTF);
         mainAddPane.getChildren().addAll(labelsPane, textFieldsPane);
 
-        dlg.setTitle("Adding A New Course");
-        dlg.setHeaderText("Add a New Course");
+        dlg.setTitle("Adding A New data.Course");
+        dlg.setHeaderText("Add a New data.Course");
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);

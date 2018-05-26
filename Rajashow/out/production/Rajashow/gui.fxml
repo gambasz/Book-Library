@@ -70,11 +70,11 @@
       </HBox>
       <TableView fx:id="tableTV">
         <columns>
-          <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
-          <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />
-            <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Course" />
-            <TableColumn maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" text="Department" />
-            <TableColumn maxWidth="-1.0" minWidth="500.0" prefWidth="-1.0" text="Current Resources" />
+          <TableColumn fx:id="crnCol" maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
+          <TableColumn fx:id="profCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />
+            <TableColumn fx:id="courseCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Course" />
+            <TableColumn fx:id="departCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" text="Department" />
+            <TableColumn fx:id="resourceCol" maxWidth="-1.0" minWidth="500.0" prefWidth="-1.0" text="Current Resources" />
         </columns>
          <VBox.margin>
             <Insets />
