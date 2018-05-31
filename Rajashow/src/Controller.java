@@ -2,6 +2,7 @@ import data.Course;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,7 +24,7 @@ public class Controller {
     @FXML
     Button searchBtn;
     @FXML
-    TableView tableTV;
+    TableView<Course> tableTV;
     @FXML
     TableColumn<Course, Integer> crnCol;
     @FXML
@@ -36,31 +37,29 @@ public class Controller {
     TableColumn<Course, ArrayList> resourceCol;
 
 
-    public void exit() {
-        System.exit(0);
+    @FXML
+    public void initialize() {
+        table_data = new ArrayList<>();
+        setCellValueOfColumns();
+        tableTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        makeCellsEditable();
+        init_tables();
     }
 
+
     public void search() {
+
         ArrayList<Course> temp_table = new ArrayList<>();
         String crn = crnTF.getText();
         String professor = profTF.getText();
         String department = departTF.getText();
         String course = courseTF.getText();
-        String resourse = resourceTF.getText();
+        String resource = resourceTF.getText();
 
-        crnCol.setCellValueFactory(
-                new PropertyValueFactory<Course, Integer>("CRN"));
-        profCol.setCellValueFactory(
-                new PropertyValueFactory<Course, String>("professor"));
-        courseCol.setCellValueFactory(
-                new PropertyValueFactory<Course, String>("name"));
-        departCol.setCellValueFactory(
-                new PropertyValueFactory<Course, String>("department"));
-        resourceCol.setCellValueFactory(
-                new PropertyValueFactory<Course, ArrayList>("books"));
-
+        tableTV.getItems().clear();
+        tableTV.getItems().add(table_data.get(Integer.parseInt(crn)));
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
-        System.out.print(crn + "||" + professor + "||" + department + "||" + course + "||" + resourse);
+//        System.out.print(crn + "||" + professor + "||" + department + "||" + course + "||" + resource);
 
         // make sure the resulting sql query is turned into array list of courses
 
@@ -70,19 +69,13 @@ public class Controller {
 //        tableTV.getItems().add(temp);
         //     }
 
-        ArrayList<String> books =  new ArrayList<>();
-        books.add("major");
-        Course temp = new Course(10,"bob","bob","bob",books);
-        tableTV.getItems().add(temp);
 
-         temp = new Course(10,"cat","bob","bob",books);
-        tableTV.getItems().add(temp);
-
-        System.out.print(tableTV.getColumns());
+//        System.out.print(  ((TableColumn)tableTV.getColumns().get(0)).getWidth());
 
         updateTable(temp_table);
 
     }
+
 
     private void updateTable(ArrayList<Course> temp_table) {
 
@@ -136,6 +129,45 @@ public class Controller {
 
     }
 
+
     public void apply() {
+    }
+
+
+    private void init_tables() {
+        ArrayList<String> books = new ArrayList<>();
+        books.add("major");
+        Course temp = new Course(0, "bob", "bob", "bob", books);
+        table_data.add(temp);
+
+        for (int i = 1; i < 10; i++) {
+            temp = new Course(i, "cat", "bob", "bob", books);
+            table_data.add(temp);
+        }
+        tableTV.getItems().addAll(table_data);
+
+    }
+
+    private void makeCellsEditable() {
+        profCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        courseCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        departCol.setCellFactory(TextFieldTableCell.forTableColumn());
+    }
+
+    private void setCellValueOfColumns() {
+        crnCol.setCellValueFactory(
+                new PropertyValueFactory<Course, Integer>("CRN"));
+        profCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("professor"));
+        courseCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("name"));
+        departCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("department"));
+        resourceCol.setCellValueFactory(
+                new PropertyValueFactory<Course, ArrayList>("books"));
+    }
+
+    public void exit() {
+        System.exit(0);
     }
 }
