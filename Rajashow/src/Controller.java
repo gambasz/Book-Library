@@ -35,7 +35,7 @@ public class Controller {
     TableColumn<Course, String> departCol;
     @FXML
     TableColumn<Course, ArrayList> resourceCol;
-
+// boos to ist
 
     @FXML
     public void initialize() {

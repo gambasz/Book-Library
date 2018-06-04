@@ -4,9 +4,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
- * This is main data stut. for the program. Every class has a CRN which the unique/primary key, a name, department,
+ * This is main data stut. for the program. Every class has a CRN which the unique/primary key, a NAME, department,
  * professor, and the book list.
  *
  * @author Rajahsow Parajuli
@@ -14,147 +15,135 @@ import java.util.ArrayList;
 public class Course {
 
 
-    final private SimpleIntegerProperty CRN;
-    private SimpleStringProperty professor, name, department;
-    private ArrayList<String> books;
+    final private SimpleIntegerProperty CRN, YEAR;
+    final private SimpleStringProperty SEMESTER;
+    private SimpleStringProperty title, department;
+    private Person professor;
+    private ArrayList<Resource> resource;
 
 
-    /**
-     * The constructor takes a CRN, the name of the prof., the name of the class, the department code, and the books to
-     * return a class object representing all the information about the class
-     *
-     * @param CRN        is the data.Course regestation number. it is unquie for all classes
-     * @param professor  name of the professor teaching the class
-     * @param name       of the class
-     * @param department is the department's code
-     * @param books      is a string list of books that is required for the course
-     */
-    public Course(int CRN, String professor, String name, String department, ArrayList<String> books) {
-        this.CRN =  new SimpleIntegerProperty(CRN);
-        this.professor = new SimpleStringProperty(professor);
-        this.name = new SimpleStringProperty (name);
-        this.department = new SimpleStringProperty (department);
-        this.books = books;
+    public Course(int CRN, int YEAR, String SEMESTER) {
+        this.CRN = new SimpleIntegerProperty(CRN);
+        this.YEAR = new SimpleIntegerProperty(YEAR);
+        this.SEMESTER = new SimpleStringProperty(SEMESTER);
     }
 
-    /**
-     * Return the unique CRN
-     *
-     * @return CRN of the class
-     */
+    public Course(int CRN, int YEAR, String SEMESTER, String title, String department, Person professor, ArrayList<Resource> resource) {
+        this.CRN = new SimpleIntegerProperty(CRN);
+        this.YEAR = new SimpleIntegerProperty(YEAR);
+        this.SEMESTER = new SimpleStringProperty(SEMESTER);
+        this.title = new SimpleStringProperty(title);
+        this.department = new SimpleStringProperty(department);
+        this.professor = professor;
+        this.resource = resource;
+    }
+
     public int getCRN() {
         return CRN.get();
     }
 
-    /**
-     * Return the name of the professor teaching the class
-     *
-     * @return professor 's name teaching the class
-     */
-    public String getProfessor() {
-        return professor.get();
+    public SimpleIntegerProperty CRNProperty() {
+        return CRN;
     }
 
-    /**
-     * set professor 's name teaching the class
-     *
-     * @param professor name of the professor teaching the class
-     */
-    public void setProfessor(String professor) {
-        this.professor = new SimpleStringProperty(professor);
+    public void setCRN(int CRN) {
+        this.CRN.set(CRN);
     }
 
-    /**
-     * Return the name of the class
-     *
-     * @return name of the class
-     */
-    public String getName() {
-        return name.get();
+    public int getYEAR() {
+        return YEAR.get();
     }
 
-    /**
-     * set name of the class
-     *
-     * @param name of the professor teaching the class
-     */
-    public void setName(String name) {
-        this.name = new SimpleStringProperty (name);
+    public SimpleIntegerProperty YEARProperty() {
+        return YEAR;
     }
 
-    /**
-     * Return the deparatment's code
-     *
-     * @return deparatment 's code
-     */
+    public void setYEAR(int YEAR) {
+        this.YEAR.set(YEAR);
+    }
+
+    public String getSEMESTER() {
+        return SEMESTER.get();
+    }
+
+    public SimpleStringProperty SEMESTERProperty() {
+        return SEMESTER;
+    }
+
+    public void setSEMESTER(String SEMESTER) {
+        this.SEMESTER.set(SEMESTER);
+    }
+
+    public String getTitle() {
+        return title.get();
+    }
+
+    public SimpleStringProperty titleProperty() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title.set(title);
+    }
+
     public String getDepartment() {
         return department.get();
     }
 
-    /**
-     * set the department's code
-     *
-     * @param department 's code
-     */
+    public SimpleStringProperty departmentProperty() {
+        return department;
+    }
+
     public void setDepartment(String department) {
-        this.department = new SimpleStringProperty(department);
+        this.department.set(department);
     }
 
-    /**
-     * get the list of books required for the class
-     *
-     * @return books is a string list of books that is required for the course
-     */
-    public ArrayList<String> getBooks() {
-        return books;
+    public Person getProfessor() {
+        return professor;
     }
 
-    /**
-     * set the list of books required for the class
-     *
-     * @param books is a string list of books that is required for the course
-     */
-    public void setBooks(ArrayList<String> books) {
-        this.books = books;
+    public void setProfessor(Person professor) {
+        this.professor = professor;
     }
 
-    /**
-     * check if two class have the same CRN number if they do they are the same
-     */
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
-        Course aCourse = (Course) object;
-        return CRN == aCourse.CRN;
+    public ArrayList<Resource> getResource() {
+        return resource;
     }
 
-    /**
-     * return the hashcode for the book object
-     *
-     * @return hashcode based on the books crn
-     */
-    public int hashCode() {
-
-        return java.util.Objects.hash(super.hashCode(), CRN);
+    public void addResource(Resource newResource) {
+        this.resource.add(newResource);
     }
 
-    @java.lang.Override
-    public java.lang.String toString() {
-        return "data.Course{" +
-                "CRN=" + CRN.getValue() +
-                ", professor='" + professor.getValue() + '\'' +
-                ", name='" + name.getValue() + '\'' +
-                ", department='" + department.getValue() + '\'' +
-                ", books=" + books.toString() +
+    public void setResource(ArrayList<Resource> resource) {
+        this.resource = resource;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "CRN=" + CRN +
+                ", YEAR=" + YEAR +
+                ", SEMESTER=" + SEMESTER +
+                ", title=" + title +
+                ", department=" + department +
+                ", professor=" + professor +
+                ", resource=" + resource +
                 '}';
     }
-    public static void main(String[] args){
-        String test = new String("bob");
-        ArrayList<String> books =  new ArrayList<>();
-        int numb =  10;
-        books.add("major");
-        Course bob = new Course(numb,test,test,test,books);
-        System.out.print(bob);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(CRN, course.CRN) &&
+                Objects.equals(YEAR, course.YEAR) &&
+                Objects.equals(SEMESTER, course.SEMESTER);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(CRN, YEAR, SEMESTER);
     }
 }

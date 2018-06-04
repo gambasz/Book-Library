@@ -16,7 +16,7 @@
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="CRN" textAlignment="CENTER" underline="true" />
-                  <TextField fx:id="crnTF" alignment="CENTER" />
+                  <TextField fx:ID="crnTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -25,7 +25,7 @@
             <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" underline="true" />
-                  <TextField fx:id="profTF" alignment="CENTER" />
+                  <TextField fx:ID="profTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -34,7 +34,7 @@
             <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" underline="true" />
-                  <TextField fx:id="courseTF" alignment="CENTER" />
+                  <TextField fx:ID="courseTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -43,7 +43,7 @@
             <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" underline="true" />
-                  <TextField fx:id="departTF" alignment="CENTER" />
+                  <TextField fx:ID="departTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
@@ -52,13 +52,13 @@
             <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" underline="true" />
-                  <TextField fx:id="resourceTF" alignment="CENTER" />
+                  <TextField fx:ID="resourceTF" alignment="CENTER" />
                </children>
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
             </VBox>
-            <Button fx:id="searchBtn" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#search" text="Search" textAlignment="CENTER">
+            <Button fx:ID="searchBtn" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#search" text="Search" textAlignment="CENTER">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -68,13 +68,13 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <TableView fx:id="tableTV" editable="true">
+      <TableView fx:ID="tableTV" editable="true">
         <columns>
-          <TableColumn fx:id="crnCol" maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
-          <TableColumn fx:id="profCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />
-            <TableColumn fx:id="courseCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Course" />
-            <TableColumn fx:id="departCol" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Department" />
-            <TableColumn fx:id="resourceCol" maxWidth="-1.0" minWidth="475.0" prefWidth="-1.0" text="Current Resources" />
+          <TableColumn fx:ID="crnCol" maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
+          <TableColumn fx:ID="profCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />
+            <TableColumn fx:ID="courseCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Course" />
+            <TableColumn fx:ID="departCol" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Department" />
+            <TableColumn fx:ID="resourceCol" maxWidth="-1.0" minWidth="475.0" prefWidth="-1.0" text="Current Resources" />
         </columns>
          <VBox.margin>
             <Insets />
@@ -82,17 +82,17 @@
       </TableView>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" text="Add">
+            <Button fx:ID="addBtn" mnemonicParsing="false" onAction="#add" text="Add">
                <HBox.margin>
                   <Insets right="25.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="applyBtn" mnemonicParsing="false" onAction="#apply" text="Apply">
+            <Button fx:ID="applyBtn" mnemonicParsing="false" onAction="#apply" text="Apply">
                <HBox.margin>
                   <Insets right="25.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" text="Exit" />
+            <Button fx:ID="exit" mnemonicParsing="false" onAction="#exit" text="Exit" />
          </children>
       </HBox>
    </children>
