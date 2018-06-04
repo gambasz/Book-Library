@@ -51,3 +51,17 @@ Statement stmt=conn.createStatement();
             e.printStackTrace();
         }
 }
+  
+  /* String insertTableSQL = "INSERT INTO PERSON"
+                    + "(ID, FIRSTNAME, LASTNAME, TYPE) " + "VALUES"
+                    + "(1,'Guido-was-here','Guido-was-here','Guido-was-here'))";
+
+            String testSQL = "INSERT INTO PERSON VALUES (1, 'Guido-was-here', 'Guido-was-here', 'Guido-was-here')";
+
+            Statement test = conn.createStatement();
+
+            System.out.println(testSQL);
+
+            test.executeQuery(testSQL);
+       
+*/
