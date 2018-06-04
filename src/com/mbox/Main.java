@@ -53,6 +53,11 @@ public class Main {
 
             //test.executeQuery(query1);
 
+            DBManager asd = new DBManager();
+            Resource c = new Resource("Nani", "Nani", "Nani", "Nani", 1, 2, "Nani");
+
+            System.out.println(asd.addResourceQuery(c));
+
 
         //step3 create the statement object
        /* Statement stmt=conn.createStatement();
