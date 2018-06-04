@@ -7,7 +7,6 @@ public class Resource {
     private String name, publisher, author, description;
     private boolean mcUnique;
     private int ammount;
-    // amount
 
     public Resource(String TYPE, String ID) {
         this.TYPE = TYPE;
