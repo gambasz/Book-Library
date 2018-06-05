@@ -107,6 +107,26 @@ public class Person {
 
     }
 
+    //-------DB METHODS to change index by ID--
+    public String newFNameByID(int ID, String newFName){
+        
+        return String.format("UPDATE PERSON SET FIRSTNAME = '" + newFName + "' WHERE ID = '" +ID+"'")
+        
+    }
+    
+    public String newLNameByID(int ID, String newLName){
+        
+        return String.format("UPDATE PERSON SET LASTNAME = '" + newLName + "' WHERE ID = '" +ID+"'")
+        
+    }
+    
+    public String newTypeByID(int ID, String newType){
+        
+        return String.format("UPDATE PERSON SET TYPE = '" + newType + "' WHERE ID = '" +ID"'")
+        
+    }
+    
+    
 
 
 
