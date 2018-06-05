@@ -94,7 +94,7 @@ public class Person {
         return "Name: " + this.first_name + " " + this.last_name + " " + "Role: " + this.type;
     }
 
-    //------- DB METHODS --------------
+    //------- DB SEARCH METHODS --------------
 
     public String searchByIDQuery(){
 
@@ -120,30 +120,23 @@ public class Person {
 
     }
 
-    //-------DB METHODS to change index by ID--
-    public String newFirstName(String name){
-        
-        this.setFirstName(name);
-        return String.format("UPDATE PERSON SET FIRSTNAME = '%s' WHERE ID = %s", name, this.id);
-        
-    }
-    
-    public String newLNameByID(String last){
+    // -----DB INSERT METHODS------------------
 
-        this.setLastName(last);
-        return String.format("UPDATE PERSON SET LASTNAME = '%s' WHERE ID = %s", last, this.id);
-        //return String.format("UPDATE PERSON SET LASTNAME = '" + newLName + "' WHERE ID = '" +ID+"'");
-        
-    }
-    
-    public String newType(String t){
+    public String addToDB(){
 
-        this.setType(t);
-        return String.format("UPDATE PERSON SET TYPE = '%s' WHERE ID = %s", t, this.id);
-        //return String.format("UPDATE PERSON SET TYPE = '" + newType + "' WHERE ID = '" +ID+"'");
-        
+        return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
     }
-    
+
+
+    //-------DB METHODS UPDATE by ID--
+    public String update(int identifier, String first, String last, String type) {
+
+        this.id = identifier;
+        this.first_name = first;
+        this.last_name = last;
+        this.type = type;
+        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s", first, last, type, this.id);
+    }
     
 
 

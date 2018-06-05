@@ -1,4 +1,6 @@
 package com.mbox;
+import java.sql.*;
+import com.mbox.Main;
 
 public class DBManager {
 
@@ -11,6 +13,21 @@ public class DBManager {
     public static final String RELATION_COURSE_RESOURCES = "RELATION_COURSE_RESOURCES";
     public static final String RELATION_COURSE_SEMESTER = "RELATION_COURSE_SEMESTER";
     public static final String RELATION_PUBLISHER_RESOURCE = "RELATION_PUBLISHER_RESOURCE";
+
+    public static Connection establishDB() {
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection("jdbc:oracle:thin:USERNAME/PASSWORD@HOST:PORT:SID");
+            return conn;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+
+    /*
 
     public String addPersonQuery(Person person){
 
@@ -62,6 +79,18 @@ public class DBManager {
 
         }
 
+        public String editPersonDB(Person pe){
+
+            int id = pe.getID();
+            String first, last, type;
+            first = pe.getFirstName();
+            last = pe.getLastName();
+            type = pe.getType();
+            String query = String.format("\"UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s\"", first, last, type, id);
+            return query;
+
+        }
+
         public String getTableQuery(String table){
 
             return String.format("SELECT * FROM %s", table);
@@ -72,5 +101,4 @@ public class DBManager {
             return String.format("SELECT * FROM %s WHERE ID=%s", table, id);
         }
 
-
-    }
+     */

@@ -116,13 +116,34 @@ https://stackoverflow.com/questions/4832056/java-jdbc-how-to-connect-to-oracle-u
             */
 }
 
-/*
+      /* try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+*/
+      /*
 
 
+           //System.out.print(asd.addPersonQuery(guido));
+            //System.out.println(asd.getIDInQuery("PERSON", 1));
+            //System.out.println(tom.newFNameByID(2, "mamali"));
+            //test.executeQuery(asd.addPersonQuery(tom));
+            //test.executeQuery(asd.getIDInQuery("PERSON", 1));
+            //test.executeQuery(tom.newFNameByID(2, "mamali"));
+            //ResultSet rs = test.executeQuery(asd.getIDInQuery("PERSON", 1));
+            //ResultSet rs = test.executeQuery(getTableQuery("PERSON"));
+            /*
+            while(rs.next()) {
+                System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
+            }
+            */
+//st.executeQuery(p.addToDB());
 
+//ResultSet rs = test.executeQuery(getTableQuery("PERSON"));
+            /*
+            while(rs.next()) {
+                System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
+            }
+            */
 
-
-
-
-
- */

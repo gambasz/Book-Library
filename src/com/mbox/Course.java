@@ -2,6 +2,7 @@ package com.mbox;
 
 public class Course {
 
+    private int id;
     private String title;
     private String crn;
     private String description;
@@ -9,6 +10,7 @@ public class Course {
 
     public Course(){
 
+        this.id = 0;
         this.title = "";
         this.crn = "";
         this.description = "";
@@ -18,6 +20,7 @@ public class Course {
 
     public Course(String title, String crn, String desc, String dept){
 
+        this.id = 0;
         this.title = title;
         this.crn = crn;
         this.description = desc;
@@ -75,7 +78,7 @@ public class Course {
                 " " + "Department: " + this.department;
     }
 
-    //------- DB METHODS --------------
+    //------- DB SEARCH METHODS --------------
 
     public String searchByIDQuery(int id){
 
@@ -100,5 +103,24 @@ public class Course {
         return String.format("SELECT * FROM COURSE_CATALOG WHERE DEPARTMENT='%s'", dp);
 
     }
+
+    //----------- DB ADD METHODS -------------------
+    public String addToDB(){
+
+        return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES ('%s', '%s', '%s', '%s')", this.title, this.crn, this.description, this.department);
+
+    }
+
+    // --- DB UPDATE METHOD ---
+    public String update(int identifier, String t, String c, String d, String desc) {
+
+        this.id = identifier;
+        this.title = t;
+        this.crn = c;
+        this.description = d;
+        this.department = desc;
+        return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s' WHERE ID = %s", this.title, this.crn, this.description, this.department, this.id);
+    }
+
 
 }
