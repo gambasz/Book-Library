@@ -3,7 +3,7 @@ package com.mbox;
 public class Resource {
 
     private String type, title, author, isbn, description;
-    private int total_amount, current_amount;
+    private int total_amount, current_amount, id;
 
     public Resource(){
 
@@ -14,18 +14,20 @@ public class Resource {
         this.total_amount = 0;
         this.current_amount = 0;
         this.description = "";
+        this.id =0 ;
 
     }
 
-    public Resource(String ty, String ti, String au, String is, int total, int current, String desc){
+    public Resource(int id, String type, String title, String author, String isbn, int total, int current, String desc){
 
-        this.type = ty;
-        this.title = ti;
-        this.author = au;
-        this.isbn = is;
+        this.type = type;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
         this.total_amount = total;
         this.current_amount = current;
         this.description = desc;
+        this.id = id;
 
     }
 
@@ -103,6 +105,30 @@ public class Resource {
     public String getDescription(){
 
         return this.description;
+    }
+
+
+    //-------adding to db method------
+
+    public String addtoDB(){
+
+        String query = String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
+                this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description);
+        return query;
+    }
+    public String update (String type, String title, String author, String isbn, int total_amount, int current_amount, String description){
+
+        this.type = type;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.total_amount = total_amount;
+        this.current_amount = current_amount;
+        this.description = description;
+
+        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', TOTAL_AMOUNT = '%s', CURRENT_AMOUNT = '%s', DESCRIPTION = '%s'  WHERE ID = %s",
+                this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description, this.id);
+
     }
 
     @Override
