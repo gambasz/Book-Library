@@ -124,7 +124,23 @@ public class Person {
 
     public String addToDB(){
 
-        return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
+
+        String quer = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
+
+        try {
+
+            ResultSet result = Main.st.executeQuery(quer);
+
+            System.out.println("haha datar obegir" + result);
+
+
+        }
+        catch (Exception e){
+
+        }
+
+
+        return quer;
     }
 
 
