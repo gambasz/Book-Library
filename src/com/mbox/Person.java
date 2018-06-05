@@ -81,5 +81,33 @@ public class Person {
         return "Name: " + this.first_name + " " + this.last_name + " " + "Role: " + this.type;
     }
 
+    //------- DB METHODS --------------
+
+    public String searchByIDQuery(int id){
+
+        return String.format("SELECT * FROM PERSON WHERE ID=%s", id);
+
+    }
+
+    public String searchByFirstNameQuery(String first){
+
+        return String.format("SELECT * FROM PERSON WHERE FIRSTNAME=%s", first);
+
+    }
+
+    public String searchByLastNameQuery(String last){
+
+        return String.format("SELECT * FROM PERSON WHERE LASTNAME=%s", last);
+
+    }
+
+    public String searchByType(String ty){
+
+        return String.format("SELECT * FROM PERSON WHERE TYPE=%s", ty);
+
+    }
+
+
+
 
 }

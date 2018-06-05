@@ -58,5 +58,10 @@ public class DBManager {
             return String.format("SELECT * FROM %s", table);
         }
 
+        public String getIDInQuery(String table, int id){
+
+            return String.format("SELECT * FROM %s WHERE ID=%s", table, id);
+        }
+
 
     }
