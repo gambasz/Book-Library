@@ -91,19 +91,19 @@ public class Person {
 
     public String searchByFirstNameQuery(String first){
 
-        return String.format("SELECT * FROM PERSON WHERE FIRSTNAME=%s", first);
+        return String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s'", first);
 
     }
 
     public String searchByLastNameQuery(String last){
 
-        return String.format("SELECT * FROM PERSON WHERE LASTNAME=%s", last);
+        return String.format("SELECT * FROM PERSON WHERE LASTNAME='%s'", last);
 
     }
 
     public String searchByType(String ty){
 
-        return String.format("SELECT * FROM PERSON WHERE TYPE=%s", ty);
+        return String.format("SELECT * FROM PERSON WHERE TYPE='%s'", ty);
 
     }
 

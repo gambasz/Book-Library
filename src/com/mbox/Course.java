@@ -74,4 +74,31 @@ public class Course {
         return "Course title: " + this.title + " " + "CRN: " + this.crn + " " + "Description: " + this.description +
                 " " + "Department: " + this.department;
     }
+
+    //------- DB METHODS --------------
+
+    public String searchByIDQuery(int id){
+
+        return String.format("SELECT * FROM COURSE_CATALOG WHERE ID=%s", id);
+
+    }
+
+    public String searchByTitleQuery(String t){
+
+        return String.format("SELECT * FROM COURSE_CATALOG WHERE TITLE='%s'", t);
+
+    }
+
+    public String searchByCRN(String crn){
+
+        return String.format("SELECT * FROM COURSE_CATALOG WHERE CNUMBER='%s'", crn);
+
+    }
+
+    public String searchByDepartment(String dp){
+
+        return String.format("SELECT * FROM COURSE_CATALOG WHERE DEPARTMENT='%s'", dp);
+
+    }
+
 }
