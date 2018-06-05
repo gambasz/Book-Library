@@ -2,10 +2,12 @@ package com.mbox;
 
 public class Person {
 
+    private int id;
     private String first_name, last_name, type;
 
     public Person(){
 
+        id = 0;
         first_name = "";
         last_name = "";
         type = "";
@@ -14,9 +16,15 @@ public class Person {
 
     public Person(String first_name, String last_name, String type){
 
+        this.id = 0;
         this.first_name = first_name;
         this.last_name = last_name;
         this.type = type;
+    }
+
+    public void setID(int identifier){
+
+        this.id = identifier;
     }
 
     public void setFirstName(String name){
@@ -58,6 +66,11 @@ public class Person {
 
     }
 
+    public int getID(){
+
+        return this.id;
+    }
+
     public String getFirstName(){
 
         return this.first_name;
@@ -83,46 +96,51 @@ public class Person {
 
     //------- DB METHODS --------------
 
-    public String searchByIDQuery(int id){
+    public String searchByIDQuery(){
 
-        return String.format("SELECT * FROM PERSON WHERE ID=%s", id);
-
-    }
-
-    public String searchByFirstNameQuery(String first){
-
-        return String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s'", first);
+        return String.format("SELECT * FROM PERSON WHERE ID=%s", this.id);
 
     }
 
-    public String searchByLastNameQuery(String last){
+    public String searchFirstNameQuery(){
 
-        return String.format("SELECT * FROM PERSON WHERE LASTNAME='%s'", last);
+        return String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s'", this.getFirstName());
 
     }
 
-    public String searchByType(String ty){
+    public String searchLastNameQuery(){
 
-        return String.format("SELECT * FROM PERSON WHERE TYPE='%s'", ty);
+        return String.format("SELECT * FROM PERSON WHERE LASTNAME='%s'", this.getLastName());
+
+    }
+
+    public String searchTypeQuery(){
+
+        return String.format("SELECT * FROM PERSON WHERE TYPE='%s'", this.getType());
 
     }
 
     //-------DB METHODS to change index by ID--
-    public String newFNameByID(int ID, String newFName){
+    public String newFirstName(String name){
         
-        return String.format("UPDATE PERSON SET FIRSTNAME = '" + newFName + "' WHERE ID = '" +ID+"'");
-        
-    }
-    
-    public String newLNameByID(int ID, String newLName){
-        
-        return String.format("UPDATE PERSON SET LASTNAME = '" + newLName + "' WHERE ID = '" +ID+"'");
+        this.setFirstName(name);
+        return String.format("UPDATE PERSON SET FIRSTNAME = '%s' WHERE ID = %s", name, this.id);
         
     }
     
-    public String newTypeByID(int ID, String newType){
+    public String newLNameByID(String last){
+
+        this.setLastName(last);
+        return String.format("UPDATE PERSON SET LASTNAME = '%s' WHERE ID = %s", last, this.id);
+        //return String.format("UPDATE PERSON SET LASTNAME = '" + newLName + "' WHERE ID = '" +ID+"'");
         
-        return String.format("UPDATE PERSON SET TYPE = '" + newType + "' WHERE ID = '" +ID+"'");
+    }
+    
+    public String newType(String t){
+
+        this.setType(t);
+        return String.format("UPDATE PERSON SET TYPE = '%s' WHERE ID = %s", t, this.id);
+        //return String.format("UPDATE PERSON SET TYPE = '" + newType + "' WHERE ID = '" +ID+"'");
         
     }
     

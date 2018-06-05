@@ -2,8 +2,17 @@ package com.mbox;
 
 public class DBManager {
 
+    public static final String PERSON_TABLE = "PERSON";
+    public static final String COURSE_TABLE = "COURSECT";
+    public static final String PUBLISHER_TABLE = "PUBLISHERS";
+    public static final String RESOURCE_TABLE = "RESOURCES";
+    public static final String SEMESTER_TABLE = "SEMESTER";
+    public static final String RELATION_COURSE_PERSON = "RELATION_COURSE_PERSON";
+    public static final String RELATION_COURSE_RESOURCES = "RELATION_COURSE_RESOURCES";
+    public static final String RELATION_COURSE_SEMESTER = "RELATION_COURSE_SEMESTER";
+    public static final String RELATION_PUBLISHER_RESOURCE = "RELATION_PUBLISHER_RESOURCE";
 
-        public String addPersonQuery(Person person){
+    public String addPersonQuery(Person person){
 
             String first, last, type;
             first = person.getFirstName();
