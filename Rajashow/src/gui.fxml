@@ -13,7 +13,7 @@
 
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <HBox prefHeight="800.0" prefWidth="1200.0">
+      <HBox onMousePressed="#updateRowSelected" prefHeight="800.0" prefWidth="1200.0">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0">
                <children>
@@ -59,7 +59,7 @@
                            <children>
                               <Label text="Resourses" />
                               <Label layoutX="110.0" layoutY="22.0" text="Names" />
-                              <Button mnemonicParsing="false" text="Focus" />
+                              <Button fx:id="resEditBtn" mnemonicParsing="false" onAction="#modifyResources" text="Focus" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -187,7 +187,7 @@
                         <Insets />
                      </opaqueInsets>
                   </HBox>
-                  <TableView fx:id="tableTV" editable="true">
+                  <TableView fx:id="tableTV" editable="true" onMousePressed="#updateRowSelected">
                     <columns>
                       <TableColumn fx:id="crnCol" maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
                       <TableColumn fx:id="profCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />

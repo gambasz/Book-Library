@@ -1,10 +1,12 @@
 import data.Course;
 import data.Person;
+import data.Publisher;
+import data.Resource;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -42,6 +44,10 @@ public class Controller {
     @FXML
     ComboBox yearComBox, yearComBoxEdit;
 
+    private TableView resourceTable;
+    TableColumn<Resource, Publisher> publisherCol;
+    TableColumn<Resource, String> nameCol, authorCol, idcCol;
+
     @FXML
     public void initialize() {
         initComboBoxes();
@@ -49,8 +55,26 @@ public class Controller {
         table_data = new ArrayList<>();
         setCellValueOfColumns();
         tableTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        makeCellsEditable();
+//        makeCellsEditable();
         init_tables();
+        initResourcesTable();
+
+    }
+
+    private void initResourcesTable() {
+        resourceTable = new TableView();
+        publisherCol = new TableColumn<>("Publisher");
+        nameCol = new TableColumn<>("Title");
+        authorCol = new TableColumn<>("Author");
+        idcCol = new TableColumn<>("ID");
+        resourceTable.getColumns().addAll(idcCol, nameCol, authorCol, publisherCol);
+        idcCol.setPrefWidth(100);
+        nameCol.setPrefWidth(200);
+        authorCol.setPrefWidth(100);
+        publisherCol.setPrefWidth(100);
+        resourceTable.setPrefWidth(500);
+        resourceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
     }
 
     private void initComboBoxes() {
@@ -93,6 +117,9 @@ public class Controller {
 
     }
 
+    public void updateRowSelected() {
+
+    }
 
     private void updateTable(ArrayList<Course> temp_table) {
 
@@ -123,12 +150,12 @@ public class Controller {
 
     }
 
-    private void makeCellsEditable() {
-        courseCol.setCellFactory(TextFieldTableCell.forTableColumn());
-        departCol.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-    }
+//    private void makeCellsEditable() {
+//        courseCol.setCellFactory(TextFieldTableCell.forTableColumn());
+//        departCol.setCellFactory(TextFieldTableCell.forTableColumn());
+//
+//
+//    }
 
     private void setCellValueOfColumns() {
         crnCol.setCellValueFactory(
@@ -142,16 +169,7 @@ public class Controller {
         resourceCol.setCellValueFactory(
                 new PropertyValueFactory<Course, ArrayList>("resource"));
 
-//        resourceCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, Button>, ObservableValue<Button>>() {
-//            final TableCell<Person, String> cell = new TableCell<Person, String>() {
-//
-//                final Button btn = new Button("Just Do It");
-//
-//                @Override
-//            public ObservableValue<Button> call(TableColumn.CellDataFeatures<Course, Button> param) {
-//                return ;
-//            }
-//        });
+
     }
 
     public void exit() {
@@ -168,7 +186,104 @@ public class Controller {
     }
 
     public void modifyResources() {
-        System.out.print("needs to be implemented");
+        VBox mainPane = new VBox();
+        VBox resourcePane = new VBox(5);
+        VBox publisherPane = new VBox(5);
+        Dialog dlg = new Dialog();
+        TitledPane resourceTitlePane = new TitledPane();
+        TitledPane publisherTitlePane = new TitledPane();
+
+        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+
+        ComboBox listOFResources = new ComboBox();
+        TextField nameBTF = new TextField();
+        TextField authorTF = new TextField();
+        TextArea descriptionRTa = new TextArea();
+        TextField idRTf = new TextField();
+
+        ComboBox typeBox = new ComboBox();
+
+        typeBox.setItems(FXCollections.observableArrayList("Z", "Mc Only", "Software", "Book"));
+
+        Label nameRLbl = new Label("Title: ");
+        Label authorLbl = new Label("Author: ");
+        Label typeLbl = new Label("Type: ");
+        Label descriptionRLbl = new Label("Description: ");
+        Label idRLbl = new Label("ID: ");
+
+
+        Label currentCBoxLbl = new Label("Current Resources as Template: ");
+
+        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+        Button addNAssignNewResource = new Button("Add and Assign new Resource");
+        resourcePane.getChildren().addAll(
+                new HBox(currentCBoxLbl, listOFResources),
+                new HBox(idRLbl, idRTf),
+                new HBox(nameRLbl, nameBTF),
+                new HBox(authorLbl, authorTF),
+                new HBox(typeLbl, typeBox),
+                new HBox(descriptionRLbl, descriptionRTa));
+        resourcePane.setSpacing(20);
+
+        ComboBox listOfPublisher = new ComboBox();
+        TextField namePTf = new TextField();
+        TextArea descriptionPTa = new TextArea();
+        TextArea contactsPTa = new TextArea();
+
+        descriptionPTa.setPrefWidth(150);
+        descriptionRTa.setPrefWidth(150);
+        contactsPTa.setPrefWidth(150);
+        descriptionPTa.setPrefHeight(100);
+        descriptionRTa.setPrefHeight(100);
+        contactsPTa.setPrefHeight(100);
+
+        Label listOfPublisherLbl = new Label("Current Publishers as Template: ");
+        Label namePLbl = new Label("Name: ");
+        Label descriptionPLbl = new Label("Description: ");
+        Label contactsPTLbl = new Label("Contacts: ");
+
+        publisherPane.getChildren().addAll(
+                new HBox(listOfPublisherLbl, listOfPublisher),
+                new HBox(namePLbl, namePTf),
+                new HBox(descriptionPLbl, descriptionPTa),
+                new HBox(contactsPTLbl, contactsPTa)
+
+        );
+        publisherTitlePane.setContent(publisherPane);
+        publisherTitlePane.setAlignment(Pos.CENTER);
+        publisherTitlePane.setCollapsible(false);
+        publisherTitlePane.setText(" PUBLISHER INFO ");
+
+        resourceTitlePane.setContent(resourcePane);
+        resourceTitlePane.setAlignment(Pos.CENTER);
+        resourceTitlePane.setCollapsible(false);
+        resourceTitlePane.setText(" RESOURCE INFO ");
+        resourceTitlePane.setPrefWidth(300);
+
+        mainPane.getChildren().addAll(new HBox(resourceTable,resourceTitlePane, publisherTitlePane),addNAssignNewResource);
+        mainPane.setAlignment(Pos.CENTER);
+
+        dlg.setTitle("Assigning Resource");
+        dlg.setHeaderText("Assigning Resource");
+
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(300);
+
+
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == assign) {
+                System.out.print("Assign new resources");
+                return null;
+            }
+            return null;
+        });
     }
 
 
@@ -183,8 +298,8 @@ public class Controller {
         ComboBox listOfCurrentProf = new ComboBox();
         TextField fNameTF = new TextField();
         TextField lNameTF = new TextField();
-        ComboBox tpyeBox = new ComboBox();
-
+        ComboBox typeBox = new ComboBox();
+        typeBox.setItems(FXCollections.observableArrayList("Program Cord.", "Course Cord.", " Course Instruc  tor"));
         Label fNameLbl = new Label("Professor's First Name: ");
         Label lNameLbl = new Label("Professor's Last Name: ");
         Label typeLbl = new Label("Type: ");
@@ -197,7 +312,7 @@ public class Controller {
                 new HBox(currentCBoxLbl, listOfCurrentProf),
                 new HBox(fNameLbl, fNameTF),
                 new HBox(lNameLbl, lNameTF),
-                new HBox(typeLbl, tpyeBox));
+                new HBox(typeLbl, typeBox));
         mainAddPane.setSpacing(20);
 
         dlg.setTitle("Assigning Professor");

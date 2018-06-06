@@ -7,7 +7,7 @@ public class Publisher {
     // NAME , ID, contact, DESCRIPTION,
     final String NAME, DESCRIPTION;
     final int ID;
-    private ArrayList<String> contacts;
+    private String contacts;
 
     public Publisher(String NAME, String DESCRIPTION, int ID) {
         this.NAME = NAME;
@@ -15,7 +15,7 @@ public class Publisher {
         this.ID = ID;
     }
 
-    public Publisher(String NAME, String DESCRIPTION, int ID, ArrayList<String> contacts) {
+    public Publisher(String NAME, String DESCRIPTION, int ID, String contacts) {
         this.NAME = NAME;
         this.DESCRIPTION = DESCRIPTION;
         this.ID = ID;
@@ -34,11 +34,11 @@ public class Publisher {
         return ID;
     }
 
-    public ArrayList<String> getContacts() {
+    public String getContacts() {
         return contacts;
     }
 
-    public void setContacts(ArrayList<String> contacts) {
+    public void setContacts(String contacts) {
         this.contacts = contacts;
     }
 
