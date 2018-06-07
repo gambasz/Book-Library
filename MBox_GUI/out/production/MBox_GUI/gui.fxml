@@ -218,6 +218,7 @@
       <Separator prefWidth="200.0" />
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
          <children>
+            <Button mnemonicParsing="false" onAction="#add_btn_mal" text="Add" />
             <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importData" text="Import">
                <HBox.margin>
                   <Insets right="25.0" />

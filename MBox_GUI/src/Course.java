@@ -5,7 +5,10 @@ public class Course {
 
     private SimpleStringProperty Semester,title,resource,intstutor;
     public Course() {
-    Semester=title=resource=intstutor=new SimpleStringProperty("Needs to be assigned");
+    Semester=new SimpleStringProperty("Needs to be assigned");
+    title =  new SimpleStringProperty("Needs to be assigned");
+    resource = new SimpleStringProperty("Needs to be assigned");
+    intstutor = new SimpleStringProperty("Needs to be assigned");
     }
     public Course(String semester, String title, String resource, String intstutor) {
         Semester =new SimpleStringProperty( semester);

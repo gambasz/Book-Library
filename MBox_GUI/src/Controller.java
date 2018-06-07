@@ -1,8 +1,10 @@
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.sql.Connection;
@@ -45,16 +47,12 @@ public class Controller {
     }
 
 
-
-
     private void initComboBoxes() {
         semesterComBox.setItems(FXCollections.observableArrayList("Fall", "Winter", "Spring", "Summer"));
-//        semesterComBoxEdit.setItems(FXCollections.observableArrayList("Fall", "Winter", "Spring", "Summer"));
         ArrayList<String> years = new ArrayList<>();
         for (int i = 1920; i < 2018; i++)
             years.add("" + i);
         yearComBox.setItems(FXCollections.observableArrayList(years));
-//        yearComBoxEdit.setItems(FXCollections.observableArrayList(years));
     }
 
     public void getStuff(Course person) {
@@ -71,7 +69,7 @@ public class Controller {
 
             while (rs.next()) {
 
-                person.setIntstutor(rs.getString(3)+" "+rs.getString(4));
+                person.setIntstutor(rs.getString(3) + " " + rs.getString(4));
             }
 
             st.close();
@@ -89,7 +87,7 @@ public class Controller {
 
             Statement st = con.createStatement();
 
-            String selectquery = "SELECT * FROM COURSECT WHERE IDTM=1";
+            String selectquery = "SELECT * FROM COURSECT WHERE IDTMP=1";
 
             ResultSet rs = st.executeQuery(selectquery);
 
@@ -101,7 +99,7 @@ public class Controller {
 
 
         } catch (Exception e) {
-System.out.print(e.getMessage());
+            System.out.print(e.getMessage());
         }
     }
 
@@ -113,13 +111,12 @@ System.out.print(e.getMessage());
 
             Statement st = con.createStatement();
 
-            String selectquery = "SELECT * FROM RESOURCES WHERE IDTM=1";
+            String selectquery = "SELECT * FROM RESOURCES WHERE IDTMP=1";
 
             ResultSet rs = st.executeQuery(selectquery);
 
             while (rs.next()) {
-
-               r.setResource(rs.getString(2));
+                r.setResource(rs.getString(2));
 
             }
 
@@ -127,9 +124,9 @@ System.out.print(e.getMessage());
 
 
         } catch (Exception e) {
-System.out.print(e.getMessage());        }
+            System.out.print(e.getMessage());
+        }
     }
-
 
 
     public static Connection establishDB() {
@@ -143,6 +140,7 @@ System.out.print(e.getMessage());        }
             return null;
         }
     }
+
     public void search() {
 
         ArrayList<Course> temp_table = new ArrayList<>();
@@ -177,16 +175,15 @@ System.out.print(e.getMessage());        }
 
     private void init_tables() {
 
-        Course temp = new Course("Fall", "CMSC 140", "PEN15", "Fucker");
+        Course temp = new Course("Fall", "CMSC 140", "java", "Webb");
         Course c1 = new Course();
         getResource(c1);
         getCourse(c1);
         getStuff(c1);
 
-        tableTV.getItems().addAll(temp,c1);
+        tableTV.getItems().addAll(temp, c1);
 
     }
-
 
 
     private void setCellValueOfColumns() {
@@ -320,4 +317,63 @@ System.out.print(e.getMessage());        }
 
     }
 
+    public void add_btn_mal() {
+        VBox mainPane = new VBox();
+
+        Dialog dlg = new Dialog();
+
+
+        TextField nameBTF = new TextField();
+        TextField authorTF = new TextField();
+
+
+        ComboBox typeBox = new ComboBox();
+
+
+        Label nameRLbl = new Label("Title: ");
+        Label authorLbl = new Label("Author: ");
+        Label typeLbl = new Label("Type: ");
+
+
+        ButtonType assign = new ButtonType("ADD", ButtonBar.ButtonData.OK_DONE);
+
+
+        TextField c = new TextField();
+        TextField r = new TextField();
+        TextField p = new TextField();
+
+
+        Label cl = new Label("Title: ");
+        Label pl = new Label("Person: ");
+        Label rl = new Label("Resource: ");
+
+
+        mainPane.getChildren().addAll(
+                new HBox(pl, p),
+                new HBox(cl, c),
+                new HBox(rl, r));
+
+        mainPane.setAlignment(Pos.CENTER);
+
+        dlg.setTitle("Add");
+        dlg.setHeaderText("Add");
+
+        dlg.getDialogPane().setMinWidth(300);
+
+
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == assign) {
+                System.out.print(c.getText());
+                return null;
+            }
+            return null;
+        });
+
+
+    }
 }
