@@ -71,9 +71,10 @@ public class Controller {
 
             while (rs.next()) {
 
-                person.setIntstutor(rs.getString(2)+" "+rs.getString(3));
+                person.setIntstutor(rs.getString(3)+" "+rs.getString(4));
             }
 
+            st.close();
 
         } catch (Exception e) {
             System.out.print(e.getMessage());
@@ -96,7 +97,7 @@ public class Controller {
 
                 ct.setTitle(rs.getString(2));
             }
-
+            st.close();
 
 
         } catch (Exception e) {
@@ -122,6 +123,7 @@ System.out.print(e.getMessage());
 
             }
 
+            st.close();
 
 
         } catch (Exception e) {
@@ -177,8 +179,11 @@ System.out.print(e.getMessage());        }
 
         Course temp = new Course("Fall", "CMSC 140", "PEN15", "Fucker");
         Course c1 = new Course();
-        
-        tableTV.getItems().addAll(temp);
+        getResource(c1);
+        getCourse(c1);
+        getStuff(c1);
+
+        tableTV.getItems().addAll(temp,c1);
 
     }
 

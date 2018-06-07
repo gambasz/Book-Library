@@ -71,8 +71,8 @@
       <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="178" column="33" selection-start-line="178" selection-start-column="33" selection-end-line="178" selection-end-column="33" />
+            <state relative-caret-position="289">
+              <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -83,9 +83,11 @@
       <file leaf-file-name="Course.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Course.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-285">
-              <caret line="9" column="41" lean-forward="true" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
+            <state relative-caret-position="119">
+              <caret line="7" column="84" selection-start-line="7" selection-start-column="84" selection-end-line="7" selection-end-column="84" />
               <folding>
+                <element signature="e#164#165#0" expanded="true" />
+                <element signature="e#183#184#0" expanded="true" />
                 <element signature="e#433#434#0" expanded="true" />
                 <element signature="e#470#471#0" expanded="true" />
                 <element signature="e#538#539#0" expanded="true" />
@@ -142,8 +144,8 @@
         <option value="$PROJECT_DIR$/src/data/Course.java" />
         <option value="$PROJECT_DIR$/src/test/Controller.java" />
         <option value="$PROJECT_DIR$/src/data/Person.java" />
-        <option value="$PROJECT_DIR$/src/Course.java" />
         <option value="$PROJECT_DIR$/src/gui.fxml" />
+        <option value="$PROJECT_DIR$/src/Course.java" />
         <option value="$PROJECT_DIR$/src/Controller.java" />
       </list>
     </option>
@@ -340,12 +342,12 @@
       <updated>1359379246138</updated>
       <workItem from="1359379250712" duration="1302000" />
       <workItem from="1528385739738" duration="7000" />
-      <workItem from="1528385983804" duration="5439000" />
+      <workItem from="1528385983804" duration="5697000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6748000" />
+    <option name="totallyTimeSpent" value="7006000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -361,11 +363,11 @@
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.25382262" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.25382262" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.072916664" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.072916664" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Learn" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -555,9 +557,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Course.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-285">
-          <caret line="9" column="41" lean-forward="true" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
+        <state relative-caret-position="119">
+          <caret line="7" column="84" selection-start-line="7" selection-start-column="84" selection-end-line="7" selection-end-column="84" />
           <folding>
+            <element signature="e#164#165#0" expanded="true" />
+            <element signature="e#183#184#0" expanded="true" />
             <element signature="e#433#434#0" expanded="true" />
             <element signature="e#470#471#0" expanded="true" />
             <element signature="e#538#539#0" expanded="true" />
@@ -588,8 +592,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="178" column="33" selection-start-line="178" selection-start-column="33" selection-end-line="178" selection-end-column="33" />
+        <state relative-caret-position="289">
+          <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
