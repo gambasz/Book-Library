@@ -35,13 +35,16 @@ public class Controller {
     ComboBox semesterComBox, semesterComBoxEdit;
     @FXML
     ComboBox yearComBox, yearComBoxEdit;
-
+    @FXML
+    VBox Cock;
     private TableView resourceTable;
     TableColumn<Resource, Publisher> publisherCol;
     TableColumn<Resource, String> nameCol, authorCol, idcCol;
 
     @FXML
     public void initialize() {
+        Cock.setVisible(false);
+        Cock.setMaxWidth(0);
         initComboBoxes();
         resourceCol.setSortable(false);
         table_data = new ArrayList<>();
