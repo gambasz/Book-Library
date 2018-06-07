@@ -16,17 +16,11 @@ import java.util.ArrayList;
 public class Controller {
     ArrayList<Course> table_data;
     @FXML
-    TextField crnTF;
+    TextField crnInfoTf,nameInfoTf,departInfoTf,crnSearchTF,profSearchTF,courseSearchTF,departSearchTF,resourceSearchTF;
     @FXML
-    TextField profTF;
+    Label crnInfoLbl;
     @FXML
-    TextField departTF;
-    @FXML
-    TextField courseTF;
-    @FXML
-    TextField resourceTF;
-    @FXML
-    Button searchBtn;
+    Button searchBtn,crnInfoBtn,resEditBtn,addBtn,commitBtn,deleteBtn;
     @FXML
     TableView<Course> tableTV;
     @FXML
@@ -34,9 +28,7 @@ public class Controller {
     @FXML
     TableColumn<Course, Person> profCol;
     @FXML
-    TableColumn<Course, String> courseCol;
-    @FXML
-    TableColumn<Course, String> departCol;
+    TableColumn<Course, String> courseCol,departCol;
     @FXML
     TableColumn<Course, ArrayList> resourceCol;
     @FXML
@@ -91,14 +83,8 @@ public class Controller {
     public void search() {
 
         ArrayList<Course> temp_table = new ArrayList<>();
-        String crn = crnTF.getText();
-        String professor = profTF.getText();
-        String department = departTF.getText();
-        String course = courseTF.getText();
-        String resource = resourceTF.getText();
-
         tableTV.getItems().clear();
-        tableTV.getItems().add(table_data.get(Integer.parseInt(crn)));
+//        tableTV.getItems().add(table_data.get(Integer.parseInt(crn)));
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 //        System.out.print(crn + "||" + professor + "||" + department + "||" + course + "||" + resource);
 
@@ -118,7 +104,16 @@ public class Controller {
     }
 
     public void updateRowSelected() {
+tableTV.getSelectionModel().getSelectedItems();
 
+//        if(tableview.getSelectionModel().getSelectedItem() != null)
+//        {
+//            TableViewSelectionModel selectionModel = tableview.getSelectionModel();
+//            ObservableList selectedCells = selectionModel.getSelectedCells();
+//            TablePosition tablePosition = (TablePosition) selectedCells.get(0);
+//            Object val = tablePosition.getTableColumn().getCellData(newValue);
+//            System.out.println("Selected Value" + val);
+//        }
     }
 
     private void updateTable(ArrayList<Course> temp_table) {

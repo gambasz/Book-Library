@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cfaff60e-bf27-43a7-ad87-fbaff2056851" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/Rajashow/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rajashow/out/production/Rajashow/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/out/production/Rajashow/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rajashow/out/production/Rajashow/data/Course.class" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/out/production/Rajashow/data/Course.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rajashow/src/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/src/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rajashow/src/data/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/src/data/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rajashow/src/data/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/src/data/Resource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rajashow/src/gui.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Rajashow/src/gui.fxml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,10 +36,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -123,11 +117,12 @@
       <workItem from="1527178880129" duration="45000" />
       <workItem from="1527178952923" duration="88000" />
       <workItem from="1528123590896" duration="41000" />
+      <workItem from="1528311533757" duration="35000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="174000" />
+    <option name="totallyTimeSpent" value="209000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />

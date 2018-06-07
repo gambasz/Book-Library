@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -13,16 +14,17 @@
 
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <HBox onMousePressed="#updateRowSelected" prefHeight="800.0" prefWidth="1200.0">
+      <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                <children>
+                  <Label text="Course Manager" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="CRN" />
-                              <TextField />
+                              <TextField fx:id="crnInfoTf" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -31,7 +33,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Professor" />
-                              <Button fx:id="profBtn" mnemonicParsing="false" onAction="#selectProf" text="Name" />
+                              <Button fx:id="crnInfoBtn" mnemonicParsing="false" onAction="#selectProf" text="Name" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -40,7 +42,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Course Name" />
-                              <TextField />
+                              <TextField fx:id="nameInfoTf" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -49,7 +51,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Department" />
-                              <TextField />
+                              <TextField fx:id="departInfoTf" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -58,7 +60,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Resourses" />
-                              <Label layoutX="110.0" layoutY="22.0" text="Names" />
+                              <Label fx:id="crnInfoLbl" layoutX="110.0" layoutY="22.0" text="Names" />
                               <Button fx:id="resEditBtn" mnemonicParsing="false" onAction="#modifyResources" text="Focus" />
                            </children>
                            <padding>
@@ -100,122 +102,135 @@
                   <Insets bottom="25.0" />
                </padding>
             </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
             <VBox prefHeight="600.0" prefWidth="800.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <VBox alignment="CENTER" prefHeight="125.0" prefWidth="100.0">
                      <children>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <Label text="Search" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="CRN" textAlignment="CENTER" underline="true" />
-                              <TextField fx:id="crnTF" alignment="CENTER" />
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="CRN" textAlignment="CENTER" underline="true" />
+                                    <TextField fx:id="crnSearchTF" alignment="CENTER" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" underline="true" />
+                                    <TextField fx:id="profSearchTF" alignment="CENTER" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" underline="true" />
+                                    <TextField fx:id="courseSearchTF" alignment="CENTER" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" underline="true" />
+                                    <TextField fx:id="departSearchTF" alignment="CENTER" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" underline="true" />
+                                    <TextField fx:id="resourceSearchTF" alignment="CENTER" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <Button fx:id="searchBtn" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#search" text="Search" textAlignment="CENTER">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" underline="true" />
-                              <TextField fx:id="profTF" alignment="CENTER" />
-                           </children>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" underline="true" />
-                              <TextField fx:id="courseTF" alignment="CENTER" />
-                           </children>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" underline="true" />
-                              <TextField fx:id="departTF" alignment="CENTER" />
-                           </children>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" underline="true" />
-                              <TextField fx:id="resourceTF" alignment="CENTER" />
-                           </children>
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <Button fx:id="searchBtn" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#search" text="Search" textAlignment="CENTER">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Button>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
                      </children>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                      <children>
-                        <CheckBox mnemonicParsing="false" text="CRN" />
-                        <CheckBox mnemonicParsing="false" text="Professor" />
-                        <CheckBox mnemonicParsing="false" text="Course" />
-                        <CheckBox mnemonicParsing="false" text="Department" />
-                        <CheckBox mnemonicParsing="false" text="Resources" />
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <Label text="Table Filters" />
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                            <children>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                              <CheckBox mnemonicParsing="false" text="CRN" />
+                              <CheckBox mnemonicParsing="false" text="Professor" />
+                              <CheckBox mnemonicParsing="false" text="Course" />
+                              <CheckBox mnemonicParsing="false" text="Department" />
+                              <CheckBox mnemonicParsing="false" text="Resources" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
-                                    <Label text="Semester" />
-                                    <ComboBox fx:id="semesterComBox" prefWidth="150.0" />
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="Semester" />
+                                          <ComboBox fx:id="semesterComBox" prefWidth="150.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label text="Year" />
+                                          <ComboBox fx:id="yearComBox" prefWidth="150.0" />
+                                       </children>
+                                    </VBox>
                                  </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                                 <children>
-                                    <Label text="Year" />
-                                    <ComboBox fx:id="yearComBox" prefWidth="150.0" />
-                                 </children>
-                              </VBox>
+                              </HBox>
                            </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                         </HBox>
                      </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
+                  </VBox>
                   <TableView fx:id="tableTV" editable="true" onMousePressed="#updateRowSelected">
                     <columns>
-                      <TableColumn fx:id="crnCol" maxWidth="-1.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="CRN" />
-                      <TableColumn fx:id="profCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Professor" />
-                        <TableColumn fx:id="courseCol" maxWidth="-1.0" minWidth="75.0" prefWidth="-1.0" resizable="false" text="Course" />
-                        <TableColumn fx:id="departCol" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Department" />
-                        <TableColumn fx:id="resourceCol" maxWidth="-1.0" minWidth="475.0" prefWidth="-1.0" text="Current Resources" />
+                      <TableColumn fx:id="crnCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="CRN" />
+                      <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Professor" />
+                        <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Course" />
+                        <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />
+                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="475.0" text="Current Resources" />
                     </columns>
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                   </TableView>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importData" text="Import">
-                           <HBox.margin>
-                              <Insets right="25.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="exportBtn" mnemonicParsing="false" onAction="#exportData" text="Export">
-                           <HBox.margin>
-                              <Insets right="25.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" text="Exit" />
-                     </children>
-                  </HBox>
                </children>
             </VBox>
          </children></HBox>
+      <Separator prefWidth="200.0" />
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importData" text="Import">
+               <HBox.margin>
+                  <Insets right="25.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="exportBtn" mnemonicParsing="false" onAction="#exportData" text="Export">
+               <HBox.margin>
+                  <Insets right="25.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" text="Exit" />
+         </children>
+      </HBox>
    </children>
 </VBox>
