@@ -1,5 +1,7 @@
 package com.mbox;
 
+import java.sql.*;
+
 public class Resource {
 
     private String type, title, author, isbn, description;
@@ -7,6 +9,7 @@ public class Resource {
 
     public Resource(){
 
+        this.id = 0;
         this.type = "";
         this.title = "";
         this.author = "";
@@ -14,12 +17,11 @@ public class Resource {
         this.total_amount = 0;
         this.current_amount = 0;
         this.description = "";
-        this.id =0 ;
-
     }
 
-    public Resource(int id, String type, String title, String author, String isbn, int total, int current, String desc){
+    public Resource(String type, String title, String author, String isbn, int total, int current, String desc){
 
+        this.id = 0;
         this.type = type;
         this.title = title;
         this.author = author;
@@ -27,7 +29,6 @@ public class Resource {
         this.total_amount = total;
         this.current_amount = current;
         this.description = desc;
-        this.id = id;
 
     }
 
@@ -134,12 +135,51 @@ public class Resource {
     @Override
     public String toString(){
 
-        return "Type: " + this.type + " "
+        return "ID: " + this.id + " "
+        +"Type: " + this.type + " "
         + "Title: " + this.title + " "
         + "Author: " + this.author + " "
         + "ISBN: " + this.isbn + " "
         + "Total Amount: " + String.valueOf(this.total_amount) + " "
         + "Current Amount: " + String.valueOf(this.current_amount) + " "
         + "Description: " + this.description;
+    }
+
+    public void addToDB(){
+
+        try {
+
+            insertToDB();
+
+            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM RESOURCES");
+
+
+            while(rs.next()){
+                this.id = rs.getInt(1);
+                this.type = rs.getString(2);
+                this.title = rs.getString(3);
+                this.author = rs.getString(4);
+                this.isbn = rs.getString(5);
+                this.total_amount = rs.getInt(6);
+                this.current_amount = rs.getInt(7);
+                this.description = rs.getString(8);
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    private void insertToDB(){
+
+        String quer = String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %s, %s, '%s')"
+                , this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description);
+
+        try{
+            Main.st.executeQuery(quer);
+        }catch(Exception e){
+
+        }
+
+
     }
 }

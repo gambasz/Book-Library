@@ -25,19 +25,18 @@ public class DBManager {
             return null;
         }
     }
-}
 
-    /*
 
-    public String addPersonQuery(Person person){
+   /* public static String addPersonQuery(Person person) {
 
-            String first, last, type;
-            first = person.getFirstName();
-            last = person.getLastName();
-            type = person.getType();
-            String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", first, last, type);
-            return query;
-        }
+        String first, last, type;
+        first = person.getFirstName();
+        last = person.getLastName();
+        type = person.getType();
+        String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", first, last, type);
+        return query;
+    }
+
 
         public String addCourseQuery(Course course){
 
@@ -102,3 +101,5 @@ public class DBManager {
         }
 
      */
+
+}

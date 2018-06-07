@@ -1,5 +1,7 @@
 package com.mbox;
 
+import java.sql.*;
+
 public class Publisher {
 
     private int id;
@@ -67,12 +69,12 @@ public class Publisher {
     @Override
     public String toString(){
 
-        return "Title: " + this.title + "\n" + "Contact Info: \n" + this.contact_information;
+        return "ID: " + this.id + " " + "Title: " + this.title + "\n" + "Contact Info: " + this.contact_information + " " + "Description: " + this.description;
     }
 
     // --- DB ADD METHOD ----
 
-    public String addToDB(){
+    public String addToDBOLDDONTUSE(){
 
         return String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')", this.title, this.contact_information, this.description);
 
@@ -86,6 +88,41 @@ public class Publisher {
         this.contact_information = c;
         this.description = d;
         return String.format("UPDATE PUBLISHERS SET TITLE = '%s', CONTACT_INFO = '%s', DESCRIPTION = '%s' WHERE ID = %s", this.title, this.contact_information, this.description, this.id);
+    }
+
+    // DB ADD METHOD
+
+    public void addToDB(){
+
+        try {
+
+            insertToDB();
+
+            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM PUBLISHERS");
+
+
+            while(rs.next()){
+                this.id = rs.getInt(1);
+                this.title = rs.getString(2);
+                this.contact_information = rs.getString(3);
+                this.description = rs.getString(4);
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    private void insertToDB(){
+
+        String quer = String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')", this.title, this.contact_information, this.description);
+
+        try{
+            Main.st.executeQuery(quer);
+        }catch(Exception e){
+
+        }
+
+
     }
 
 }

@@ -92,7 +92,7 @@ public class Person {
     @Override
     public String toString(){
 
-        return "Name: " + this.first_name + " " + this.last_name + " " + "Role: " + this.type;
+        return "ID: " + this.id + "Name: " + this.first_name + " " + this.last_name + " " + "Role: " + this.type;
     }
 
     //------- DB SEARCH METHODS --------------
@@ -123,25 +123,37 @@ public class Person {
 
     // -----DB INSERT METHODS------------------
 
-    public String addToDB(){
-
-
-        String quer = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
+    public void addToDB(){
 
         try {
 
-            ResultSet result = Main.st.executeQuery(quer);
+            insertToDB();
 
-            System.out.println("haha datar obegir" + result);
+            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM PERSON");
 
+
+            while(rs.next()){
+                this.id = rs.getInt(1);
+                this.first_name = rs.getString(2);
+                this.last_name = rs.getString(3);
+                this.type = rs.getString(4);
+                }
+            }catch (Exception e){
 
         }
-        catch (Exception e){
+    }
+
+    private void insertToDB(){
+
+        String quer = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
+
+        try{
+            Main.st.executeQuery(quer);
+        }catch(Exception e){
 
         }
 
 
-        return quer;
     }
 
 

@@ -1,5 +1,7 @@
 package com.mbox;
 
+import java.sql.*;
+
 public class Course {
 
     private int id;
@@ -74,7 +76,7 @@ public class Course {
     @Override
     public String toString(){
 
-        return "Course title: " + this.title + " " + "CRN: " + this.crn + " " + "Description: " + this.description +
+        return "ID: " + this.id + " " +  "Course title: " + this.title + " " + "CRN: " + this.crn + " " + "Description: " + this.description +
                 " " + "Department: " + this.department;
     }
 
@@ -105,7 +107,7 @@ public class Course {
     }
 
     //----------- DB ADD METHODS -------------------
-    public String addToDB(){
+    public String addToDBOLD(){
 
         return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES ('%s', '%s', '%s', '%s')", this.title, this.crn, this.description, this.department);
 
@@ -122,5 +124,49 @@ public class Course {
         return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s' WHERE ID = %s", this.title, this.crn, this.description, this.department, this.id);
     }
 
+    public String getAllSemesters(){
+
+        //while(rs.next()){
+
+          //  System.out.println(String.valueOf(rs.getInt(1)) + " " + rs.getString(2) + " " + rs.getString(3));
+        return "";
+        }
+
+    // INSERT TO DB AND GET INTO OBJECT:
+
+    public void addToDB(){
+
+        try {
+
+            insertToDB();
+
+            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM COURSECT");
+
+
+            while(rs.next()){
+                this.id = rs.getInt(1);
+                this.title = rs.getString(2);
+                this.crn = rs.getString(3);
+                this.description = rs.getString(4);
+                this.department = rs.getString(5);
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    private void insertToDB(){
+
+        String quer = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES ('%s', '%s', '%s', '%s')", this.title, this.crn, this.description, this.department);
+
+        try{
+            Main.st.executeQuery(quer);
+        }catch(Exception e){
+
+        }
+
+
+    }
 
 }
+
