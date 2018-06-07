@@ -175,13 +175,14 @@ public class Controller {
 
     private void init_tables() {
 
-        Course temp = new Course("Fall", "CMSC 140", "java", "Webb");
-        Course c1 = new Course();
-        getResource(c1);
-        getCourse(c1);
-        getStuff(c1);
-
-        tableTV.getItems().addAll(temp, c1);
+//        Course temp = new Course("Fall", "CMSC 140", "java", "Webb");
+       for (int i = 0 ; i < 2;i++) {
+           Course c1 = new Course();
+           getResource(c1);
+           getCourse(c1);
+           getStuff(c1);
+           tableTV.getItems().add(c1);
+       }
 
     }
 
