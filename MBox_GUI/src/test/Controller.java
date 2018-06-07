@@ -1,11 +1,10 @@
+package test;
+
 import data.Course;
 import data.Person;
 import data.Publisher;
 import data.Resource;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -13,10 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Controller {
     ArrayList<Course> table_data;
@@ -27,7 +24,7 @@ public class Controller {
     @FXML
     Button searchBtn,crnInfoBtn,resEditBtn,addBtn,commitBtn,deleteBtn;
     @FXML
-    TableView<String[]> tableTV;
+    TableView<Course> tableTV;
     @FXML
     TableColumn<Course, Integer> crnCol;
     @FXML
@@ -48,26 +45,6 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        String[][] staffArray = {{"nice to ", "have", "titles"},
-                {"a", "b", "c"},
-                {"d", "e", "f"}};
-        ObservableList<String[]> data = FXCollections.observableArrayList();
-        data.addAll(Arrays.asList(staffArray));
-        data.remove(0);//remove titles from data
-
-        for (int i = 0; i < staffArray[0].length; i++) {
-            TableColumn tc = new TableColumn(staffArray[0][i]);
-            final int colNo = i;
-            tc.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<String[], String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<String[], String> p) {
-                    return new SimpleStringProperty((p.getValue()[colNo]));
-                }
-            });
-            tc.setPrefWidth(90);
-            tableTV.getColumns().add(tc);
-        }
-        tableTV.setItems(data);
         Cock.setVisible(false);
         Cock.setMaxWidth(0);
         initComboBoxes();
@@ -169,7 +146,7 @@ tableTV.getSelectionModel().getSelectedItems();
         for (int i = 1; i < 10; i++) {
 //            table_data.add(temp);
         }
-//        tableTV.getItems().addAll(table_data);
+        tableTV.getItems().addAll(table_data);
 
     }
 
@@ -181,17 +158,17 @@ tableTV.getSelectionModel().getSelectedItems();
 //    }
 
     private void setCellValueOfColumns() {
-//        crnCol.setCellValueFactory(
-//                new PropertyValueFactory<Course, Integer>("CRN"));
-//        profCol.setCellValueFactory(
-//                new PropertyValueFactory<Course, Person>("professor"));
-//        courseCol.setCellValueFactory(
-//                new PropertyValueFactory<Course, String>("name"));
-//        departCol.setCellValueFactory(
-//                new PropertyValueFactory<Course, String>("department"));
-//        resourceCol.setCellValueFactory(
-//                new PropertyValueFactory<Course, ArrayList>("resource"));
-//
+        crnCol.setCellValueFactory(
+                new PropertyValueFactory<Course, Integer>("CRN"));
+        profCol.setCellValueFactory(
+                new PropertyValueFactory<Course, Person>("professor"));
+        courseCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("name"));
+        departCol.setCellValueFactory(
+                new PropertyValueFactory<Course, String>("department"));
+        resourceCol.setCellValueFactory(
+                new PropertyValueFactory<Course, ArrayList>("resource"));
+
 
     }
 

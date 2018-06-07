@@ -14,11 +14,12 @@ import java.util.Objects;
  */
 public class Course {
 
-
+    private  int ID;
     final private SimpleIntegerProperty CRN, YEAR;
     final private SimpleStringProperty SEMESTER;
     private SimpleStringProperty title, department;
     private Person professor;
+    private  String description;
     private ArrayList<Resource> resource;
 
 
