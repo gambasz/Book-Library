@@ -33,6 +33,11 @@ public class Controller {
     @FXML
     VBox Cock;
 
+    public static Connection con = establishDB();
+    public static Statement ex_statement;
+
+
+
 
     @FXML
     public void initialize() {
@@ -55,7 +60,7 @@ public class Controller {
         yearComBox.setItems(FXCollections.observableArrayList(years));
     }
 
-    public void getStuff(Course person) {
+    public void getStuff(Course person, int id) {
 
         try {
 
@@ -63,7 +68,7 @@ public class Controller {
 
             Statement st = con.createStatement();
 
-            String selectquery = "SELECT * FROM PERSON WHERE  IDTMP !=1";
+            String selectquery = String.format("SELECT * FROM PERSON WHERE  IDTMP = %s", id);
 
             ResultSet rs = st.executeQuery(selectquery);
 
@@ -79,7 +84,7 @@ public class Controller {
         }
     }
 
-    public void getCourse(Course ct) {
+    public void getCourse(Course ct, int id) {
 
         try {
 
@@ -87,7 +92,7 @@ public class Controller {
 
             Statement st = con.createStatement();
 
-            String selectquery = "SELECT * FROM COURSECT WHERE IDTMP=1";
+            String selectquery = String.format("SELECT * FROM COURSECT WHERE IDTMP = %s", id);
 
             ResultSet rs = st.executeQuery(selectquery);
 
@@ -103,7 +108,7 @@ public class Controller {
         }
     }
 
-    public void getResource(Course r) {
+    public void getResource(Course r, int id) {
 
         try {
 
@@ -111,7 +116,7 @@ public class Controller {
 
             Statement st = con.createStatement();
 
-            String selectquery = "SELECT * FROM RESOURCES WHERE IDTMP=1";
+            String selectquery = String.format("SELECT * FROM RESOURCES WHERE IDTMP = %s", id);
 
             ResultSet rs = st.executeQuery(selectquery);
 
@@ -176,13 +181,23 @@ public class Controller {
     private void init_tables() {
 
 //        Course temp = new Course("Fall", "CMSC 140", "java", "Webb");
-       for (int i = 0 ; i < 2;i++) {
-           Course c1 = new Course();
-           getResource(c1);
-           getCourse(c1);
-           getStuff(c1);
-           tableTV.getItems().add(c1);
-       }
+
+        try {
+
+             int max = Integer.parseInt(findMaxIDTMP("Person"));
+
+            for (int i = 1; i <= max; i++) {
+                Course c1 = new Course();
+                getResource(c1, i);
+                getCourse(c1, i);
+                getStuff(c1, i);
+                tableTV.getItems().add(c1);
+            }
+
+        } catch (Exception e) {
+
+        }
+
 
     }
 
@@ -376,5 +391,85 @@ public class Controller {
         });
 
 
+    }
+
+    public static String findMaxIDTMP(String input) {
+
+        try {
+
+            ex_statement = con.createStatement();
+            switch (input) {
+
+
+                case "Person": {
+
+                    try {
+
+                        ResultSet rs = ex_statement.executeQuery("SELECT MAX(IDTMP) FROM PERSON");
+
+                        while (rs.next()) {
+
+                            return rs.getString(1);
+
+                        }
+
+                    } catch (Exception e) {
+
+                        System.out.print(e.getMessage());
+
+                    }
+
+                }
+
+
+                case "Course": {
+
+                    try {
+
+                        ResultSet rs = ex_statement.executeQuery("SELECT MAX(IDTMP) FROM COURSECT");
+
+                        while (rs.next()) {
+
+                            return rs.getString(1);
+
+                        }
+
+                    } catch (Exception e) {
+
+                        System.out.print(e.getMessage());
+
+                    }
+
+
+                }
+
+
+                case "Resource": {
+
+                    try {
+
+                        ResultSet rs = ex_statement.executeQuery("SELECT MAX(IDTMP) FROM RESOURCES");
+
+                        while (rs.next()) {
+
+                            return rs.getString(1);
+
+                        }
+
+                    } catch (Exception e) {
+
+                        System.out.print(e.getMessage());
+
+                    }
+
+
+                }
+            }
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        return input;
     }
 }
