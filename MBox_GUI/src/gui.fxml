@@ -16,7 +16,7 @@
    <children>
       <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
          <children>
-            <VBox fx:id="Cock" alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+            <VBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                <children>
                   <Label text="Course Manager" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
@@ -33,7 +33,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Professor" />
-                              <Button fx:id="crnInfoBtn" mnemonicParsing="false" onAction="#selectProf" text="Name" />
+                              <Button fx:id="profInfoBtn" mnemonicParsing="false" onAction="#selectProf" text="Name" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -42,7 +42,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Course Name" />
-                              <TextField fx:id="nameInfoTf" />
+                              <TextField fx:id="courseInfoTf" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -60,7 +60,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Resourses" />
-                              <Label fx:id="crnInfoLbl" layoutX="110.0" layoutY="22.0" text="Names" />
+                              <Label fx:id="resInfoLbl" layoutX="110.0" layoutY="22.0" text="Names" />
                               <Button fx:id="resEditBtn" mnemonicParsing="false" onAction="#modifyResources" text="Focus" />
                            </children>
                            <padding>
@@ -103,7 +103,7 @@
                </padding>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox prefHeight="600.0" prefWidth="800.0">
+            <VBox onMousePressed="#resetSelect" prefHeight="600.0" prefWidth="800.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="125.0" prefWidth="100.0">
                      <children>
@@ -173,11 +173,11 @@
                         <Label text="Table Filters" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                            <children>
-                              <CheckBox mnemonicParsing="false" text="CRN" />
-                              <CheckBox mnemonicParsing="false" text="Professor" />
-                              <CheckBox mnemonicParsing="false" text="Course" />
-                              <CheckBox mnemonicParsing="false" text="Department" />
-                              <CheckBox mnemonicParsing="false" text="Resources" />
+                              <CheckBox fx:id="crnCB" mnemonicParsing="false" onAction="#filter" text="CRN" />
+                              <CheckBox fx:id="profCB" mnemonicParsing="false" onAction="#filter" text="Professor" />
+                              <CheckBox fx:id="courseCB" mnemonicParsing="false" onAction="#filter" text="Course" />
+                              <CheckBox fx:id="departCB" mnemonicParsing="false" onAction="#filter" text="Department" />
+                              <CheckBox fx:id="resCB" mnemonicParsing="false" onAction="#filter" text="Resources" />
                               <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                  <children>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
@@ -203,10 +203,12 @@
                   </VBox>
                   <TableView fx:id="tableTV" editable="true" onMousePressed="#updateRowSelected">
                     <columns>
+                        <TableColumn fx:id="timeCol" prefWidth="75.0" text="Time" />
+                      <TableColumn fx:id="crnCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="CRN" />
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Professor" />
                         <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Course" />
+                        <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />
                         <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="475.0" text="Current Resources" />
-                        <TableColumn fx:id="semesterCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Semester" />
                     </columns>
                      <VBox.margin>
                         <Insets />
@@ -216,9 +218,8 @@
             </VBox>
          </children></HBox>
       <Separator prefWidth="200.0" />
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+      <HBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="50.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#add_btn_mal" text="Add" />
             <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importData" text="Import">
                <HBox.margin>
                   <Insets right="25.0" />

@@ -14,29 +14,50 @@ import java.util.Objects;
  */
 public class Course {
 
-    private  int ID;
+    private int ID;
     final private SimpleIntegerProperty CRN, YEAR;
     final private SimpleStringProperty SEMESTER;
-    private SimpleStringProperty title, department;
+    private SimpleStringProperty title, department, description;
     private Person professor;
-    private  String description;
     private ArrayList<Resource> resource;
 
 
-    public Course(int CRN, int YEAR, String SEMESTER) {
+    public Course(int CRN, int YEAR,String SEMESTER) {
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
         this.SEMESTER = new SimpleStringProperty(SEMESTER);
     }
 
-    public Course(int CRN, int YEAR, String SEMESTER, String title, String department, Person professor, ArrayList<Resource> resource) {
+    public Course(int ID, int CRN, int YEAR, String SEMESTER, String title, String department, Person professor, String description, ArrayList<Resource> resource) {
+        this.ID = ID;
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
-        this.SEMESTER = new SimpleStringProperty(SEMESTER);
+        this.SEMESTER = new SimpleStringProperty(SEMESTER.toUpperCase());
         this.title = new SimpleStringProperty(title);
         this.department = new SimpleStringProperty(department);
+        this.description = new SimpleStringProperty(description);
         this.professor = professor;
         this.resource = resource;
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public SimpleStringProperty descriptionProperty() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description.set(description);
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public int getCRN() {
@@ -122,12 +143,14 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" +
-                "CRN=" + CRN +
+                "ID=" + ID +
+                ", CRN=" + CRN +
                 ", YEAR=" + YEAR +
                 ", SEMESTER=" + SEMESTER +
                 ", title=" + title +
                 ", department=" + department +
                 ", professor=" + professor +
+                ", description='" + description + '\'' +
                 ", resource=" + resource +
                 '}';
     }

@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Person {
 
-    final String lastName,firstName,id;
-    private Enum type ;
+    final String lastName, firstName, id;
+    private Enum type;
 
 
     public Person(String lastName, String firstName, String id, Enum type) {

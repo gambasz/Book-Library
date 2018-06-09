@@ -4,19 +4,20 @@ import java.util.Objects;
 
 public class Resource {
     private final String TYPE, ID;
-    private String name, author, description;
+    private String title, author, description;
     private boolean mcUnique;
     private int ammount;
-    private  Publisher publisher;
+    private Publisher publisher;
+
     public Resource(String TYPE, String ID) {
         this.TYPE = TYPE;
         this.ID = ID;
     }
 
-    public Resource(String TYPE, String ID, String name, Publisher publisher, String author, String description, boolean mcUnique) {
+    public Resource(String TYPE, String ID, String title, Publisher publisher, String author, String description, boolean mcUnique) {
         this.TYPE = TYPE;
         this.ID = ID;
-        this.name = name;
+        this.title = title;
         this.publisher = publisher;
         this.author = author;
         this.description = description;
@@ -31,12 +32,12 @@ public class Resource {
         return ID;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Publisher getPublisher() {
