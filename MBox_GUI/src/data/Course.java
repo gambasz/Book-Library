@@ -15,14 +15,14 @@ import java.util.Objects;
 public class Course {
 
     private int ID;
-    final private SimpleIntegerProperty CRN, YEAR;
-    final private SimpleStringProperty SEMESTER;
+    private SimpleIntegerProperty CRN, YEAR;
+    private SimpleStringProperty SEMESTER;
     private SimpleStringProperty title, department, description;
     private Person professor;
     private ArrayList<Resource> resource;
 
 
-    public Course(int CRN, int YEAR,String SEMESTER) {
+    public Course(int CRN, int YEAR, String SEMESTER) {
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
         this.SEMESTER = new SimpleStringProperty(SEMESTER);

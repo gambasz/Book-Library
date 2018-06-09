@@ -24,6 +24,25 @@ public class Resource {
         this.mcUnique = mcUnique;
     }
 
+    public Resource(String TYPE, String ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
+        this.TYPE = TYPE;
+        this.ID = ID;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.ammount = ammount;
+        this.publisher = publisher;
+    }
+
+    public int getAmmount() {
+        return ammount;
+    }
+
+    public void setAmmount(int ammount) {
+        this.ammount = ammount;
+    }
+
     public String getTYPE() {
         return TYPE;
     }

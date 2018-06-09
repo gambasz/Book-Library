@@ -1,12 +1,10 @@
 package data;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Publisher {
-    // NAME , ID, contact, DESCRIPTION,
     final String NAME, DESCRIPTION;
-    final int ID;
+    int ID;
     private String contacts;
 
     public Publisher(String NAME, String DESCRIPTION, int ID) {
@@ -20,6 +18,10 @@ public class Publisher {
         this.DESCRIPTION = DESCRIPTION;
         this.ID = ID;
         this.contacts = contacts;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getNAME() {

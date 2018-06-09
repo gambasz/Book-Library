@@ -15,7 +15,14 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
+/**
+ * The main controller class for th gui fxml file that has all the functionality need to provide a smooth user experience.
+ * The class also interacts with the data manager.
+ *
+ * @author Rajashow
+ */
 public class Controller {
 
     private TableView resourceTable;
@@ -40,7 +47,15 @@ public class Controller {
     @FXML
     CheckBox crnCB, profCB, courseCB, departCB, resCB;
 
-
+    /**
+     * This is initializes the start state.
+     * The initial state includes:
+     * - values for the combo boxes
+     * - value factory for the columns based on the Object "Course"
+     * - initial values to display on the table
+     * - initializes the resource table
+     * - marking all the filter checkboxes to true
+     */
     @FXML
     public void initialize() {
         initComboBoxes();
@@ -53,6 +68,9 @@ public class Controller {
 
     }
 
+    /**
+     * Marks all the filter checkboxes to true
+     */
     private void initCheckBoxes() {
         crnCB.setSelected(true);
         profCB.setSelected(true);
@@ -61,6 +79,16 @@ public class Controller {
         resCB.setSelected(true);
     }
 
+    /**
+     * Initializes the resource table.
+     * > makes a instance of TableView object
+     * > makes columns for the Resource :
+     * - publisher
+     * - Author
+     * - ID
+     * - Title
+     * > sets attributes for the resource table
+     */
     private void initResourcesTable() {
         resourceTable = new TableView();
         publisherCol = new TableColumn<>("Publisher");
@@ -77,11 +105,18 @@ public class Controller {
 
     }
 
+    /**
+     * Initialize values for the combo boxes.
+     * <p>
+     * For the semester combo boxes add the semesters.
+     * <p>
+     * For the year combo boxes add the all the years since 1946 to next year
+     */
     private void initComboBoxes() {
         semesterComBox.setItems(FXCollections.observableArrayList("Fall", "Winter", "Spring", "Summer"));
         semesterComBoxEdit.setItems(FXCollections.observableArrayList("Fall", "Winter", "Spring", "Summer"));
         ArrayList<String> years = new ArrayList<>();
-        for (int i = 1920; i < 2018; i++)
+        for (int i = 1946; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
             years.add("" + i);
         yearComBox.setItems(FXCollections.observableArrayList(years));
         yearComBoxEdit.setItems(FXCollections.observableArrayList(years));
@@ -116,6 +151,9 @@ public class Controller {
 
     }
 
+    /**
+     * Un-selects the selected row when clicking on background
+     */
     public void resetSelect() {
         tableTV.getSelectionModel().clearSelection();
 
@@ -133,7 +171,9 @@ public class Controller {
 
     }
 
-
+    /**
+     * populates the table with initial values
+     */
     private void initTables() {
         ArrayList<Resource> arr = new ArrayList<>();
         Resource r = new Resource("h", "he", "automate the boring stuff with python", null, "me", "something", true);
@@ -199,6 +239,9 @@ public class Controller {
     public void importData() {
     }
 
+    /**
+     * Handles the filter check boxes action
+     */
     public void filter() {
         crnCol.setVisible(crnCB.isSelected());
         profCol.setVisible(profCB.isSelected());
@@ -208,6 +251,10 @@ public class Controller {
 
     }
 
+    /**
+     * Assign a new Resources to Course.
+     * It creates Resource objects and assign the resources as the Professor for the course object
+     */
     public void modifyResources() {
         VBox mainPane = new VBox();
         VBox resourcePane = new VBox(5);
@@ -309,7 +356,10 @@ public class Controller {
         });
     }
 
-
+    /**
+     * Assign a new Professor to Course.
+     * It creates a Person object and assign the person as the Professor for the course object
+     */
     public void selectProf() {
         VBox mainAddPane = new VBox(2);
 

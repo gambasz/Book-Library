@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Person {
 
-    final String lastName, firstName, id;
+    String lastName, firstName, id;
     private Enum type;
 
 
@@ -13,6 +13,18 @@ public class Person {
         this.firstName = firstName;
         this.id = id;
         this.type = type;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLastName() {
