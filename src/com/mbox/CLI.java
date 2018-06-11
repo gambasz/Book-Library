@@ -31,26 +31,19 @@ public class CLI {
             String command = values[0];
 
 
-            switch (command) {
-                case "help":
-                case "HELP":
-                case "Help": {
+            switch (command.toLowerCase()) {
+                case "help": {
 
                     showHelp();
                     break;
                 }
-                case "Insert":
-                case "INSERT":
                 case "insert": {
 
                     String table = values[1];
                     insertTable(table,values,DB);
                     break;
                 }
-
-                case "SHOW":
-                case "show":
-                case "Show": {
+                case "show": {
                     String table = values[1];
                     showTable(table);
                     break;
@@ -70,33 +63,28 @@ public class CLI {
 
 
     public static void showHelp(){
-        System.out.println("-------Instruction--------");
-        System.out.println("To add to person: INSERT -Person -<Firstname> -<Lastname> -<Type>");
-        System.out.println("To add to resource: INSERT -Resource -<Type> -<Title> -<Author> -<ISBN> -<totalAmount>"+
-                "-<currentAmount> -<Description>");
-        System.out.println("1. To add to publisher: INSERT -Publisher -<Title> -<contactInfo> -<description>");
-        System.out.println("2. To see data in table: SHOW -<Name of table> ");
+        System.out.println("------------------------Instruction----------------------------");
+        System.out.printf("%-50s%-100s\n","ACTION","SYNTAX");
+        System.out.printf("%-50s%-100s\n","[Add to person]","INSERT -Person -<Firstname> -<lastname> -<type>");
+        System.out.printf("%-50s%-100s\n","[Add to resource]","INSERT -Resource -<Type> -<Title> -<Author> -<ISBN> -<totalAmount>"+
+                " -<currentAmount> -<Description>");
+        System.out.printf("%-50s%-100s\n","[Add to publisher]","INSERT -Publisher -<Title> -<ContactInfo> -<Description>");
+        System.out.printf("%-50s%-100s\n","[Show a table]","Show -<NameOfTable>");
     }
 
     public static void showTable(String table) {
-        switch (table) {
-            case "PERSON":
-            case "Person":
+        switch (table.toLowerCase()) {
             case "person": {
 
                 DBManager.getTablePerson();
                 break;
             }
 
-            case "Resource":
-            case "RESOURCE":
             case "resource": {
                 DBManager.getTableResources();
                 break;
             }
 
-            case "Publisher":
-            case "PUBLISHER":
             case "publisher": {
                 DBManager.getTablePublishers();
                 break;
@@ -107,42 +95,36 @@ public class CLI {
 
 
     public static void insertTable(String table, String[] values,DBManager DB){
-        switch(table){
-            case"PERSON":
-            case"Person":
+        switch(table.toLowerCase()){
             case"person":{
                 try{
 
-//                     Person p=new Person(1, values[2],values[3],values[4]);
-//                     DB.executeNoReturnQuery(DB.qiPerson(p));
-//                     System.out.println("Added Person");
+                     Person p=new Person(1, values[2],values[3],values[4]);
+                     DB.executeNoReturnQuery(DB.qiPerson(p));
+                     System.out.println("Added Person");
                 }catch(Exception e){
                     System.out.println("It must be Firstname Lastname Type");
                  }
                 break;
             }
 
-            case"Resource":
-            case"RESOURCE":
             case"resource":{
                 try{
-//                    Resource r=new Resource(values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
-//                    Integer.valueOf(values[7]),values[8]);
-//                    DB.executeNoReturnQuery(DB.qiResource(r));
-//                    System.out.println("Added Resource");
+                    Resource r = new Resource(0,values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
+                    Integer.valueOf(values[7]),values[8]);
+                    DB.executeNoReturnQuery(DB.qiResource(r));
+                    System.out.println("Added Resource");
                 }catch(Exception e){
                     System.out.println("It must be type title author isbn total current description");
             }
                 break;
         }
 
-            case"Course":
-            case"COURSE":
             case"course":{
                 try{
-//                    Course c=new Course(values[2],values[3],values[4],values[5]);
-//                    DB.executeNoReturnQuery(DB.qiCourse(c));
-//                    System.out.println("Added Course");
+                    Course c=new Course(0,values[2],values[3],values[4],values[5]);
+                    DB.executeNoReturnQuery(DB.qiCourse(c));
+                    System.out.println("Added Course");
                 }catch(Exception e){
                     System.out.println("It must be title crn description department");
             }
@@ -155,3 +137,6 @@ public class CLI {
     }
 }
 
+//malnipulate the help syntax
+//finish the search method
+//delete
