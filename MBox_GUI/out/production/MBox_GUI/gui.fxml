@@ -18,9 +18,9 @@
          <children>
             <VBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                <children>
-                  <Label text="Course Manager" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
+                        <Label style="-fx-font-weight: bold;" text="Course Details" />
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="CRN" />
@@ -30,16 +30,7 @@
                               <Insets bottom="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
-                           <children>
-                              <Label text="Professor" />
-                              <Button fx:id="profInfoBtn" mnemonicParsing="false" onAction="#selectProf" text="Name" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Course Name" />
                               <TextField fx:id="courseInfoTf" />
@@ -48,7 +39,7 @@
                               <Insets bottom="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Department" />
                               <TextField fx:id="departInfoTf" />
@@ -57,49 +48,122 @@
                               <Insets bottom="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="60.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></VBox>
+                  <Separator prefWidth="200.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="30.0">
                            <children>
-                              <Label text="Resourses" />
-                              <Label fx:id="resInfoLbl" layoutX="110.0" layoutY="22.0" text="Names" />
-                              <Button fx:id="resEditBtn" mnemonicParsing="false" onAction="#modifyResources" text="Focus" />
+                              <Label style="-fx-font-weight: bold;" text="Professor" textAlignment="CENTER" />
+                              <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectProf" text="FInd &amp; Auto Fill Info" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="170.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                        <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <Label text="Semester" />
-                              <ComboBox fx:id="semesterComBoxEdit" prefWidth="150.0" />
+                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Label text="First Name:" />
+                                    <TextField fx:id="courseInfoTf" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Last Name:" />
+                                    <TextField fx:id="courseInfoTf1" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="10.0" layoutY="45.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Type:" />
+                                    <ComboBox prefWidth="150.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <Separator prefWidth="200.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label style="-fx-font-weight: bold;" text="Resources" />
+                        <HBox prefWidth="99.0" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER_LEFT" spacing="5.0">
+                                 <children>
+                                    <Label fx:id="resInfoLbl" text="Resources" />
+                                    <Label fx:id="resInfoLbl1" layoutX="10.0" layoutY="14.0" text="Resources" />
+                                    <Label fx:id="resInfoLbl11" layoutX="10.0" layoutY="32.0" text="Resources" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="BASELINE_RIGHT">
+                                 <children>
+                                    <Button fx:id="resEditBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#modifyResources" text="Expand" />
+                                 </children>
+                              </VBox>
                            </children>
                            <padding>
-                              <Insets bottom="10.0" />
+                              <Insets left="5.0" />
                            </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="176.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
-                           <children>
-                              <Label text="Year" />
-                              <ComboBox fx:id="yearComBoxEdit" prefWidth="150.0" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="220.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                           <children>
-                              <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" text="Add New" />
-                              <Button fx:id="commitBtn" mnemonicParsing="false" onAction="#apply" text="Commit" />
-                              <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#delete" text="Delete" />
-                           </children>
                         </HBox>
                      </children>
                   </VBox>
+                  <Separator prefWidth="200.0" />
+                  <VBox>
+                     <children>
+                        <Label style="-fx-font-weight: bold;" text="Semester" />
+                        <VBox>
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Season" />
+                                    <ComboBox fx:id="semesterComBoxEdit" prefWidth="150.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Year" />
+                                    <ComboBox fx:id="yearComBoxEdit" prefWidth="150.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                     <children>
+                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" text="Add New" />
+                        <Button fx:id="commitBtn" mnemonicParsing="false" onAction="#apply" text="Commit" />
+                        <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                     </children>
+                  </HBox>
                </children>
                <padding>
-                  <Insets bottom="25.0" />
+                  <Insets bottom="25.0" left="25.0" top="10.0" />
                </padding>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
@@ -173,7 +237,6 @@
                         <Label text="Table Filters" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                            <children>
-                              <CheckBox fx:id="crnCB" mnemonicParsing="false" onAction="#filter" text="CRN" />
                               <CheckBox fx:id="profCB" mnemonicParsing="false" onAction="#filter" text="Professor" />
                               <CheckBox fx:id="courseCB" mnemonicParsing="false" onAction="#filter" text="Course" />
                               <CheckBox fx:id="departCB" mnemonicParsing="false" onAction="#filter" text="Department" />
@@ -203,8 +266,7 @@
                   </VBox>
                   <TableView fx:id="tableTV" editable="true" onMousePressed="#updateRowSelected">
                     <columns>
-                        <TableColumn fx:id="timeCol" prefWidth="75.0" text="Time" />
-                      <TableColumn fx:id="crnCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="CRN" />
+                        <TableColumn fx:id="timeCol" prefWidth="75.0" text="Semester" />
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Professor" />
                         <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Course" />
                         <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />

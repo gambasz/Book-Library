@@ -39,13 +39,11 @@ public class Controller {
     @FXML
     TableView<Course> tableTV;
     @FXML
-    TableColumn<Course, Integer> crnCol;
-    @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
     ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit;
     @FXML
-    CheckBox crnCB, profCB, courseCB, departCB, resCB;
+    CheckBox profCB, courseCB, departCB, resCB;
 
     /**
      * This is initializes the start state.
@@ -72,7 +70,6 @@ public class Controller {
      * Marks all the filter checkboxes to true
      */
     private void initCheckBoxes() {
-        crnCB.setSelected(true);
         profCB.setSelected(true);
         courseCB.setSelected(true);
         departCB.setSelected(true);
@@ -178,15 +175,13 @@ public class Controller {
         ArrayList<Resource> arr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         arr.add(r);
-        Person p = new Person("P", "R", null, null);
+        Person p = new Person("P", "R", 1, null);
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", arr);
         tableTV.getItems().add(c);
     }
 
 
     private void setCellValueOfColumns() {
-        crnCol.setCellValueFactory(
-                new PropertyValueFactory<Course, Integer>("CRN"));
         courseCol.setCellValueFactory(
                 new PropertyValueFactory<Course, String>("name"));
         departCol.setCellValueFactory(
@@ -243,7 +238,6 @@ public class Controller {
      * Handles the filter check boxes action
      */
     public void filter() {
-        crnCol.setVisible(crnCB.isSelected());
         profCol.setVisible(profCB.isSelected());
         courseCol.setVisible(courseCB.isSelected());
         departCol.setVisible(departCB.isSelected());

@@ -5,31 +5,32 @@ import java.util.Objects;
 public class Publisher {
 
     int ID;
-    private String DESCRIPTION, NAME, contacts ;
+    private String Description, name, contacts ;
 
-    public Publisher(String NAME, String contacts, int ID) {
-        this.NAME = NAME;
+    public Publisher(String name, String contacts, int ID) {
+        this.name = name;
         this.contacts = contacts;
         this.ID = ID;
     }
 
-    public Publisher(String NAME, String DESCRIPTION, int ID, String contacts) {
-        this.NAME = NAME;
-        this.DESCRIPTION = DESCRIPTION;
+    public Publisher(int ID, String name, String Description, String contacts) {
+        this.name = name;
+        this.Description = Description;
         this.ID = ID;
         this.contacts = contacts;
     }
+
 
     public void setID(int ID) {
         this.ID = ID;
     }
 
-    public String getNAME() {
-        return NAME;
+    public String getName() {
+        return name;
     }
 
-    public String getDESCRIPTION() {
-        return DESCRIPTION;
+    public String getDescription() {
+        return Description;
     }
 
     public int getID() {
@@ -44,12 +45,12 @@ public class Publisher {
         this.contacts = contacts;
     }
 
-    public void setDESCRIPTION(String DESCRIPTION) {
-        this.DESCRIPTION = DESCRIPTION;
+    public void setDescription(String description) {
+        this.Description = description;
     }
 
-    public void setNAME(String NAME) {
-        this.NAME = NAME;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -69,8 +70,8 @@ public class Publisher {
     @Override
     public String toString() {
         return "Publisher{" +
-                "NAME='" + NAME + '\'' +
-                ", DESCRIPTION='" + DESCRIPTION + '\'' +
+                "name='" + name + '\'' +
+                ", Description='" + Description + '\'' +
                 ", ID=" + ID +
                 ", contacts=" + contacts +
                 '}';

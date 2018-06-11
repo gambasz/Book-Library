@@ -4,14 +4,15 @@ import java.util.Objects;
 
 public class Person {
 
-    String lastName, firstName, id;
+    private String lastName, firstName;
+    private int ID;
     private Enum type;
 
 
-    public Person(String lastName, String firstName, String id, Enum type) {
+    public Person(String lastName, String firstName, int ID, Enum type) {
         this.lastName = lastName;
         this.firstName = firstName;
-        this.id = id;
+        this.ID = ID;
         this.type = type;
     }
 
@@ -23,8 +24,8 @@ public class Person {
         this.firstName = firstName;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getLastName() {
@@ -35,8 +36,8 @@ public class Person {
         return firstName;
     }
 
-    public String getId() {
-        return id;
+    public int getID() {
+        return ID;
     }
 
     public Enum getType() {
@@ -54,13 +55,13 @@ public class Person {
         Person person = (Person) o;
         return Objects.equals(lastName, person.lastName) &&
                 Objects.equals(firstName, person.firstName) &&
-                Objects.equals(id, person.id);
+                Objects.equals(ID, person.ID);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(lastName, firstName, id);
+        return Objects.hash(lastName, firstName, ID);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class Person {
         return "Person{" +
                 "lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", ID='" + id + '\'' +
+                ", ID='" + ID + '\'' +
                 ", type=" + type +
                 '}';
     }

@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Resource {
     private String TYPE, title, author, description;
     private boolean mcUnique;
-    private int amount,ID;
+    private int totalAmount,ID,currentAmount;
     private Publisher publisher;
 
     public Resource(String TYPE, int ID) {
@@ -30,16 +30,24 @@ public class Resource {
         this.author = author;
         this.description = description;
         this.mcUnique = mcUnique;
-        this.amount = ammount;
+        this.totalAmount = ammount;
         this.publisher = publisher;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getCurrentAmount() {
+        return currentAmount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setCurrentAmount(int currentAmount) {
+        this.currentAmount = currentAmount;
+    }
+
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public String getTYPE() {
