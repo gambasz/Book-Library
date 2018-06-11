@@ -19,9 +19,9 @@ public class Resource {
         this.description = "";
     }
 
-    public Resource(String type, String title, String author, String isbn, int total, int current, String desc){
+    public Resource(int id, String type, String title, String author, String isbn, int total, int current, String desc){
 
-        this.id = 0;
+        this.id = id;
         this.type = type;
         this.title = title;
         this.author = author;
