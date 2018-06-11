@@ -412,6 +412,59 @@ public class DBManager {
         System.out.println("=========================================================================================");
     }
 
+    // Search by: Professor (name), Course(title), Resource(title), Semester-Year
+
+    public static Person[] searchByProfessor(String name){
+
+        int i = 0;
+
+        try{
+
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s'", name);
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+                i++;
+            }
+
+            Person[] p = new Person[i];
+
+            rs = st.executeQuery(query);
+            i = 0;
+            while(rs.next()){
+
+                p[i] = new Person(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4));
+                i++;
+                return p;
+            }
+
+        }catch(SQLException e){
+
+        }
+
+        return null;
+    }
+
+    public static Course[] searchByCourse(String title){
+
+        Course[] c = new Course[1];
+        return c;
+    }
+
+    public static Resource[] searchByResource(String title){
+
+        Resource[] r = new Resource[1];
+        return r;
+    }
+
+    public static Course[] searchBySemester(String semester, String year){
+
+        Course[] c = new Course[1];
+        return c;
+    }
+
 
 
 }
