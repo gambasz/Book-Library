@@ -2,6 +2,8 @@ package com.mbox;
 import java.sql.*;
 import com.mbox.Main;
 
+import javax.xml.transform.Result;
+
 public class DBManager {
     public static Statement st;
     public static Connection conn;
@@ -519,6 +521,42 @@ public class DBManager {
 
     /*
     public static Course[] searchBySemester(String semester, String year){
+
+        //ID 49 for Semster -> Spring 2018
+        int id[];
+        int i = 0;
+        Course[] c;
+
+        try{
+
+            String query = String.format("SELECT * FROM SEMESTER WHERE SEMESTER='%s', YEAR='%s'", semester, year);
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+
+                i++;
+            }
+
+            id = new int[i];
+            i = 0;
+
+            while(rs.next()){
+
+                id[i] = rs.getInt(1);
+                i++;
+            }
+
+
+        }catch(SQLException e){
+
+        }
+
+
+        return c;
+    }
+
+    public static Course[] searchBySemester(String semester, String year){
         int i = 0;
         int j = 0;
         int[] arrayids;
@@ -555,7 +593,6 @@ public class DBManager {
         return null;
     }
     */
-
 
 
 }
