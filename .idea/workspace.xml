@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0cbe0248-d14c-4f6c-96a4-4555fb09d056" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/CLI.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/mbox/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/CLI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/mbox/DBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/DBManager.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,8 +35,8 @@
       <file leaf-file-name="Person.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2595">
-              <caret line="173" selection-start-line="173" selection-end-line="173" />
+            <state relative-caret-position="-732">
+              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
             </state>
           </provider>
         </entry>
@@ -47,8 +44,8 @@
       <file leaf-file-name="CLI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/mbox/CLI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="1224">
+              <caret line="108" column="26" lean-forward="true" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -77,7 +74,7 @@
       <file leaf-file-name="DBManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
+            <state relative-caret-position="4335">
               <caret line="289" column="5" lean-forward="true" selection-start-line="289" selection-start-column="5" selection-end-line="289" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -540,7 +537,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
+        <state relative-caret-position="4335">
           <caret line="289" column="5" lean-forward="true" selection-start-line="289" selection-start-column="5" selection-end-line="289" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -550,15 +547,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2595">
-          <caret line="173" selection-start-line="173" selection-end-line="173" />
+        <state relative-caret-position="-732">
+          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/mbox/CLI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="1224">
+          <caret line="108" column="26" lean-forward="true" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
