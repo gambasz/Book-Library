@@ -134,9 +134,9 @@ public class Person {
 
             while(rs.next()){
                 this.id = rs.getInt(1);
-                this.first_name = rs.getString(2);
-                this.last_name = rs.getString(3);
-                this.type = rs.getString(4);
+                this.type = rs.getString(2);
+                this.first_name = rs.getString(3);
+                this.last_name = rs.getString(4);
                 }
             }catch (Exception e){
 
