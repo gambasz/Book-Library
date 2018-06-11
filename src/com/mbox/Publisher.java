@@ -98,7 +98,7 @@ public class Publisher {
 
             insertToDB();
 
-            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM PUBLISHERS");
+            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM PUBLISHERS");
 
 
             while(rs.next()){
@@ -117,7 +117,7 @@ public class Publisher {
         String quer = String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')", this.title, this.contact_information, this.description);
 
         try{
-            Main.st.executeQuery(quer);
+            DBManager.st.executeQuery(quer);
         }catch(Exception e){
 
         }

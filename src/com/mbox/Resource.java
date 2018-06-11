@@ -71,6 +71,11 @@ public class Resource {
         this.description = desc;
     }
 
+    public int getID(){
+
+        return this.id;
+    }
+
     public String getType(){
 
         return this.type;
@@ -151,7 +156,7 @@ public class Resource {
 
             insertToDB();
 
-            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM RESOURCES");
+            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM RESOURCES");
 
 
             while(rs.next()){
@@ -175,7 +180,7 @@ public class Resource {
                 , this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description);
 
         try{
-            Main.st.executeQuery(quer);
+            DBManager.st.executeQuery(quer);
         }catch(Exception e){
 
         }

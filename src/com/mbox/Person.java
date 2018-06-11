@@ -129,7 +129,7 @@ public class Person {
 
             insertToDB();
 
-            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM PERSON");
+            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM PERSON");
 
 
             while(rs.next()){
@@ -148,7 +148,7 @@ public class Person {
         String quer = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
 
         try{
-            Main.st.executeQuery(quer);
+            DBManager.st.executeQuery(quer);
         }catch(Exception e){
 
         }

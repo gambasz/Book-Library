@@ -53,6 +53,11 @@ public class Course {
 
     }
 
+    public int getID(){
+
+        return this.id;
+    }
+
     public String getTitle(){
 
         return this.title;
@@ -140,7 +145,7 @@ public class Course {
 
             insertToDB();
 
-            ResultSet rs = Main.st.executeQuery("SELECT MAX(ID) FROM COURSECT");
+            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM COURSECT");
 
 
             while(rs.next()){
@@ -160,7 +165,7 @@ public class Course {
         String quer = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES ('%s', '%s', '%s', '%s')", this.title, this.crn, this.description, this.department);
 
         try{
-            Main.st.executeQuery(quer);
+            DBManager.st.executeQuery(quer);
         }catch(Exception e){
 
         }
