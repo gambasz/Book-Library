@@ -160,14 +160,12 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(CRN, course.CRN) &&
-                Objects.equals(YEAR, course.YEAR) &&
-                Objects.equals(SEMESTER, course.SEMESTER);
+        return ID == course.ID;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(CRN, YEAR, SEMESTER);
+        return Objects.hash(ID);
     }
 }

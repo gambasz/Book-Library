@@ -176,7 +176,7 @@ public class Controller {
      */
     private void initTables() {
         ArrayList<Resource> arr = new ArrayList<>();
-        Resource r = new Resource("h", "he", "automate the boring stuff with python", null, "me", "something", true);
+        Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         arr.add(r);
         Person p = new Person("P", "R", null, null);
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", arr);

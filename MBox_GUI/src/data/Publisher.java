@@ -3,13 +3,13 @@ package data;
 import java.util.Objects;
 
 public class Publisher {
-    final String NAME, DESCRIPTION;
-    int ID;
-    private String contacts;
 
-    public Publisher(String NAME, String DESCRIPTION, int ID) {
+    int ID;
+    private String DESCRIPTION, NAME, contacts ;
+
+    public Publisher(String NAME, String contacts, int ID) {
         this.NAME = NAME;
-        this.DESCRIPTION = DESCRIPTION;
+        this.contacts = contacts;
         this.ID = ID;
     }
 
@@ -44,20 +44,26 @@ public class Publisher {
         this.contacts = contacts;
     }
 
+    public void setDESCRIPTION(String DESCRIPTION) {
+        this.DESCRIPTION = DESCRIPTION;
+    }
+
+    public void setNAME(String NAME) {
+        this.NAME = NAME;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Publisher publisher = (Publisher) o;
-        return ID == publisher.ID &&
-                Objects.equals(NAME, publisher.NAME) &&
-                Objects.equals(DESCRIPTION, publisher.DESCRIPTION);
+        return ID == publisher.ID;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(NAME, DESCRIPTION, ID);
+        return Objects.hash(ID);
     }
 
     @Override

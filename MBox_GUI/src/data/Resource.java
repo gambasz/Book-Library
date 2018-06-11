@@ -3,18 +3,17 @@ package data;
 import java.util.Objects;
 
 public class Resource {
-    private final String TYPE, ID;
-    private String title, author, description;
+    private String TYPE, title, author, description;
     private boolean mcUnique;
-    private int ammount;
+    private int amount,ID;
     private Publisher publisher;
 
-    public Resource(String TYPE, String ID) {
+    public Resource(String TYPE, int ID) {
         this.TYPE = TYPE;
         this.ID = ID;
     }
 
-    public Resource(String TYPE, String ID, String title, Publisher publisher, String author, String description, boolean mcUnique) {
+    public Resource(String TYPE, int ID, String title, Publisher publisher, String author, String description, boolean mcUnique) {
         this.TYPE = TYPE;
         this.ID = ID;
         this.title = title;
@@ -24,31 +23,39 @@ public class Resource {
         this.mcUnique = mcUnique;
     }
 
-    public Resource(String TYPE, String ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
+    public Resource(String TYPE, int ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
         this.TYPE = TYPE;
         this.ID = ID;
         this.title = title;
         this.author = author;
         this.description = description;
         this.mcUnique = mcUnique;
-        this.ammount = ammount;
+        this.amount = ammount;
         this.publisher = publisher;
     }
 
-    public int getAmmount() {
-        return ammount;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setAmmount(int ammount) {
-        this.ammount = ammount;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public String getTYPE() {
         return TYPE;
     }
 
-    public String getID() {
+    public int getID() {
         return ID;
+    }
+
+    public void setTYPE(String TYPE) {
+        this.TYPE = TYPE;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getTitle() {
