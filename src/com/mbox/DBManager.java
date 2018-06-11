@@ -3,26 +3,29 @@ import java.sql.*;
 import com.mbox.Main;
 
 public class DBManager {
-
     public static Statement st;
     public static Connection conn;
+
 
     // As of right now returns a connection. Should be void.
     public static void openConnection() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             conn = DriverManager.getConnection("jdbc:oracle:thin:USERNAME/PASSWORD@HOST:PORT:SID");
-            System.out.println("Connection to the database was successful");
+            st = conn.createStatement();
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Connection to the database was NOT successful");
+
         }
     }
-    public DBManager(){}
+    public DBManager(){
+        //Method is empty for now
+    }
+
     public static void closeConnection(){
-
         try{
-
             if(conn.isClosed()){
 
                 System.out.println("The connection has already been closed");
@@ -165,7 +168,7 @@ public class DBManager {
         return returntable;
     }
 
-    public static String findByIDPerson(int id){
+    public static void findByIDPerson(int id){
 
         try{
 
@@ -180,7 +183,7 @@ public class DBManager {
         }
 
 
-        return String.format("SELECT * FROM PERSON WHERE ID = %d", id);
+       // return String.format("SELECT * FROM PERSON WHERE ID = %d", id);
     }
 
     public static String findByIDCourse(int id){

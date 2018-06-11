@@ -1,4 +1,7 @@
-/*package com.mbox;
+
+package com.mbox;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -13,9 +16,8 @@ public class CLI {
 
         DBManager DB = new DBManager();
         DB.openConnection();
-
-
-        System.out.println("Enter Help to know more.");
+        System.out.println("MBox CLI Version 1.0");
+        System.out.println("Enter help for a list of commends.\n");
 
         while (true) {
             System.out.print(">> ");
@@ -53,9 +55,11 @@ public class CLI {
                     showTable(table);
                     break;
                 }
+                case "exit":
+                    System.exit(0);
 
                 default:
-                    System.out.println("Enter Help to know more");
+                    System.out.println("Invalid input");
             }
         }
     }
@@ -109,9 +113,9 @@ public class CLI {
             case"person":{
                 try{
 
-                     Person p=new Person(values[2],values[3],values[4]);
-                     DB.executeNoReturnQuery(DB.qiPerson(p));
-                     System.out.println("Added Person");
+//                     Person p=new Person(1, values[2],values[3],values[4]);
+//                     DB.executeNoReturnQuery(DB.qiPerson(p));
+//                     System.out.println("Added Person");
                 }catch(Exception e){
                     System.out.println("It must be Firstname Lastname Type");
                  }
@@ -122,10 +126,10 @@ public class CLI {
             case"RESOURCE":
             case"resource":{
                 try{
-                    Resource r=new Resource(values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
-                    Integer.valueOf(values[7]),values[8]);
-                    DB.executeNoReturnQuery(DB.qiResource(r));
-                    System.out.println("Added Resource");
+//                    Resource r=new Resource(values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
+//                    Integer.valueOf(values[7]),values[8]);
+//                    DB.executeNoReturnQuery(DB.qiResource(r));
+//                    System.out.println("Added Resource");
                 }catch(Exception e){
                     System.out.println("It must be type title author isbn total current description");
             }
@@ -136,17 +140,18 @@ public class CLI {
             case"COURSE":
             case"course":{
                 try{
-                    Course c=new Course(values[2],values[3],values[4],values[5]);
-                    DB.executeNoReturnQuery(DB.qiCourse(c));
-                    System.out.println("Added Course");
+//                    Course c=new Course(values[2],values[3],values[4],values[5]);
+//                    DB.executeNoReturnQuery(DB.qiCourse(c));
+//                    System.out.println("Added Course");
                 }catch(Exception e){
                     System.out.println("It must be title crn description department");
             }
                 break;
         }
             default: System.out.println("There is no table like that.");
+
+
         }
     }
 }
 
-*/
