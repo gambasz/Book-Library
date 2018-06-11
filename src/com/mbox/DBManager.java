@@ -18,7 +18,7 @@ public class DBManager {
             e.printStackTrace();
         }
     }
-
+    public DBManager(){}
     public static void closeConnection(){
 
         try{
@@ -283,19 +283,19 @@ public class DBManager {
 
         // Query Makers: Given an object, create a query to insert into the database.
 
-    private String qiPerson(Person person) {
+    public String qiPerson(Person person) {
 
         return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
                 person.getFirstName(), person.getLastName(), person.getType());
     }
-    private String qiCourse(Course course){
+    public String qiCourse(Course course){
 
         return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
                 "('%s', '%s', '%s', '%s')", course.getTitle(), course.getCRN(), course.getDescription(),
                 course.getDepartment());
 
     }
-    private String qiResource(Resource resource){
+    public String qiResource(Resource resource){
 
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
                         "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
@@ -303,7 +303,7 @@ public class DBManager {
                 resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
 
     }
-    private String qiPublisher(Publisher publisher){
+    public String qiPublisher(Publisher publisher){
 
         return String.format("INSERT INTO PUBLISHER (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
                 publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription());
