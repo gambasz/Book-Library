@@ -137,8 +137,8 @@ public class Person {
                 this.type = rs.getString(2);
                 this.first_name = rs.getString(3);
                 this.last_name = rs.getString(4);
-                }
-            }catch (Exception e){
+            }
+        }catch (Exception e){
 
         }
     }
@@ -166,7 +166,7 @@ public class Person {
         this.type = type;
         return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s", first, last, type, this.id);
     }
-    
+
 
 
 

@@ -12,7 +12,7 @@ public class CLI {
 
         Scanner scan = new Scanner(System.in);
 
-        con = DBManager.establishDB();
+        DBManager.openConnection();
         System.out.println("Connection to the database has been established.");
 
         System.out.println("Enter Help to know more.");
