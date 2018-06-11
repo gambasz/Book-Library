@@ -17,7 +17,7 @@ public class Person {
 
     public Person(int id, String first_name, String last_name, String type){
 
-        this.id = 0;
+        this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.type = type;

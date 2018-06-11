@@ -20,9 +20,9 @@ public class Course {
 
     }
 
-    public Course(String title, String crn, String desc, String dept){
+    public Course(int id, String title, String crn, String desc, String dept){
 
-        this.id = 0;
+        this.id = id;
         this.title = title;
         this.crn = crn;
         this.description = desc;

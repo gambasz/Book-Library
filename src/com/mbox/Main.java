@@ -9,8 +9,9 @@ public class Main {
 
         DBManager.openConnection();
         DBManager.printSeparator();
-        DBManager.getTablePerson();
-        System.out.println(DBManager.searchByProfessor("Alla"));
+        DBManager.getTableResources();
+        DBManager.printSeparator();
+        System.out.println(DBManager.searchByResource("Book"));
         DBManager.closeConnection();
 
         }

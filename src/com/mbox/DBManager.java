@@ -448,22 +448,110 @@ public class DBManager {
     }
 
     public static Course[] searchByCourse(String title){
+        int i = 0;
 
-        Course[] c = new Course[1];
-        return c;
+        try{
+
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM COURSECT WHERE TITLE='%s'", title);
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+                i++;
+            }
+
+            Course[] c = new Course[i];
+
+            rs = st.executeQuery(query);
+            i = 0;
+            while(rs.next()){
+
+                c[i] = new Course(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5));
+                i++;
+                return c;
+            }
+
+        }catch(SQLException e){
+
+        }
+
+        return null;
     }
 
     public static Resource[] searchByResource(String title){
 
-        Resource[] r = new Resource[1];
-        return r;
+        int i = 0;
+
+        try{
+
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'", title);
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+                i++;
+            }
+
+            Resource[] r = new Resource[i];
+
+            rs = st.executeQuery(query);
+            i = 0;
+            while(rs.next()){
+
+                r[i] = new Resource(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getInt(6),
+                        rs.getInt(7), rs.getString(8));
+                i++;
+            }
+
+            return r;
+
+        }catch(SQLException e){
+
+        }
+
+        return null;
     }
 
+    /*
     public static Course[] searchBySemester(String semester, String year){
+        int i = 0;
+        int j = 0;
+        int[] arrayids;
 
-        Course[] c = new Course[1];
-        return c;
+        try{
+
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM SEMESTER WHERE SEASON='%s', YEAR='%s'", semester, year);
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+                i++;
+                j++;
+            }
+
+            arrayids = new int[j];
+
+            Course[] c = new Course[i];
+
+            rs = st.executeQuery(query);
+            i = 0;
+            while(rs.next()){
+
+                c[i] = new Person(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4));
+                i++;
+                return p;
+            }
+
+        }catch(SQLException e){
+
+        }
+
+        return null;
     }
+    */
 
 
 
