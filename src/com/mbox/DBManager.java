@@ -47,81 +47,25 @@ public class DBManager {
             switch(table){
 
                 case "Person":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Person)");
-                    }
-
-                    rs = st.executeQuery("SELECT * FROM PERSON");
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4));
-                    }
-
+                    getTablePerson();
                     break;
 
                 case "Course":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Course)");
-                    }
-
-                    rs = st.executeQuery("SELECT * FROM COURSECT");
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4) + "|" +
-                                rs.getString(5));
-                    }
+                    getTableCourses();
                     break;
 
                 case "Resource":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Resource)");
-                    }
-
-                    rs = st.executeQuery("SELECT * FROM RESOURCES");
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4) + "|" +
-                                rs.getInt(5) + "|" + rs.getInt(6) + "|" +
-                                rs.getString(7));
-                    }
-
+                    getTableResources();
                     break;
 
                 case "Publisher":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Publisher)");
-                    }
-
-                    rs = st.executeQuery("SELECT * FROM PUBLISHERS");
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4));
-                    }
-
+                    getTablePublishers();
                     break;
                 default:
-
                     System.out.println("Something very weird happened.");
-
                     break;
             }
-        }catch(SQLException e){
+        }catch(Exception e){
 
             System.out.println("Something went wrong when trying to get the " + table + " table.");
         }
@@ -219,6 +163,76 @@ public class DBManager {
         }
 
         return returntable;
+    }
+
+    public static String findByIDPerson(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE ID = %d", id));
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4));
+            }
+
+        }catch(SQLException e){
+
+        }
+
+
+        return String.format("SELECT * FROM PERSON WHERE ID = %d", id);
+    }
+
+    public static String findByIDCourse(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", id));
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4) + "|" + rs.getString(5));
+            }
+
+        }catch(SQLException e){
+
+        }
+
+        return String.format("SELECT * FROM COURSECT WHERE ID = %d", id);
+    }
+
+    public static String findByIDResources(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4) + rs.getInt(5) +
+                        rs.getInt(6) + rs.getString(7));
+            }
+
+        }catch(SQLException e){
+
+        }
+
+
+        return String.format("SELECT * FROM RESOURCES WHERE ID = %d", id);
+
+    }
+
+    public static void findByIDPublisher(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PUBLISHER WHERE ID = %d", id));
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4));
+            }
+
+        }catch(SQLException e){
+
+        }
     }
 
     // Used to execute a non return query. Meaning? Either an update, insert or delete.
