@@ -53,6 +53,11 @@ public class CLI {
                     searchInTable(table,values);
                     break;
                 }
+                case "delete": {
+                    String table = values[1];
+                    deleteFromTable(table,values);
+                    break;
+                }
                 case "clear" :{
                     System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                     break;
@@ -88,7 +93,7 @@ public class CLI {
         System.out.printf("%-100s%-50s\n","Search -Publisher -<Title>","[Search by Title in Publisher table]");
         System.out.printf("%-100s%-50s\n","Search -Resource -<Title>","[Search by Title in Resources table]");
         System.out.printf("%-100s%-50s\n","Search -Course -<Title>","[Search by Title in Courses table]");
-
+        System.out.printf("%-100s%-50s\n","Delete -<Table>","[Delete by ID from that table]");
     }
 
     public static void showTable(String table) {
@@ -170,6 +175,71 @@ public class CLI {
     }
 
     //Search method
+    public static void deleteFromTable(String table, String[] values){
+        DBManager DB = new DBManager();
+        Scanner scan = new Scanner(System.in);
+        switch(table.toLowerCase()){
+            case "person":{
+                    DBManager.printTablePerson();
+                    System.out.print("ID: ");
+                    try{
+                        int ID = scan.nextInt();
+                        DB.executeNoReturnQuery("DELETE FROM PERSON WHERE ID = " + ID);
+                        System.out.println("Deleted");
+
+                    }catch(Exception e){
+                        System.out.println("Invalid input");
+                    }
+
+                break;
+            }
+            case "publisher":{
+                    DBManager.printTablePublishers();
+                    System.out.print("ID: ");
+                    try{
+                        int ID = scan.nextInt();
+                        DB.executeNoReturnQuery("DELETE FROM PUBLISHERS WHERE ID = " + ID);
+                        System.out.println("Deleted");
+
+                    }catch(Exception e){
+                        System.out.println("Invalid input");
+                    }
+
+                break;
+            }
+            case "course": {
+                    DBManager.printTableCourses();
+                    System.out.print("ID: ");
+                    try{
+                        int ID = scan.nextInt();
+                        DB.executeNoReturnQuery("DELETE FROM COURSECT WHERE ID = " + ID);
+                        System.out.println("Deleted");
+
+                    }catch(Exception e){
+                        System.out.println("Invalid input");
+                    }
+
+                break;
+            }
+            case "resource":{
+                    DBManager.printTableResources();
+                    System.out.print("ID: ");
+                    try{
+                        int ID = scan.nextInt();
+                        DB.executeNoReturnQuery("DELETE FROM RESOURCES WHERE ID = " + ID);
+                        System.out.println("Deleted");
+
+                    }catch(Exception e){
+                        System.out.println("Invalid input");
+                    }
+
+                break;
+            }
+        }
+    }
+
+
+    //delete method use ID based on search method
     public static void searchInTable(String table, String[] values){
         DBManager DB = new DBManager();
         switch(table.toLowerCase()){
@@ -213,7 +283,7 @@ public class CLI {
                     while (rs.next()) {
                         System.out.println(rs.getInt(1) + " | " + rs.getString(2) + " | " +
                                 rs.getString(3) + " | " + rs.getString(4)+ " | "+
-                        rs.getString(5));
+                                rs.getString(5));
                     }
                 }catch(Exception e){
                     System.out.println("DATA not found");
