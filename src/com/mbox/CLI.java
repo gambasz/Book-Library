@@ -69,6 +69,7 @@ public class CLI {
         System.out.printf("%-50s%-100s\n","[Add to resource]","INSERT -Resource -<Type> -<Title> -<Author> -<ISBN> -<totalAmount>"+
                 " -<currentAmount> -<Description>");
         System.out.printf("%-50s%-100s\n","[Add to publisher]","INSERT -Publisher -<Title> -<ContactInfo> -<Description>");
+        System.out.printf("%-50s%-100s\n","[Add to course]","INSERT -Course -<Title> -<CRN> -<Description> -<Department>");
         System.out.printf("%-50s%-100s\n","[Show a table]","Show -<NameOfTable>");
     }
 
@@ -87,6 +88,10 @@ public class CLI {
 
             case "publisher": {
                 DBManager.getTablePublishers();
+                break;
+            }
+            case "course": {
+                DBManager.getTableCourses();
                 break;
             }
             default: System.out.println("There is no table like that.");
@@ -130,6 +135,16 @@ public class CLI {
             }
                 break;
         }
+            case"publisher":{
+                try{
+                    Publisher  pub =new Publisher(values[2],values[3],values[4]);
+                    DB.executeNoReturnQuery(DB.qiPublisher(pub));
+                    System.out.println("Added Publisher");
+                }catch(Exception e){
+                    System.out.println("It must be title crn description department");
+                }
+                break;
+            }
             default: System.out.println("There is no table like that.");
 
 
