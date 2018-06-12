@@ -1,6 +1,7 @@
 package com.mbox;
 import java.sql.*;
 import com.mbox.Main;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.xml.transform.Result;
 
@@ -478,7 +479,7 @@ public class DBManager {
             }
 
         }catch(SQLException e){
-
+            System.out.println(e);
         }
 
         return null;

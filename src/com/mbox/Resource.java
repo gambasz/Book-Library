@@ -9,14 +9,14 @@ public class Resource {
 
     public Resource(){
 
-        this.id = 0;
-        this.type = "";
-        this.title = "";
-        this.author = "";
-        this.isbn = "";
-        this.total_amount = 0;
-        this.current_amount = 0;
-        this.description = "";
+        id = 0;
+        type = "";
+        title = "";
+        author = "";
+        isbn = "";
+        total_amount = 0;
+        current_amount = 0;
+        description = "";
     }
 
     public Resource(int id, String type, String title, String author, String isbn, int total, int current, String desc){
