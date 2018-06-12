@@ -53,8 +53,15 @@ public class CLI {
                     searchInTable(table,values);
                     break;
                 }
-                case "exit":
+                case "clear" :{
+                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                    break;
+                }
+                case "exit": {
                     System.exit(0);
+                    break;
+                }
+
 
                 default:
                     System.out.println("Invalid input");
