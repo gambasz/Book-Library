@@ -505,10 +505,10 @@ public class DBManager {
             i = 0;
             while(rs.next()){
 
-//                r[i] = new Resource(rs.getInt(1), rs.getString(2), rs.getString(3),
-//                        rs.getString(4), rs.getString(5), rs.getInt(6),
-//                        rs.getInt(7), rs.getString(8));
-//                i++;
+                r[i] = new Resource(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getInt(6),
+                        rs.getInt(7), rs.getString(8));
+                i++;
             }
 
             return r;

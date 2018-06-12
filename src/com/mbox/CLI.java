@@ -115,10 +115,10 @@ public class CLI {
 
             case"resource":{
                 try{
-//                    Resource r = new Resource(0,values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
-//                    Integer.valueOf(values[7]),values[8]);
-//                    DB.executeNoReturnQuery(DB.qiResource(r));
-//                    System.out.println("Added Resource");
+                    Resource r = new Resource(0,values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
+                    Integer.valueOf(values[7]),values[8]);
+                    DB.executeNoReturnQuery(DB.qiResource(r));
+                    System.out.println("Added Resource");
                 }catch(Exception e){
                     System.out.println("It must be type title author isbn total current description");
             }
