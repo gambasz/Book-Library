@@ -48,6 +48,11 @@ public class CLI {
                     showTable(table);
                     break;
                 }
+                case "search": {
+                    String table = values[1];
+                    searchInTable(table,values);
+                    break;
+                }
                 case "exit":
                     System.exit(0);
 
@@ -63,14 +68,20 @@ public class CLI {
 
 
     public static void showHelp(){
-        System.out.println("------------------------Instruction----------------------------");
-        System.out.printf("%-50s%-100s\n","ACTION","SYNTAX");
-        System.out.printf("%-50s%-100s\n","[Add to person]","INSERT -Person -<Firstname> -<lastname> -<type>");
-        System.out.printf("%-50s%-100s\n","[Add to resource]","INSERT -Resource -<Type> -<Title> -<Author> -<ISBN> -<totalAmount>"+
-                " -<currentAmount> -<Description>");
-        System.out.printf("%-50s%-100s\n","[Add to publisher]","INSERT -Publisher -<Title> -<ContactInfo> -<Description>");
-        System.out.printf("%-50s%-100s\n","[Add to course]","INSERT -Course -<Title> -<CRN> -<Description> -<Department>");
-        System.out.printf("%-50s%-100s\n","[Show a table]","Show -<NameOfTable>");
+        System.out.println("-------------------------------------------------------------------Instruction"+
+        "-------------------------------------------------------------");
+        System.out.printf("%-100s%-50s\n","SYNTAX","EXPLANATION");
+        System.out.printf("%-100s%-50s\n","INSERT -Person -<Firstname> -<lastname> -<type>","[Add to person]");
+        System.out.printf("%-100s%-50s\n","INSERT -Resource -<Type> -<Title> -<Author> -<ISBN> -<totalAmount>"+
+                " -<currentAmount> -<Description>","[Add to resource]");
+        System.out.printf("%-100s%-50s\n","INSERT -Publisher -<Title> -<ContactInfo> -<Description>","[Add to publisher]");
+        System.out.printf("%-100s%-50s\n","INSERT -Course -<Title> -<CRN> -<Description> -<Department>","[Add to course]");
+        System.out.printf("%-100s%-50s\n","Show -<NameOfTable>","[Show a table]");
+        System.out.printf("%-100s%-50s\n","Search -Person -<Firstname>","[Search by Firstname in Person table]");
+        System.out.printf("%-100s%-50s\n","Search -Publisher -<Title>","[Search by Title in Publisher table]");
+        System.out.printf("%-100s%-50s\n","Search -Resource -<Title>","[Search by Title in Resources table]");
+        System.out.printf("%-100s%-50s\n","Search -Course -<Title>","[Search by Title in Courses table]");
+
     }
 
     public static void showTable(String table) {
@@ -150,8 +161,79 @@ public class CLI {
 
         }
     }
+
+    //Search method
+    public static void searchInTable(String table, String[] values){
+        DBManager DB = new DBManager();
+        switch(table.toLowerCase()){
+            case "person":{
+                try {
+
+
+                    String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s'", values[2]);
+                    ResultSet rs = DB.st.executeQuery(query);
+
+                    while (rs.next()) {
+                        System.out.println(rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                                rs.getString(3) + " | " + rs.getString(4));
+                    }
+                }catch(Exception e){
+                    System.out.println("DATA not found");
+                }
+                break;
+            }
+            case "publisher":{
+                try {
+                    String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s'", values[2]);
+                    ResultSet rs = DB.st.executeQuery(query);
+
+                    while (rs.next()) {
+                        System.out.println(rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                                rs.getString(3)+" | "+rs.getString(4));
+                    }
+                }catch(Exception e){
+                    System.out.println("DATA not found");
+                }
+                break;
+            }
+            case "course": {
+                try {
+
+
+                    String query = String.format("SELECT * FROM COURSECT WHERE TITLE='%s'", values[2]);
+                    ResultSet rs = DB.st.executeQuery(query);
+
+                    while (rs.next()) {
+                        System.out.println(rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                                rs.getString(3) + " | " + rs.getString(4)+ " | "+
+                        rs.getString(5));
+                    }
+                }catch(Exception e){
+                    System.out.println("DATA not found");
+                }
+                break;
+            }
+            case "resource":{
+                try {
+
+
+                    String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'", values[2]);
+                    ResultSet rs = DB.st.executeQuery(query);
+
+                    while (rs.next()) {
+                        System.out.println(rs.getInt(1) + " | " + rs.getString(2) + " | " +
+                                rs.getString(3) + " | " + rs.getString(4) + " | " +
+                                rs.getInt(5) + " | " + rs.getInt(6) +" | "+ rs.getString(7));
+                    }
+                }catch(Exception e){
+                    System.out.println("DATA not found");
+                }
+                break;
+            }
+        }
+    }
 }
 
-//malnipulate the help syntax
-//finish the search method
+
+
 //delete
