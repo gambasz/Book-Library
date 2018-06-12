@@ -109,7 +109,7 @@ public class CLI {
                 break;
             }
             case "course": {
-                DBManager.getTableCourses();
+                DBManager.printTableCourses();
                 break;
             }
             default: System.out.println("There is no table like that.");
@@ -123,7 +123,7 @@ public class CLI {
                 try{
 
                      Person p=new Person(1, values[2],values[3],values[4]);
-                     DB.executeNoReturnQuery(DB.qiPerson(p));
+                     DB.executeNoReturnQuery(DB.insertPersonQuery(p));
                      System.out.println("Added Person");
                 }catch(Exception e){
                     System.out.println("It must be Firstname Lastname Type");
@@ -135,7 +135,7 @@ public class CLI {
                 try{
                     Resource r = new Resource(0,values[2],values[3],values[4],values[5],Integer.valueOf(values[6]),
                     Integer.valueOf(values[7]),values[8]);
-                    DB.executeNoReturnQuery(DB.qiResource(r));
+                    DB.executeNoReturnQuery(DB.insertResourceQuery(r));
                     System.out.println("Added Resource");
                 }catch(Exception e){
                     System.out.println("It must be type title author isbn total current description");
@@ -146,7 +146,7 @@ public class CLI {
             case"course":{
                 try{
                     Course c=new Course(0,values[2],values[3],values[4],values[5]);
-                    DB.executeNoReturnQuery(DB.qiCourse(c));
+                    DB.executeNoReturnQuery(DB.insertCourseQuery(c));
                     System.out.println("Added Course");
                 }catch(Exception e){
                     System.out.println("It must be title crn description department");
@@ -156,7 +156,7 @@ public class CLI {
             case"publisher":{
                 try{
                     Publisher  pub =new Publisher(values[2],values[3],values[4]);
-                    DB.executeNoReturnQuery(DB.qiPublisher(pub));
+                    DB.executeNoReturnQuery(DB.insertPublisherQuery(pub));
                     System.out.println("Added Publisher");
                 }catch(Exception e){
                     System.out.println("It must be title crn description department");
