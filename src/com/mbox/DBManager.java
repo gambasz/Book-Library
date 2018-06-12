@@ -8,12 +8,16 @@ public class DBManager {
     public static Statement st;
     public static Connection conn;
 
+    public DBManager() {
+        //Method is empty for now
+    }
 
-    // As of right now returns a connection. Should be void.
     public static void openConnection() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             conn = DriverManager.getConnection("jdbc:oracle:thin:USERNAME/PASSWORD@HOST:PORT:SID");
+
+            System.out.println("Successfully connected to the database");
             st = conn.createStatement();
 
         } catch (Exception e) {
@@ -22,10 +26,6 @@ public class DBManager {
 
         }
     }
-    public DBManager(){
-        //Method is empty for now
-    }
-
     public static void closeConnection(){
         try{
             if(conn.isClosed()){
@@ -39,204 +39,6 @@ public class DBManager {
         } catch(SQLException e){
 
             System.out.println("Something went wrong when trying to close the connection");
-        }
-    }
-
-    // Returns the whole table in the form of a string. (Either "Person", "Course", etc) [CURRENTLY NOT WORKING]
-    public static void getTable(String table){
-
-        ResultSet rs;
-
-        try{
-
-            switch(table){
-
-                case "Person":
-                    getTablePerson();
-                    break;
-
-                case "Course":
-                    getTableCourses();
-                    break;
-
-                case "Resource":
-                    getTableResources();
-                    break;
-
-                case "Publisher":
-                    getTablePublishers();
-                    break;
-                default:
-                    System.out.println("Something very weird happened.");
-                    break;
-            }
-        }catch(Exception e){
-
-            System.out.println("Something went wrong when trying to get the " + table + " table.");
-        }
-    }
-
-    // Given a table and id, returns all that matches it. As of right now, there is repetition in the method, find
-    // a way to integrate "getTable()" and "findByID()" together. [CURRENTLY NOT WORKING]
-    public static String findByID(String table, int id){
-
-        String returntable = "";
-        ResultSet rs;
-
-        try{
-
-            switch(table){
-
-                case "Person":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Person)");
-                    }
-
-                    rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE ID = %d", id));
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4));
-                    }
-
-                    break;
-
-                case "Course":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Course)");
-                    }
-
-                    rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", id));
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4) + "|" +
-                                rs.getString(5));
-                    }
-                    break;
-
-                case "Resource":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Resource)");
-                    }
-
-                    rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4) + "|" +
-                                rs.getInt(5) + "|" + rs.getInt(6) + "|" +
-                                rs.getString(7));
-                    }
-
-                    break;
-
-                case "Publisher":
-
-                    if(st.isClosed()){
-
-                        System.out.println("Scanner is closed. Fix me (Publisher)");
-                    }
-
-                    rs = st.executeQuery(String.format("SELECT * FROM PUBLISHERS WHERE ID = %d", id));
-
-                    while(rs.next()){
-
-                        System.out.println(rs.getInt(1) + "|" + rs.getString(2) + "|" +
-                                rs.getString(3) + "|" + rs.getString(4));
-                    }
-
-                    break;
-                default:
-
-                    System.out.println("Something very weird happened.");
-
-                    break;
-            }
-        }catch(SQLException e){
-
-            System.out.println("Something went wrong when trying to get the " + table + " table.");
-        }
-
-        return returntable;
-    }
-
-    public static void findByIDPerson(int id){
-
-        try{
-
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE ID = %d", id));
-            while(rs.next()){
-                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
-                        rs.getString(3) + rs.getString(4));
-            }
-
-        }catch(SQLException e){
-
-        }
-
-
-       // return String.format("SELECT * FROM PERSON WHERE ID = %d", id);
-    }
-
-    public static String findByIDCourse(int id){
-
-        try{
-
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", id));
-            while(rs.next()){
-                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
-                        rs.getString(3) + rs.getString(4) + "|" + rs.getString(5));
-            }
-
-        }catch(SQLException e){
-
-        }
-
-        return String.format("SELECT * FROM COURSECT WHERE ID = %d", id);
-    }
-
-    public static String findByIDResources(int id){
-
-        try{
-
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
-            while(rs.next()){
-                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
-                        rs.getString(3) + rs.getString(4) + rs.getInt(5) +
-                        rs.getInt(6) + rs.getString(7));
-            }
-
-        }catch(SQLException e){
-
-        }
-
-
-        return String.format("SELECT * FROM RESOURCES WHERE ID = %d", id);
-
-    }
-
-    public static void findByIDPublisher(int id){
-
-        try{
-
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PUBLISHER WHERE ID = %d", id));
-            while(rs.next()){
-                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
-                        rs.getString(3) + rs.getString(4));
-            }
-
-        }catch(SQLException e){
-
         }
     }
 
@@ -255,94 +57,18 @@ public class DBManager {
         }
     }
 
-    //============================================Update Methods Queries================================================
+    //============================================== PRINT METHODS =====================================================
 
-    private String quPerson(Person person){
+    //======================================SELECT METHODS(PRINT TO SCREEN)=============================================
 
-        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %d",
-                person.getFirstName(), person.getLastName(), person.getType(), person.getID());
-    }
-    private String quCourse(Course course){
+    //============================================PRINTS WHOLE TABLE====================================================
 
-        return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s" +
-                "WHERE ID = %d", course.getTitle(), course.getCRN(), course.getDescription(), course.getDepartment(),
-                course.getID());
-
-    }
-    private String quResource(Resource resource){
-
-        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s, " +
-                        "TOTAL_AMOUNT = %d, CURRENT_AMOUNT = %d, DESCRIPTION = '%s' WHERE ID = %d",
-                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
-
-    }
-    private String quPublisher(Publisher publisher){
-
-        return String.format("UPDATE PUBLISHER SET TITLE = '%s', CONTACT_INFO = '%s', DESCRIPTION = '%s' WHERE ID = %d",
-                publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription(),
-                publisher.getID());
-    }
-
-    //===========================================Insert Method Queries==================================================
-
-        // Query Makers: Given an object, create a query to insert into the database.
-
-    public String qiPerson(Person person) {
-
-        return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
-                person.getFirstName(), person.getLastName(), person.getType());
-    }
-    public String qiCourse(Course course){
-
-        return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
-                "('%s', '%s', '%s', '%s')", course.getTitle(), course.getCRN(), course.getDescription(),
-                course.getDepartment());
-
-    }
-    public String qiResource(Resource resource){
-
-        return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
-                        "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
-                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
-
-    }
-    public String qiPublisher(Publisher publisher){
-
-        return String.format("INSERT INTO PUBLISHER (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
-                publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription());
-
-    }
-
-    //==========================================Delete Method Queries===================================================
-    // Deletes it by ID (getting it from the object passed into the method.
-
-    private String qdPerson(Person person){
-
-        return String.format("DELETE FROM PERSON WHERE ID = %d", person.getID());
-    }
-    private String qdPerson(Course course){
-
-        return String.format("DELETE FROM COURSECT WHERE ID = %d", course.getID());
-    }
-    private String qdResource(Resource resource){
-
-        return String.format("DELETE FROM RESOURCES WHERE ID = %d", resource.getID());
-    }
-    private String qdPublisher(Publisher publisher){
-
-        return String.format("DELETE FROM PUBLISHERS WHERE ID = %d", publisher.getID());
-    }
-
-    //==========================================SELECT METHODS (EXECUTED)===============================================
-    public static void getTablePerson(){
+    // Regular Tables
+    public static void printTablePerson(){
 
         try{
 
-            Statement st = conn.createStatement();
-
-            ResultSet rs = st.executeQuery("SELECT * FROM PERSON");
+            ResultSet rs = st.executeQuery(getTablePersonQuery());
 
             while(rs.next()){
 
@@ -352,15 +78,16 @@ public class DBManager {
 
         }catch(SQLException e){
 
+            e.printStackTrace();
+            System.out.println("ERROR: Failed to execute 'printTablePerson()' method.");
+
         }
     }
-    public static void getTableCourses(){
+    public static void printTableCourses(){
 
         try{
 
-            Statement st = conn.createStatement();
-
-            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT");
+            ResultSet rs = st.executeQuery(getTableCourseQuery());
 
             while(rs.next()){
 
@@ -371,15 +98,17 @@ public class DBManager {
 
         }catch(SQLException e){
 
+            e.printStackTrace();
+            System.out.println("ERROR: Failed to execute 'printTableCourses()' method.");
         }
     }
-    public static void getTableResources(){
+    public static void printTableResources(){
 
         try{
 
             Statement st = conn.createStatement();
 
-            ResultSet rs = st.executeQuery("SELECT * FROM RESOURCES");
+            ResultSet rs = st.executeQuery(getTableResourceQuery());
 
             while(rs.next()){
 
@@ -390,15 +119,16 @@ public class DBManager {
 
         }catch(SQLException e){
 
+            e.printStackTrace();
+            System.out.println("ERROR: Failed to execute 'printTableResources()' method.");
+
         }
     }
-    public static void getTablePublishers(){
+    public static void printTablePublishers(){
 
         try {
 
-            Statement st = conn.createStatement();
-
-            ResultSet rs = st.executeQuery("SELECT * FROM PUBLISHERS");
+            ResultSet rs = st.executeQuery(getTablePublisherQuery());
 
             while (rs.next()) {
 
@@ -408,17 +138,325 @@ public class DBManager {
             }
         }catch(SQLException e){
 
+            e.printStackTrace();
+            System.out.println("ERROR: Failed to execute 'printTablePublishers()' method.");
         }
     }
 
-    // Just prints a long line of equal signs
+    // Relationship Tables
+    public static void printTableCoursePerson(){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getTableCoursePersonQuery());
+            while(rs.next()){
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTableCoursePerson() method.");
+        }
+
+    }
+    public static void printTableCourseResource(){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getTableCourseResourceQuery());
+            while(rs.next()){
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTableCourseResource() method.");
+        }
+    }
+    public static void printTableCourseSemester(){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getTableCourseSemesterQuery());
+            while(rs.next()){
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTableCourseSemester() method.");
+        }
+
+    }
+    public static void printTablePersonResource(){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getTablePersonResourceQuery());
+            while(rs.next()){
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTablePersonResource() method.");
+        }
+
+    }
+    public static void printTablePublisherResource(){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getTablePublisherResourceQuery());
+            while(rs.next()){
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTablePublisherResource() method.");
+        }
+
+    }
+
+    //===========================================PRINTS MATCHING ID=====================================================
+
+    public static void printPersonInTable(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getPersonInTableQuery(id));
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printPersonInTable() method.");
+        }
+
+
+        // return String.format("SELECT * FROM PERSON WHERE ID = %d", id);
+    }
+    public static void printCourseInTable(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getCourseInTableQuery(id));
+
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4) + "|" + rs.getString(5));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printCourseInTable() method.");
+
+        }
+    }
+    public static void printResourcesInTable(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getResourceInTableQuery(id));
+
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4) + rs.getInt(5) +
+                        rs.getInt(6) + rs.getString(7));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printResourcesInTable() method.");
+        }
+
+    }
+    public static void printPublisherInTable(int id){
+
+        try{
+
+            ResultSet rs = st.executeQuery(getPublisherInTableQuery(id));
+
+            while(rs.next()){
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4));
+            }
+
+        }catch(SQLException e){
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printPublisherInTable() method.");
+        }
+    }
+
+    //================================ Just prints a long line of equal signs===========================================
     public static void printSeparator(){
 
         System.out.println("=========================================================================================");
     }
 
-    // Search by: Professor (name), Course(title), Resource(title), Semester-Year
+    //================================================= QUERIES ========================================================
 
+    //===========================================SELECT METHODS (QUERIES)===============================================
+
+    //===========================================SELECT WHOLE TABLE QUERY===============================================
+
+    //Regular Tables
+    public static String getTablePersonQuery(){
+
+        return "SELECT * FROM PERSON";
+    }
+    public static String getTableCourseQuery(){
+
+        return "SELECT * FROM COURSECT";
+    }
+    public static String getTableResourceQuery(){
+
+        return "SELECT * FROM RESOURCES";
+    }
+    public static String getTablePublisherQuery(){
+
+        return "SELECT * FROM PUBLISHERS";
+    }
+
+    //Relationship Tables
+    public static String getTableCoursePersonQuery(){
+
+        return "SELECT * FROM RELATION_COURSE_PERSON";
+
+    }
+    public static String getTableCourseResourceQuery(){
+
+        return "SELECT * FROM RELATION_COURSE_RESOURCES";
+    }
+    public static String getTableCourseSemesterQuery(){
+
+        return "SELECT * FROM RELATION_COURSE_SEMESTER";
+    }
+    public static String getTablePersonResourceQuery(){
+
+        return "SELECT * FROM RELATION_PERSON_RESOURCES";
+    }
+    public static String getTablePublisherResourceQuery(){
+
+        return "SELECT * FROM RELATION_PUBLISHER_RESOURCE";
+    }
+
+    //==============================================SELECT BY ID QUERY==================================================
+    public static String getPersonInTableQuery(int id){
+
+        return String.format("SELECT * FROM PERSON WHERE ID=%d", id);
+    }
+    public static String getCourseInTableQuery(int id){
+
+        return String.format("SELECT * FROM COURSECT WHERE ID=%d", id);
+    }
+    public static String getResourceInTableQuery(int id){
+
+        return String.format("SELECT * FROM RESOURCES WHERE ID=%d", id);
+    }
+    public static String getPublisherInTableQuery(int id){
+
+        return String.format("SELECT * FROM PUBLISHERS WHERE ID=%d", id);
+    }
+
+    //===========================================Insert Method Queries==================================================
+
+    public String insertPersonQuery(Person person) {
+
+        return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
+                person.getFirstName(), person.getLastName(), person.getType());
+    }
+    public String insertCourseQuery(Course course){
+
+        return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
+                        "('%s', '%s', '%s', '%s')", course.getTitle(), course.getCRN(), course.getDescription(),
+                course.getDepartment());
+
+    }
+    public String insertResourceQuery(Resource resource){
+
+        return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
+                        "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
+                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
+
+    }
+    public String insertPublisherQuery(Publisher publisher){
+
+        return String.format("INSERT INTO PUBLISHER (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
+                publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription());
+
+    }
+
+    //============================================Update Methods Queries================================================
+
+    private String updatePersonQuery(Person person){
+
+        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %d",
+                person.getFirstName(), person.getLastName(), person.getType(), person.getID());
+    }
+    private String updateCourseQuery(Course course){
+
+        return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s" +
+                        "WHERE ID = %d", course.getTitle(), course.getCRN(), course.getDescription(), course.getDepartment(),
+                course.getID());
+
+    }
+    private String updateResourceQuery(Resource resource){
+
+        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s, " +
+                        "TOTAL_AMOUNT = %d, CURRENT_AMOUNT = %d, DESCRIPTION = '%s' WHERE ID = %d",
+                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
+
+    }
+    private String updatePublisherQuery(Publisher publisher){
+
+        return String.format("UPDATE PUBLISHER SET TITLE = '%s', CONTACT_INFO = '%s', DESCRIPTION = '%s' WHERE ID = %d",
+                publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription(),
+                publisher.getID());
+    }
+
+    //==========================================Delete Method Queries===================================================
+
+    private String deletePersonQuery(Person person){
+
+        return String.format("DELETE FROM PERSON WHERE ID = %d", person.getID());
+    }
+    private String deleteCourseQuery(Course course){
+
+        return String.format("DELETE FROM COURSECT WHERE ID = %d", course.getID());
+    }
+    private String deleteResourceQuery(Resource resource){
+
+        return String.format("DELETE FROM RESOURCES WHERE ID = %d", resource.getID());
+    }
+    private String deletePublisherQuery(Publisher publisher){
+
+        return String.format("DELETE FROM PUBLISHERS WHERE ID = %d", publisher.getID());
+    }
+
+    //============================================GUI METHODS===========================================================
+
+    // 1st view:
+    // Search by: Professor (name), Course(title), Resource(title), Semester-Year
     public static Person[] searchByProfessor(String name){
 
         int i = 0;
@@ -451,7 +489,6 @@ public class DBManager {
 
         return null;
     }
-
     public static Course[] searchByCourse(String title){
         int i = 0;
 
@@ -483,7 +520,6 @@ public class DBManager {
 
         return null;
     }
-
     public static Resource[] searchByResource(String title){
 
         int i = 0;
@@ -519,8 +555,13 @@ public class DBManager {
         return null;
     }
 
-    /*
+    // Work in progress
     public static Course[] searchBySemester(String semester, String year){
+
+        Course[] c = new Course[1];
+        return c;
+
+        /*
 
         //ID 49 for Semster -> Spring 2018
         int id[];
@@ -593,6 +634,112 @@ public class DBManager {
         return null;
     }
     */
+    }
 
+    //================================All select methods returning object===============================================
 
+    public static Person getPersonObject(int id){
+
+        Person p = new Person();
+
+        try{
+
+            ResultSet rs = st.executeQuery(getPersonInTableQuery(id));
+
+            while(rs.next()){
+
+                p.setID(rs.getInt(1));
+                p.setType(rs.getString(2));
+                p.setFirstName(rs.getString(3));
+                p.setLastName(rs.getString(4));
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong inside of the method getPersonObject()");
+
+        }
+
+        return p;
+
+    }
+    public static Course getCourseObject(int id){
+
+        Course c = new Course();
+
+        try{
+
+            ResultSet rs = st.executeQuery(getCourseInTableQuery(id));
+
+            while(rs.next()){
+
+              c.setID(rs.getInt(1));
+              c.setTitle(rs.getString(2));
+              c.setCRN(rs.getString(3));
+              c.setDescription(rs.getString(4));
+              c.setDepartment(rs.getString(5));
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong inside of the method getPersonObject()");
+
+        }
+
+        return c;
+
+    }
+    public static Resource getResourceObject(int id){
+
+        Resource r = new Resource();
+
+        try{
+
+            ResultSet rs = st.executeQuery(getPersonInTableQuery(id));
+
+            while(rs.next()){
+
+                r.setID(rs.getInt(1));
+                r.setType(rs.getString(2));
+                r.setTitle(rs.getString(3));
+                r.setAuthor(rs.getString(4));
+                r.setISBN(rs.getString(5));
+                r.setTotalAmount(rs.getInt(6));
+                r.setCurrentAmount(rs.getInt(7));
+                r.setDescription(rs.getString(8));
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong inside of the method getPersonObject()");
+
+        }
+
+        return r;
+
+    }
+    public static Publisher getPublisherObject(int id){
+
+        Publisher p = new Publisher();
+
+        try{
+
+            ResultSet rs = st.executeQuery(getPersonInTableQuery(id));
+
+            while(rs.next()){
+
+                p.setID(rs.getInt(1));
+                p.setTitle(rs.getString(2));
+                p.setContactInformation(rs.getString(3));
+                p.setDescription(rs.getString(4));
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong inside of the method getPersonObject()");
+
+        }
+
+        return p;
+    }
 }

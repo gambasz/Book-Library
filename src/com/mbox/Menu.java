@@ -60,7 +60,7 @@ public class Menu {
                 System.out.print("Please enter a table: ");
                 table = kb.nextLine();
                 System.out.println();
-                DBManager.getTable(table);
+                //DBManager.getTable(table);
                 break;
 
             case 2:
@@ -72,7 +72,7 @@ public class Menu {
                 try{
 
                     int id = Integer.parseInt(kb.nextLine());
-                    System.out.println(DBManager.findByID(table, id));
+                    //System.out.println(DBManager.findByID(table, id));
 
                 } catch(Exception e){
 

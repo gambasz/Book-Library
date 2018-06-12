@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a7eb68b1-319e-4c8a-a70f-bbfead656056" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/CLI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/CLI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/Course.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/Course.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/DBManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/DBManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/Menu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/Menu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/Person.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/Person.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MBox/com/mbox/Resource.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MBox/com/mbox/Resource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mbox/CLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/CLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mbox/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mbox/DBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/DBManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mbox/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mbox/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/mbox/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/mbox/Resource.java" afterDir="false" />
+    </list>
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Menu.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/Menu.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="431">
+              <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#getInput#0;class#Menu#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JunkClass.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/JunkClass.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Person.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1920">
+              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CLI.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/CLI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="100" column="46" selection-start-line="100" selection-start-column="46" selection-end-line="100" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Publisher.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/Publisher.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1785">
+              <caret line="119" column="21" selection-start-line="119" selection-start-column="21" selection-end-line="119" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Resource.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/Resource.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="269">
+              <caret line="36" column="21" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DBManager.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="545">
+              <caret line="720" selection-start-line="720" selection-end-line="720" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#193#253#0" />
+                <element signature="method#openConnection#0;class#DBManager#0" />
+                <element signature="method#closeConnection#0;class#DBManager#0" />
+                <element signature="method#executeNoReturnQuery#0;class#DBManager#0" />
+                <element signature="method#prPerson#0;class#DBManager#0" />
+                <element signature="method#printTableCourses#0;class#DBManager#0" />
+                <element signature="method#printTableResources#0;class#DBManager#0" />
+                <element signature="method#printTablePublishers#0;class#DBManager#0" />
+                <element signature="e#4169#4281#0" />
+                <element signature="e#4687#5113#0" />
+                <element signature="e#5127#5562#0" />
+                <element signature="e#5576#6011#0" />
+                <element signature="e#6025#6463#0" />
+                <element signature="e#4221#4688#0" />
+                <element signature="e#4776#5248#0" />
+                <element signature="e#5329#5875#0" />
+                <element signature="e#5937#6333#0" />
+                <element signature="method#printSeparator#0;class#DBManager#0" />
+                <element signature="method#getTablePersonQuery#0;class#DBManager#0" />
+                <element signature="method#getTableCourseQuery#0;class#DBManager#0" />
+                <element signature="method#getTableResourceQuery#0;class#DBManager#0" />
+                <element signature="method#getTablePublisherQuery#0;class#DBManager#0" />
+                <element signature="e#7541#7656#0" />
+                <element signature="e#7705#7787#0" />
+                <element signature="e#7839#7921#0" />
+                <element signature="e#7972#8054#0" />
+                <element signature="e#8106#8191#0" />
+                <element signature="e#7120#7323#0" />
+                <element signature="e#7387#7478#0" />
+                <element signature="e#7535#7634#0" />
+                <element signature="e#7686#7780#0" />
+                <element signature="e#8301#8541#0" />
+                <element signature="e#8546#8859#0" />
+                <element signature="e#8864#9324#0" />
+                <element signature="e#9329#9610#0" />
+                <element signature="e#9738#10000#0" />
+                <element signature="e#10005#10340#0" />
+                <element signature="e#10345#10815#0" />
+                <element signature="e#10820#11142#0" />
+                <element signature="e#11270#11407#0" />
+                <element signature="e#11412#11551#0" />
+                <element signature="e#11556#11704#0" />
+                <element signature="e#11709#11862#0" />
+                <element signature="method#searchByProfessor#0;class#DBManager#0" />
+                <element signature="method#searchByCourse#0;class#DBManager#0" />
+                <element signature="method#searchByResource#0;class#DBManager#0" />
+                <element signature="e#17305#17407#0" />
+                <element signature="e#19128#19203#0" />
+                <element signature="e#19778#20335#0" />
+                <element signature="e#20286#20847#0" />
+                <element signature="e#21043#21605#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Course.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/mbox/Course.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="269">
+              <caret line="33" column="21" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>executenore</find>
+      <find>setID</find>
+      <find>set</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/com/mbox/CLI.java" />
+        <option value="$PROJECT_DIR$/src/com/mbox/Menu.java" />
+        <option value="$PROJECT_DIR$/src/com/mbox/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/mbox/Course.java" />
+        <option value="$PROJECT_DIR$/src/com/mbox/Resource.java" />
+        <option value="$PROJECT_DIR$/src/com/mbox/DBManager.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="AndroidView" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="MBox" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MBox" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MBox" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MBox" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MBox" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MBox" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="mbox" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="CLI" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.mbox.CLI" />
+      <module name="MBox" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.mbox.Main" />
+      <module name="MBox" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.CLI" />
+      <item itemvalue="Application.Main" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0cbe0248-d14c-4f6c-96a4-4555fb09d056" name="Default" comment="" />
+      <created>1528134276559</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1528134276559</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1920" height="1061" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="bottom" id="Messages" order="3" weight="0.32883817" />
+      <window_info anchor="right" id="Palette&#9;" order="1" />
+      <window_info id="Image Layers" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.50078124" side_tool="true" weight="0.32935917" />
+      <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Run" order="6" sideWeight="0.49921876" visible="true" weight="0.25518674" />
+      <window_info anchor="bottom" id="Version Control" order="2" />
+      <window_info anchor="bottom" id="Terminal" order="0" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="0" />
+      <window_info active="true" content_ui="combo" id="Project" order="5" visible="true" weight="0.25" />
+      <window_info id="Structure" order="6" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
+      <window_info id="UI Designer" order="1" />
+      <window_info anchor="right" id="Theme Preview" order="2" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="7" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="5" type="SLIDING" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="5" />
+    </layout>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="5" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Course.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="104" lean-forward="true" selection-start-line="104" selection-end-line="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Resource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBEditor.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Publisher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="59" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="70" column="4" lean-forward="true" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/JunkClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="586">
+          <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MBox.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Course.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Resource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBEditor.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Publisher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MBox.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBEditor.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="27" column="1" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#193#253#0" />
+            <element signature="method#openConnection#0;class#DBManager#0" />
+            <element signature="method#closeConnection#0;class#DBManager#0" />
+            <element signature="method#executeNoReturnQuery#0;class#DBManager#0" />
+            <element signature="method#prPerson#0;class#DBManager#0" />
+            <element signature="method#printTableCourses#0;class#DBManager#0" />
+            <element signature="method#printTableResources#0;class#DBManager#0" />
+            <element signature="method#printTablePublishers#0;class#DBManager#0" />
+            <element signature="e#4169#4281#0" />
+            <element signature="e#4687#5113#0" />
+            <element signature="e#5127#5562#0" />
+            <element signature="e#5576#6011#0" />
+            <element signature="e#6025#6463#0" />
+            <element signature="e#4221#4688#0" />
+            <element signature="e#4776#5248#0" />
+            <element signature="e#5329#5875#0" />
+            <element signature="e#5937#6333#0" />
+            <element signature="method#printSeparator#0;class#DBManager#0" />
+            <element signature="method#getTablePersonQuery#0;class#DBManager#0" />
+            <element signature="method#getTableCourseQuery#0;class#DBManager#0" />
+            <element signature="method#getTableResourceQuery#0;class#DBManager#0" />
+            <element signature="method#getTablePublisherQuery#0;class#DBManager#0" />
+            <element signature="e#7541#7656#0" />
+            <element signature="e#7705#7787#0" />
+            <element signature="e#7839#7921#0" />
+            <element signature="e#7972#8054#0" />
+            <element signature="e#8106#8191#0" />
+            <element signature="e#7120#7323#0" />
+            <element signature="e#7387#7478#0" />
+            <element signature="e#7535#7634#0" />
+            <element signature="e#7686#7780#0" />
+            <element signature="e#8301#8541#0" />
+            <element signature="e#8546#8859#0" />
+            <element signature="e#8864#9324#0" />
+            <element signature="e#9329#9610#0" />
+            <element signature="e#9738#10000#0" />
+            <element signature="e#10005#10340#0" />
+            <element signature="e#10345#10815#0" />
+            <element signature="e#10820#11142#0" />
+            <element signature="e#11270#11407#0" />
+            <element signature="e#11412#11551#0" />
+            <element signature="e#11556#11704#0" />
+            <element signature="e#11709#11862#0" />
+            <element signature="method#searchByProfessor#0;class#DBManager#0" />
+            <element signature="method#searchByCourse#0;class#DBManager#0" />
+            <element signature="method#searchByResource#0;class#DBManager#0" />
+            <element signature="e#17305#17407#0" />
+            <element signature="e#19128#19203#0" />
+            <element signature="e#19778#20335#0" />
+            <element signature="e#20286#20847#0" />
+            <element signature="e#21043#21605#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/JunkClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="20" column="75" selection-start-line="20" selection-start-column="75" selection-end-line="20" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Course.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="116" column="28" selection-start-line="116" selection-start-column="28" selection-end-line="116" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Publisher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="81" column="39" selection-start-line="81" selection-start-column="39" selection-end-line="81" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="137" column="39" lean-forward="true" selection-start-line="137" selection-start-column="39" selection-end-line="137" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Resource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MBox.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Course.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Resource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBEditor.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Publisher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MBox.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBEditor.java" />
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Publisher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1785">
+          <caret line="119" column="21" selection-start-line="119" selection-start-column="21" selection-end-line="119" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/JunkClass.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/CLI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="100" column="46" selection-start-line="100" selection-start-column="46" selection-end-line="100" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Menu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getInput#0;class#Menu#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Person.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1920">
+          <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Course.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="33" column="21" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/Resource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="36" column="21" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/mbox/DBManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="545">
+          <caret line="720" selection-start-line="720" selection-end-line="720" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#193#253#0" />
+            <element signature="method#openConnection#0;class#DBManager#0" />
+            <element signature="method#closeConnection#0;class#DBManager#0" />
+            <element signature="method#executeNoReturnQuery#0;class#DBManager#0" />
+            <element signature="method#prPerson#0;class#DBManager#0" />
+            <element signature="method#printTableCourses#0;class#DBManager#0" />
+            <element signature="method#printTableResources#0;class#DBManager#0" />
+            <element signature="method#printTablePublishers#0;class#DBManager#0" />
+            <element signature="e#4169#4281#0" />
+            <element signature="e#4687#5113#0" />
+            <element signature="e#5127#5562#0" />
+            <element signature="e#5576#6011#0" />
+            <element signature="e#6025#6463#0" />
+            <element signature="e#4221#4688#0" />
+            <element signature="e#4776#5248#0" />
+            <element signature="e#5329#5875#0" />
+            <element signature="e#5937#6333#0" />
+            <element signature="method#printSeparator#0;class#DBManager#0" />
+            <element signature="method#getTablePersonQuery#0;class#DBManager#0" />
+            <element signature="method#getTableCourseQuery#0;class#DBManager#0" />
+            <element signature="method#getTableResourceQuery#0;class#DBManager#0" />
+            <element signature="method#getTablePublisherQuery#0;class#DBManager#0" />
+            <element signature="e#7541#7656#0" />
+            <element signature="e#7705#7787#0" />
+            <element signature="e#7839#7921#0" />
+            <element signature="e#7972#8054#0" />
+            <element signature="e#8106#8191#0" />
+            <element signature="e#7120#7323#0" />
+            <element signature="e#7387#7478#0" />
+            <element signature="e#7535#7634#0" />
+            <element signature="e#7686#7780#0" />
+            <element signature="e#8301#8541#0" />
+            <element signature="e#8546#8859#0" />
+            <element signature="e#8864#9324#0" />
+            <element signature="e#9329#9610#0" />
+            <element signature="e#9738#10000#0" />
+            <element signature="e#10005#10340#0" />
+            <element signature="e#10345#10815#0" />
+            <element signature="e#10820#11142#0" />
+            <element signature="e#11270#11407#0" />
+            <element signature="e#11412#11551#0" />
+            <element signature="e#11556#11704#0" />
+            <element signature="e#11709#11862#0" />
+            <element signature="method#searchByProfessor#0;class#DBManager#0" />
+            <element signature="method#searchByCourse#0;class#DBManager#0" />
+            <element signature="method#searchByResource#0;class#DBManager#0" />
+            <element signature="e#17305#17407#0" />
+            <element signature="e#19128#19203#0" />
+            <element signature="e#19778#20335#0" />
+            <element signature="e#20286#20847#0" />
+            <element signature="e#21043#21605#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

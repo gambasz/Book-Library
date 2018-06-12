@@ -84,21 +84,21 @@ public class CLI {
             case "Person":
             case "person": {
 
-                DBManager.getTablePerson();
+                DBManager.printTablePerson();
                 break;
             }
 
             case "Resource":
             case "RESOURCE":
             case "resource": {
-                DBManager.getTableResources();
+                DBManager.printTableResources();
                 break;
             }
 
             case "Publisher":
             case "PUBLISHER":
             case "publisher": {
-                DBManager.getTablePublishers();
+                DBManager.printTablePublishers();
                 break;
             }
             default: System.out.println("There is no table like that.");
