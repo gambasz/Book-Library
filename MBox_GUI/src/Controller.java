@@ -27,7 +27,7 @@ public class Controller {
     private TableColumn<Resource, Publisher> publisherCol;
     private TableColumn<Resource, String> nameCol, authorCol, idcCol;
     private ArrayList<Course> courseList;
-    private ArrayList<String> profList;
+    private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
 
     @FXML
@@ -183,7 +183,7 @@ public class Controller {
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator);
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", arr);
         tableTV.getItems().add(c);
-        profList.add(p.toString());
+        profList.add(p);
         resList.add(r);
     }
 
@@ -403,9 +403,9 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-            profInfoFName.setText("Alla");
-            profInfoLName.setText("Webb");
-            profInfoType.setValue(profInfoType.getItems().get(0));
+            profInfoFName.setText(((Person)(listOfCurrentProf.getSelectionModel().getSelectedItem())).getFirstName());
+            profInfoLName.setText(((Person)(listOfCurrentProf.getSelectionModel().getSelectedItem())).getLastName());
+            profInfoType.setValue(((Person)(listOfCurrentProf.getSelectionModel().getSelectedItem())).getType());
             }
             return null;
         });
