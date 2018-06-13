@@ -39,33 +39,34 @@ public class CLI {
                 }
                 case "insert": {
 
-                    String table = values[1];
-                    insertTable(table,values,DB);
-                    break;
+                        String table = values[1];
+                        insertTable(table, values, DB);
+                        break;
                 }
                 case "show": {
-                    String table = values[1];
-                    showTable(table);
-                    break;
+                        String table = values[1];
+                        showTable(table);
+                        break;
                 }
                 case "search": {
-                    String table = values[1];
-                    searchInTable(table,values);
-                    break;
+                        String table = values[1];
+                        searchInTable(table, values);
+                        break;
                 }
                 case "delete": {
-                    String table = values[1];
-                    deleteFromTable(table,values);
-                    break;
+                        String table = values[1];
+                        deleteFromTable(table, values);
+                        break;
                 }
-                case "clear" :{
-                    System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-                    break;
+                case "clear": {
+                        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                        break;
                 }
                 case "exit": {
-                    System.exit(0);
-                    break;
+                        System.exit(0);
+                        break;
                 }
+
 
 
                 default:
@@ -307,6 +308,34 @@ public class CLI {
                 }
                 break;
             }
+        }
+    }
+
+
+    public static void insertID(){
+        Scanner scan = new Scanner(System.in);
+        DBManager DB = new DBManager();
+        System.out.println("Format: <CourseID> <PersonID> <ResourceID> <PublisherID> <SemesterID>");
+        System.out.println("Enter <exit> to exit.");
+
+        while(true) {
+            System.out.println("Enter PersonID, CourseID, ResourceID, PublisherID: ");
+            String input = scan.nextLine();
+            if(!input.contains("exit")){
+            String[] values = input.split(" ");
+
+                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
+                        " (COURSEID, PERSONID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[1])));
+                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                        " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[2])));
+                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_SEMESTER" +
+                        " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[4])));
+                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+                        " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[1]),Integer.parseInt(values[2])));
+                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[3]),Integer.parseInt(values[2])));
+                System.out.println("Added ID");
+            } else { break;}
         }
     }
 }
