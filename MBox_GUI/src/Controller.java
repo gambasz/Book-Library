@@ -26,7 +26,9 @@ public class Controller {
     private TableView resourceTable;
     private TableColumn<Resource, Publisher> publisherCol;
     private TableColumn<Resource, String> nameCol, authorCol, idcCol;
-    private ArrayList<Course> table_data;
+    private ArrayList<Course> courseList;
+    private ArrayList<String> profList;
+    private ArrayList<Resource> resList;
 
     @FXML
     TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF,profInfoFName,profInfoLName;
@@ -39,7 +41,7 @@ public class Controller {
     @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
-    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit,profInfoType;
+    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit,profInfoType,listOfCurrentProf;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
 
@@ -54,8 +56,10 @@ public class Controller {
      */
     @FXML
     public void initialize() {
+        courseList = new ArrayList<>();
+        profList = new ArrayList<>();
+        resList = new ArrayList<>();
         initComboBoxes();
-        table_data = new ArrayList<>();
         setCellValueOfColumns();
         tableTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initTables();
@@ -179,6 +183,8 @@ public class Controller {
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator);
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", arr);
         tableTV.getItems().add(c);
+        profList.add(p.toString());
+        resList.add(r);
     }
 
 
@@ -363,8 +369,8 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        ComboBox listOfCurrentProf = new ComboBox();
-//        listOfCurrentProf.setItems();
+        listOfCurrentProf = new ComboBox();
+        listOfCurrentProf.setItems(FXCollections.observableArrayList(profList));
 //        TextField fNameTF = new TextField();
 //        TextField lNameTF = new TextField();
 //        ComboBox typeBox = new ComboBox();

@@ -66,11 +66,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", ID='" + ID + '\'' +
-                ", type=" + type +
-                '}';
+        return firstName.concat(" ").concat(lastName).concat(" | ").concat(type.toString());
+
     }
 }

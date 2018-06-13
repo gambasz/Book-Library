@@ -121,6 +121,10 @@ public class Resource {
         return Objects.hash(TYPE, ID);
     }
 
+    @Override
+    public String toString() {
+        return   TYPE + ':' + title + " by " +  author;
 
+    }
 }
 
