@@ -512,9 +512,8 @@ public class DBManager {
                 c[i] = new Course(rs.getInt(1), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5));
                 i++;
-                return c;
             }
-
+            return c;
         }catch(SQLException e){
             System.out.println(e);
         }
