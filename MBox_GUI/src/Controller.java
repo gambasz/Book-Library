@@ -1,7 +1,5 @@
+import data.*;
 import data.Course;
-import data.Person;
-import data.Publisher;
-import data.Resource;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -31,9 +29,9 @@ public class Controller {
     private ArrayList<Course> table_data;
 
     @FXML
-    TextField crnInfoTf, courseInfoTf, departInfoTf, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF;
+    TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF,profInfoFName,profInfoLName;
     @FXML
-    Label resInfoLbl;
+    Label resInfoLbl1,resInfoLbl2,resInfoLbl3;
     @FXML
     Button searchBtn, profInfoBtn, resEditBtn, addBtn, commitBtn, deleteBtn;
     @FXML
@@ -41,7 +39,7 @@ public class Controller {
     @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
-    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit;
+    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit,profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
 
@@ -110,13 +108,14 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
-        semesterComBox.setItems(FXCollections.observableArrayList("Fall", "Winter", "Spring", "Summer"));
-        semesterComBoxEdit.setItems(FXCollections.observableArrayList("Fall", "Winter", "Spring", "Summer"));
+        semesterComBox.setItems(FXCollections.observableArrayList(Semester.values()));
+        semesterComBoxEdit.setItems(FXCollections.observableArrayList(Semester.values()));
         ArrayList<String> years = new ArrayList<>();
         for (int i = 1946; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
             years.add("" + i);
         yearComBox.setItems(FXCollections.observableArrayList(years));
         yearComBoxEdit.setItems(FXCollections.observableArrayList(years));
+        profInfoType.setItems(FXCollections.observableArrayList(PersonType.values()));
     }
 
 
@@ -135,12 +134,14 @@ public class Controller {
 
         Course temp = tableTV.getSelectionModel().getSelectedItems().get(0);
         if (temp != null) {
-            crnInfoTf.setText("" + temp.getCRN());
-            profInfoBtn.setText(temp.getProfessor().getFirstName().concat(" ".concat(temp.getProfessor().getLastName())));
-            courseInfoTf.setText(temp.getTitle());
-            departInfoTf.setText(temp.getDepartment());
-            resInfoLbl.setText(temp.getResource().toString().substring(0, Math.min(temp.getResource().toString().length(), 15)));
-
+            courseInfoCRN.setText("" + temp.getCRN());
+            profInfoFName.setText(temp.getProfessor().getFirstName());
+            profInfoLName.setText(temp.getProfessor().getLastName());
+            profInfoType.setValue(temp.getProfessor().getType());
+            courseInfoTitle.setText(temp.getTitle());
+            courseInfoDepart.setText(temp.getDepartment());
+            semesterComBoxEdit.getSelectionModel().select(temp.getSEMESTER());
+            yearComBoxEdit.getSelectionModel().select(new Integer(temp.getYEAR()));
         }
     }
 
@@ -175,7 +176,7 @@ public class Controller {
         ArrayList<Resource> arr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         arr.add(r);
-        Person p = new Person("P", "R", 1, null);
+        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator);
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", arr);
         tableTV.getItems().add(c);
     }
@@ -183,7 +184,7 @@ public class Controller {
 
     private void setCellValueOfColumns() {
         courseCol.setCellValueFactory(
-                new PropertyValueFactory<Course, String>("name"));
+                new PropertyValueFactory<Course, String>("title"));
         departCol.setCellValueFactory(
                 new PropertyValueFactory<Course, String>("department"));
         profCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
@@ -363,23 +364,25 @@ public class Controller {
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         ComboBox listOfCurrentProf = new ComboBox();
-        TextField fNameTF = new TextField();
-        TextField lNameTF = new TextField();
-        ComboBox typeBox = new ComboBox();
-        typeBox.setItems(FXCollections.observableArrayList("Program Cord.", "Course Cord.", " Course Instruc  tor"));
-        Label fNameLbl = new Label("Professor's First Name: ");
-        Label lNameLbl = new Label("Professor's Last Name: ");
-        Label typeLbl = new Label("Type: ");
-        Label currentCBoxLbl = new Label("Current Professor templates: ");
+//        listOfCurrentProf.setItems();
+//        TextField fNameTF = new TextField();
+//        TextField lNameTF = new TextField();
+//        ComboBox typeBox = new ComboBox();
+//        typeBox.setItems(FXCollections.observableArrayList("Program Cord.", "Course Cord.", " Course Instruc  tor"));
+//        Label fNameLbl = new Label("Professor's First Name: ");
+//        Label lNameLbl = new Label("Professor's Last Name: ");
+//        Label typeLbl = new Label("Type: ");
+        Label currentCBoxLbl = new Label("Current Professor : ");
 
-        ButtonType assign = new ButtonType("Assign", ButtonBar.ButtonData.OK_DONE);
+        ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
 
 
         mainAddPane.getChildren().addAll(
-                new HBox(currentCBoxLbl, listOfCurrentProf),
-                new HBox(fNameLbl, fNameTF),
-                new HBox(lNameLbl, lNameTF),
-                new HBox(typeLbl, typeBox));
+                new HBox(currentCBoxLbl, listOfCurrentProf)
+//                new HBox(fNameLbl, fNameTF),
+//                new HBox(lNameLbl, lNameTF),
+//                new HBox(typeLbl, typeBox)
+        );
         mainAddPane.setSpacing(20);
 
         dlg.setTitle("Assigning Professor");
@@ -388,14 +391,15 @@ public class Controller {
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);
         dlg.getDialogPane().setContent(mainAddPane);
-        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+        dlg.getDialogPane().getButtonTypes().addAll(fill, ButtonType.CANCEL);
 
 
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
-            if (dialogButton == assign) {
-                System.out.print("Assign new prof");
-                return null;
+            if (dialogButton == fill) {
+            profInfoFName.setText("Alla");
+            profInfoLName.setText("Webb");
+            profInfoType.setValue(profInfoType.getItems().get(0));
             }
             return null;
         });
