@@ -16,7 +16,7 @@ public class Course {
 
     private int ID;
     private SimpleIntegerProperty CRN, YEAR;
-    private SimpleStringProperty SEMESTER;
+    private Enum SEMESTER;
     private SimpleStringProperty title, department, description;
     private Person professor;
     private ArrayList<Resource> resource;
@@ -25,14 +25,14 @@ public class Course {
     public Course(int CRN, int YEAR, String SEMESTER) {
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
-        this.SEMESTER = new SimpleStringProperty(SEMESTER);
+        this.SEMESTER = Semester.valueOf(SEMESTER);
     }
 
     public Course(int ID, int CRN, int YEAR, String SEMESTER, String title, String department, Person professor, String description, ArrayList<Resource> resource) {
         this.ID = ID;
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
-        this.SEMESTER = new SimpleStringProperty(SEMESTER.toUpperCase());
+        this.SEMESTER = Semester.valueOf(SEMESTER.toUpperCase());
         this.title = new SimpleStringProperty(title);
         this.department = new SimpleStringProperty(department);
         this.description = new SimpleStringProperty(description);
@@ -85,15 +85,12 @@ public class Course {
     }
 
     public String getSEMESTER() {
-        return SEMESTER.get();
+        return SEMESTER.toString();
     }
 
-    public SimpleStringProperty SEMESTERProperty() {
-        return SEMESTER;
-    }
 
     public void setSEMESTER(String SEMESTER) {
-        this.SEMESTER.set(SEMESTER);
+        this.SEMESTER= Semester.valueOf(SEMESTER.toUpperCase());
     }
 
     public String getTitle() {
