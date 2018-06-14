@@ -38,6 +38,15 @@ public class Course {
         this.department = "";
     }
 
+    public Course(String title){
+
+        this.id = 0;
+        this.title = title;
+        this.crn = "";
+        this.description = "";
+        this.department = "";
+    }
+
     public void setID(int id){
 
         this.id = id;
