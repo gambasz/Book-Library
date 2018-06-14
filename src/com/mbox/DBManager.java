@@ -2,6 +2,7 @@ package com.mbox;
 import java.sql.*;
 import java.util.*;
 import com.mbox.Main;
+import jdk.management.resource.ResourceContext;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.xml.transform.Result;
@@ -349,7 +350,7 @@ public class DBManager {
     }
     public static String getTableCourseSemesterQuery(){
 
-        return "SELECT * FROM RELATION_COURSE_SEMESTER";
+        return "SELECT * FROM RELATION_SEMESTER_COURSE";
     }
     public static String getTablePersonResourceQuery(){
 
@@ -820,18 +821,16 @@ public class DBManager {
             Scanner scan = new Scanner(System.in);
 
             int personID = 0;
-
             int[] cr = new int[20];
             int[] pr = new int[20];
             //get personID
             ResultSet rs;
 
             rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
-
+            //it supposed to get a list of all persons teaching that course. Assuming one person for now.
             while (rs.next()) {
                 personID = rs.getInt(2);
             }
-
 
             //get resourceID
             rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
@@ -849,7 +848,6 @@ public class DBManager {
                 a++;
             }
 
-
             int[] comm = new int[20];
             for(int k=0;i<cr.length;i++){
                 for(int j=0;j<pr.length;j++){
@@ -859,30 +857,43 @@ public class DBManager {
                 }
             }
 
-            String fullName = "";
-            String course = "";
+            String fName = "", lName = "", pType = "", cTitle = "", cDescription="", cDepartment="";
+            int pID=0, cID = 0;
             String resource = "";
 
             rs = st.executeQuery(getPersonInTableQuery(personID));
             while(rs.next()) {
-                fullName = rs.getString(3) + " " + rs.getString(4);
+                pID = rs.getInt(1);
+                fName = rs.getString(3);
+                lName = rs.getString(4);
+                pType = rs.getString(2);
             }
-
 
             rs = st.executeQuery(getCourseInTableQuery(courseID));
             while(rs.next()) {
-                course = rs.getString(2) + rs.getString(3);
+                cTitle = rs.getString(2) + rs.getString(3);
+                cID = rs.getInt(1);
+                cDescription = rs.getString(4);
+                cDepartment = rs.getString(5);
+
             }
 
             rs = st.executeQuery(getResourceInTableQuery(comm[0]));
+            Resource rInst = new Resource(1,"s","s","s","s",1,2,"s");
             while(rs.next()) {
-                resource = rs.getString(3);
+                // ID, Type, Title, Author, ISBN, total, current, desc
+                // initilizing the object
+                   rInst = new Resource(rs.getInt(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getInt(7), rs.getString(8));
             }
 
+            Person pInst = new Person(pID, fName, lName, pType);
+            Course cInst = new Course(cID, cTitle, cDescription, cDepartment, "0");
 
-            System.out.println("Name :" + fullName);
-            System.out.println("Course :" + course);
-            System.out.println("Resource :" + resource);
+            System.out.println("Name :" + pInst.getFirstName() + " " + pInst.getLastName() );
+            System.out.println("Course :" + cInst.getTitle());
+            System.out.println("Resource :" + rInst.getTitle());
         }catch(Exception e){
             System.out.println("Error");
         }
@@ -905,7 +916,7 @@ public class DBManager {
                         " (COURSEID, PERSONID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[1])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
                         " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[2])));
-                executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_SEMESTER" +
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
                         " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[4])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
                         " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[1]),Integer.parseInt(values[2])));
