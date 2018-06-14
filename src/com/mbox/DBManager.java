@@ -1,5 +1,6 @@
 package com.mbox;
 import java.sql.*;
+import java.util.*;
 import com.mbox.Main;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
@@ -809,4 +810,100 @@ public class DBManager {
         return null;
 
     }
+
+    //==================================================================================================================
+    //                                                  Relational tables methods
+    //==================================================================================================================
+
+
+    public static void readFromTable() {
+
+        try {
+            Scanner scan = new Scanner(System.in);
+            //DBManager DB = new DBManager();
+            System.out.println("Enter Course ID: ");
+            int courseID = scan.nextInt();
+            int personID = 0;
+
+            int[] cr = new int[20];
+            int[] pr = new int[20];
+            //get personID
+            ResultSet rs;
+
+            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
+
+            while (rs.next()) {
+                personID = rs.getInt(2);
+            }
+
+
+            //get resourceID
+            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
+            int i = 0;
+            while (rs.next()) {
+                cr[i] = rs.getInt(2);
+                i++;
+            }
+
+            //from person get resource
+            rs = st.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + personID);
+            int a = 0;
+            while (rs.next()) {
+                pr[a] = rs.getInt(2);
+                a++;
+            }
+
+
+            int[] comm = new int[20];
+            for(int k=0;i<cr.length;i++){
+                for(int j=0;j<pr.length;j++){
+                    if(cr[i]==pr[j]){
+                        comm[k] = cr[k];
+                    }
+                }
+            }
+
+            String fullName = "";
+            String course = "";
+            String resource = "";
+
+            rs = st.executeQuery(getPersonInTableQuery(personID));
+            while(rs.next()) {
+                fullName = rs.getString(3) + " " + rs.getString(4);
+            }
+
+
+            rs = st.executeQuery(getCourseInTableQuery(courseID));
+            while(rs.next()) {
+                course = rs.getString(2) + rs.getString(3);
+            }
+
+            rs = st.executeQuery(getResourceInTableQuery(comm[0]));
+            while(rs.next()) {
+                resource = rs.getString(3);
+            }
+
+
+            System.out.println("Name :" + fullName);
+            System.out.println("Course :" + course);
+            System.out.println("Resource :" + resource);
+        }catch(Exception e){
+            System.out.println("Error");
+        }
+    }
+
+    //==================================================================================================================
+    //                                                  Next
+    //==================================================================================================================
+
+
+
+
+    
 }
+
+
+
+
+
+
