@@ -34,7 +34,7 @@ public class Controller {
     @FXML
     ListView resInfolList;
     @FXML
-    Button searchBtn, profInfoBtn, resEditBtn, addBtn, commitBtn, deleteBtn;
+    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn;
     @FXML
     TableView<Course> tableTV;
     @FXML
@@ -65,7 +65,28 @@ public class Controller {
         resourceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initTables();
         initCheckBoxes();
+        addButtonGraphics();
+        resetSelect();
 
+    }
+
+    private void addButtonGraphics() {
+        ImageView searchImg = new ImageView("/media/search.png");
+        addGraphicToButtons(searchImg, searchBtn);
+        ImageView addImg = new ImageView("/media/add.png");
+        addGraphicToButtons(addImg, addBtn);
+        ImageView deleteImg = new ImageView("/media/delete.png");
+        addGraphicToButtons(deleteImg, deleteBtn);
+        ImageView updateImg = new ImageView("/media/upload.png");
+        addGraphicToButtons(updateImg, updateBtn);
+    }
+
+    private void addGraphicToButtons(ImageView img, Button button) {
+        img.setFitHeight(20);
+        img.setFitWidth(90);
+        img.setPreserveRatio(true);
+        button.setGraphic(img);
+        button.setText("");
     }
 
     /**
@@ -137,6 +158,10 @@ public class Controller {
     public void updateRowSelected() {
         Course temp = tableTV.getSelectionModel().getSelectedItems().get(0);
         if (temp != null) {
+            updateBtn.setVisible(true);
+            deleteBtn.setVisible(true);
+            updateBtn.setManaged(true);
+            deleteBtn.setManaged(true);
             courseInfoCRN.setText("" + temp.getCRN());
             profInfoFName.setText(temp.getProfessor().getFirstName());
             profInfoLName.setText(temp.getProfessor().getLastName());
@@ -172,6 +197,10 @@ public class Controller {
      */
     public void resetSelect() {
         tableTV.getSelectionModel().clearSelection();
+        updateBtn.setVisible(false);
+        deleteBtn.setVisible(false);
+        updateBtn.setManaged(false);
+        deleteBtn.setManaged(false);
     }
 
     public void add() {
