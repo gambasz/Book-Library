@@ -310,35 +310,6 @@ public class CLI {
         }
     }
 
-
-    public static void insertID(){
-        Scanner scan = new Scanner(System.in);
-        DBManager DB = new DBManager();
-        System.out.println("Format: <CourseID> <PersonID> <ResourceID> <PublisherID> <SemesterID>");
-        System.out.println("Enter <exit> to exit.");
-
-        while(true) {
-            System.out.println("Enter PersonID, CourseID, ResourceID, PublisherID: ");
-            String input = scan.nextLine();
-            if(!input.contains("exit")){
-            String[] values = input.split(" ");
-
-                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
-                        " (COURSEID, PERSONID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[1])));
-                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                        " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[2])));
-                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_SEMESTER" +
-                        " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[4])));
-                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-                        " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[1]),Integer.parseInt(values[2])));
-                DB.executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[3]),Integer.parseInt(values[2])));
-                System.out.println("Added ID");
-            } else { break;}
-        }
-    }
-
-
 }
 
 
