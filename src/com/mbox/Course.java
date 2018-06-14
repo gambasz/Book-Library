@@ -20,13 +20,22 @@ public class Course {
 
     }
 
-    public Course(int id, String title, String crn, String desc, String dept){
+    public Course(int id, String title, String desc, String dept, String crn){
 
         this.id = id;
         this.title = title;
         this.crn = crn;
         this.description = desc;
         this.department = dept;
+    }
+
+    public Course(int id){
+
+        this.id = id;
+        this.title = "";
+        this.crn = "";
+        this.description = "";
+        this.department = "";
     }
 
     public void setID(int id){
