@@ -61,7 +61,7 @@
       <file leaf-file-name="Course.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/data/Course.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
+            <state relative-caret-position="670">
               <caret line="127" column="29" selection-start-line="127" selection-start-column="21" selection-end-line="127" selection-end-column="29" />
               <folding>
                 <element signature="e#2270#2271#0" expanded="true" />
@@ -106,11 +106,13 @@
       <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="205" column="127" selection-start-line="205" selection-start-column="127" selection-end-line="205" selection-end-column="127" />
+            <state relative-caret-position="254">
+              <caret line="294" column="61" selection-start-line="294" selection-start-column="61" selection-end-line="294" selection-end-column="61" />
               <folding>
-                <element signature="e#8880#8881#0" expanded="true" />
-                <element signature="e#8910#8911#0" expanded="true" />
+                <element signature="e#5832#5833#0" expanded="true" />
+                <element signature="e#5892#5893#0" expanded="true" />
+                <element signature="e#9568#9569#0" expanded="true" />
+                <element signature="e#9598#9599#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -214,6 +216,8 @@
       <find>profInfoType</find>
       <find>semester</find>
       <find>publisherCol</find>
+      <find>resourceTable</find>
+      <find>resourceTitlePane</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -441,12 +445,12 @@
       <workItem from="1528728471756" duration="1131000" />
       <workItem from="1528730455982" duration="7833000" />
       <workItem from="1528739352519" duration="631000" />
-      <workItem from="1528922724167" duration="9710000" />
+      <workItem from="1528922724167" duration="12452000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36194000" />
+    <option name="totallyTimeSpent" value="38936000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -825,7 +829,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/data/Course.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
+        <state relative-caret-position="670">
           <caret line="127" column="29" selection-start-line="127" selection-start-column="21" selection-end-line="127" selection-end-column="29" />
           <folding>
             <element signature="e#2270#2271#0" expanded="true" />
@@ -838,29 +842,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/Publisher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="71" column="20" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
-          <folding>
-            <element signature="e#1427#1428#0" expanded="true" />
-            <element signature="e#1454#1455#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/gui.fxml">
       <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
       <provider editor-type-id="text-editor">
         <state relative-caret-position="2057">
           <caret line="126" column="62" selection-start-line="126" selection-start-column="62" selection-end-line="126" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_171/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="2565" selection-start-line="2565" selection-end-line="2565" />
         </state>
       </provider>
     </entry>
@@ -877,13 +863,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/Publisher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="935">
+          <caret line="71" column="20" selection-start-line="71" selection-start-column="20" selection-end-line="71" selection-end-column="20" />
+          <folding>
+            <element signature="e#1427#1428#0" expanded="true" />
+            <element signature="e#1454#1455#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_171/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="2565" selection-start-line="2565" selection-end-line="2565" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="205" column="127" selection-start-line="205" selection-start-column="127" selection-end-line="205" selection-end-column="127" />
+        <state relative-caret-position="254">
+          <caret line="294" column="61" selection-start-line="294" selection-start-column="61" selection-end-line="294" selection-end-column="61" />
           <folding>
-            <element signature="e#8880#8881#0" expanded="true" />
-            <element signature="e#8910#8911#0" expanded="true" />
+            <element signature="e#5832#5833#0" expanded="true" />
+            <element signature="e#5892#5893#0" expanded="true" />
+            <element signature="e#9568#9569#0" expanded="true" />
+            <element signature="e#9598#9599#0" expanded="true" />
           </folding>
         </state>
       </provider>

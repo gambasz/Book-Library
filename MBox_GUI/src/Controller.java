@@ -62,6 +62,7 @@ public class Controller {
         initResourcesTable();
         setCellValueOfColumns();
         tableTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        resourceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initTables();
         initCheckBoxes();
 
@@ -134,7 +135,6 @@ public class Controller {
     }
 
     public void updateRowSelected() {
-
         Course temp = tableTV.getSelectionModel().getSelectedItems().get(0);
         if (temp != null) {
             courseInfoCRN.setText("" + temp.getCRN());
@@ -146,9 +146,17 @@ public class Controller {
             semesterComBoxEdit.getSelectionModel().select(temp.getSEMESTER());
             yearComBoxEdit.getSelectionModel().select(new Integer(temp.getYEAR()));
             ArrayList<Resource> tempRes = temp.getResource();
+            System.out.println(tempRes);
+            System.out.println(resourceTable.getItems());
+
             resInfolList.getItems().clear();
-            for (int i = 0; i < 3 && i < tempRes.size(); i++) {
-                resInfolList.getItems().add(tempRes.get(i).getTitle());
+            resourceTable.getSelectionModel().select(null);
+            for (int i = 0; i < tempRes.size(); i++) {
+                if (i < 3) {
+                    resInfolList.getItems().add(tempRes.get(i).getTitle());
+                }
+                resourceTable.getSelectionModel().select(tempRes.get(i));
+
             }
 
 
@@ -164,7 +172,6 @@ public class Controller {
      */
     public void resetSelect() {
         tableTV.getSelectionModel().clearSelection();
-
     }
 
     public void add() {
@@ -183,6 +190,11 @@ public class Controller {
      * populates the table with initial values
      */
     private void initTables() {
+        tableTV.setOnMouseClicked(e -> {
+            updateRowSelected();
+            e.consume();
+
+        });
         ArrayList<Resource> arr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         arr.add(r);
@@ -203,7 +215,7 @@ public class Controller {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Course, String> c) {
                 Person temp = c.getValue().getProfessor();
-                return new SimpleStringProperty(temp!=null?temp.getFirstName().concat(" ").concat(temp.getLastName()):"**NONE**");
+                return new SimpleStringProperty(temp != null ? temp.getFirstName().concat(" ").concat(temp.getLastName()) : "**NONE**");
             }
         });
         resourceCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
@@ -234,9 +246,9 @@ public class Controller {
         publisherCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Resource, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Resource, String> c) {
-                    Publisher p = c.getValue().getPublisher();
+                Publisher p = c.getValue().getPublisher();
 
-                return new SimpleStringProperty(p!=null?p.getName():"**NONE**");
+                return new SimpleStringProperty(p != null ? p.getName() : "**NONE**");
             }
         });
         nameCol.setCellValueFactory(
@@ -244,7 +256,7 @@ public class Controller {
         idcCol.setCellValueFactory(new
                 PropertyValueFactory<Resource, String>("ID"));
         authorCol.setCellValueFactory(new
-        PropertyValueFactory<Resource,String>("author"));
+                PropertyValueFactory<Resource, String>("author"));
     }
 
 
@@ -277,6 +289,11 @@ public class Controller {
      * It creates Resource objects and assign the resources as the Professor for the course object
      */
     public void modifyResources() {
+        //TODO: migrate Resource add and modify window
+        //TODO: migrate Publisher add and modify window
+        //TODO: Add Functionally and support to the resource manager
+        //TODO: Add Functionally and support to the publisher manager
+
         VBox mainPane = new VBox();
         VBox resourcePane = new VBox(5);
         VBox publisherPane = new VBox(5);
@@ -289,6 +306,7 @@ public class Controller {
         icon.setFitWidth(75);
         ComboBox listOFResources = new ComboBox();
         listOFResources.setItems(FXCollections.observableArrayList(resList));
+        resourceTable.getItems().clear();
         resourceTable.getItems().addAll(resList);
         TextField nameBTF = new TextField();
         TextField authorTF = new TextField();
@@ -299,11 +317,11 @@ public class Controller {
 
         typeBox.setItems(FXCollections.observableArrayList("Z", "Mc Only", "Software", "Book"));
 
-        Label nameRLbl = new Label("Title: ");
-        Label authorLbl = new Label("Author: ");
-        Label typeLbl = new Label("Type: ");
-        Label descriptionRLbl = new Label("Description: ");
-        Label idRLbl = new Label("ID: ");
+        Label nameRLbl = new Label("Will be moved in the next overhaul Title: ");
+        Label authorLbl = new Label("Will be moved in the next overhaul Author: ");
+        Label typeLbl = new Label("Will be moved in the next overhaul Type: ");
+        Label descriptionRLbl = new Label("Will be moved in the next overhaul Description: ");
+        Label idRLbl = new Label("Will be moved in the next overhaul ID: ");
 
 
         Label currentCBoxLbl = new Label("Current Resources as Template: ");
@@ -331,27 +349,28 @@ public class Controller {
         descriptionRTa.setPrefHeight(100);
         contactsPTa.setPrefHeight(100);
 
-        Label listOfPublisherLbl = new Label("Current Publishers as Template: ");
-        Label namePLbl = new Label("Name: ");
-        Label descriptionPLbl = new Label("Description: ");
-        Label contactsPTLbl = new Label("Contacts: ");
+        Label listOfPublisherLbl = new Label("Current Publishers");
+        Label namePLbl = new Label("Will be moved in the next overhaul Name: ");
+        Label descriptionPLbl = new Label("Will be moved in the next overhaul Description: ");
+        Label contactsPTLbl = new Label("Will be moved in the next overhaul Contacts: ");
 
         publisherPane.getChildren().addAll(
                 new HBox(listOfPublisherLbl, listOfPublisher),
                 new HBox(namePLbl, namePTf),
                 new HBox(descriptionPLbl, descriptionPTa),
-                new HBox(contactsPTLbl, contactsPTa)
+                new HBox(contactsPTLbl, contactsPTa),
+                new HBox(new Button("Add new or modify publishers"))
 
         );
         publisherTitlePane.setContent(publisherPane);
         publisherTitlePane.setAlignment(Pos.CENTER);
         publisherTitlePane.setCollapsible(false);
-        publisherTitlePane.setText(" PUBLISHER INFO ");
+        publisherTitlePane.setText(" temp PUBLISHER INFO:  needs to be extracted  ");
 
         resourceTitlePane.setContent(resourcePane);
         resourceTitlePane.setAlignment(Pos.CENTER);
         resourceTitlePane.setCollapsible(false);
-        resourceTitlePane.setText(" RESOURCE INFO ");
+        resourceTitlePane.setText(" Temp :RESOURCE INFO:");
         resourceTitlePane.setPrefWidth(300);
 
         mainPane.getChildren().addAll(new HBox(resourceTable, resourceTitlePane, publisherTitlePane), addNAssignNewResource);
@@ -371,7 +390,8 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
-                System.out.print("Assign new resources");
+                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
+                    System.out.println(r);
                 return null;
             }
             return null;
