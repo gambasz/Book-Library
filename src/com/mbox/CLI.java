@@ -5,7 +5,6 @@ import java.util.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Scanner;
 import java.lang.String;
 public class CLI {
 
@@ -347,8 +346,8 @@ public class CLI {
             DBManager DB = new DBManager();
             System.out.println("Enter Course ID: ");
             int courseID = scan.nextInt();
-            int personID;
-            int resourceID;
+            int personID = 0;
+
             int[] cr = new int[20];
             int[] pr = new int[20];
             //get personID
@@ -356,16 +355,20 @@ public class CLI {
 
             rs = DB.st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
 
-            personID = rs.getInt(2);
+            while (rs.next()) {
+                personID = rs.getInt(2);
+            }
 
-            System.out.println(personID);
+
             //get resourceID
-
             rs = DB.st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
             int i = 0;
             while (rs.next()) {
                 cr[i] = rs.getInt(2);
+                i++;
             }
+
+
 
             //from person get resource
 
@@ -373,35 +376,43 @@ public class CLI {
             int a = 0;
             while (rs.next()) {
                 pr[a] = rs.getInt(2);
+                a++;
             }
 
 
-            List<Integer> commonElements = new ArrayList<Integer>();
-
-            for (int k = 0; k < cr.length; i++) {
-                for (int j = 0; j < pr.length; j++) {
-                    if (cr[k] == pr[j]) {
-                        //Check if the list already contains the common element
-                        if (!commonElements.contains(cr[i])) {
-                            //add the common element into the list
-                            commonElements.add(cr[i]);
-                        }
+            int[] comm = new int[20];
+            for(int k=0;i<cr.length;i++){
+                for(int j=0;j<pr.length;j++){
+                    if(cr[i]==pr[j]){
+                        comm[k] = cr[k];
                     }
                 }
             }
-            String fullName;
-            String course;
-            String resource;
+
+
+
+
+
+
+            String fullName = "";
+            String course = "";
+            String resource = "";
 
             rs = DB.st.executeQuery(DBManager.getPersonInTableQuery(personID));
-            fullName = rs.getString(3) + " " + rs.getString(4);
+            while(rs.next()) {
+                fullName = rs.getString(3) + " " + rs.getString(4);
+            }
 
 
             rs = DB.st.executeQuery(DBManager.getCourseInTableQuery(courseID));
-            course = rs.getString(2) + rs.getString(3);
+            while(rs.next()) {
+                course = rs.getString(2) + rs.getString(3);
+            }
 
-            rs = DB.st.executeQuery(DBManager.getResourceInTableQuery(commonElements.get(0)));
-            resource = rs.getString(3);
+            rs = DB.st.executeQuery(DBManager.getResourceInTableQuery(comm[0]));
+            while(rs.next()) {
+                resource = rs.getString(3);
+            }
 
 
             System.out.println("Name :" + fullName);
