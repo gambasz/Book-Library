@@ -5,17 +5,17 @@ import java.util.Objects;
 public class Publisher {
 
     int ID;
-    private String Description, name, contacts ;
+    private String description, name, contacts ;
 
-    public Publisher(String name, String contacts, int ID) {
+    public Publisher(String name, String contacts, String Description) {
         this.name = name;
         this.contacts = contacts;
-        this.ID = ID;
+        this.description = Description;
     }
 
     public Publisher(int ID, String name, String Description, String contacts) {
         this.name = name;
-        this.Description = Description;
+        this.description = Description;
         this.ID = ID;
         this.contacts = contacts;
     }
@@ -30,7 +30,7 @@ public class Publisher {
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public int getID() {
@@ -46,7 +46,7 @@ public class Publisher {
     }
 
     public void setDescription(String description) {
-        this.Description = description;
+        this.description = description;
     }
 
     public void setName(String name) {

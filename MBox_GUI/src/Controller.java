@@ -3,11 +3,14 @@ import data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -28,6 +31,9 @@ public class Controller {
     private ArrayList<Course> courseList;
     private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
+    private Course selectedCourse;
+    private Resource selectedResource;
+    private Publisher selectedPublisher;
 
     @FXML
     TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
@@ -121,7 +127,6 @@ public class Controller {
         authorCol.setPrefWidth(100);
         publisherCol.setPrefWidth(100);
         resourceTable.setPrefWidth(500);
-        resourceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     }
 
@@ -156,21 +161,21 @@ public class Controller {
     }
 
     public void updateRowSelected() {
-        Course temp = tableTV.getSelectionModel().getSelectedItems().get(0);
-        if (temp != null) {
+        selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
+        if (selectedCourse != null) {
             updateBtn.setVisible(true);
             deleteBtn.setVisible(true);
             updateBtn.setManaged(true);
             deleteBtn.setManaged(true);
-            courseInfoCRN.setText("" + temp.getCRN());
-            profInfoFName.setText(temp.getProfessor().getFirstName());
-            profInfoLName.setText(temp.getProfessor().getLastName());
-            profInfoType.setValue(temp.getProfessor().getType());
-            courseInfoTitle.setText(temp.getTitle());
-            courseInfoDepart.setText(temp.getDepartment());
-            semesterComBoxEdit.getSelectionModel().select(temp.getSEMESTER());
-            yearComBoxEdit.getSelectionModel().select(new Integer(temp.getYEAR()));
-            ArrayList<Resource> tempRes = temp.getResource();
+            courseInfoCRN.setText("" + selectedCourse.getCRN());
+            profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
+            profInfoLName.setText(selectedCourse.getProfessor().getLastName());
+            profInfoType.setValue(selectedCourse.getProfessor().getType());
+            courseInfoTitle.setText(selectedCourse.getTitle());
+            courseInfoDepart.setText(selectedCourse.getDepartment());
+            semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
+            yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
+            ArrayList<Resource> tempRes = selectedCourse.getResource();
             System.out.println(tempRes);
             System.out.println(resourceTable.getItems());
 
@@ -219,11 +224,8 @@ public class Controller {
      * populates the table with initial values
      */
     private void initTables() {
-        tableTV.setOnMouseClicked(e -> {
-            updateRowSelected();
-            e.consume();
-
-        });
+        setTablesSelectionProperty(tableTV);
+        setTablesSelectionProperty(resourceTable);
         ArrayList<Resource> arr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         arr.add(r);
@@ -232,6 +234,35 @@ public class Controller {
         tableTV.getItems().add(c);
         profList.add(p);
         resList.add(r);
+    }
+
+    private void setTablesSelectionProperty(TableView table) {
+        table.setRowFactory(new Callback<TableView<Course>, TableRow<Course>>() {
+            @Override
+            public TableRow<Course> call(TableView<Course> tableView2) {
+                final TableRow<Course> row = new TableRow<>();
+                row.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        final int index = row.getIndex();
+                        if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
+                            table.getSelectionModel().clearSelection();
+                            event.consume();
+                            updateRowSelected();
+                        }
+                    }
+                });
+                return row;
+            }
+        });
+
+        tableTV.setOnMouseClicked(e -> {
+            updateRowSelected();
+            e.consume();
+
+        });
+
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
 
@@ -313,103 +344,210 @@ public class Controller {
 
     }
 
+    private Publisher selectPublisher() {
+        Dialog dlg = new Dialog();
+        dlg.setTitle("Select Resource");
+        dlg.setHeaderText("Select Resource");
+        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        VBox mainPane = new VBox();
+        ButtonType assign = new ButtonType("Assign the  Selected Publisher", ButtonBar.ButtonData.OK_DONE);
+
+        Label listOfPublisher = new Label("List of Current Publisher: ");
+        Label name = new Label("Name: ");
+        Label contact = new Label("Contacts: ");
+        Label description = new Label("Description: ");
+
+        ComboBox publishersCB = new ComboBox();
+        TextField nameTF = new TextField();
+        TextField contactsTF = new TextField();
+        TextField decriptionTF = new TextField();
+
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(400);
+
+        mainPane.getChildren().addAll(
+                new HBox(listOfPublisher, publishersCB),
+                new HBox(name, nameTF),
+                new HBox(contact, contactsTF),
+                new HBox(description, decriptionTF)
+        );
+
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setSpacing(20);
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == assign) {
+                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
+                    System.out.println(r);
+                return null;
+            }
+            return null;
+        });
+        return null;
+    }
+
+    public void addResources() {
+        Dialog dlg = new Dialog();
+        dlg.setTitle("Create,Add and Assign Resource");
+        dlg.setHeaderText("Add new Resource");
+        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        VBox mainPane = new VBox();
+        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(400);
+
+        Label title = new Label("Title: ");
+        Label author = new Label(("Author: "));
+        Label id = new Label("ID: ");
+        Label totalAmount = new Label(("Total Amount: "));
+        Label currentAmount = new Label(("Current Amount: "));
+        Label description = new Label("Description: ");
+        Label type = new Label("Type: ");
+        Label publisher = new Label("Publisher: ");
+
+        TextField titleTF = new TextField();
+        TextField authorTF = new TextField();
+        TextField idTF = new TextField();
+        TextField totalAmTF = new TextField();
+        TextField currentAmTF = new TextField();
+        TextField descriptionTF = new TextField();
+        Button publisherBtn = new Button("Click me to add a new Publisher");
+        ComboBox typeCB = new ComboBox();
+
+        publisherBtn.setOnAction(e -> {
+            selectedPublisher = selectPublisher();
+            publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
+        });
+
+        mainPane.getChildren().addAll(
+                new HBox(type, typeCB),
+                new HBox(title, titleTF),
+                new HBox(author, authorTF),
+                new HBox(id, idTF),
+                new HBox(publisher, publisherBtn),
+                new HBox(totalAmount, totalAmTF),
+                new HBox(currentAmount, currentAmTF),
+                new HBox(description, descriptionTF)
+        );
+
+        for (Node box : mainPane.getChildren()) {
+            ((HBox) box).setAlignment(Pos.CENTER_LEFT);
+
+        }
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setSpacing(20);
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == assign) {
+                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
+                    System.out.println(r);
+                return null;
+            }
+            return null;
+        });
+    }
+
+    public void deleteResources() {
+
+    }
+
+    public void updateResource() {
+        Dialog dlg = new Dialog();
+        dlg.setTitle("Update Resource");
+        dlg.setHeaderText("Update Resource");
+        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        VBox mainPane = new VBox();
+        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+
+
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(400);
+
+
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == assign) {
+                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
+                    System.out.println(r);
+                return null;
+            }
+            return null;
+        });
+
+    }
+
     /**
      * Assign a new Resources to Course.
      * It creates Resource objects and assign the resources as the Professor for the course object
      */
-    public void modifyResources() {
+    public void openResourceView() {
         //TODO: migrate Resource add and modify window
         //TODO: migrate Publisher add and modify window
         //TODO: Add Functionally and support to the resource manager
         //TODO: Add Functionally and support to the publisher manager
 
         VBox mainPane = new VBox();
-        VBox resourcePane = new VBox(5);
-        VBox publisherPane = new VBox(5);
         Dialog dlg = new Dialog();
         TitledPane resourceTitlePane = new TitledPane();
         TitledPane publisherTitlePane = new TitledPane();
-
+        ComboBox listOFResources = new ComboBox();
         ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
-        ComboBox listOFResources = new ComboBox();
+
+
+        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+        Button addNAssignNewResource = new Button("Add and Assign");
+        addGraphicToButtons(new ImageView("/media/add.png"), addNAssignNewResource);
+        Button delete = new Button();
+        addGraphicToButtons(new ImageView("/media/delete.png"), delete);
+        Button update = new Button();
+        addGraphicToButtons(new ImageView("/media/upload.png"), update);
+
         listOFResources.setItems(FXCollections.observableArrayList(resList));
         resourceTable.getItems().clear();
         resourceTable.getItems().addAll(resList);
-        TextField nameBTF = new TextField();
-        TextField authorTF = new TextField();
-        TextArea descriptionRTa = new TextArea();
-        TextField idRTf = new TextField();
+        updateRowSelected();
+        addNAssignNewResource.setOnAction(e -> {
+            addResources();
+        });
+        delete.setOnAction(e -> {
+            deleteResources();
+        });
+        update.setOnAction(e -> {
+            updateResource();
+        });
+        HBox buttons = new HBox(addNAssignNewResource, update, delete);
 
-        ComboBox typeBox = new ComboBox();
-
-        typeBox.setItems(FXCollections.observableArrayList("Z", "Mc Only", "Software", "Book"));
-
-        Label nameRLbl = new Label("Will be moved in the next overhaul Title: ");
-        Label authorLbl = new Label("Will be moved in the next overhaul Author: ");
-        Label typeLbl = new Label("Will be moved in the next overhaul Type: ");
-        Label descriptionRLbl = new Label("Will be moved in the next overhaul Description: ");
-        Label idRLbl = new Label("Will be moved in the next overhaul ID: ");
-
-
-        Label currentCBoxLbl = new Label("Current Resources as Template: ");
-
-        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
-        Button addNAssignNewResource = new Button("Add and Assign new Resource");
-        resourcePane.getChildren().addAll(
-                new HBox(currentCBoxLbl, listOFResources),
-                new HBox(idRLbl, idRTf),
-                new HBox(nameRLbl, nameBTF),
-                new HBox(authorLbl, authorTF),
-                new HBox(typeLbl, typeBox),
-                new HBox(descriptionRLbl, descriptionRTa));
-        resourcePane.setSpacing(20);
-
-        ComboBox listOfPublisher = new ComboBox();
-        TextField namePTf = new TextField();
-        TextArea descriptionPTa = new TextArea();
-        TextArea contactsPTa = new TextArea();
-
-        descriptionPTa.setPrefWidth(150);
-        descriptionRTa.setPrefWidth(150);
-        contactsPTa.setPrefWidth(150);
-        descriptionPTa.setPrefHeight(100);
-        descriptionRTa.setPrefHeight(100);
-        contactsPTa.setPrefHeight(100);
-
-        Label listOfPublisherLbl = new Label("Current Publishers");
-        Label namePLbl = new Label("Will be moved in the next overhaul Name: ");
-        Label descriptionPLbl = new Label("Will be moved in the next overhaul Description: ");
-        Label contactsPTLbl = new Label("Will be moved in the next overhaul Contacts: ");
-
-        publisherPane.getChildren().addAll(
-                new HBox(listOfPublisherLbl, listOfPublisher),
-                new HBox(namePLbl, namePTf),
-                new HBox(descriptionPLbl, descriptionPTa),
-                new HBox(contactsPTLbl, contactsPTa),
-                new HBox(new Button("Add new or modify publishers"))
-
-        );
-        publisherTitlePane.setContent(publisherPane);
-        publisherTitlePane.setAlignment(Pos.CENTER);
-        publisherTitlePane.setCollapsible(false);
-        publisherTitlePane.setText(" temp PUBLISHER INFO:  needs to be extracted  ");
-
-        resourceTitlePane.setContent(resourcePane);
-        resourceTitlePane.setAlignment(Pos.CENTER);
-        resourceTitlePane.setCollapsible(false);
-        resourceTitlePane.setText(" Temp :RESOURCE INFO:");
-        resourceTitlePane.setPrefWidth(300);
-
-        mainPane.getChildren().addAll(new HBox(resourceTable, resourceTitlePane, publisherTitlePane), addNAssignNewResource);
+        buttons.setAlignment(Pos.CENTER);
+        mainPane.getChildren().addAll(new HBox(resourceTable), buttons);
         mainPane.setAlignment(Pos.CENTER);
+        buttons.setSpacing(20);
 
         dlg.setTitle("Assigning Resource");
         dlg.setHeaderText("Assigning Resource");
 
         dlg.setGraphic(icon);
-        dlg.getDialogPane().setMinWidth(300);
+        dlg.getDialogPane().setMinWidth(400);
 
 
         dlg.getDialogPane().setContent(mainPane);

@@ -111,7 +111,7 @@
                               </VBox>
                               <VBox alignment="CENTER_RIGHT">
                                  <children>
-                                    <Button fx:id="resEditBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#modifyResources" text="Edit" />
+                                    <Button fx:id="resEditBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#openResourceView" text="Edit" />
                                  </children>
                               </VBox>
                            </children>
