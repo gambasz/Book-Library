@@ -1,5 +1,5 @@
-import data.*;
 import data.Course;
+import data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,17 +23,16 @@ import java.util.Calendar;
  */
 public class Controller {
 
-    private TableView resourceTable;
-    private TableColumn<Resource, Publisher> publisherCol;
-    private TableColumn<Resource, String> nameCol, authorCol, idcCol;
+    private TableView<Resource> resourceTable;
+    private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol;
     private ArrayList<Course> courseList;
     private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
 
     @FXML
-    TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF,profInfoFName,profInfoLName;
+    TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
     @FXML
-    Label resInfoLbl1,resInfoLbl2,resInfoLbl3;
+    ListView resInfolList;
     @FXML
     Button searchBtn, profInfoBtn, resEditBtn, addBtn, commitBtn, deleteBtn;
     @FXML
@@ -41,7 +40,7 @@ public class Controller {
     @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
-    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit,profInfoType,listOfCurrentProf;
+    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType, listOfCurrentProf;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
 
@@ -60,10 +59,10 @@ public class Controller {
         profList = new ArrayList<>();
         resList = new ArrayList<>();
         initComboBoxes();
+        initResourcesTable();
         setCellValueOfColumns();
         tableTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initTables();
-        initResourcesTable();
         initCheckBoxes();
 
     }
@@ -146,6 +145,13 @@ public class Controller {
             courseInfoDepart.setText(temp.getDepartment());
             semesterComBoxEdit.getSelectionModel().select(temp.getSEMESTER());
             yearComBoxEdit.getSelectionModel().select(new Integer(temp.getYEAR()));
+            ArrayList<Resource> tempRes = temp.getResource();
+            resInfolList.getItems().clear();
+            for (int i = 0; i < 3 && i < tempRes.size(); i++) {
+                resInfolList.getItems().add(tempRes.get(i).getTitle());
+            }
+
+
         }
     }
 
@@ -197,7 +203,7 @@ public class Controller {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Course, String> c) {
                 Person temp = c.getValue().getProfessor();
-                return new SimpleStringProperty(temp.getFirstName().concat(" ").concat(temp.getLastName()));
+                return new SimpleStringProperty(temp!=null?temp.getFirstName().concat(" ").concat(temp.getLastName()):"**NONE**");
             }
         });
         resourceCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
@@ -209,7 +215,6 @@ public class Controller {
                 for (int i = 0; i < length; i++) {
                     String tTitle = res.get(i).getTitle();
                     temp.append(tTitle.substring(0, Math.min(tTitle.length(), (78 / (length % 10)))));
-//                    temp.append(tTitle.substring(0, tTitle.length() ));
                     temp.append(" , ");
                 }
                 return new SimpleStringProperty(temp.toString());
@@ -226,7 +231,22 @@ public class Controller {
                 return new SimpleStringProperty(temp.toString());
             }
         });
+        publisherCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Resource, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Resource, String> c) {
+                    Publisher p = c.getValue().getPublisher();
+
+                return new SimpleStringProperty(p!=null?p.getName():"**NONE**");
+            }
+        });
+        nameCol.setCellValueFactory(
+                new PropertyValueFactory<Resource, String>("title"));
+        idcCol.setCellValueFactory(new
+                PropertyValueFactory<Resource, String>("ID"));
+        authorCol.setCellValueFactory(new
+        PropertyValueFactory<Resource,String>("author"));
     }
+
 
     public void exit() {
         System.exit(0);
@@ -267,8 +287,9 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
-
         ComboBox listOFResources = new ComboBox();
+        listOFResources.setItems(FXCollections.observableArrayList(resList));
+        resourceTable.getItems().addAll(resList);
         TextField nameBTF = new TextField();
         TextField authorTF = new TextField();
         TextArea descriptionRTa = new TextArea();
@@ -371,13 +392,7 @@ public class Controller {
         icon.setFitWidth(100);
         listOfCurrentProf = new ComboBox();
         listOfCurrentProf.setItems(FXCollections.observableArrayList(profList));
-//        TextField fNameTF = new TextField();
-//        TextField lNameTF = new TextField();
-//        ComboBox typeBox = new ComboBox();
-//        typeBox.setItems(FXCollections.observableArrayList("Program Cord.", "Course Cord.", " Course Instruc  tor"));
-//        Label fNameLbl = new Label("Professor's First Name: ");
-//        Label lNameLbl = new Label("Professor's Last Name: ");
-//        Label typeLbl = new Label("Type: ");
+
         Label currentCBoxLbl = new Label("Current Professor : ");
 
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
@@ -385,9 +400,6 @@ public class Controller {
 
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, listOfCurrentProf)
-//                new HBox(fNameLbl, fNameTF),
-//                new HBox(lNameLbl, lNameTF),
-//                new HBox(typeLbl, typeBox)
         );
         mainAddPane.setSpacing(20);
 
@@ -403,9 +415,9 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-            profInfoFName.setText(((Person)(listOfCurrentProf.getSelectionModel().getSelectedItem())).getFirstName());
-            profInfoLName.setText(((Person)(listOfCurrentProf.getSelectionModel().getSelectedItem())).getLastName());
-            profInfoType.setValue(((Person)(listOfCurrentProf.getSelectionModel().getSelectedItem())).getType());
+                profInfoFName.setText(((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem())).getFirstName());
+                profInfoLName.setText(((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem())).getLastName());
+                profInfoType.setValue(((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem())).getType());
             }
             return null;
         });

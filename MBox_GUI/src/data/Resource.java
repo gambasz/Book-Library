@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Resource {
     private String TYPE, title, author, description;
     private boolean mcUnique;
-    private int totalAmount,ID,currentAmount;
+    private int totalAmount, ID, currentAmount;
     private Publisher publisher;
 
     public Resource(String TYPE, int ID) {
@@ -123,7 +123,7 @@ public class Resource {
 
     @Override
     public String toString() {
-        return   TYPE + ':' + title + " by " +  author;
+        return TYPE.concat(" : ").concat(title).concat(" by ").concat(author);
 
     }
 }
