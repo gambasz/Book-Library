@@ -742,4 +742,71 @@ public class DBManager {
 
         return p;
     }
+
+    //=====================================Methods for searching relationship tables====================================
+
+    public static Person getPersonRelationTable(int id){
+
+        Person p = new Person();
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID=%d", id));
+
+            while(rs.next()){
+
+                p.setID(rs.getInt(2));
+            }
+
+
+            return p;
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong.");
+
+        }
+
+        return null;
+
+    }
+    public static Resource[] getResourcesRelationTable(int id){
+
+        Resource r[];
+        try{
+
+            st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID=%d",id));
+
+
+            int i = 0;
+            while(rs.next()){
+
+                i++;
+            }
+
+            r = new Resource[i];
+
+            int j = 0;
+
+            ResultSet sr = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID=%d",id));
+
+            while(rs.next()){
+
+                r[j].setID(sr.getInt(2));
+            }
+
+            return r;
+
+
+        } catch(SQLException e){
+
+            System.out.println("Something went wrong");
+        }
+
+        return null;
+
+    }
 }
