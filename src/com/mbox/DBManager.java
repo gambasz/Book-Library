@@ -815,14 +815,10 @@ public class DBManager {
     //                                                  Relational tables methods
     //==================================================================================================================
 
-
-    public static void readFromTable() {
-
+    public static void relationalReadByCourseID(int courseID) {
         try {
             Scanner scan = new Scanner(System.in);
-            //DBManager DB = new DBManager();
-            System.out.println("Enter Course ID: ");
-            int courseID = scan.nextInt();
+
             int personID = 0;
 
             int[] cr = new int[20];
@@ -892,6 +888,34 @@ public class DBManager {
         }
     }
 
+    public static void relationalInsertByID(){
+
+        Scanner scan = new Scanner(System.in);
+        //DBManager DB = new DBManager();
+        System.out.println("Format: <CourseID> <PersonID> <ResourceID> <PublisherID> <SemesterID>");
+        System.out.println("Enter <exit> to exit.");
+
+        while(true) {
+            System.out.println("Enter PersonID, CourseID, ResourceID, PublisherID: ");
+            String input = scan.nextLine();
+            if(!input.contains("exit")){
+                String[] values = input.split(" ");
+
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
+                        " (COURSEID, PERSONID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[1])));
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                        " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[2])));
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_SEMESTER" +
+                        " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[4])));
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+                        " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[1]),Integer.parseInt(values[2])));
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[3]),Integer.parseInt(values[2])));
+                System.out.println("Added ID");
+            } else { break;}
+        }
+    }
+
     //==================================================================================================================
     //                                                  Next
     //==================================================================================================================
@@ -899,7 +923,7 @@ public class DBManager {
 
 
 
-    
+
 }
 
 
