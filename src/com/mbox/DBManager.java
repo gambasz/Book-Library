@@ -816,7 +816,7 @@ public class DBManager {
     //                                                  Relational tables methods
     //==================================================================================================================
 
-    public static void relationalReadByCourseID(int courseID) {
+    public static AllObject[] relationalReadByCourseID(int courseID) {
         try {
             Scanner scan = new Scanner(System.in);
 
@@ -894,9 +894,16 @@ public class DBManager {
             System.out.println("Name :" + pInst.getFirstName() + " " + pInst.getLastName() );
             System.out.println("Course :" + cInst.getTitle());
             System.out.println("Resource :" + rInst.getTitle());
+
+            //array of Object
+            AllObject[] array = new AllObject[20];
+            //added the first object in index 0
+            array[0] = new AllObject(pInst,cInst,rInst);
+            return array;
         }catch(Exception e){
             System.out.println("Error");
         }
+        return null;
     }
 
     public static void relationalInsertByID(){
@@ -930,7 +937,6 @@ public class DBManager {
     //==================================================================================================================
     //                                                  Next
     //==================================================================================================================
-
 
 
 
