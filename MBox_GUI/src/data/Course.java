@@ -90,7 +90,7 @@ public class Course {
 
 
     public void setSEMESTER(String SEMESTER) {
-        this.SEMESTER= Semester.valueOf(SEMESTER.toUpperCase());
+        this.SEMESTER = Semester.valueOf(SEMESTER.toUpperCase());
     }
 
     public String getTitle() {

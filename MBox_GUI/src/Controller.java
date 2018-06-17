@@ -231,11 +231,13 @@ public class Controller {
     private void initTables() {
         setTablesSelectionProperty(tableTV);
         setTablesSelectionProperty(resourceTable);
+
         ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         resArr.add(r);
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator);
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
+
         courseList.add(c);
         profList.add(p);
         resList.addAll(resArr);
@@ -379,7 +381,7 @@ public class Controller {
         if (resourceTable.getSelectionModel().getSelectedItems().size() > 0) {
 
             Publisher tempPub = resourceTable.getSelectionModel().getSelectedItems().get(0).getPublisher();
-            if(tempPub!=null) {
+            if (tempPub != null) {
                 nameTF.setText(tempPub.getName());
                 contactsTF.setText(tempPub.getContacts());
                 descriptionTF.setText(tempPub.getDescription());

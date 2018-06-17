@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Publisher {
 
     int ID;
-    private String description, name, contacts ;
+    private String description, name, contacts;
 
     public Publisher(String name, String contacts, String Description) {
         this.name = name;
