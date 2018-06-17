@@ -3,7 +3,6 @@ import data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -370,7 +369,15 @@ public class Controller {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
+        if (resourceTable.getSelectionModel().getSelectedItems().size() > 0) {
 
+            Publisher tempPub = resourceTable.getSelectionModel().getSelectedItems().get(0).getPublisher();
+            if(tempPub!=null) {
+                nameTF.setText(tempPub.getName());
+                contactsTF.setText(tempPub.getContacts());
+                descriptionTF.setText(tempPub.getDescription());
+            }
+        }
         mainPane.getChildren().addAll(
                 new HBox(listOfPublisher, publishersCB),
                 new HBox(name, nameTF),
@@ -387,7 +394,7 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
-                selectedPublisher= new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
+                selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
 
                 return null;
             }
@@ -419,12 +426,12 @@ public class Controller {
             selectPublisher();
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
-        resourceTable.setOnMouseClicked(e ->{
+        resourceTable.setOnMouseClicked(e -> {
             onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
 
         });
         //TODO: Please get rid of this
-        if(resourceTable.getSelectionModel().getSelectedItems().size()>0){
+        if (resourceTable.getSelectionModel().getSelectedItems().size() > 0) {
             onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
 
         }
@@ -450,14 +457,14 @@ public class Controller {
     }
 
     private void onResourceTableSelect(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB) {
-        Resource tempRes =  resourceTable.getSelectionModel().getSelectedItems().get(0);
+        Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
         titleTF.setText(tempRes.getTitle());
         authorTF.setText(tempRes.getAuthor());
         idTF.setText(String.valueOf(tempRes.getID()));
         typeCB.setItems(FXCollections.observableArrayList(tempRes.getTYPE()));
         typeCB.getSelectionModel().select(tempRes.getTYPE());
         descriptionTF.setText(tempRes.getDescription());
-        publisherBtn.setText(tempRes.getPublisher()!=null?tempRes.getPublisher().toString():" No publisher assigned.Click me to add. ");
+        publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
         totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
         currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
     }
@@ -474,7 +481,7 @@ public class Controller {
         VBox mainPane = new VBox();
         Dialog dlg = new Dialog();
         TitledPane resourceTitlePane = new TitledPane();
-        VBox resourceEditPane =resourceDetailedView();
+        VBox resourceEditPane = resourceDetailedView();
         ComboBox listOFResources = new ComboBox();
         ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         icon.setFitHeight(75);
@@ -504,10 +511,10 @@ public class Controller {
         buttons.setAlignment(Pos.CENTER);
 
 
-        resourceTitlePane.setContent(resourceEditPane);
+        resourceTitlePane.setContent(new VBox(resourceEditPane, buttons));
         resourceTitlePane.setAlignment(Pos.CENTER);
 
-        mainPane.getChildren().addAll(new HBox(resourceTitlePane,resourceTable), buttons);
+        mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
         mainPane.setAlignment(Pos.CENTER);
         buttons.setSpacing(20);
 
