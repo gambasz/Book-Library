@@ -3,6 +3,7 @@ import data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -191,9 +192,7 @@ public class Controller {
                     resInfolList.getItems().add(tempRes.get(i).getTitle());
                 }
                 resourceTable.getSelectionModel().select(tempRes.get(i));
-
             }
-
 
         }
     }
@@ -424,6 +423,11 @@ public class Controller {
             onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
 
         });
+        //TODO: Please get rid of this
+        if(resourceTable.getSelectionModel().getSelectedItems().size()>0){
+            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
+
+        }
         resourceEditPane.getChildren().addAll(
                 new HBox(type, typeCB),
                 new HBox(title, titleTF),
@@ -464,9 +468,7 @@ public class Controller {
      * It creates Resource objects and assign the resources as the Professor for the course object
      */
     public void openResourceView() {
-        //TODO: migrate Resource add and modify window
         //TODO: migrate Publisher add and modify window
-        //TODO: Add Functionally and support to the resource manager
         //TODO: Add Functionally and support to the publisher manager
 
         VBox mainPane = new VBox();
