@@ -31,6 +31,7 @@ public class Controller {
     private ArrayList<Course> courseList;
     private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
+    private ArrayList<Publisher> pubList;
     private Course selectedCourse;
     private Resource selectedResource;
     private Publisher selectedPublisher;
@@ -66,6 +67,7 @@ public class Controller {
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
+        pubList = new ArrayList<>();
         initComboBoxes();
         initResourcesTable();
         setCellValueOfColumns();
@@ -229,14 +231,18 @@ public class Controller {
     private void initTables() {
         setTablesSelectionProperty(tableTV);
         setTablesSelectionProperty(resourceTable);
-        ArrayList<Resource> arr = new ArrayList<>();
+        ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
-        arr.add(r);
+        resArr.add(r);
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator);
-        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", arr);
-        tableTV.getItems().add(c);
+        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
+        courseList.add(c);
         profList.add(p);
-        resList.add(r);
+        resList.addAll(resArr);
+        pubList.add(null);
+
+        tableTV.getItems().addAll(courseList);
+
     }
 
     private void setTablesSelectionProperty(TableView table) {
@@ -353,7 +359,7 @@ public class Controller {
         dlg.setHeaderText("Select Resource");
         ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         VBox mainPane = new VBox();
-        ButtonType assign = new ButtonType("Assign the  Selected Publisher", ButtonBar.ButtonData.OK_DONE);
+        ButtonType assign = new ButtonType("Create & Assign", ButtonBar.ButtonData.OK_DONE);
 
         Label listOfPublisher = new Label("List of Current Publisher: ");
         Label name = new Label("Name: ");
@@ -365,6 +371,7 @@ public class Controller {
         TextField contactsTF = new TextField();
         TextField descriptionTF = new TextField();
 
+        publishersCB.setItems(FXCollections.observableArrayList());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
