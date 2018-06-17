@@ -50,6 +50,8 @@ public class Controller {
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
 
+    boolean debugging = true;
+
     /**
      * This is initializes the start state.
      * The initial state includes:
@@ -73,6 +75,9 @@ public class Controller {
         initCheckBoxes();
         addButtonGraphics();
         resetSelect();
+        if (debugging) {
+
+        }
 
     }
 
@@ -344,7 +349,7 @@ public class Controller {
 
     }
 
-    private Publisher selectPublisher() {
+    private void selectPublisher() {
         Dialog dlg = new Dialog();
         dlg.setTitle("Select Resource");
         dlg.setHeaderText("Select Resource");
@@ -360,7 +365,7 @@ public class Controller {
         ComboBox publishersCB = new ComboBox();
         TextField nameTF = new TextField();
         TextField contactsTF = new TextField();
-        TextField decriptionTF = new TextField();
+        TextField descriptionTF = new TextField();
 
         icon.setFitHeight(75);
         icon.setFitWidth(75);
@@ -371,7 +376,7 @@ public class Controller {
                 new HBox(listOfPublisher, publishersCB),
                 new HBox(name, nameTF),
                 new HBox(contact, contactsTF),
-                new HBox(description, decriptionTF)
+                new HBox(description, descriptionTF)
         );
 
         mainPane.setAlignment(Pos.CENTER);
@@ -383,28 +388,16 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
-                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
-                    System.out.println(r);
+                selectedPublisher= new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
+
                 return null;
             }
             return null;
         });
-        return null;
     }
 
-    public void addResources() {
-        Dialog dlg = new Dialog();
-        dlg.setTitle("Create,Add and Assign Resource");
-        dlg.setHeaderText("Add new Resource");
-        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
-        VBox mainPane = new VBox();
-        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
-
-        icon.setFitHeight(75);
-        icon.setFitWidth(75);
-        dlg.setGraphic(icon);
-        dlg.getDialogPane().setMinWidth(400);
-
+    public VBox resourceDetailedView() {
+        VBox resourceEditPane = new VBox();
         Label title = new Label("Title: ");
         Label author = new Label(("Author: "));
         Label id = new Label("ID: ");
@@ -424,11 +417,14 @@ public class Controller {
         ComboBox typeCB = new ComboBox();
 
         publisherBtn.setOnAction(e -> {
-            selectedPublisher = selectPublisher();
+            selectPublisher();
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
+        resourceTable.setOnMouseClicked(e ->{
+            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
 
-        mainPane.getChildren().addAll(
+        });
+        resourceEditPane.getChildren().addAll(
                 new HBox(type, typeCB),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
@@ -439,61 +435,29 @@ public class Controller {
                 new HBox(description, descriptionTF)
         );
 
-        for (Node box : mainPane.getChildren()) {
+        for (Node box : resourceEditPane.getChildren()) {
             ((HBox) box).setAlignment(Pos.CENTER_LEFT);
 
         }
-        mainPane.setAlignment(Pos.CENTER);
-        mainPane.setSpacing(20);
-        dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+        resourceEditPane.setAlignment(Pos.CENTER);
+        resourceEditPane.setSpacing(20);
 
-
-        dlg.show();
-        dlg.setResultConverter(dialogButton -> {
-            if (dialogButton == assign) {
-                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
-                    System.out.println(r);
-                return null;
-            }
-            return null;
-        });
+        return resourceEditPane;
     }
 
-    public void deleteResources() {
-
+    private void onResourceTableSelect(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB) {
+        Resource tempRes =  resourceTable.getSelectionModel().getSelectedItems().get(0);
+        titleTF.setText(tempRes.getTitle());
+        authorTF.setText(tempRes.getAuthor());
+        idTF.setText(String.valueOf(tempRes.getID()));
+        typeCB.setItems(FXCollections.observableArrayList(tempRes.getTYPE()));
+        typeCB.getSelectionModel().select(tempRes.getTYPE());
+        descriptionTF.setText(tempRes.getDescription());
+        publisherBtn.setText(tempRes.getPublisher()!=null?tempRes.getPublisher().toString():" No publisher assigned.Click me to add. ");
+        totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
+        currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
     }
 
-    public void updateResource() {
-        Dialog dlg = new Dialog();
-        dlg.setTitle("Update Resource");
-        dlg.setHeaderText("Update Resource");
-        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
-        VBox mainPane = new VBox();
-        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
-
-
-        icon.setFitHeight(75);
-        icon.setFitWidth(75);
-        dlg.setGraphic(icon);
-        dlg.getDialogPane().setMinWidth(400);
-
-
-        dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
-
-
-        dlg.show();
-        dlg.setResultConverter(dialogButton -> {
-            if (dialogButton == assign) {
-                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
-                    System.out.println(r);
-                return null;
-            }
-            return null;
-        });
-
-    }
 
     /**
      * Assign a new Resources to Course.
@@ -508,7 +472,7 @@ public class Controller {
         VBox mainPane = new VBox();
         Dialog dlg = new Dialog();
         TitledPane resourceTitlePane = new TitledPane();
-        TitledPane publisherTitlePane = new TitledPane();
+        VBox resourceEditPane =resourceDetailedView();
         ComboBox listOFResources = new ComboBox();
         ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
         icon.setFitHeight(75);
@@ -528,20 +492,23 @@ public class Controller {
         resourceTable.getItems().addAll(resList);
         updateRowSelected();
         addNAssignNewResource.setOnAction(e -> {
-            addResources();
         });
         delete.setOnAction(e -> {
-            deleteResources();
         });
         update.setOnAction(e -> {
-            updateResource();
         });
         HBox buttons = new HBox(addNAssignNewResource, update, delete);
 
         buttons.setAlignment(Pos.CENTER);
-        mainPane.getChildren().addAll(new HBox(resourceTable), buttons);
+
+
+        resourceTitlePane.setContent(resourceEditPane);
+        resourceTitlePane.setAlignment(Pos.CENTER);
+
+        mainPane.getChildren().addAll(new HBox(resourceTitlePane,resourceTable), buttons);
         mainPane.setAlignment(Pos.CENTER);
         buttons.setSpacing(20);
+
 
         dlg.setTitle("Assigning Resource");
         dlg.setHeaderText("Assigning Resource");

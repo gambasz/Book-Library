@@ -7,7 +7,6 @@ public class Resource {
     private boolean mcUnique;
     private int totalAmount, ID, currentAmount;
     private Publisher publisher;
-
     public Resource(String TYPE, int ID) {
         this.TYPE = TYPE;
         this.ID = ID;
