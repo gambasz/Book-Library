@@ -2,6 +2,7 @@ package com.mbox;
 import java.sql.*;
 import java.util.*;
 import com.mbox.Main;
+import com.sun.istack.internal.Nullable;
 import jdk.management.resource.ResourceContext;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
@@ -10,7 +11,6 @@ import javax.xml.transform.Result;
 public class DBManager {
     public static Statement st;
     public static Connection conn;
-
     public DBManager() {
         //Method is empty for now
     }

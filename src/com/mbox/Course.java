@@ -5,10 +5,9 @@ import java.sql.*;
 public class Course {
 
     private int id;
-    private String title;
-    private String crn;
-    private String description;
-    private String department;
+    private String title, crn, description, department;
+    private Person personInstance;
+    private Resource resourceInstance;
 
     public Course(){
 
@@ -17,7 +16,8 @@ public class Course {
         this.crn = "";
         this.description = "";
         this.department = "";
-
+        this.personInstance = new Person();
+        this.resourceInstance = new Resource();
     }
 
     public Course(int id, String title, String desc, String dept, String crn){
@@ -76,6 +76,16 @@ public class Course {
 
     }
 
+    public void setPersonInstance(Person personInst){
+
+        this.personInstance = personInst;
+    }
+
+    public void setResourceInstance(Resource resourceInst){
+
+        this.resourceInstance = resourceInst;
+    }
+
     public int getID(){
 
         return this.id;
@@ -99,6 +109,16 @@ public class Course {
     public String getDepartment(){
 
         return this.department;
+    }
+
+    public Person getPersonInstance(){
+
+        return this.personInstance;
+    }
+
+    public Resource getResourceInstance(){
+
+        return this.resourceInstance;
     }
 
     @Override

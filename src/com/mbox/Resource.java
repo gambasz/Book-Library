@@ -6,6 +6,7 @@ public class Resource {
 
     private String type, title, author, isbn, description;
     private int total_amount, current_amount, id;
+    private Publisher publisherInstance;
 
     public Resource(){
 
@@ -17,9 +18,11 @@ public class Resource {
         total_amount = 0;
         current_amount = 0;
         description = "";
+        publisherInstance = new Publisher();
     }
 
-    public Resource(int id, String type, String title, String author, String isbn, int total, int current, String desc){
+    public Resource(int id, String type, String title, String author, String isbn, int total, int current,
+                    String desc){
 
         this.id = id;
         this.type = type;
@@ -29,6 +32,7 @@ public class Resource {
         this.total_amount = total;
         this.current_amount = current;
         this.description = desc;
+        //this.publisherInstance = publisherInst;
 
     }
 
@@ -76,6 +80,11 @@ public class Resource {
         this.description = desc;
     }
 
+    public void setPublisherInstance(Publisher inst){
+
+        this.publisherInstance = inst;
+    }
+
     public int getID(){
 
         return this.id;
@@ -116,6 +125,11 @@ public class Resource {
     public String getDescription(){
 
         return this.description;
+    }
+
+    public Publisher getPublisherInstance(){
+
+        return this.publisherInstance;
     }
 
 
