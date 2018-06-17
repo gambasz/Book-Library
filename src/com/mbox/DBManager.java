@@ -817,22 +817,26 @@ public class DBManager {
     //==================================================================================================================
 
     public static Course[] relationalReadByCourseID(int courseID) {
-        Course[] courseArray = new Course[20];
+        // This method is only accept ONE courseID and will find all relations to that course
+        //So you may need to call the function N times with different courseID to get all information stored in table
+        Course[] courseArray = new Course[20]; //Will make it a dynamic array list
+        int personID = 0;
+        int[] cr = new int[20];
+        //get personID
+        int[] pr = new int[20];
+        ResultSet rs;
+
 
         try {
             Scanner scan = new Scanner(System.in);
-
-            int personID = 0;
-            int[] cr = new int[20];
-            int[] pr = new int[20];
-            //get personID
-            ResultSet rs;
+            //=======================Finding Persons teaching that course===============================================
 
             rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
             //it supposed to get a list of all persons teaching that course. Assuming one person for now.
             while (rs.next()) {
                 personID = rs.getInt(2);
             }
+            //=======================Finding Resource related to that course============================================
 
             //get resourceID
             rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
@@ -842,7 +846,7 @@ public class DBManager {
                 i++;
             }
 
-            //from person get resource
+            //=======================Finding Resources related to the PERSON============================================
             rs = st.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + personID);
             int a = 0;
             while (rs.next()) {
@@ -850,6 +854,7 @@ public class DBManager {
                 a++;
             }
 
+            //Finding intersections between Resourcss person has and Resources course has!
             int[] comm = new int[20];
             for(int k=0;i<cr.length;i++){
                 for(int j=0;j<pr.length;j++){
@@ -862,6 +867,7 @@ public class DBManager {
             String fName = "", lName = "", pType = "", cTitle = "", cDescription="", cDepartment="";
             int pID=0, cID = 0;
             String resource = "";
+            //=======================Information to create Person OBJECT================================================
 
             rs = st.executeQuery(getPersonInTableQuery(personID));
             while(rs.next()) {
@@ -870,6 +876,7 @@ public class DBManager {
                 lName = rs.getString(4);
                 pType = rs.getString(2);
             }
+            //=======================Getting information to create the course object====================================
 
             rs = st.executeQuery(getCourseInTableQuery(courseID));
             while(rs.next()) {
@@ -879,6 +886,7 @@ public class DBManager {
                 cDepartment = rs.getString(5);
 
             }
+            //=======================Creating resource OBJECT===========================================================
 
             rs = st.executeQuery(getResourceInTableQuery(comm[0]));
             Resource rInst = new Resource(1,"s","s","s","s",1,2,"s");
@@ -890,8 +898,8 @@ public class DBManager {
                         rs.getInt(6), rs.getInt(7), rs.getString(8));
             }
 
+            //=======================Creating Person Object=============================================================
             Person pInst = new Person(pID, fName, lName, pType);
-            Course cInst = new Course(cID, cTitle, cDescription, cDepartment, "0");
 
             //-----------Creating a list of course with resources and persons
             courseArray[0] = new Course(cID, cTitle, cDescription, cDepartment, "0");
@@ -899,20 +907,20 @@ public class DBManager {
             courseArray[0].setResourceInstance(rInst);
             //------------ended with that
 
+            //=======================Just printing out data=============================================================
             System.out.println("Name :" + pInst.getFirstName() + " " + pInst.getLastName() );
-            System.out.println("Course :" + cInst.getTitle());
+            System.out.println("Course :" + courseArray[0].getTitle());
             System.out.println("Resource :" + rInst.getTitle());
 
-            //array of Object
-            //AllObject[] array = new AllObject[20];
-            //added the first object in index 0
-            //array[0] = new AllObject(pInst,cInst,rInst);
             return courseArray;
+
         }catch(Exception e){
             System.out.println("Error");
         }
         return null;
     }
+
+
     //==================================================================================================================
     //==================================================================================================================
 
