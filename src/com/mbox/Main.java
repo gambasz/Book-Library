@@ -17,6 +17,9 @@ public class Main {
 
         Course c[] = getCourseTitlesByID(getCourseIdsBySemesterID(49));
         System.out.println(c[0].getTitle());
+        Course[] mamali = DBManager.relationalReadByCourseID(14);
+//        System.out.println(mamali[0].getPersonInstance().getFirstName());
+//        System.out.println(mamali.length);
 
         DBManager.closeConnection();
         }

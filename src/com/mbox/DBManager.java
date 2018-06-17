@@ -10,6 +10,7 @@ import javax.xml.transform.Result;
 
 public class DBManager {
     public static Statement st;
+    public static Statement stt;
     public static Connection conn;
     public DBManager() {
         //Method is empty for now
@@ -22,6 +23,7 @@ public class DBManager {
 
             System.out.println("Successfully connected to the database");
             st = conn.createStatement();
+            stt=conn.createStatement();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -816,106 +818,214 @@ public class DBManager {
     //                                                  Relational tables methods
     //==================================================================================================================
 
+
+    public static Person setResourcesForPerson(Person person1){
+        ResultSet rss;
+        int resourceID;
+        int i = 0;
+
+        Resource[] resourcesList = new Resource[20];
+
+        try {
+            rss = stt.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + person1.getID());
+            while (rss.next()) {
+                //there will be a list of all reousrces ID that is owned by Person
+                resourceID = rss.getInt(2);
+
+                rss = st.executeQuery(getResourceInTableQuery(resourceID));
+                while(rss.next()) {
+                    // ID, Type, Title, Author, ISBN, total, current, desc
+                    resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
+                            rss.getString(3), rss.getString(4), rss.getString(5),
+                            rss.getInt(6), rss.getInt(7), rss.getString(8));
+                    i++;
+                }
+            }
+            person1.setResourcesPerson(resourcesList);
+            return person1;
+        }
+        catch (SQLException err){
+            err.printStackTrace();
+        }
+        // Adding the list of the resources to the person object
+        return null;
+
+    }
+
+
+
+    public static Resource[] findResourcesCourse(int courseID)
+    {
+
+        ResultSet rs;
+        int resourceID=0;
+        int i = 0;
+        Resource[] resourcesList = new Resource[20];
+
+
+        try {
+
+        rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
+
+        while (rs.next()) {
+            resourceID = rs.getInt(2);
+            rs = st.executeQuery(getResourceInTableQuery(resourceID));
+            //System.out.println("lol");
+
+            while(rs.next()) {
+                System.out.println("");
+                // ID, Type, Title, Author, ISBN, total, current, desc
+                resourcesList[i] = new Resource(rs.getInt(1), rs.getString(2),
+                        rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getInt(7), rs.getString(8));
+                i++;
+            }
+
+        }
+
+            return resourcesList;
+        }
+        catch (SQLException err){
+            System.out.println(err);
+        }
+        // Adding the list of the resources to the person object
+        return null;
+
+    }
+
+
+
     public static Course[] relationalReadByCourseID(int courseID) {
         // This method is only accept ONE courseID and will find all relations to that course
         //So you may need to call the function N times with different courseID to get all information stored in table
         Course[] courseArray = new Course[20]; //Will make it a dynamic array list
-        int personID = 0;
-        int[] cr = new int[20];
-        //get personID
-        int[] pr = new int[20];
+        List<Course> courseList = new ArrayList<Course>();
+
+        int personID = 0, i=0, pID=0, cID = 0;
+        int[] pr = new int[20], cr = new int[20];
         ResultSet rs;
+        String fName = "", lName = "", pType = "", cTitle = "", cDescription="", cDepartment="";
+
+        Person personTmp = new Person();
+        Resource[] courseResources = new Resource[20];
 
 
         try {
-            Scanner scan = new Scanner(System.in);
-            //=======================Finding Persons teaching that course===============================================
+            //Scanner scan = new Scanner(System.in);
 
-            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
-            //it supposed to get a list of all persons teaching that course. Assuming one person for now.
-            while (rs.next()) {
-                personID = rs.getInt(2);
-            }
-            //=======================Finding Resource related to that course============================================
 
-            //get resourceID
-            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
-            int i = 0;
-            while (rs.next()) {
-                cr[i] = rs.getInt(2);
-                i++;
-            }
-
-            //=======================Finding Resources related to the PERSON============================================
-            rs = st.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + personID);
-            int a = 0;
-            while (rs.next()) {
-                pr[a] = rs.getInt(2);
-                a++;
-            }
-
-            //Finding intersections between Resourcss person has and Resources course has!
-            int[] comm = new int[20];
-            for(int k=0;i<cr.length;i++){
-                for(int j=0;j<pr.length;j++){
-                    if(cr[i]==pr[j]){
-                        comm[k] = cr[k];
-                    }
-                }
-            }
-
-            String fName = "", lName = "", pType = "", cTitle = "", cDescription="", cDepartment="";
-            int pID=0, cID = 0;
-            String resource = "";
-            //=======================Information to create Person OBJECT================================================
-
-            rs = st.executeQuery(getPersonInTableQuery(personID));
-            while(rs.next()) {
-                pID = rs.getInt(1);
-                fName = rs.getString(3);
-                lName = rs.getString(4);
-                pType = rs.getString(2);
-            }
             //=======================Getting information to create the course object====================================
 
             rs = st.executeQuery(getCourseInTableQuery(courseID));
+
             while(rs.next()) {
+
                 cTitle = rs.getString(2) + rs.getString(3);
                 cID = rs.getInt(1);
                 cDescription = rs.getString(4);
                 cDepartment = rs.getString(5);
+                System.out.println("courseID "+courseID);
+            }
+            courseResources = findResourcesCourse(courseID);
+
+
+            //=======================Finding and creating Persons list teaching that course=============================
+            i = 0;
+            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
+            //it supposed to get a list of all persons teaching that course. Assuming one person for now.
+            while (rs.next()) {
+                courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
+                personID = rs.getInt(2);
+                rs = st.executeQuery(getPersonInTableQuery(personID));
+                while(rs.next()) {
+                    personTmp = new Person(personID, rs.getString(3), rs.getString(4),
+                            rs.getString(2));
+
+
+                    personTmp = setResourcesForPerson(personTmp);
+                    courseArray[i].setPersonInstance(personTmp);
+                    courseArray[i].setResourceInstance(courseResources);
+
+                    i++;
+                }
+
+//                pID = rs.getInt(1);
+//                fName = rs.getString(3);
+//                lName = rs.getString(4);
+//                pType = rs.getString(2);
 
             }
-            //=======================Creating resource OBJECT===========================================================
+//            //=======================Finding Resource related to that course============================================
+//
+//            //get resourceID
+//            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
+//            i = 0;
+//            while (rs.next()) {
+//                cr[i] = rs.getInt(2);
+//                i++;
+//            }
+//
+//            //=======================Finding Resources related to the PERSON============================================
+//            rs = st.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + personID);
+//            int a = 0;
+//            while (rs.next()) {
+//                pr[a] = rs.getInt(2);
+//                a++;
+//            }
 
-            rs = st.executeQuery(getResourceInTableQuery(comm[0]));
-            Resource rInst = new Resource(1,"s","s","s","s",1,2,"s");
-            while(rs.next()) {
-                // ID, Type, Title, Author, ISBN, total, current, desc
-                // initilizing the object
-                   rInst = new Resource(rs.getInt(1), rs.getString(2),
-                        rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), rs.getInt(7), rs.getString(8));
-            }
-
-            //=======================Creating Person Object=============================================================
-            Person pInst = new Person(pID, fName, lName, pType);
-
-            //-----------Creating a list of course with resources and persons
-            courseArray[0] = new Course(cID, cTitle, cDescription, cDepartment, "0");
-            courseArray[0].setPersonInstance(pInst);
-            courseArray[0].setResourceInstance(rInst);
-            //------------ended with that
+//            //Finding intersections between Resourcss person has and Resources course has!
+//            int[] comm = new int[20];
+//            for(int k=0;i<cr.length;i++){
+//                for(int j=0;j<pr.length;j++){
+//                    if(cr[i]==pr[j]){
+//                        comm[k] = cr[k];
+//                    }
+//                }
+//            }
+//
+//
+//            String resource = "";
+//            //=======================Information to create Person OBJECT================================================
+//
+//            rs = st.executeQuery(getPersonInTableQuery(personID));
+//            while(rs.next()) {
+//                pID = rs.getInt(1);
+//                fName = rs.getString(3);
+//                lName = rs.getString(4);
+//                pType = rs.getString(2);
+//            }
+//
+//            //=======================Creating resource OBJECT===========================================================
+//
+//            rs = st.executeQuery(getResourceInTableQuery(comm[0]));
+//            Resource rInst = new Resource(1,"s","s","s","s",1,2,"s");
+//            while(rs.next()) {
+//                // ID, Type, Title, Author, ISBN, total, current, desc
+//                // initilizing the object
+//                   rInst = new Resource(rs.getInt(1), rs.getString(2),
+//                        rs.getString(3), rs.getString(4), rs.getString(5),
+//                        rs.getInt(6), rs.getInt(7), rs.getString(8));
+//            }
+//
+//            //=======================Creating Person Object=============================================================
+//            Person pInst = new Person(pID, fName, lName, pType);
+//
+//            //-----------Creating a list of course with resources and persons
+//            courseArray[0] = new Course(cID, cTitle, cDescription, cDepartment, "0");
+//            courseArray[0].setPersonInstance(pInst);
+//            courseArray[0].setResourceInstance(rInst);
+//            //------------ended with that
 
             //=======================Just printing out data=============================================================
-            System.out.println("Name :" + pInst.getFirstName() + " " + pInst.getLastName() );
+            System.out.println("Name :" + courseArray[0].getPersonInstance().getFirstName() + " " +
+                    courseArray[0].getPersonInstance().getLastName() );
             System.out.println("Course :" + courseArray[0].getTitle());
-            System.out.println("Resource :" + rInst.getTitle());
+            System.out.println("Resource :" + courseArray[0].getResourceInstance()[0].getTitle());
 
             return courseArray;
 
         }catch(Exception e){
-            System.out.println("Error");
+            e.printStackTrace();
         }
         return null;
     }

@@ -5,6 +5,7 @@ public class Person {
 
     private int id;
     private String first_name, last_name, type;
+    Resource resourcePerson[];
 
     public Person(){
 
@@ -12,6 +13,8 @@ public class Person {
         first_name = "";
         last_name = "";
         type = "";
+        this.resourcePerson = new Resource[20];
+
 
     }
 
@@ -67,6 +70,11 @@ public class Person {
 
     }
 
+    public void setResourcesPerson(Resource[] resourcesPerson){
+
+        this.resourcePerson = resourcesPerson;
+    }
+
     public int getID(){
 
         return this.id;
@@ -87,6 +95,11 @@ public class Person {
     public String getType(){
 
         return this.type;
+    }
+
+    public Resource[] getResourcePerson(){
+
+        return this.resourcePerson;
     }
 
     @Override

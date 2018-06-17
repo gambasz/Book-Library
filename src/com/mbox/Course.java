@@ -7,7 +7,7 @@ public class Course {
     private int id;
     private String title, crn, description, department;
     private Person personInstance;
-    private Resource resourceInstance;
+    private Resource resourceInstance[];
 
     public Course(){
 
@@ -17,7 +17,7 @@ public class Course {
         this.description = "";
         this.department = "";
         this.personInstance = new Person();
-        this.resourceInstance = new Resource();
+        this.resourceInstance = new Resource[20];
     }
 
     public Course(int id, String title, String desc, String dept, String crn){
@@ -81,7 +81,7 @@ public class Course {
         this.personInstance = personInst;
     }
 
-    public void setResourceInstance(Resource resourceInst){
+    public void setResourceInstance(Resource[] resourceInst){
 
         this.resourceInstance = resourceInst;
     }
@@ -116,7 +116,7 @@ public class Course {
         return this.personInstance;
     }
 
-    public Resource getResourceInstance(){
+    public Resource[] getResourceInstance(){
 
         return this.resourceInstance;
     }
