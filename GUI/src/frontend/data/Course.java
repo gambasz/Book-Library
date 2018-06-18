@@ -1,4 +1,4 @@
-package data;
+package frontend.data;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * This is main data stut. for the program. Every class has a CRN which the unique/primary key, a NAME, department,
+ * This is main frontend.data stut. for the program. Every class has a CRN which the unique/primary key, a NAME, department,
  * professor, and the book list.
  *
  * @author Rajahsow Parajuli
@@ -26,6 +26,13 @@ public class Course {
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
         this.SEMESTER = Semester.valueOf(SEMESTER);
+    }
+
+    public Course(int ID, String title, String department, String description) {
+        this.ID = ID;
+        this.title = new SimpleStringProperty(title) ;
+        this.department = new SimpleStringProperty(department);
+        this.description = new SimpleStringProperty(description);
     }
 
     public Course(int ID, int CRN, int YEAR, String SEMESTER, String title, String department, Person professor, String description, ArrayList<Resource> resource) {

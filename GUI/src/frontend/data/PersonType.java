@@ -1,4 +1,4 @@
-package data;
+package frontend.data;
 
 public enum PersonType {
     ProgramCoordinator("Program Coordinator"), CourseCoordinator("Course Coordinator"), CourseInstructor("Course Instructor");

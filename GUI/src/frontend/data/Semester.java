@@ -1,4 +1,4 @@
-package data;
+package frontend.data;
 
 public enum Semester {
     FALL("FALL"), SUMMER("SUMMER"), SPRING("SPRING"), WINTER("WINTER");

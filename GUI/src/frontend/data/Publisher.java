@@ -1,4 +1,4 @@
-package data;
+package frontend.data;
 
 import java.util.Objects;
 

@@ -1,4 +1,7 @@
-import data.*;
+package frontend;
+
+import com.mbox.DBManager;
+import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,7 +22,7 @@ import java.util.Calendar;
 
 /**
  * The main controller class for th gui fxml file that has all the functionality need to provide a smooth user experience.
- * The class also interacts with the data manager.
+ * The class also interacts with the frontend.data manager.
  *
  * @author Rajashow
  */
@@ -61,6 +64,9 @@ public class Controller {
      * - initializes the resource table
      * - marking all the filter checkboxes to true
      */
+    public static  void test(){
+        System.out.print("TEST WORKED");
+    }
     @FXML
     public void initialize() {
         courseList = new ArrayList<>();
@@ -83,13 +89,13 @@ public class Controller {
     }
 
     private void addButtonGraphics() {
-        ImageView searchImg = new ImageView("/media/search.png");
+        ImageView searchImg = new ImageView("/frontend/media/search.png");
         addGraphicToButtons(searchImg, searchBtn);
-        ImageView addImg = new ImageView("/media/add.png");
+        ImageView addImg = new ImageView("/frontend/media/add.png");
         addGraphicToButtons(addImg, addBtn);
-        ImageView deleteImg = new ImageView("/media/delete.png");
+        ImageView deleteImg = new ImageView("/frontend/media/delete.png");
         addGraphicToButtons(deleteImg, deleteBtn);
-        ImageView updateImg = new ImageView("/media/upload.png");
+        ImageView updateImg = new ImageView("/frontend/media/upload.png");
         addGraphicToButtons(updateImg, updateBtn);
     }
 
@@ -247,7 +253,9 @@ public class Controller {
     private void initTables() {
         setTablesSelectionProperty(tableTV);
         setTablesSelectionProperty(resourceTable);
-        //======================BEGIN OODE BACKEND
+        //======================BEGIN CODE BACKEND
+        DBManager.openConnection();
+
         ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         resArr.add(r);
@@ -255,6 +263,7 @@ public class Controller {
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
 
         courseList.add(c);
+
         //====================== END CODE BACKEND
 
         profList.add(p);
@@ -377,7 +386,7 @@ public class Controller {
         Dialog dlg = new Dialog();
         dlg.setTitle("Select Resource");
         dlg.setHeaderText("Select Resource");
-        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource("/frontend/media/icon.png").toString());
         VBox mainPane = new VBox();
         ButtonType assign = new ButtonType("Create & Assign", ButtonBar.ButtonData.OK_DONE);
 
@@ -451,11 +460,11 @@ public class Controller {
 
 
         Button addNAssignNewResource = new Button("Add and Assign");
-        addGraphicToButtons(new ImageView("/media/add.png"), addNAssignNewResource);
+        addGraphicToButtons(new ImageView("/frontend/media/add.png"), addNAssignNewResource);
         Button delete = new Button();
-        addGraphicToButtons(new ImageView("/media/delete.png"), delete);
+        addGraphicToButtons(new ImageView("/frontend/media/delete.png"), delete);
         Button update = new Button();
-        addGraphicToButtons(new ImageView("/media/upload.png"), update);
+        addGraphicToButtons(new ImageView("/frontend/media/upload.png"), update);
 
         addNAssignNewResource.setOnAction(e -> {
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
@@ -566,7 +575,7 @@ public class Controller {
         TitledPane resourceTitlePane = new TitledPane();
         VBox resourceEditPane = resourceDetailedView();
         ComboBox listOFResources = new ComboBox();
-        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource("/frontend/media/icon.png").toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
 
@@ -617,7 +626,7 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
-        ImageView icon = new ImageView(this.getClass().getResource("/media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource("/frontend/media/icon.png").toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         listOfCurrentProf = new ComboBox();
