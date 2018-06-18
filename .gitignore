@@ -2,3 +2,4 @@
 out/
 .idea/
 DBinformation.txt
+*.DS_Store
