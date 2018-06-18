@@ -34,6 +34,18 @@ public class Resource {
         this.publisher = publisher;
     }
 
+    public Resource(String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
+        this.TYPE = TYPE;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.totalAmount = totalAmount;
+        this.ID = ID;
+        this.currentAmount = currentAmount;
+        this.publisher = publisher;
+    }
+
     public int getCurrentAmount() {
         return currentAmount;
     }
