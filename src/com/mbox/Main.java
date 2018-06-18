@@ -15,11 +15,12 @@ public class Main {
         // Raja will use this to display it in the tables. (I'll do this for the rest of the methods to fill that table.
         // Note: I added a new constrcuctor to the Course class (to create objects just with titles).
 
-        Course c[] = getCourseTitlesByID(getCourseIdsBySemesterID(49));
-        System.out.println(c[0].getTitle());
-        Course[] mamali = DBManager.relationalReadByCourseID(14);
+//        Course c[] = getCourseTitlesByID(getCourseIdsBySemesterID(49));
+//        System.out.println(c[0].getTitle());
+            Course[] mamali = DBManager.relationalReadByCourseID(11);
 //        System.out.println(mamali[0].getPersonInstance().getFirstName());
 //        System.out.println(mamali.length);
+        //DBManager.relationalInsertByID();
 
         DBManager.closeConnection();
         }

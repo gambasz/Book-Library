@@ -11,6 +11,7 @@ import javax.xml.transform.Result;
 public class DBManager {
     public static Statement st;
     public static Statement stt;
+    public static Statement st3;
     public static Connection conn;
     public DBManager() {
         //Method is empty for now
@@ -24,6 +25,7 @@ public class DBManager {
             System.out.println("Successfully connected to the database");
             st = conn.createStatement();
             stt=conn.createStatement();
+            st3=conn.createStatement();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -832,7 +834,7 @@ public class DBManager {
                 //there will be a list of all reousrces ID that is owned by Person
                 resourceID = rss.getInt(2);
 
-                rss = st.executeQuery(getResourceInTableQuery(resourceID));
+                rss = st3.executeQuery(getResourceInTableQuery(resourceID));
                 while(rss.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
                     resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
@@ -937,10 +939,10 @@ public class DBManager {
                 courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
                 personID = rs.getInt(2);
                 rs = st.executeQuery(getPersonInTableQuery(personID));
+                System.out.println("PersonID is: "+personID);
                 while(rs.next()) {
                     personTmp = new Person(personID, rs.getString(3), rs.getString(4),
                             rs.getString(2));
-
 
                     personTmp = setResourcesForPerson(personTmp);
                     courseArray[i].setPersonInstance(personTmp);
@@ -1042,7 +1044,7 @@ public class DBManager {
         System.out.println("Enter <exit> to exit.");
 
         while(true) {
-            System.out.println("Enter PersonID, CourseID, ResourceID, PublisherID: ");
+            System.out.println("Enter  CourseID, PersonID, ResourceID, PublisherID, SemesterID: ");
             String input = scan.nextLine();
             if(!input.contains("exit")){
                 String[] values = input.split(" ");
