@@ -9,11 +9,17 @@ public class Person {
     private Enum type;
 
 
-    public Person(String lastName, String firstName, int ID, Enum type) {
+    public Person(String lastName, String firstName, String type) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.type = PersonType.valueOf(type);
+    }
+
+    public Person(String lastName, String firstName, int ID, String type) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.ID = ID;
-        this.type = type;
+        this.type = PersonType.valueOf(type);
     }
 
     public void setLastName(String lastName) {
@@ -40,12 +46,12 @@ public class Person {
         return ID;
     }
 
-    public Enum getType() {
-        return type;
+    public String getType() {
+        return type.toString();
     }
 
-    public void setType(Enum type) {
-        this.type = type;
+    public void setType(String  type) {
+        this.type = PersonType.valueOf(type);
     }
 
     @Override

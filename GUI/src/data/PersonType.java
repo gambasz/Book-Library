@@ -16,6 +16,6 @@ public enum PersonType {
 
     @Override
     public String toString() {
-        return type;
+        return this.name();
     }
 }

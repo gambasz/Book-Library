@@ -199,6 +199,7 @@ public class Controller {
 
     private void updateTable(ArrayList<Course> temp_table) {
 
+
     }
 
     /**
@@ -213,10 +214,26 @@ public class Controller {
     }
 
     public void add() {
+        //TODO: the when templateing a course though selection resources are not assinged without access the resources window:: fix this bug
+        Person tempPer = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
+        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
 
-        System.out.println("Added to the db");
+        Course tempCour = new Course(
+                courseList.size(),
+                courseList.size(),
+                Integer.valueOf((Integer) yearComBoxEdit.getSelectionModel().getSelectedItem()),
+                semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+                courseInfoTitle.getText(),
+                courseInfoDepart.getText(),
+                tempPer,
+                courseInfoCRN.getText(),
+                tempRes
+        );
 
-
+        System.out.print(tempCour);
+        courseList.add(tempCour);
+        tableTV.getItems().clear();
+        tableTV.getItems().addAll(courseList);
     }
 
 
@@ -234,7 +251,7 @@ public class Controller {
         ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         resArr.add(r);
-        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator);
+        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
 
         courseList.add(c);
@@ -454,16 +471,19 @@ public class Controller {
         delete.setOnAction(e -> {
             ArrayList<Resource> temp = new ArrayList<>();
             temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
-            for(Resource r : temp){
+            for (Resource r : temp) {
                 resList.remove(r);
                 resourceTable.getItems().remove(r);
-                for(Course c : courseList){
+                for (Course c : courseList) {
                     c.getResource().remove(r);
                 }
-                tableTV.getItems().clear();
-                tableTV.getItems().addAll(courseList);
-                onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+
             }
+            tableTV.getItems().clear();
+            resInfolList.getItems().clear();
+            resInfolList.getItems().addAll(resList);
+            tableTV.getItems().addAll(courseList);
+            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         });
         update.setOnAction(e -> {
         });
