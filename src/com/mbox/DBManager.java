@@ -5,7 +5,7 @@ import com.mbox.Main;
 import com.sun.istack.internal.Nullable;
 import jdk.management.resource.ResourceContext;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
+import java.io.*;
 import javax.xml.transform.Result;
 
 public class DBManager {
@@ -17,10 +17,53 @@ public class DBManager {
         //Method is empty for now
     }
 
+    public static String readFromFile(){
+        // The name of the file to open.
+        String fileName = "DBinformation.txt";
+
+        // This will reference one line at a time
+        String line = null;
+
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader =
+                    new FileReader(fileName);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader =
+                    new BufferedReader(fileReader);
+
+            while((line = bufferedReader.readLine()) != null) {
+                return line;
+            }
+
+            // Always close files.
+            bufferedReader.close();
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                    "Unable to open file '" +
+                            fileName + "'");
+        }
+        catch(IOException ex) {
+            System.out.println(
+                    "Error reading file '"
+                            + fileName + "'");
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
     public static void openConnection() {
         try {
+            String url = readFromFile();
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection("jdbc:oracle:thin:USERNAME/PASSWORD@HOST:PORT:SID");
+            conn = DriverManager.getConnection(url);
+
 
             System.out.println("Successfully connected to the database");
             st = conn.createStatement();
