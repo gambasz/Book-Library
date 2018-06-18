@@ -188,9 +188,8 @@ public class Controller {
             semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
             yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
             ArrayList<Resource> tempRes = selectedCourse.getResource();
-            System.out.println(tempRes);
-            System.out.println(resourceTable.getItems());
-
+            resourceTable.getItems().clear();
+            resourceTable.getItems().addAll(resList);
             resInfolList.getItems().clear();
             resourceTable.getSelectionModel().select(null);
             for (int i = 0; i < tempRes.size(); i++) {
@@ -220,7 +219,6 @@ public class Controller {
     }
 
     public void add() {
-        //TODO: the when templateing a course though selection resources are not assinged without access the resources window:: fix this bug
         Person tempPer = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
 
@@ -236,7 +234,6 @@ public class Controller {
                 tempRes
         );
 
-        System.out.print(tempCour);
         courseList.add(tempCour);
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
