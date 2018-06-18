@@ -1111,7 +1111,23 @@ public class DBManager {
     //                                                  Next
     //==================================================================================================================
 
+    //method without user's input
+    public static void relationalInsertByID(int courseID, int personID, int resourceID, int publisherID, int semesterID){
 
+
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
+                " (COURSEID, PERSONID) VALUES ('%d', '%d')",courseID,personID));
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",courseID,resourceID));
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
+                " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",courseID,semesterID));
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+                " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",personID,resourceID));
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",publisherID,resourceID));
+        System.out.println("Added ID");
+
+    }
 
 
 }

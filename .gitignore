@@ -1,2 +1,3 @@
-
-src/com/mbox/Main.java
+*.class
+out/
+.idea/

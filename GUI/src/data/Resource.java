@@ -3,7 +3,7 @@ package data;
 import java.util.Objects;
 
 public class Resource {
-    private String TYPE, title, author, description;
+    private String TYPE, title, author, description, ISBN;
     private boolean mcUnique;
     private int totalAmount, ID, currentAmount;
     private Publisher publisher;
@@ -44,6 +44,27 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.publisher = publisher;
+    }
+
+    public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
+        this.ISBN = ISBN;
+        this.TYPE = TYPE;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.totalAmount = totalAmount;
+        this.ID = ID;
+        this.currentAmount = currentAmount;
+        this.publisher = publisher;
+    }
+
+    public String getISBN() {
+        return this.ISBN;
+    }
+
+    public void setISBN() {
+        this.ISBN = ISBN;
     }
 
     public int getCurrentAmount() {
