@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import data.Course;
+>>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
 import data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -81,6 +85,7 @@ public class Controller {
         }
 
     }
+<<<<<<< HEAD
 
     private void addButtonGraphics() {
         ImageView searchImg = new ImageView("/media/search.png");
@@ -101,6 +106,28 @@ public class Controller {
         button.setText("");
     }
 
+=======
+
+    private void addButtonGraphics() {
+        ImageView searchImg = new ImageView("/media/search.png");
+        addGraphicToButtons(searchImg, searchBtn);
+        ImageView addImg = new ImageView("/media/add.png");
+        addGraphicToButtons(addImg, addBtn);
+        ImageView deleteImg = new ImageView("/media/delete.png");
+        addGraphicToButtons(deleteImg, deleteBtn);
+        ImageView updateImg = new ImageView("/media/upload.png");
+        addGraphicToButtons(updateImg, updateBtn);
+    }
+
+    private void addGraphicToButtons(ImageView img, Button button) {
+        img.setFitHeight(20);
+        img.setFitWidth(90);
+        img.setPreserveRatio(true);
+        button.setGraphic(img);
+        button.setText("");
+    }
+
+>>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
     /**
      * Marks all the filter checkboxes to true
      */
@@ -265,6 +292,7 @@ public class Controller {
                 return row;
             }
         });
+<<<<<<< HEAD
 
         tableTV.setOnMouseClicked(e -> {
             updateRowSelected();
@@ -272,6 +300,15 @@ public class Controller {
 
         });
 
+=======
+
+        tableTV.setOnMouseClicked(e -> {
+            updateRowSelected();
+            e.consume();
+
+        });
+
+>>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
@@ -430,6 +467,7 @@ public class Controller {
         Button publisherBtn = new Button("Click me to add a new Publisher");
         ComboBox typeCB = new ComboBox();
 
+<<<<<<< HEAD
 
         Button addNAssignNewResource = new Button("Add and Assign");
         addGraphicToButtons(new ImageView("/media/add.png"), addNAssignNewResource);
@@ -531,6 +569,56 @@ public class Controller {
     }
 
 
+=======
+        publisherBtn.setOnAction(e -> {
+            selectPublisher();
+            publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
+        });
+        resourceTable.setOnMouseClicked(e -> {
+            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
+
+        });
+        //TODO: Please get rid of this
+        if (resourceTable.getSelectionModel().getSelectedItems().size() > 0) {
+            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
+
+        }
+        resourceEditPane.getChildren().addAll(
+                new HBox(type, typeCB),
+                new HBox(title, titleTF),
+                new HBox(author, authorTF),
+                new HBox(id, idTF),
+                new HBox(publisher, publisherBtn),
+                new HBox(totalAmount, totalAmTF),
+                new HBox(currentAmount, currentAmTF),
+                new HBox(description, descriptionTF)
+        );
+
+        for (Node box : resourceEditPane.getChildren()) {
+            ((HBox) box).setAlignment(Pos.CENTER_LEFT);
+
+        }
+        resourceEditPane.setAlignment(Pos.CENTER);
+        resourceEditPane.setSpacing(20);
+
+        return resourceEditPane;
+    }
+
+    private void onResourceTableSelect(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB) {
+        Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
+        titleTF.setText(tempRes.getTitle());
+        authorTF.setText(tempRes.getAuthor());
+        idTF.setText(String.valueOf(tempRes.getID()));
+        typeCB.setItems(FXCollections.observableArrayList(tempRes.getTYPE()));
+        typeCB.getSelectionModel().select(tempRes.getTYPE());
+        descriptionTF.setText(tempRes.getDescription());
+        publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
+        totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
+        currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
+    }
+
+
+>>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
     /**
      * Assign a new Resources to Course.
      * It creates Resource objects and assign the resources as the Professor for the course object
@@ -550,6 +638,7 @@ public class Controller {
 
 
         ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+<<<<<<< HEAD
 
         listOFResources.setItems(FXCollections.observableArrayList(resList));
         resourceTable.getItems().clear();
@@ -558,10 +647,37 @@ public class Controller {
 
 
         resourceTitlePane.setContent(resourceEditPane);
+=======
+        Button addNAssignNewResource = new Button("Add and Assign");
+        addGraphicToButtons(new ImageView("/media/add.png"), addNAssignNewResource);
+        Button delete = new Button();
+        addGraphicToButtons(new ImageView("/media/delete.png"), delete);
+        Button update = new Button();
+        addGraphicToButtons(new ImageView("/media/upload.png"), update);
+
+        listOFResources.setItems(FXCollections.observableArrayList(resList));
+        resourceTable.getItems().clear();
+        resourceTable.getItems().addAll(resList);
+        updateRowSelected();
+        addNAssignNewResource.setOnAction(e -> {
+        });
+        delete.setOnAction(e -> {
+        });
+        update.setOnAction(e -> {
+        });
+        HBox buttons = new HBox(addNAssignNewResource, update, delete);
+
+        buttons.setAlignment(Pos.CENTER);
+
+
+        resourceTitlePane.setContent(new VBox(resourceEditPane, buttons));
+>>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
         resourceTitlePane.setAlignment(Pos.CENTER);
 
         mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
         mainPane.setAlignment(Pos.CENTER);
+        buttons.setSpacing(20);
+
 
 
         dlg.setTitle("Assigning Resource");
@@ -600,9 +716,15 @@ public class Controller {
         icon.setFitWidth(100);
         listOfCurrentProf = new ComboBox();
         listOfCurrentProf.setItems(FXCollections.observableArrayList(profList));
+<<<<<<< HEAD
 
         Label currentCBoxLbl = new Label("Current Professor : ");
 
+=======
+
+        Label currentCBoxLbl = new Label("Current Professor : ");
+
+>>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
 
 
