@@ -34,7 +34,6 @@ public class Resource {
         this.publisher = publisher;
     }
 
-<<<<<<< HEAD
     public Resource(String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
         this.TYPE = TYPE;
         this.title = title;
@@ -47,8 +46,6 @@ public class Resource {
         this.publisher = publisher;
     }
 
-=======
->>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
     public int getCurrentAmount() {
         return currentAmount;
     }
@@ -79,21 +76,12 @@ public class Resource {
 
     public void setID(int ID) {
         this.ID = ID;
-<<<<<<< HEAD
     }
 
     public String getTitle() {
         return title;
     }
 
-=======
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
->>>>>>> c7bab346f07fa370c3d44bc7f69033f9262782e6
     public void setTitle(String title) {
         this.title = title;
     }
