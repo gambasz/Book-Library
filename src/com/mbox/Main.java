@@ -9,18 +9,7 @@ public class Main {
 
         DBManager.openConnection();
 
-        //This two methods need to be put in the DBManager. I'll do that as well as add the other ones later tonight.
-        // getCourseTitleById Recieves an id (for semester) and returns an array of ints (ids for Course)
-        // This is used by getCourseTitlesByID to get all titles for Courses and returns them in an array of objects
-        // Raja will use this to display it in the tables. (I'll do this for the rest of the methods to fill that table.
-        // Note: I added a new constrcuctor to the Course class (to create objects just with titles).
-
-//        Course c[] = getCourseTitlesByID(getCourseIdsBySemesterID(49));
-//        System.out.println(c[0].getTitle());
-            Course[] mamali = DBManager.relationalReadByCourseID(11);
-//        System.out.println(mamali[0].getPersonInstance().getFirstName());
-//        System.out.println(mamali.length);
-        //DBManager.relationalInsertByID();
+        Course[] mamali = DBManager.relationalReadByCourseID(11);
 
         DBManager.closeConnection();
         }
