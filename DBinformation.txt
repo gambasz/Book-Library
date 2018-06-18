@@ -1,1 +1,0 @@
-jdbc:oracle:thin:Username/Password@HOST:PORT:SID
