@@ -61,6 +61,15 @@ public class CLI {
                         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                         break;
                 }
+                case "relate": {
+                    DB.relationalInsertByID();
+                    break;
+                }
+                case "read":  {
+                    int courseID = Integer.parseInt(values[1]);
+                    DB.relationalReadByCourseID(courseID);
+                    break;
+                }
                 case "exit": {
                         System.exit(0);
                         break;
@@ -94,6 +103,8 @@ public class CLI {
         System.out.printf("%-100s%-50s\n","Search -Resource -<Title>","[Search by Title in Resources table]");
         System.out.printf("%-100s%-50s\n","Search -Course -<Title>","[Search by Title in Courses table]");
         System.out.printf("%-100s%-50s\n","Delete -<Table>","[Delete by ID from that table]");
+        System.out.printf("%-100s%-50s\n","Relate","[Create connection between elements]");
+        System.out.printf("%-100s%-50s\n","Read -<courseID>","[Enter course ID to get all elements related to that course]");
     }
 
     public static void showTable(String table) {
