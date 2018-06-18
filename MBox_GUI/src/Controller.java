@@ -1,4 +1,3 @@
-import data.Course;
 import data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -431,19 +430,58 @@ public class Controller {
         Button publisherBtn = new Button("Click me to add a new Publisher");
         ComboBox typeCB = new ComboBox();
 
+
+        Button addNAssignNewResource = new Button("Add and Assign");
+        addGraphicToButtons(new ImageView("/media/add.png"), addNAssignNewResource);
+        Button delete = new Button();
+        addGraphicToButtons(new ImageView("/media/delete.png"), delete);
+        Button update = new Button();
+        addGraphicToButtons(new ImageView("/media/upload.png"), update);
+
+        addNAssignNewResource.setOnAction(e -> {
+            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                    titleTF.getText(),
+                    authorTF.getText(),
+                    descriptionTF.getText(),
+                    false,
+                    Integer.parseInt(totalAmTF.getText()),
+                    Integer.parseInt(idTF.getText()),
+                    Integer.parseInt(currentAmTF.getText()),
+                    selectedPublisher
+            );
+
+        });
+        delete.setOnAction(e -> {
+            ArrayList<Resource> temp = new ArrayList<>();
+            temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
+            for(Resource r : temp){
+                resList.remove(r);
+                resourceTable.getItems().remove(r);
+                for(Course c : courseList){
+                    c.getResource().remove(r);
+                }
+                tableTV.getItems().clear();
+                tableTV.getItems().addAll(courseList);
+                onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            }
+        });
+        update.setOnAction(e -> {
+        });
+        HBox buttons = new HBox(addNAssignNewResource, update, delete);
+
+        buttons.setSpacing(20);
+        buttons.setAlignment(Pos.CENTER);
+
+
         publisherBtn.setOnAction(e -> {
             selectPublisher();
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
         resourceTable.setOnMouseClicked(e -> {
-            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
+            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
-        //TODO: Please get rid of this
-        if (resourceTable.getSelectionModel().getSelectedItems().size() > 0) {
-            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB);
-
-        }
+        onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         resourceEditPane.getChildren().addAll(
                 new HBox(type, typeCB),
                 new HBox(title, titleTF),
@@ -453,29 +491,43 @@ public class Controller {
                 new HBox(totalAmount, totalAmTF),
                 new HBox(currentAmount, currentAmTF),
                 new HBox(description, descriptionTF)
+
         );
 
         for (Node box : resourceEditPane.getChildren()) {
             ((HBox) box).setAlignment(Pos.CENTER_LEFT);
 
         }
+        resourceEditPane.getChildren().add(buttons);
         resourceEditPane.setAlignment(Pos.CENTER);
         resourceEditPane.setSpacing(20);
 
         return resourceEditPane;
     }
 
-    private void onResourceTableSelect(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB) {
+    private void onResourceTableSelect(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+
         Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
-        titleTF.setText(tempRes.getTitle());
-        authorTF.setText(tempRes.getAuthor());
-        idTF.setText(String.valueOf(tempRes.getID()));
-        typeCB.setItems(FXCollections.observableArrayList(tempRes.getTYPE()));
-        typeCB.getSelectionModel().select(tempRes.getTYPE());
-        descriptionTF.setText(tempRes.getDescription());
-        publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
-        totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
-        currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
+        if (tempRes != null) {
+            titleTF.setText(tempRes.getTitle());
+            authorTF.setText(tempRes.getAuthor());
+            idTF.setText(String.valueOf(tempRes.getID()));
+            typeCB.setItems(FXCollections.observableArrayList(tempRes.getTYPE()));
+            typeCB.getSelectionModel().select(tempRes.getTYPE());
+            descriptionTF.setText(tempRes.getDescription());
+            publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
+            totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
+            currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
+            update.setVisible(true);
+            delete.setVisible(true);
+            update.setManaged(true);
+            delete.setManaged(true);
+        } else {
+            update.setVisible(false);
+            delete.setVisible(false);
+            update.setManaged(false);
+            delete.setManaged(false);
+        }
     }
 
 
@@ -498,34 +550,18 @@ public class Controller {
 
 
         ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
-        Button addNAssignNewResource = new Button("Add and Assign");
-        addGraphicToButtons(new ImageView("/media/add.png"), addNAssignNewResource);
-        Button delete = new Button();
-        addGraphicToButtons(new ImageView("/media/delete.png"), delete);
-        Button update = new Button();
-        addGraphicToButtons(new ImageView("/media/upload.png"), update);
 
         listOFResources.setItems(FXCollections.observableArrayList(resList));
         resourceTable.getItems().clear();
         resourceTable.getItems().addAll(resList);
         updateRowSelected();
-        addNAssignNewResource.setOnAction(e -> {
-        });
-        delete.setOnAction(e -> {
-        });
-        update.setOnAction(e -> {
-        });
-        HBox buttons = new HBox(addNAssignNewResource, update, delete);
-
-        buttons.setAlignment(Pos.CENTER);
 
 
-        resourceTitlePane.setContent(new VBox(resourceEditPane, buttons));
+        resourceTitlePane.setContent(resourceEditPane);
         resourceTitlePane.setAlignment(Pos.CENTER);
 
         mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
         mainPane.setAlignment(Pos.CENTER);
-        buttons.setSpacing(20);
 
 
         dlg.setTitle("Assigning Resource");
