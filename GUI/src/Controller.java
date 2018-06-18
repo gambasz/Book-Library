@@ -247,7 +247,7 @@ public class Controller {
     private void initTables() {
         setTablesSelectionProperty(tableTV);
         setTablesSelectionProperty(resourceTable);
-
+        //======================BEGIN OODE BACKEND
         ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         resArr.add(r);
@@ -255,6 +255,8 @@ public class Controller {
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
 
         courseList.add(c);
+        //====================== END CODE BACKEND
+
         profList.add(p);
         resList.addAll(resArr);
         pubList.add(null);
