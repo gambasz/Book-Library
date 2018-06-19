@@ -4,6 +4,7 @@ import java.util.*;
 import com.mbox.Main;
 import com.sun.istack.internal.Nullable;
 import jdk.management.resource.ResourceContext;
+import jdk.management.resource.ResourceId;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import java.io.*;
 import javax.xml.transform.Result;
@@ -12,6 +13,7 @@ public class DBManager {
     public static Statement st;
     public static Statement stt;
     public static Statement st3;
+    public static Statement st4;
     public static Connection conn;
     public DBManager() {
         //Method is empty for now
@@ -69,6 +71,7 @@ public class DBManager {
             st = conn.createStatement();
             stt=conn.createStatement();
             st3=conn.createStatement();
+            st4=conn.createStatement();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -938,6 +941,42 @@ public class DBManager {
 
     }
 
+    public static Resource setPublisherForResource(Resource resource1){
+        ResultSet rss;
+        ResultSet rs2;
+        int publisherID = 0, i = 0;
+        Publisher publisherInstance = new Publisher();
+
+        //Resource[] resourcesList = new Resource[20];
+
+        try {
+            rs2 = st4.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +
+                    resource1.getID());
+
+            while (rs2.next()) {
+                //there will be a list of all reousrces ID that is owned by Person
+                publisherID = rs2.getInt(1);
+
+                rss = st3.executeQuery(getPublisherInTableQuery(publisherID));
+                while(rss.next()) {
+                    // ID, Type, Title, Author, ISBN, total, current, desc
+                    publisherInstance = new Publisher(rss.getInt(1), rss.getString(2),
+                            rss.getString(3), rss.getString(4));
+                    i++;
+                }
+            }
+            resource1.setPublisherInstance(publisherInstance);
+            return resource1;
+        }
+        catch (SQLException err){
+            err.printStackTrace();
+        }
+        // Adding the list of the resources to the person object
+        return null;
+
+    }
+
+
 
 
     public static ArrayList<Course> relationalReadByCourseID(int courseID) {
@@ -949,15 +988,13 @@ public class DBManager {
         int personID = 0, i=0, pID=0, cID = 0;
         int[] pr = new int[20], cr = new int[20];
         ResultSet rs;
-        String fName = "", lName = "", pType = "", cTitle = "", cDescription="", cDepartment="";
+        String cTitle = "", cDescription="", cDepartment="";
 
         Person personTmp = new Person();
         Resource[] courseResources = new Resource[20];
 
 
         try {
-            //Scanner scan = new Scanner(System.in);
-
 
             //=======================Getting information to create the course object====================================
 
@@ -999,72 +1036,8 @@ public class DBManager {
                     i++;
                 }
 
-//                pID = rs.getInt(1);
-//                fName = rs.getString(3);
-//                lName = rs.getString(4);
-//                pType = rs.getString(2);
 
             }
-//            //=======================Finding Resource related to that course============================================
-//
-//            //get resourceID
-//            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
-//            i = 0;
-//            while (rs.next()) {
-//                cr[i] = rs.getInt(2);
-//                i++;
-//            }
-//
-//            //=======================Finding Resources related to the PERSON============================================
-//            rs = st.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + personID);
-//            int a = 0;
-//            while (rs.next()) {
-//                pr[a] = rs.getInt(2);
-//                a++;
-//            }
-
-//            //Finding intersections between Resourcss person has and Resources course has!
-//            int[] comm = new int[20];
-//            for(int k=0;i<cr.length;i++){
-//                for(int j=0;j<pr.length;j++){
-//                    if(cr[i]==pr[j]){
-//                        comm[k] = cr[k];
-//                    }
-//                }
-//            }
-//
-//
-//            String resource = "";
-//            //=======================Information to create Person OBJECT================================================
-//
-//            rs = st.executeQuery(getPersonInTableQuery(personID));
-//            while(rs.next()) {
-//                pID = rs.getInt(1);
-//                fName = rs.getString(3);
-//                lName = rs.getString(4);
-//                pType = rs.getString(2);
-//            }
-//
-//            //=======================Creating resource OBJECT===========================================================
-//
-//            rs = st.executeQuery(getResourceInTableQuery(comm[0]));
-//            Resource rInst = new Resource(1,"s","s","s","s",1,2,"s");
-//            while(rs.next()) {
-//                // ID, Type, Title, Author, ISBN, total, current, desc
-//                // initilizing the object
-//                   rInst = new Resource(rs.getInt(1), rs.getString(2),
-//                        rs.getString(3), rs.getString(4), rs.getString(5),
-//                        rs.getInt(6), rs.getInt(7), rs.getString(8));
-//            }
-//
-//            //=======================Creating Person Object=============================================================
-//            Person pInst = new Person(pID, fName, lName, pType);
-//
-//            //-----------Creating a list of course with resources and persons
-//            courseArray[0] = new Course(cID, cTitle, cDescription, cDepartment, "0");
-//            courseArray[0].setPersonInstance(pInst);
-//            courseArray[0].setResourceInstance(rInst);
-//            //------------ended with that
 
             //=======================Just printing out data=============================================================
             System.out.println("Name :" + courseArray[0].getPersonInstance().getFirstName() + " " +

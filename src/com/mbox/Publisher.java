@@ -25,6 +25,13 @@ public class Publisher {
         this.contact_information = contact;
         this.description = desc;
     }
+    public Publisher(int id,String title, String contact, String description){
+
+        this.id = id;
+        this.title = title;
+        this.contact_information = contact;
+        this.description = description;
+    }
 
     public void setID(int id){
 
