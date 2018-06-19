@@ -18,7 +18,8 @@ public class Resource {
         total_amount = 0;
         current_amount = 0;
         description = "";
-        publisherInstance = new Publisher();
+        publisherInstance = new Publisher("Title", "Contact Information", "Description");
+
     }
 
     public Resource(int id, String type, String title, String author, String isbn, int total, int current,
@@ -35,6 +36,29 @@ public class Resource {
         //this.publisherInstance = publisherInst;
 
     }
+
+    public Resource(int id, String type, String title, String author, String isbn, int total, int current,
+                    String desc, Publisher publisherInst){
+
+        this.id = id;
+        this.type = type;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.total_amount = total;
+        this.current_amount = current;
+        this.description = desc;
+        this.publisherInstance = publisherInst;
+
+    }
+
+    public frontend.data.Resource initResourceGUI() {
+        frontend.data.Resource tmp = new frontend.data.Resource(this.isbn, this.type, this.title, this.author,
+                this.description, true, this.total_amount, this.id, this.current_amount, this.publisherInstance.initPublisherGUI());
+        return tmp;
+    }
+
+
 
     public void setID(int id){
 
