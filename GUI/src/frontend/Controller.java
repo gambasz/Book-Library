@@ -262,19 +262,23 @@ public class Controller {
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         resArr.add(r);
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
-        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
-        courseList.add(c);
+//        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
+//        courseList.add(c);
 
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(57);
-        for(int k=0 ; k < pulledDatabase.size(); k++  ){
+        for(int k=0 ; k < pulledDatabase.size(); k++){
             courseList.add(pulledDatabase.get(k));
 
         }
 
+        for(int i=0; i<com.mbox.CLI.getPersonFromTable().size();i++){
+            profList.add(com.mbox.CLI.getPersonFromTable().get(i).initPersonGUI());
+        }
 
         //====================== END CODE BACKEND
 
         profList.add(p);
+
         resList.addAll(resArr);
         pubList.add(null);
 

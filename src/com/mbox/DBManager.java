@@ -542,6 +542,80 @@ public class DBManager {
 
         return null;
     }
+
+    public static ArrayList<Integer> searchGetCoursesIdsByProfessorName(String name){
+
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' OR LASTNAME='s'", name, name);
+
+            ResultSet rs = st.executeQuery(query);
+
+            ArrayList<Integer> professorids = new ArrayList<>();
+
+            while(rs.next()){
+
+                professorids.add(rs.getInt(1));
+            }
+
+            for(int i = 0; i < professorids.size(); i++){
+
+                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+                        professorids.get(i)));
+
+                while(rs.next()){
+
+                    arr.add(rs.getInt(2));
+                }
+            }
+
+            return arr;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong");
+
+        }
+
+        return null;
+    }
+    public static ArrayList<frontend.data.Course> getCourseArrayByIDs(ArrayList<Integer> timmy){
+
+        ArrayList<frontend.data.Course> c = new ArrayList<>();
+        frontend.data.Course course;
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs;
+
+            for (int i = 0; i < timmy.size(); i++){
+
+                rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID=%d", timmy.get(i)));
+
+                while(rs.next()){
+
+                    course = new frontend.data.Course(rs.getInt(1), rs.getString(2),
+                            rs.getString(5), rs.getString(4));
+
+                    c.add(course);
+                }
+            }
+
+            return c;
+
+        }catch(SQLException e){
+
+
+        }
+
+        return null;
+
+    }
+
     public static Course[] searchByCourse(String title){
         int i = 0;
 
@@ -1129,7 +1203,8 @@ public class DBManager {
         for(int l = 0; l < resourceidlist.length; l++){
 
             executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",resourceidlist[l], r.get(l).getPublisher().getID()));
+                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",resourceidlist[l],
+                    r.get(l).getPublisher().getID()));
 
         }
 
