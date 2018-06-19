@@ -256,14 +256,16 @@ public class Controller {
         ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
         resArr.add(r);
-        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
-        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
+        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", null, "something about the course", resArr);
 
         courseList.add(c);
 
         //====================== END CODE BACKEND
+        DBManager.openConnection();
+        for(int i=0;i<com.mbox.CLI.getPersonFromTable().size();i++){
+            profList.add(com.mbox.CLI.getPersonFromTable().get(i).initPersonGUI());
+        }
 
-        profList.add(p);
         resList.addAll(resArr);
         pubList.add(null);
 
