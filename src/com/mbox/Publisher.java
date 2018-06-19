@@ -125,4 +125,9 @@ public class Publisher {
 
     }
 
+    public frontend.data.Publisher initPublisherGUI(){
+        frontend.data.Publisher pub = new frontend.data.Publisher(this.id,this.title,this.description,this.contact_information);
+        return pub;
+    }
+
 }
