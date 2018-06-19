@@ -960,6 +960,8 @@ public class DBManager {
                     resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
                             rss.getString(3), rss.getString(4), rss.getString(5),
                             rss.getInt(6), rss.getInt(7), rss.getString(8));
+                    setPublisherForResource(resourcesList[i]);
+
                     i++;
                 }
             }
@@ -1000,6 +1002,7 @@ public class DBManager {
                 resourcesList[i] = new Resource(rs.getInt(1), rs.getString(2),
                         rs.getString(3), rs.getString(4), rs.getString(5),
                         rs.getInt(6), rs.getInt(7), rs.getString(8));
+                setPublisherForResource(resourcesList[i]);
                 i++;
             }
 
@@ -1019,19 +1022,23 @@ public class DBManager {
         ResultSet rss;
         ResultSet rs2;
         int publisherID = 0, i = 0;
+
         Publisher publisherInstance = new Publisher();
 
         //Resource[] resourcesList = new Resource[20];
 
         try {
-            rs2 = st4.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +
+            Statement stpublisher1 = conn.createStatement();
+            Statement stpublisher2 = conn.createStatement();
+
+            rs2 = stpublisher1.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +
                     resource1.getID());
 
             while (rs2.next()) {
                 //there will be a list of all reousrces ID that is owned by Person
                 publisherID = rs2.getInt(1);
 
-                rss = st3.executeQuery(getPublisherInTableQuery(publisherID));
+                rss = stpublisher2.executeQuery(getPublisherInTableQuery(publisherID));
                 while(rss.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
                     publisherInstance = new Publisher(rss.getInt(1), rss.getString(2),
