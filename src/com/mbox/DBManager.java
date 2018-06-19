@@ -940,11 +940,11 @@ public class DBManager {
 
 
 
-    public static Course[] relationalReadByCourseID(int courseID) {
+    public static ArrayList<Course> relationalReadByCourseID(int courseID) {
         // This method is only accept ONE courseID and will find all relations to that course
         //So you may need to call the function N times with different courseID to get all information stored in table
         Course[] courseArray = new Course[20]; //Will make it a dynamic array list
-        List<Course> courseList = new ArrayList<Course>();
+        ArrayList<Course>  courseList = new ArrayList<>();
 
         int personID = 0, i=0, pID=0, cID = 0;
         int[] pr = new int[20], cr = new int[20];
@@ -980,6 +980,8 @@ public class DBManager {
             //it supposed to get a list of all persons teaching that course. Assuming one person for now.
             while (rs.next()) {
                 courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
+                courseList.add(new Course(cID, cTitle, cDepartment, cDescription, "CRN"));
+
                 personID = rs.getInt(2);
                 rs = st.executeQuery(getPersonInTableQuery(personID));
                 System.out.println("PersonID is: "+personID);
@@ -988,8 +990,11 @@ public class DBManager {
                             rs.getString(2));
 
                     personTmp = setResourcesForPerson(personTmp);
+
                     courseArray[i].setPersonInstance(personTmp);
                     courseArray[i].setResourceInstance(courseResources);
+                    courseList.get(i).setPersonInstance(personTmp);
+                    courseList.get(i).setResourceInstance(courseResources);
 
                     i++;
                 }
@@ -1067,7 +1072,7 @@ public class DBManager {
             System.out.println("Course :" + courseArray[0].getTitle());
             System.out.println("Resource :" + courseArray[0].getResourceInstance()[0].getTitle());
 
-            return courseArray;
+            return courseList;
 
         }catch(Exception e){
             e.printStackTrace();
@@ -1181,10 +1186,11 @@ public class DBManager {
     }
 
 
-    public static int[] getCourseIdsBySemesterID(int id){
+    public static ArrayList<Integer> getCourseIdsBySemesterID(int id){
 
         int i = 0;
         String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d", id);
+        ArrayList<Integer> idsList= new ArrayList<Integer>();
 
         try{
 
@@ -1195,17 +1201,15 @@ public class DBManager {
                 i++;
             }
 
-            int[] ids = new int[i];
 
             rs = st.executeQuery(query);
             i = 0;
             while(rs.next()){
-
-                ids[i] = rs.getInt(1);
+                idsList.add(rs.getInt(1));
                 i++;
             }
 
-            return ids;
+            return idsList;
 
 
         }catch(SQLException e){
@@ -1218,24 +1222,24 @@ public class DBManager {
     }
 
 
-    public static ArrayList<Course> returnEverything(int semesterid) {
+    public static ArrayList<frontend.data.Course> returnEverything(int semesterid) {
 
-        int arr[] = getCourseIdsBySemesterID(semesterid);
+        ArrayList<Integer> arr = getCourseIdsBySemesterID(semesterid);
 
-        ArrayList<Course> hugeshit = new ArrayList<>();
+        ArrayList<frontend.data.Course> hugeshit2 = new ArrayList<>();
 
-        for(int i = 0; i < arr.length; i++){
+        for(int i = 0; i < arr.size(); i++){
 
-            Course[] tmp = DBManager.relationalReadByCourseID(arr[i]);
+            ArrayList<Course> tmpCourse = DBManager.relationalReadByCourseID(arr.get(i));
 
-            for(int j = 0; j < tmp.length; j++) {
+            for(int j = 0; j < tmpCourse.size(); j++) {
 
-                hugeshit.add(tmp[j]);
+                hugeshit2.add(tmpCourse.get(j).initCourseGUI());
 
             }
         }
 
-        return hugeshit;
+        return hugeshit2;
     }
 
     // Returns id needs to return title;
