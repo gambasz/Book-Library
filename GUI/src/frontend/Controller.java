@@ -263,8 +263,14 @@ public class Controller {
         resArr.add(r);
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
         Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
-
         courseList.add(c);
+
+        ArrayList<Course> pulledDatabase = DBManager.returnEverything(57);
+        for(int k=0 ; k < pulledDatabase.size(); k++  ){
+            courseList.add(pulledDatabase.get(k));
+
+        }
+
 
         //====================== END CODE BACKEND
 
