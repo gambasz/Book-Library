@@ -1,4 +1,6 @@
 package com.mbox;
+import frontend.data.PersonType;
+
 import java.sql.*;
 
 public class Person {
@@ -180,7 +182,10 @@ public class Person {
         return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s", first, last, type, this.id);
     }
 
-
+    public frontend.data.Person initPersonGUI(){
+        frontend.data.Person p = new frontend.data.Person(this.last_name,this.first_name,this.id,PersonType.CourseCoordinator.toString());
+        return p;
+    }
 
 
 }
