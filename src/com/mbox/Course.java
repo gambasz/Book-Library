@@ -1,6 +1,7 @@
 package com.mbox;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Course {
 
@@ -46,6 +47,20 @@ public class Course {
         this.description = "";
         this.department = "";
     }
+
+
+    public frontend.data.Course initCourseGUI(){
+        ArrayList <frontend.data.Resource> tmpResource = new ArrayList<frontend.data.Resource>();
+        tmpResource.add(this.resourceInstance[0].initResourceGUI());
+
+
+        frontend.data.Course tmp = new frontend.data.Course(this.id, 0, 2018,"FALL", this.title, this.department,
+                this.personInstance.initPersonGUI(), this.description, tmpResource);
+        return tmp;
+
+    }
+
+
 
     public void setID(int id){
 
