@@ -1107,6 +1107,57 @@ public class DBManager {
         }
     }
 
+    public static void relationalInsertByID2(frontend.data.Course c){
+
+        //getting all the data
+        int id = c.getID();
+        int crn = c.getCRN();
+        int year = c.getYEAR();
+        String semester = c.getSEMESTER();
+        String title = c.getTitle();
+        String dept = c.getDepartment();
+        String desc = c.getDescription();
+        int personid = c.getProfessor().getID();
+
+        // Fall 2018 ID = 52
+        int semesterid = 52;
+        ArrayList<frontend.data.Resource> r = c.getResource();
+
+        int[] resourceidlist = new int[r.size()];
+
+        for(int i = 0; i < c.getResource().size(); i++){
+
+            resourceidlist[i] = r.get(i).getID();
+        }
+
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
+                " (COURSEID, PERSONID) VALUES ('%d', '%d')",id ,personid));
+
+        for(int j = 0; j < resourceidlist.length; j++){
+
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                    " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",id, resourceidlist[j]));
+        }
+
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
+                " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",id, semesterid));
+
+        for(int k = 0; k < resourceidlist.length; k++){
+
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+                    " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",personid,resourceidlist[k]));
+        }
+
+        for(int l = 0; l < resourceidlist.length; l++){
+
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",resourceidlist[l], r.get(l).getPublisher().getID()));
+
+        }
+
+
+    }
+
     //==================================================================================================================
     //                                                  Next
     //==================================================================================================================
