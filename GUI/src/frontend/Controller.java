@@ -64,9 +64,10 @@ public class Controller {
      * - initializes the resource table
      * - marking all the filter checkboxes to true
      */
-    public static  void test(){
+    public static void test() {
         System.out.print("TEST WORKED");
     }
+
     @FXML
     public void initialize() {
         courseList = new ArrayList<>();
@@ -239,7 +240,7 @@ public class Controller {
         //Raja: This currently does not work. Need to pass the publisher when doing the add in the GUI
         // Because the method needs to pull the id from your Publisher object to put it into the DB
         //DBManager.relationalInsertByID2(tempCour);
-        
+
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
     }
@@ -257,21 +258,21 @@ public class Controller {
         setTablesSelectionProperty(resourceTable);
         //======================BEGIN CODE BACKEND
         DBManager.openConnection();
-
+        Publisher pub = new Publisher("name", "bob:123", "persona");
         ArrayList<Resource> resArr = new ArrayList<>();
-        Resource r = new Resource("h", 1, "automate the boring stuff with python", null, "me", "something", true);
+        Resource r = new Resource("h", 1, "automate the boring stuff with python", pub, "me", "something", true);
         resArr.add(r);
         Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
-//        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
-//        courseList.add(c);
+        Course c = new Course(0, 10, 1999, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
+        courseList.add(c);
 
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(57);
-        for(int k=0 ; k < pulledDatabase.size(); k++){
+        for (int k = 0; k < pulledDatabase.size(); k++) {
             courseList.add(pulledDatabase.get(k));
 
         }
 
-        for(int i=0; i<com.mbox.CLI.getPersonFromTable().size();i++){
+        for (int i = 0; i < com.mbox.CLI.getPersonFromTable().size(); i++) {
             profList.add(com.mbox.CLI.getPersonFromTable().get(i).initPersonGUI());
         }
 
@@ -280,7 +281,7 @@ public class Controller {
         profList.add(p);
 
         resList.addAll(resArr);
-        pubList.add(null);
+        pubList.add(pub);
 
         tableTV.getItems().addAll(courseList);
 
@@ -412,11 +413,16 @@ public class Controller {
         TextField contactsTF = new TextField();
         TextField descriptionTF = new TextField();
 
-        publishersCB.setItems(FXCollections.observableArrayList());
+        publishersCB.setItems(FXCollections.observableArrayList(pubList));
         icon.setFitHeight(75);
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
+        if (selectedPublisher != null) {
+            nameTF.setText(selectedPublisher.getName());
+            contactsTF.setText(selectedPublisher.getContacts());
+            descriptionTF.setText(selectedPublisher.getDescription());
+        }
         if (resourceTable.getSelectionModel().getSelectedItems().size() > 0) {
 
             Publisher tempPub = resourceTable.getSelectionModel().getSelectedItems().get(0).getPublisher();
@@ -426,6 +432,7 @@ public class Controller {
                 descriptionTF.setText(tempPub.getDescription());
             }
         }
+
         mainPane.getChildren().addAll(
                 new HBox(listOfPublisher, publishersCB),
                 new HBox(name, nameTF),
@@ -479,6 +486,7 @@ public class Controller {
         addGraphicToButtons(new ImageView("/frontend/media/upload.png"), update);
 
         addNAssignNewResource.setOnAction(e -> {
+            Publisher tempPub = selectedPublisher;
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                     titleTF.getText(),
                     authorTF.getText(),
@@ -489,6 +497,11 @@ public class Controller {
                     Integer.parseInt(currentAmTF.getText()),
                     selectedPublisher
             );
+            resList.add(temp);
+            resourceTable.getItems().clear();
+            resourceTable.getItems().addAll(resList);
+            selectedPublisher = tempPub;
+
 
         });
         delete.setOnAction(e -> {
@@ -559,6 +572,7 @@ public class Controller {
             typeCB.getSelectionModel().select(tempRes.getTYPE());
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
+            selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
             update.setVisible(true);
