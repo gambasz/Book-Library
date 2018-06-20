@@ -259,6 +259,8 @@ public class Controller {
         //======================BEGIN CODE BACKEND
         DBManager.openConnection();
         Publisher pub = new Publisher("name", "bob:123", "persona");
+        Publisher pub2 = new Publisher("nam1e", "bob:123", "persona");
+
         ArrayList<Resource> resArr = new ArrayList<>();
         Resource r = new Resource("h", 1, "automate the boring stuff with python", pub, "me", "something", true);
         resArr.add(r);
@@ -282,6 +284,7 @@ public class Controller {
 
         resList.addAll(resArr);
         pubList.add(pub);
+        pubList.add(pub2);
 
         tableTV.getItems().addAll(courseList);
 
@@ -418,6 +421,15 @@ public class Controller {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
+        publishersCB.setOnMouseClicked(e->{
+            if(publishersCB.getSelectionModel().getSelectedItem()!=null){
+                Publisher tempPub = (Publisher) publishersCB.getSelectionModel().getSelectedItem();
+                nameTF.setText(tempPub.getName());
+                contactsTF.setText(tempPub.getContacts());
+                descriptionTF.setText(tempPub.getDescription());
+            }
+
+        });
         if (selectedPublisher != null) {
             nameTF.setText(selectedPublisher.getName());
             contactsTF.setText(selectedPublisher.getContacts());
