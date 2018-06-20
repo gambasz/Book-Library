@@ -462,7 +462,7 @@ public class Controller {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
-
+                pubList.add(selectedPublisher);
                 return null;
             }
             return null;
