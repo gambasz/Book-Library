@@ -37,6 +37,8 @@ public class Controller {
     private Course selectedCourse;
     private Resource selectedResource;
     private Publisher selectedPublisher;
+    private Person selectedPerson;
+
     private final String addIconImg = "/frontend/media/add.png";
     private final String updateIconImg = "/frontend/media/upload.png";
     private final String deleteIconImg = "/frontend/media/delete.png";
@@ -192,6 +194,7 @@ public class Controller {
             profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
             profInfoLName.setText(selectedCourse.getProfessor().getLastName());
             profInfoType.setValue(selectedCourse.getProfessor().getType());
+            selectedPerson = selectedCourse.getProfessor();
             courseInfoTitle.setText(selectedCourse.getTitle());
             courseInfoDepart.setText(selectedCourse.getDepartment());
             semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
@@ -230,7 +233,11 @@ public class Controller {
     }
 
     public void add() {
-        Person tempPer = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
+        selectedPerson.setFirstName(profInfoFName.getText());
+        selectedPerson.setLastName(profInfoLName.getText());
+        selectedPerson.setType( profInfoType.getSelectionModel().getSelectedItem().toString());
+
+
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
                 courseList.size(),
@@ -239,7 +246,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                tempPer,
+                selectedPerson,
                 courseInfoCRN.getText(),
                 tempRes
         );
@@ -701,9 +708,12 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                profInfoFName.setText(((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem())).getFirstName());
-                profInfoLName.setText(((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem())).getLastName());
-                profInfoType.setValue(((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem())).getType());
+                selectedPerson =  ((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem()));
+                profInfoFName.setText(selectedPerson.getFirstName());
+                profInfoLName.setText(selectedPerson.getLastName());
+                profInfoType.setValue(selectedPerson.getType());
+
+
             }
             return null;
         });
