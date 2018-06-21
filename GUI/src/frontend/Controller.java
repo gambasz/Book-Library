@@ -168,12 +168,10 @@ public class Controller {
 
     public void search() {
 
-        ArrayList<Course> temp_table = new ArrayList<>();
-        tableTV.getItems().clear();
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
 
-        updateTable(temp_table);
+        updateTable();
 
     }
 
@@ -207,7 +205,9 @@ public class Controller {
         }
     }
 
-    private void updateTable(ArrayList<Course> temp_table) {
+    private void updateTable() {
+        tableTV.getItems().clear();
+        tableTV.getItems().addAll(courseList);
 
 
     }
@@ -249,7 +249,7 @@ public class Controller {
     }
 
 
-    public void apply() {
+    public void updateCourseInformation() {
 
     }
 
@@ -274,6 +274,7 @@ public class Controller {
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(57);
         for (int k = 0; k < pulledDatabase.size(); k++) {
             courseList.add(pulledDatabase.get(k));
+            resList.addAll(pulledDatabase.get(k).getResource());
 
         }
 
@@ -283,14 +284,14 @@ public class Controller {
 
         //====================== END CODE BACKEND
 
+        for(Resource tempR :resList)
+            pubList.add(tempR.getPublisher());
         profList.add(p);
 
         resList.addAll(resArr);
-        pubList.add(pub);
         pubList.add(pub2);
 
-        tableTV.getItems().addAll(courseList);
-
+        updateTable();
     }
 
     private void setTablesSelectionProperty(TableView table) {

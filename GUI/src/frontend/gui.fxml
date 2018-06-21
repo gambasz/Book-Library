@@ -21,7 +21,12 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label style="-fx-font-weight: bold;" text="Course Details" />
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <Label style="-fx-font-weight: bold;" text="Course Details" />
+                              <ComboBox prefWidth="150.0" />
+                           </children>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
                               <Label text="CRN" />
@@ -156,7 +161,7 @@
                      </padding>
                      <children>
                         <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" text="Add New" />
-                        <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#apply" text="Commit" />
+                        <Button fx:id="updateCourseInformation" mnemonicParsing="false" onAction="#updateCourseInformation" text="Commit" />
                         <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#delete" text="Delete" />
                      </children>
                   </HBox>
