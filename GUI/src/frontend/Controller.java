@@ -168,6 +168,12 @@ public class Controller {
 
     public void search() {
 
+        String fName, lName;
+        String[] temp = profSearchTF.getText().split(" ");
+        fName = temp[0];
+        lName = temp[1];
+        int year = Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
+        String semester = semesterComBox.getSelectionModel().getSelectedItem().toString();
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
         courseList.addAll(DBManager.convertArrayCC(DBManager.getCourseFromTable()));
@@ -284,7 +290,7 @@ public class Controller {
 
         //====================== END CODE BACKEND
 
-        for(Resource tempR :resList)
+        for (Resource tempR : resList)
             pubList.add(tempR.getPublisher());
         profList.add(p);
 

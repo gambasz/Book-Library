@@ -161,7 +161,7 @@
                      </padding>
                      <children>
                         <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" text="Add New" />
-                        <Button fx:id="updateCourseInformation" mnemonicParsing="false" onAction="#updateCourseInformation" text="Commit" />
+                        <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#updateCourseInformation" text="Commit" />
                         <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#delete" text="Delete" />
                      </children>
                   </HBox>
