@@ -160,9 +160,9 @@ public class Controller {
         ArrayList<String> years = new ArrayList<>();
         for (int i = 1946; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
             years.add("" + i);
-        yearComBox.setItems(FXCollections.observableArrayList(years));
-        yearComBoxEdit.setItems(FXCollections.observableArrayList(years));
-        profInfoType.setItems(FXCollections.observableArrayList(PersonType.values()));
+        yearComBox.getItems().addAll(years);
+        yearComBoxEdit.getItems().addAll(years);
+        profInfoType.getItems().addAll(PersonType.values());
     }
 
 
@@ -227,7 +227,7 @@ public class Controller {
         Person tempPer = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         String tetmp = (String) yearComBoxEdit.getSelectionModel().getSelectedItem();
-        
+        System.out.println(tetmp);
         Course tempCour = new Course(
                 courseList.size(),
                 courseList.size(),
@@ -279,8 +279,8 @@ public class Controller {
 
         }
 
-        for (int i = 0; i < com.mbox.CLI.getPersonFromTable().size(); i++) {
-            profList.add(com.mbox.CLI.getPersonFromTable().get(i).initPersonGUI());
+        for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
+            profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
         }
 
         //====================== END CODE BACKEND

@@ -11,7 +11,7 @@ public class Main {
         DBManager.openConnection();
 
         //Course[] mamali = DBManager.relationalReadByCourseID(11);
-        ArrayList<Course> lopm = DBManager.returnEverything(57);
+//        ArrayList<Course> lopm = DBManager.returnEverything(57);
 
         DBManager.closeConnection();
         }
