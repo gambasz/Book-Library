@@ -170,7 +170,7 @@ public class Controller {
 
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
-
+        courseList.addAll(DBManager.convertArrayCC(DBManager.getCourseFromTable()));
         updateTable();
 
     }

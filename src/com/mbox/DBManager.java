@@ -1415,6 +1415,13 @@ public class DBManager {
     }
     //======================================================================================
 
+    public static ArrayList<frontend.data.Course> convertArrayCC(ArrayList<com.mbox.Course> c){
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        for(int i=0;i<c.size();i++){
+            arr.add(c.get(i).initCourseGUI());
+        }
+        return arr;
+    }
 }
 
 
