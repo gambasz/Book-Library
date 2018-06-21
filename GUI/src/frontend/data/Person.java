@@ -59,15 +59,13 @@ public class Person {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(lastName, person.lastName) &&
-                Objects.equals(firstName, person.firstName) &&
-                Objects.equals(ID, person.ID);
+        return Objects.equals(ID, person.ID)&& Objects.equals(lastName, person.lastName)&& Objects.equals(firstName, person.firstName)&& Objects.equals(type, person.type);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(lastName, firstName, ID);
+        return Objects.hash(lastName, firstName,type, ID);
     }
 
     @Override

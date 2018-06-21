@@ -234,7 +234,7 @@ public class Controller {
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
                 courseList.size(),
-                courseList.size(),
+                tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size()-1).getID(),
                 Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
@@ -246,8 +246,6 @@ public class Controller {
 
         courseList.add(tempCour);
 
-        //Raja: This currently does not work. Need to pass the publisher when doing the add in the GUI
-        // Because the method needs to pull the id from your Publisher object to put it into the DB
         DBManager.relationalInsertByID2(tempCour);
 
         tableTV.getItems().clear();
