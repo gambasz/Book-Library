@@ -37,7 +37,11 @@ public class Controller {
     private Course selectedCourse;
     private Resource selectedResource;
     private Publisher selectedPublisher;
-
+    private final String addIconImg = "/frontend/media/add.png";
+    private final String updateIconImg = "/frontend/media/upload.png";
+    private final String deleteIconImg = "/frontend/media/delete.png";
+    private final String searchIconImg = "/frontend/media/search.png";
+    private final String programeIconImg = "/frontend/media/icon.png";
     @FXML
     TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
     @FXML
@@ -84,19 +88,19 @@ public class Controller {
         addButtonGraphics();
         resetSelect();
         if (debugging) {
-
+            test();
         }
 
     }
 
     private void addButtonGraphics() {
-        ImageView searchImg = new ImageView("/frontend/media/search.png");
+        ImageView searchImg = new ImageView(searchIconImg);
         addGraphicToButtons(searchImg, searchBtn);
-        ImageView addImg = new ImageView("/frontend/media/add.png");
+        ImageView addImg = new ImageView(addIconImg);
         addGraphicToButtons(addImg, addBtn);
-        ImageView deleteImg = new ImageView("/frontend/media/delete.png");
+        ImageView deleteImg = new ImageView(deleteIconImg);
         addGraphicToButtons(deleteImg, deleteBtn);
-        ImageView updateImg = new ImageView("/frontend/media/upload.png");
+        ImageView updateImg = new ImageView(updateIconImg);
         addGraphicToButtons(updateImg, updateBtn);
     }
 
@@ -222,11 +226,12 @@ public class Controller {
     public void add() {
         Person tempPer = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
-
+        String tetmp = (String) yearComBoxEdit.getSelectionModel().getSelectedItem();
+        
         Course tempCour = new Course(
                 courseList.size(),
                 courseList.size(),
-                Integer.valueOf((Integer) yearComBoxEdit.getSelectionModel().getSelectedItem()),
+                2018,
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
@@ -239,7 +244,7 @@ public class Controller {
 
         //Raja: This currently does not work. Need to pass the publisher when doing the add in the GUI
         // Because the method needs to pull the id from your Publisher object to put it into the DB
-        //DBManager.relationalInsertByID2(tempCour);
+        DBManager.relationalInsertByID2(tempCour);
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
@@ -402,7 +407,7 @@ public class Controller {
         Dialog dlg = new Dialog();
         dlg.setTitle("Select Resource");
         dlg.setHeaderText("Select Resource");
-        ImageView icon = new ImageView(this.getClass().getResource("/frontend/media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         VBox mainPane = new VBox();
         ButtonType assign = new ButtonType("Create & Assign", ButtonBar.ButtonData.OK_DONE);
 
@@ -421,8 +426,8 @@ public class Controller {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
-        publishersCB.setOnMouseClicked(e->{
-            if(publishersCB.getSelectionModel().getSelectedItem()!=null){
+        publishersCB.setOnMouseClicked(e -> {
+            if (publishersCB.getSelectionModel().getSelectedItem() != null) {
                 Publisher tempPub = (Publisher) publishersCB.getSelectionModel().getSelectedItem();
                 nameTF.setText(tempPub.getName());
                 contactsTF.setText(tempPub.getContacts());
@@ -491,11 +496,11 @@ public class Controller {
 
 
         Button addNAssignNewResource = new Button("Add and Assign");
-        addGraphicToButtons(new ImageView("/frontend/media/add.png"), addNAssignNewResource);
+        addGraphicToButtons(new ImageView(addIconImg), addNAssignNewResource);
         Button delete = new Button();
-        addGraphicToButtons(new ImageView("/frontend/media/delete.png"), delete);
+        addGraphicToButtons(new ImageView(deleteIconImg), delete);
         Button update = new Button();
-        addGraphicToButtons(new ImageView("/frontend/media/upload.png"), update);
+        addGraphicToButtons(new ImageView(updateIconImg), update);
 
         addNAssignNewResource.setOnAction(e -> {
             Publisher tempPub = selectedPublisher;
@@ -613,7 +618,7 @@ public class Controller {
         TitledPane resourceTitlePane = new TitledPane();
         VBox resourceEditPane = resourceDetailedView();
         ComboBox listOFResources = new ComboBox();
-        ImageView icon = new ImageView(this.getClass().getResource("/frontend/media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
 
@@ -627,6 +632,7 @@ public class Controller {
 
 
         resourceTitlePane.setContent(resourceEditPane);
+        resourceTitlePane.setText("Resource Details and Management");
         resourceTitlePane.setAlignment(Pos.CENTER);
 
         mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
@@ -664,7 +670,7 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
-        ImageView icon = new ImageView(this.getClass().getResource("/frontend/media/icon.png").toString());
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         listOfCurrentProf = new ComboBox();
