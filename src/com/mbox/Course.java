@@ -53,8 +53,19 @@ public class Course {
         ArrayList <frontend.data.Resource> tmpResource = new ArrayList<frontend.data.Resource>();
         tmpResource.add(this.resourceInstance[0].initResourceGUI());
 
+        frontend.data.Course tmp = new frontend.data.Course(this.id, this.id, 2018,"FALL", this.title, this.department,
+                this.personInstance.initPersonGUI(), this.description, tmpResource);
+        return tmp;
 
-        frontend.data.Course tmp = new frontend.data.Course(this.id, 0, 2018,"FALL", this.title, this.department,
+    }
+
+    public frontend.data.Course initCourseGUI(String year, String semester){
+        ArrayList <frontend.data.Resource> tmpResource = new ArrayList<frontend.data.Resource>();
+        tmpResource.add(this.resourceInstance[0].initResourceGUI());
+        year = "2018"; semester = "FALL";
+
+
+        frontend.data.Course tmp = new frontend.data.Course(this.id, this.id, Integer.valueOf(year),semester, this.title, this.department,
                 this.personInstance.initPersonGUI(), this.description, tmpResource);
         return tmp;
 

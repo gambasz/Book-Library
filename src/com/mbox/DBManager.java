@@ -134,10 +134,32 @@ public class DBManager {
 
         return 0;
 
-
-
     }
 
+
+    public static String[] getSemesterNameByID(int id){
+
+        try{
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM SEMESTER WHERE ID='%s'", id);
+            ResultSet rs = st.executeQuery(query);
+            String semester[]= new String[2];
+            semester[0]= "FALL"; semester[1] = "2018";
+
+            while(rs.next()){
+                semester[0] = rs.getString(2);
+                semester[1] = rs.getString(3);
+            }
+
+            return semester;
+
+        }catch(SQLException e){
+
+        }
+
+        return null;
+
+    }
     //============================================== PRINT METHODS =====================================================
 
     //======================================SELECT METHODS(PRINT TO SCREEN)=============================================
@@ -1310,6 +1332,8 @@ public class DBManager {
 
 
     public static ArrayList<frontend.data.Course> returnEverything(int semesterid) {
+        String[] semester = getSemesterNameByID(semesterid);
+        semester[0] = semester[0].toUpperCase();
 
         ArrayList<Integer> arr = getCourseIdsBySemesterID(semesterid);
 
@@ -1321,7 +1345,7 @@ public class DBManager {
 
             for(int j = 0; j < tmpCourse.size(); j++) {
 
-                hugeshit2.add(tmpCourse.get(j).initCourseGUI());
+                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester[0],semester[1]));
 
             }
         }

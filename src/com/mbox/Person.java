@@ -183,7 +183,17 @@ public class Person {
     }
 
     public frontend.data.Person initPersonGUI(){
-        frontend.data.Person p = new frontend.data.Person(this.last_name,this.first_name,this.id,PersonType.CourseCoordinator.toString());
+
+        PersonType enumTmp;
+
+        switch (this.type){
+            case "Program Coordinator" : enumTmp = PersonType.ProgramCoordinator; break;
+            case "Course Coordinator" : enumTmp = PersonType.CourseCoordinator; break;
+            case "Course Instructor" : enumTmp = PersonType.CourseInstructor; break;
+            default: enumTmp = PersonType.CourseInstructor;
+
+        }
+        frontend.data.Person p = new frontend.data.Person(this.last_name,this.first_name,this.id, enumTmp.toString());
         return p;
     }
 
