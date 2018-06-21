@@ -1199,15 +1199,19 @@ public class DBManager {
         //getting all the data
         int id = c.getID();
         int crn = c.getCRN();
-        int year = c.getYEAR();
+        String year = String.valueOf(c.getYEAR());
         String semester = c.getSEMESTER();
         String title = c.getTitle();
         String dept = c.getDepartment();
         String desc = c.getDescription();
         int personid = c.getProfessor().getID();
+        int semesterid = getSemesterIDByName(semester, year);
+
+        System.out.println(personid);
+        System.out.println(semesterid);
 
         // Fall 2018 ID = 52
-        int semesterid = 57;
+//        int semesterid = 57;
         ArrayList<frontend.data.Resource> r = c.getResource();
 
         int[] resourceidlist = new int[r.size()];
