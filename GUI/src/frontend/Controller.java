@@ -240,7 +240,7 @@ public class Controller {
 
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
-                courseList.size(),
+                selectedCourse.getID(),
                 tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size()-1).getID(),
                 Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
