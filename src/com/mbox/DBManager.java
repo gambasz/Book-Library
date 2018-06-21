@@ -110,6 +110,34 @@ public class DBManager {
         }
     }
 
+
+
+    public static int getSemesterIDByName(String season, String year){
+
+        int id = 0;
+        season = season.toLowerCase();
+        season = season.substring(0, 1).toUpperCase() + season.substring(1);
+        try{
+            Statement st = conn.createStatement();
+            String query = String.format("SELECT * FROM SEMESTER WHERE SEASON='%s' AND  YEAR='%s'", season, year);
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+                id = rs.getInt(1);
+            }
+
+            return id;
+
+        }catch(SQLException e){
+
+        }
+
+        return 0;
+
+
+
+    }
+
     //============================================== PRINT METHODS =====================================================
 
     //======================================SELECT METHODS(PRINT TO SCREEN)=============================================
@@ -1121,10 +1149,10 @@ public class DBManager {
             }
 
             //=======================Just printing out data=============================================================
-            System.out.println("Name :" + courseArray[0].getPersonInstance().getFirstName() + " " +
-                    courseArray[0].getPersonInstance().getLastName() );
-            System.out.println("Course :" + courseArray[0].getTitle());
-            System.out.println("Resource :" + courseArray[0].getResourceInstance()[0].getTitle());
+//            System.out.println("Name :" + courseArray[0].getPersonInstance().getFirstName() + " " +
+//                    courseArray[0].getPersonInstance().getLastName() );
+//            System.out.println("Course :" + courseArray[0].getTitle());
+//            System.out.println("Resource :" + courseArray[0].getResourceInstance()[0].getTitle());
 
             return courseList;
 
@@ -1179,7 +1207,7 @@ public class DBManager {
         int personid = c.getProfessor().getID();
 
         // Fall 2018 ID = 52
-        int semesterid = 52;
+        int semesterid = 57;
         ArrayList<frontend.data.Resource> r = c.getResource();
 
         int[] resourceidlist = new int[r.size()];
