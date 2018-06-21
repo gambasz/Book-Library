@@ -1242,8 +1242,8 @@ public class DBManager {
         for(int l = 0; l < resourceidlist.length; l++){
 
             executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')",resourceidlist[l],
-                    r.get(l).getPublisher().getID()));
+                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                    resourceidlist[l]));
 
         }
 

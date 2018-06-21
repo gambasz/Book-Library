@@ -276,13 +276,13 @@ public class Controller {
         Publisher pub2 = new Publisher("nam1e", "bob:123", "persona");
 
         ArrayList<Resource> resArr = new ArrayList<>();
-        Resource r = new Resource("h", 1, "automate the boring stuff with python", pub, "me", "something", true);
-        resArr.add(r);
-        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
-        Course c = new Course(0, 10, 2018, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
-        courseList.add(c);
+//        Resource r = new Resource("h", 1, "automate the boring stuff with python", pub, "me", "something", true);
+//        resArr.add(r);
+//        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
+//        Course c = new Course(0, 10, 2018, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
+//        courseList.add(c);
 
-        ArrayList<Course> pulledDatabase = DBManager.returnEverything(57);
+        ArrayList<Course> pulledDatabase = DBManager.returnEverything(52);
         for (int k = 0; k < pulledDatabase.size(); k++) {
             courseList.add(pulledDatabase.get(k));
             resList.addAll(pulledDatabase.get(k).getResource());
@@ -297,7 +297,7 @@ public class Controller {
 
         for (Resource tempR : resList)
             pubList.add(tempR.getPublisher());
-        profList.add(p);
+//        profList.add(p);
 
         resList.addAll(resArr);
         pubList.add(pub2);
