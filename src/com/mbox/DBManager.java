@@ -1478,6 +1478,62 @@ public class DBManager {
         }
         return arr;
     }
+
+    public static ArrayList<frontend.data.Course> getCourseListByName(String fname, String lname){
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        int[] courseIDArr = new int[10];
+        Person person;
+        int personID=0;
+        String personType="";
+        int resourceID=0;
+        String cDescription="",cDepartment="",cTitle="";
+        Resource[] courseResources = new Resource[20];
+        int cID;
+        try {
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '&s' and LASTNAME = '&s'", fname, lname);
+            Statement st = DBManager.conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                personID = rs.getInt(1);
+                personType = rs.getString(2);
+            }
+            person = new Person(personID,fname,lname,personType);
+            rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON"));
+            int i=0;
+            while(rs.next()){
+                courseIDArr[i] = rs.getInt(1);
+                i++;
+            }
+
+        person = new Person(personID,fname, lname,personType);
+
+            for(int a=0;a<courseIDArr.length;a++){
+
+                rs = st.executeQuery(getCourseInTableQuery(courseIDArr[i]));
+
+                while(rs.next()) {
+
+                    cTitle = rs.getString(2) + rs.getString(3);
+                    cID = rs.getInt(1);
+                    cDescription = rs.getString(4);
+                    cDepartment = rs.getString(5);
+                    System.out.println("courseID "+courseIDArr[i]);
+                }
+                courseResources = findResourcesCourse(courseIDArr[i]);
+                frontend.data.Course tempCourse = new frontend.data.Course(courseIDArr[i],cTitle,cDepartment,cDescription);
+                for(int b=0;b<courseResources.length;b++) {
+                    tempCourse.addResource(courseResources[b].initResourceGUI());
+                }
+                tempCourse.setProfessor(person.initPersonGUI());
+
+                arr.add(tempCourse);
+            }
+            return arr;
+        }catch(Exception e){
+            System.out.println("wtf");
+        }
+        return arr;
+    }
 }
 
 

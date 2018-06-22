@@ -178,7 +178,8 @@ public class Controller {
         String semester = semesterComBox.getSelectionModel().getSelectedItem().toString();
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
-        courseList.addAll(DBManager.convertArrayCC(DBManager.getCourseFromTable()));
+
+        courseList.addAll(DBManager.getCourseListByName(fName,lName));
         updateTable();
 
     }
