@@ -190,6 +190,8 @@ public class Controller {
 //
 ////
         courseList = DBManager.searchByNameCourseList(fName,lName);
+        System.out.println(courseList.get(0).toString());
+        System.out.println("It's ok now");
         updateTable();
 
     }
