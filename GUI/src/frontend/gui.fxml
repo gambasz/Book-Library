@@ -261,6 +261,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
+                              <Button mnemonicParsing="false" onMouseClicked="#updateCourseInformation" text="Filter" />
                            </children>
                            <opaqueInsets>
                               <Insets />

@@ -226,10 +226,9 @@ public class Controller {
     }
 
     private void updateTable() {
+
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
-
-
     }
 
     /**
@@ -273,6 +272,19 @@ public class Controller {
 
     public void updateCourseInformation() {
 
+        //has an exception when combobox is empty (program keeps running, needs to be fixed);
+
+            String semester = semesterComBox.getValue().toString();
+            String year = yearComBox.getValue().toString();
+
+            System.out.println("|" + semester + "|" + year);
+
+            int id = DBManager.getSemesterIDByName(semester, year);
+            System.out.println(id);
+
+            courseList = DBManager.returnEverything(id);
+
+            updateTable();
     }
 
     /**
