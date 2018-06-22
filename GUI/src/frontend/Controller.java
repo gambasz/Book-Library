@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -170,16 +171,25 @@ public class Controller {
 
     public void search() {
 
-        String fName, lName;
+        String fName = "" , lName = "";
+        int i = 0;
         String[] temp = profSearchTF.getText().split(" ");
-        fName = temp[0];
-        lName = temp[1];
-        int year = Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
-        String semester = semesterComBox.getSelectionModel().getSelectedItem().toString();
-        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
-
-
-        courseList.addAll(DBManager.getCourseListByName(fName,lName));
+        for (String t : temp){
+            i++;
+            if (i==1)
+            fName = t;
+            if (i==2)
+            lName = t;
+        }
+        System.out.println(fName + " LName:\t" +  lName);
+//        fName = temp[0];
+//        lName = temp[1];
+//        int year = Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
+//        String semester = semesterComBox.getSelectionModel().getSelectedItem().toString();
+//        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
+//
+////
+        courseList = DBManager.searchByNameCourseList(fName,lName);
         updateTable();
 
     }

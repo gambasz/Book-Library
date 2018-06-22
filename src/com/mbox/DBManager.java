@@ -1479,7 +1479,7 @@ public class DBManager {
         return arr;
     }
 
-    public static ArrayList<frontend.data.Course> getCourseListByName(String fname, String lname){
+    public static ArrayList<frontend.data.Course> searchByNameCourseList(String fname, String lname){
         ArrayList<frontend.data.Course> arr = new ArrayList<>();
         int[] courseIDArr = new int[10];
         Person person;
@@ -1530,6 +1530,7 @@ public class DBManager {
             }
             return arr;
         }catch(Exception e){
+            e.printStackTrace();
             System.out.println("wtf");
         }
         return arr;
