@@ -21,6 +21,8 @@ public class Course {
     private Person professor;
     private ArrayList<Resource> resource;
 
+    public Course() {
+    }
 
     public Course(int CRN, int YEAR, String SEMESTER) {
         this.CRN = new SimpleIntegerProperty(CRN);
@@ -30,7 +32,7 @@ public class Course {
 
     public Course(int ID, String title, String department, String description) {
         this.ID = ID;
-        this.title = new SimpleStringProperty(title) ;
+        this.title = new SimpleStringProperty(title);
         this.department = new SimpleStringProperty(department);
         this.description = new SimpleStringProperty(description);
     }
