@@ -169,20 +169,32 @@ public class Controller {
 
     public void search() {
 
+        String fName, lName;
+        fName = lName = "";
+        //TODO: talk to mamali about this code
+//           String fName="", lName="";
+//        fName=lName="";
+//        int i = 0;
 
-           String fName="", lName="";
-        fName=lName="";
-        int i = 0;
+//        for (String t : temp){
+//            i++;
+//            if (i==1)
+//            fName = t;
+//            if (i==2)
+//            lName = t;
+//        }
+
         String[] temp = profSearchTF.getText().split(" ");
+        switch (temp.length) {
+            case 2:
+                lName = temp[1];
+            case 1:
+                fName = temp[0];
+                break;
+            default:
+                System.err.print("Improper input for professor search output");
 
-        for (String t : temp){
-            i++;
-            if (i==1)
-            fName = t;
-            if (i==2)
-            lName = t;
         }
-
         System.out.println(fName + " LName:\t" + lName);
 
 //        fName = temp[0];
@@ -795,8 +807,4 @@ public class Controller {
 
 
     }
-
-
-
-
 }
