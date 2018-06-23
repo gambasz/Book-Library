@@ -731,6 +731,70 @@ public class Controller {
 
     }
 
+    public void selectCourse() {
+
+        ArrayList<Course> tempCourses = new ArrayList<>();
+
+        VBox mainAddPane = new VBox(2);
+
+        Dialog dlg = new Dialog();
+
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+        icon.setFitHeight(100);
+        icon.setFitWidth(100);
+        courseTemplates = new ComboBox();
+        courseTemplates.getItems().addAll(profList);
+
+        Label currentCBoxLbl = new Label("Course Templates : ");
+
+        ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
+
+
+        mainAddPane.getChildren().addAll(
+                new HBox(currentCBoxLbl, courseTemplates)
+        );
+        mainAddPane.setSpacing(20);
+
+        dlg.setTitle("Assigning Course");
+        dlg.setHeaderText("Assigning Course");
+
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(300);
+        dlg.getDialogPane().setContent(mainAddPane);
+        dlg.getDialogPane().getButtonTypes().addAll(fill, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == fill) {
+
+                selectedCourse = new Course();
+                courseInfoCRN.setText("" + selectedCourse.getCRN());
+                profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
+                profInfoLName.setText(selectedCourse.getProfessor().getLastName());
+                profInfoType.setValue(selectedCourse.getProfessor().getType());
+                selectedPerson = selectedCourse.getProfessor();
+                courseInfoTitle.setText(selectedCourse.getTitle());
+                courseInfoDepart.setText(selectedCourse.getDepartment());
+                semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
+                yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
+                ArrayList<Resource> tempRes = selectedCourse.getResource();
+                resourceTable.getItems().clear();
+                resourceTable.getItems().addAll(resList);
+                resInfolList.getItems().clear();
+                resourceTable.getSelectionModel().select(null);
+                for (int i = 0; i < tempRes.size(); i++) {
+                    if (i < 3) {
+                        resInfolList.getItems().add(tempRes.get(i).getTitle());
+                    }
+                    resourceTable.getSelectionModel().select(tempRes.get(i));
+                }
+            }
+            return null;
+        });
+
+
+    }
 
 
 
