@@ -4,7 +4,6 @@ import com.mbox.DBManager;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -17,13 +16,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * The main controller class for th gui fxml file that has all the functionality need to provide a smooth user experience.
- * The class also interacts with the frontend.data manager.
+ * The class also interacts with the data manager.
  *
  * @author Rajashow
  */
@@ -56,7 +54,7 @@ public class Controller {
     @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
-    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType, listOfCurrentProf;
+    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType, courseTemplates;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
 
@@ -158,8 +156,8 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
-        semesterComBox.setItems(FXCollections.observableArrayList(Semester.values()));
-        semesterComBoxEdit.setItems(FXCollections.observableArrayList(Semester.values()));
+        semesterComBox.getItems().addAll(Semester.values());
+        semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<String> years = new ArrayList<>();
         for (int i = 2017; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
             years.add("" + i);
@@ -171,9 +169,12 @@ public class Controller {
 
     public void search() {
 
-        String fName = "" , lName = "";
+
+           String fName="", lName="";
+        fName=lName="";
         int i = 0;
         String[] temp = profSearchTF.getText().split(" ");
+
         for (String t : temp){
             i++;
             if (i==1)
@@ -181,18 +182,19 @@ public class Controller {
             if (i==2)
             lName = t;
         }
-        System.out.println(fName + " LName:\t" +  lName);
+
+        System.out.println(fName + " LName:\t" + lName);
+
 //        fName = temp[0];
 //        lName = temp[1];
 //        int year = Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
 //        String semester = semesterComBox.getSelectionModel().getSelectedItem().toString();
 //        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
-//
-////
-        courseList = DBManager.searchByNameCourseList(fName,lName);
+
+        courseList = DBManager.searchByNameCourseList(fName, lName);
         System.out.println(courseList.get(0).toString());
         System.out.println("It's ok now");
-        updateTable();
+        updateCourseTable();
 
     }
 
@@ -227,7 +229,7 @@ public class Controller {
         }
     }
 
-    private void updateTable() {
+    private void updateCourseTable() {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
@@ -247,13 +249,13 @@ public class Controller {
     public void add() {
         selectedPerson.setFirstName(profInfoFName.getText());
         selectedPerson.setLastName(profInfoLName.getText());
-        selectedPerson.setType( profInfoType.getSelectionModel().getSelectedItem().toString());
+        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
 
 
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
                 selectedCourse.getID(),
-                tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size()-1).getID(),
+                tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
                 Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
@@ -267,26 +269,25 @@ public class Controller {
 
         DBManager.relationalInsertByID2(tempCour);
 
-        tableTV.getItems().clear();
-        tableTV.getItems().addAll(courseList);
+        updateCourseTable();
     }
 
-
+    //TODO: look at it with guido how is it related with update button
     public void updateCourseInformation() {
 
         //has an exception when combobox is empty (program keeps running, needs to be fixed);
 
-            String semester = semesterComBox.getValue().toString();
-            String year = yearComBox.getValue().toString();
+        String semester = semesterComBox.getValue().toString();
+        String year = yearComBox.getValue().toString();
 
-            System.out.println("|" + semester + "|" + year);
+        System.out.println("|" + semester + "|" + year);
 
-            int id = DBManager.getSemesterIDByName(semester, year);
-            System.out.println(id);
+        int id = DBManager.getSemesterIDByName(semester, year);
+        System.out.println(id);
 
-            courseList = DBManager.returnEverything(id);
+        courseList = DBManager.returnEverything(id);
 
-            updateTable();
+        updateCourseTable();
     }
 
     /**
@@ -297,15 +298,7 @@ public class Controller {
         setTablesSelectionProperty(resourceTable);
         //======================BEGIN CODE BACKEND
         DBManager.openConnection();
-        Publisher pub = new Publisher("name", "bob:123", "persona");
-        Publisher pub2 = new Publisher("nam1e", "bob:123", "persona");
 
-        ArrayList<Resource> resArr = new ArrayList<>();
-//        Resource r = new Resource("h", 1, "automate the boring stuff with python", pub, "me", "something", true);
-//        resArr.add(r);
-//        Person p = new Person("P", "R", 1, PersonType.CourseCoordinator.toString());
-//        Course c = new Course(0, 10, 2018, "fall", "CMSC 140", "CS", p, "something about the course", resArr);
-//        courseList.add(c);
 
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(52);
         for (int k = 0; k < pulledDatabase.size(); k++) {
@@ -317,17 +310,12 @@ public class Controller {
         for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
             profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
         }
-
-        //====================== END CODE BACKEND
-
         for (Resource tempR : resList)
             pubList.add(tempR.getPublisher());
-//        profList.add(p);
+        //====================== END CODE BACKEND
 
-        resList.addAll(resArr);
-        pubList.add(pub2);
 
-        updateTable();
+        updateCourseTable();
     }
 
     private void setTablesSelectionProperty(TableView table) {
@@ -456,7 +444,7 @@ public class Controller {
         TextField contactsTF = new TextField();
         TextField descriptionTF = new TextField();
 
-        publishersCB.setItems(FXCollections.observableArrayList(pubList));
+        publishersCB.getItems().addAll(pubList);
         icon.setFitHeight(75);
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
@@ -529,7 +517,7 @@ public class Controller {
         Button publisherBtn = new Button("Click me to add a new Publisher");
         ComboBox typeCB = new ComboBox();
 
-
+        typeCB.getItems().add("Books");
         Button addNAssignNewResource = new Button("Add and Assign");
         addGraphicToButtons(new ImageView(addIconImg), addNAssignNewResource);
         Button delete = new Button();
@@ -567,10 +555,9 @@ public class Controller {
                 }
 
             }
-            tableTV.getItems().clear();
+            updateCourseTable();
             resInfolList.getItems().clear();
             resInfolList.getItems().addAll(resList);
-            tableTV.getItems().addAll(courseList);
             onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         });
         update.setOnAction(e -> {
@@ -620,7 +607,7 @@ public class Controller {
             titleTF.setText(tempRes.getTitle());
             authorTF.setText(tempRes.getAuthor());
             idTF.setText(String.valueOf(tempRes.getID()));
-            typeCB.setItems(FXCollections.observableArrayList(tempRes.getTYPE()));
+            typeCB.getItems().addAll(tempRes.getTYPE());
             typeCB.getSelectionModel().select(tempRes.getTYPE());
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
@@ -646,7 +633,6 @@ public class Controller {
      */
     public void openResourceView() {
         //TODO: migrate Publisher add and modify window
-        //TODO: Add Functionally and support to the publisher manager
 
         VBox mainPane = new VBox();
         Dialog dlg = new Dialog();
@@ -660,7 +646,7 @@ public class Controller {
 
         ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
-        listOFResources.setItems(FXCollections.observableArrayList(resList));
+        listOFResources.getItems().addAll(resList);
         resourceTable.getItems().clear();
         resourceTable.getItems().addAll(resList);
         updateRowSelected();
@@ -708,8 +694,8 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        listOfCurrentProf = new ComboBox();
-        listOfCurrentProf.setItems(FXCollections.observableArrayList(profList));
+        courseTemplates = new ComboBox();
+        courseTemplates.getItems().addAll(profList);
 
         Label currentCBoxLbl = new Label("Current Professor : ");
 
@@ -717,7 +703,7 @@ public class Controller {
 
 
         mainAddPane.getChildren().addAll(
-                new HBox(currentCBoxLbl, listOfCurrentProf)
+                new HBox(currentCBoxLbl, courseTemplates)
         );
         mainAddPane.setSpacing(20);
 
@@ -733,7 +719,7 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                selectedPerson =  ((Person) (listOfCurrentProf.getSelectionModel().getSelectedItem()));
+                selectedPerson = ((Person) (courseTemplates.getSelectionModel().getSelectedItem()));
                 profInfoFName.setText(selectedPerson.getFirstName());
                 profInfoLName.setText(selectedPerson.getLastName());
                 profInfoType.setValue(selectedPerson.getType());
@@ -744,5 +730,9 @@ public class Controller {
         });
 
     }
+
+
+
+
 
 }
