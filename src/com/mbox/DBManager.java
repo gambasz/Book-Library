@@ -1527,6 +1527,8 @@ public class DBManager {
         Person person;
         int personID=0;
         String personType="";
+        lname = lname.substring(0,1).toUpperCase() + lname.substring(1).toLowerCase();
+        fname = fname.substring(0,1).toUpperCase() + fname.substring(1).toLowerCase();
         int resourceID=0;
         String cDescription="",cDepartment="",cTitle="";
         Resource[] courseResources = new Resource[20];
@@ -1570,6 +1572,24 @@ public class DBManager {
                 tempCourse.setProfessor(person.initPersonGUI());
                 System.out.println(cID+cTitle+cDepartment+cDescription);
                 System.out.println(person.initPersonGUI().toString());
+                //Restrict search by name with semester, haven't test yet
+
+//                int semesterID = 0;
+//                ArrayList<frontend.data.Course> courseListSemester = new ArrayList<>();
+//                rs = st.executeQuery(String.format("SELECT * FROM SEMESTER WHERE YEAR = '%d' AND SEMESTER = '%s'",year,semester));
+//                while(rs.next()){
+//                    semesterID = rs.getInt(1);
+//                }
+//                courseListSemester = returnEverything(semesterID);
+//                for(int c=0;c<courseListSemester.size();c++){
+//                    if(tempCourse.equals(courseListSemester.get(c))){
+//                        arr.add(tempCourse);
+//                    }
+//                }
+
+
+
+
 
                 arr.add(tempCourse);
             }
