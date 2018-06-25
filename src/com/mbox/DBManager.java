@@ -1023,7 +1023,6 @@ public class DBManager {
         }
         // Adding the list of the resources to the person object
         return null;
-
     }
 
 
@@ -1591,6 +1590,7 @@ public class DBManager {
 //                courseListSemester = returnEverything(semesterID);
 //                for(int c=0;c<courseListSemester.size();c++){
 //                    if(tempCourse.equals(courseListSemester.get(c))){
+
 //                        arr.add(tempCourse);
 //                    }
 //                }
@@ -1608,6 +1608,16 @@ public class DBManager {
             System.out.println("wtf");
         }
         return arr;
+    }
+
+    public static ArrayList<frontend.data.Resource> getResourceList(){
+        ArrayList<frontend.data.Resource> resList = new ArrayList<>();
+        ArrayList<Resource> tempList = getResourceFromTable();
+        for(int i=0; i< tempList.size();i++) {
+
+            resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
+        }
+        return resList;
     }
 }
 
