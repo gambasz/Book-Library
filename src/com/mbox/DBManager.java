@@ -1601,6 +1601,67 @@ public class DBManager {
         }
         return arr;
     }
+
+    public static void delete_relation_course(frontend.data.Course c) {
+
+        try {
+
+            Statement st = conn.createStatement();
+
+            int idtmp = 0;
+            int asd = 0;
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d"
+                    , c.getID()));
+
+            while (rs.next()) {
+
+                asd++;
+                idtmp = rs.getInt(3);
+            }
+
+            if (asd > 1) {
+
+                    st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d AND ID = " +
+                            "%d", c.getID(), idtmp));
+
+            } else if (asd == 1) {
+
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
+                        c.getID()));
+                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d",
+                        c.getID()));
+
+            } else{
+
+                System.out.println("There is nada.");
+
+            }
+
+
+        } catch (SQLException e) {
+
+            System.out.println("Something went wrong when trying to delete resources");
+
+        }
+    }
+
+    public static void delete_course(frontend.data.Course c)
+    {
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
+                c.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM COURSECT WHERE ID = %d", c.getID()));
+    }
+
+    public static void delete_person(frontend.data.Person p)
+    {
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", p.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", p.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", p.getID()));
+    }
 }
 
 
