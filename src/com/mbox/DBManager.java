@@ -1393,7 +1393,7 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Person p = new Person(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
+                Person p = new Person(rs.getInt(1),rs.getString(3),rs.getString(4),rs.getString(2));
                 arr.add(p);
             }
             return arr;
