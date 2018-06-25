@@ -417,6 +417,10 @@ public class Controller {
     }
 
     public void delete() {
+
+        DBManager.delete_relation_course(selectedCourse);
+        //needs to show in the gui
+
     }
 
     public void exportData() {
@@ -805,6 +809,7 @@ public class Controller {
     }
 
     private void deleteProfessor(Person selectedPerson) {
+        //DBManager.delete_person(selectedPerson);
         profList.remove(selectedPerson);
 
     }
