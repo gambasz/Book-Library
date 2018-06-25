@@ -1023,7 +1023,6 @@ public class DBManager {
         }
         // Adding the list of the resources to the person object
         return null;
-
     }
 
 
@@ -1393,7 +1392,7 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Person p = new Person(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
+                Person p = new Person(rs.getInt(1),rs.getString(3),rs.getString(4),rs.getString(2));
                 arr.add(p);
             }
             return arr;
@@ -1414,8 +1413,8 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Course p = new Course(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4)
-                        ,rs.getString(5));
+                Course p = new Course(rs.getInt(1),rs.getString(2)+rs.getString(3),rs.getString(4)
+                        ,rs.getString(5),rs.getString(1));
                 arr.add(p);
             }
             return arr;
@@ -1475,6 +1474,14 @@ public class DBManager {
         ArrayList<frontend.data.Course> arr = new ArrayList<>();
         for(int i=0;i<c.size();i++){
             arr.add(c.get(i).initCourseGUI());
+        }
+        return arr;
+    }
+
+    public static ArrayList<frontend.data.Course> convertArrayCCBasic(ArrayList<com.mbox.Course> c){
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        for(int i=0;i<c.size();i++){
+            arr.add(c.get(i).initCourseGUIBasic());
         }
         return arr;
     }
@@ -1583,6 +1590,7 @@ public class DBManager {
 //                courseListSemester = returnEverything(semesterID);
 //                for(int c=0;c<courseListSemester.size();c++){
 //                    if(tempCourse.equals(courseListSemester.get(c))){
+
 //                        arr.add(tempCourse);
 //                    }
 //                }
@@ -1656,11 +1664,19 @@ public class DBManager {
         executeNoReturnQuery(String.format("DELETE FROM COURSECT WHERE ID = %d", c.getID()));
     }
 
-    public static void delete_person(frontend.data.Person p)
-    {
+    public static void delete_person(frontend.data.Person p) {
         executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", p.getID()));
         executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", p.getID()));
         executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", p.getID()));
+    }
+    public static ArrayList<frontend.data.Resource> getResourceList(){
+        ArrayList<frontend.data.Resource> resList = new ArrayList<>();
+        ArrayList<Resource> tempList = getResourceFromTable();
+        for(int i=0; i< tempList.size();i++) {
+
+            resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
+        }
+        return resList;
     }
 }
 

@@ -25,7 +25,7 @@ public class Course {
 
         this.id = id;
         this.title = title;
-        this.crn = crn;
+        this.crn = ""+id;
         this.description = desc;
         this.department = dept;
     }
@@ -57,6 +57,11 @@ public class Course {
                 this.personInstance.initPersonGUI(), this.description, tmpResource);
         return tmp;
 
+    }
+
+    public frontend.data.Course initCourseGUIBasic(){
+        frontend.data.Course tmp = new frontend.data.Course(this.id,this.title,this.department,this.description);
+        return tmp;
     }
 
     public frontend.data.Course initCourseGUI(String year, String semester){

@@ -27,15 +27,6 @@
                               <Button mnemonicParsing="false" onAction="#selectCourse" prefWidth="150.0" text="Find and Auto Fill Info" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
-                           <children>
-                              <Label text="CRN" />
-                              <TextField fx:id="courseInfoCRN" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                        </HBox>
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
                               <Label text="Title" />
@@ -49,6 +40,15 @@
                            <children>
                               <Label text="Department" />
                               <TextField fx:id="courseInfoDepart" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="15.0">
+                           <children>
+                              <Label text="Description" />
+                              <TextField fx:id="courseInfoDescrip" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -111,7 +111,7 @@
                            <children>
                               <VBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
-                                    <ListView fx:id="resInfolList" prefWidth="200.0" />
+                                    <ListView fx:id="resInfoList" prefWidth="200.0" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER_RIGHT">
@@ -261,7 +261,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <Button fx:id="filterBtn" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#updateCourseInformation" text="Filter" />
+                              <Button fx:id="filterBtn" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#filterTableBasedOnSemesterNYear" text="Filter" />
                            </children>
                            <opaqueInsets>
                               <Insets />
