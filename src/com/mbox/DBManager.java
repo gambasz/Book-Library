@@ -1414,8 +1414,8 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Course p = new Course(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4)
-                        ,rs.getString(5));
+                Course p = new Course(rs.getInt(1),rs.getString(2)+rs.getString(3),rs.getString(4)
+                        ,rs.getString(5),rs.getString(1));
                 arr.add(p);
             }
             return arr;

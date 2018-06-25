@@ -25,7 +25,7 @@ public class Course {
 
         this.id = id;
         this.title = title;
-        this.crn = crn;
+        this.crn = ""+id;
         this.description = desc;
         this.department = dept;
     }
