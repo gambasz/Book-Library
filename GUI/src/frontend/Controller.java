@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -757,6 +758,7 @@ public class Controller {
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         ComboBox<Course> courseTemplates = new ComboBox();
+        setCourseTemplatesCellValue(courseTemplates);
         //TODO: Course template method
         courseTemplates.getItems().addAll(templateList);
 
@@ -809,5 +811,41 @@ public class Controller {
         });
 
 
+    }
+
+    private void setCourseTemplatesCellValue(ComboBox<Course> courseTemplates) {
+        courseTemplates.setConverter(new StringConverter<Course>() {
+            @Override
+            public String toString(Course item) {
+                if (item == null) {
+                    return null;
+                } else {
+                    return item.getTitle() + " - " + item.getDescription();
+                }
+            }
+
+            @Override
+            public Course fromString(String string) {
+                return null;
+            }
+        });
+        courseTemplates.setCellFactory(new Callback<ListView<Course>, ListCell<Course>>() {
+            @Override
+            public ListCell<Course> call(ListView<Course> p) {
+                return new ListCell<Course>() {
+
+                    @Override
+                    protected void updateItem(Course item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        } else {
+                            setText(item.getTitle() + " - " + item.getDescription());
+                        }
+                    }
+                };
+            }
+        });
     }
 }
