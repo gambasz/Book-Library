@@ -1047,7 +1047,6 @@ public class DBManager {
         }
         // Adding the list of the resources to the person object
         return null;
-
     }
 
 
@@ -1417,7 +1416,7 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Person p = new Person(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
+                Person p = new Person(rs.getInt(1),rs.getString(3),rs.getString(4),rs.getString(2));
                 arr.add(p);
             }
             return arr;
@@ -1438,8 +1437,8 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Course p = new Course(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4)
-                        ,rs.getString(5));
+                Course p = new Course(rs.getInt(1),rs.getString(2)+rs.getString(3),rs.getString(4)
+                        ,rs.getString(5),rs.getString(1));
                 arr.add(p);
             }
             return arr;
@@ -1483,7 +1482,7 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Publisher p = new Publisher(rs.getString(1),rs.getString(2),rs.getString(3));
+                Publisher p = new Publisher(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
                 arr.add(p);
             }
             return arr;
@@ -1499,6 +1498,20 @@ public class DBManager {
         ArrayList<frontend.data.Course> arr = new ArrayList<>();
         for(int i=0;i<c.size();i++){
             arr.add(c.get(i).initCourseGUI());
+        }
+        return arr;
+    }
+    public static ArrayList<frontend.data.Publisher> convertArrayPubPub(ArrayList<com.mbox.Publisher> pub){
+        ArrayList<frontend.data.Publisher> arr = new ArrayList<>();
+        for(int i=0;i<pub.size();i++){
+            arr.add(pub.get(i).initPublisherGUI());
+        }
+        return arr;
+    }
+    public static ArrayList<frontend.data.Course> convertArrayCCBasic(ArrayList<com.mbox.Course> c){
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        for(int i=0;i<c.size();i++){
+            arr.add(c.get(i).initCourseGUIBasic());
         }
         return arr;
     }
@@ -1607,6 +1620,7 @@ public class DBManager {
 //                courseListSemester = returnEverything(semesterID);
 //                for(int c=0;c<courseListSemester.size();c++){
 //                    if(tempCourse.equals(courseListSemester.get(c))){
+
 //                        arr.add(tempCourse);
 //                    }
 //                }
@@ -1624,6 +1638,118 @@ public class DBManager {
             System.out.println("wtf");
         }
         return arr;
+    }
+
+    public static void delete_relation_course(frontend.data.Course c) {
+
+        try {
+
+            Statement st = conn.createStatement();
+
+            int idtmp = 0;
+            int asd = 0;
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d"
+                    , c.getID()));
+
+            while (rs.next()) {
+
+                asd++;
+                idtmp = rs.getInt(3);
+            }
+
+            if (asd > 1) {
+
+                    st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d AND ID = " +
+                            "%d", c.getID(), idtmp));
+
+            } else if (asd == 1) {
+
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
+                        c.getID()));
+                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d",
+                        c.getID()));
+
+            } else{
+
+                System.out.println("There is nada.");
+
+            }
+
+
+        } catch (SQLException e) {
+
+            System.out.println("Something went wrong when trying to delete resources");
+
+        }
+    }
+
+    public static void delete_course(frontend.data.Course c)
+    {
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
+                c.getID()));
+        executeNoReturnQuery(String.format("DELETE FROM COURSECT WHERE ID = %d", c.getID()));
+    }
+
+    //todo (GUIDO):
+    // Delete method person
+    // put delete method (course in gui)
+
+
+//    public static void delete_person(frontend.data.Person p) {
+//
+//        ArrayList<Integer> list_of_course_ids = new ArrayList<>();
+//        ArrayList<Integer> count_of_course_ids = new ArrayList<>();
+//        ArrayList<Integer> tmpids_for_deletion = new ArrayList<>();
+//        int i = 0;
+//        int old = 0;
+//
+//        try{
+//
+//            // get all the courses professor teaches.
+//            // delete the exact amount for every different course
+//            // execute the rest
+//
+//            Statement st = conn.createStatement();
+//
+//            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+//                    p.getID()));
+//
+//            while(rs.next()){
+//
+//                old = rs.getInt(1);
+//                if(old == list_of_course_ids.get(i)){
+//
+//                    i++;
+//                }
+//                list_of_course_ids.add(rs.getInt(old));
+//
+//            }
+//
+//
+//
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", p.getID()));
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", p.getID()));
+//            executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", p.getID()));
+//
+//        }catch(SQLException e){
+//
+//            System.out.println("Something went wrong with the delete_person function");
+//
+//        }
+//
+//    }
+    public static ArrayList<frontend.data.Resource> getResourceList(){
+        ArrayList<frontend.data.Resource> resList = new ArrayList<>();
+        ArrayList<Resource> tempList = getResourceFromTable();
+        for(int i=0; i< tempList.size();i++) {
+
+            resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
+        }
+        return resList;
     }
 }
 
