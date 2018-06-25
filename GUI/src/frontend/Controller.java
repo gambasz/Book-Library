@@ -526,7 +526,12 @@ public class Controller {
         addGraphicToButtons(new ImageView(deleteIconImg), delete);
         Button update = new Button();
         addGraphicToButtons(new ImageView(updateIconImg), update);
+        Button autoFillBtn = new Button("Auto Fill");
 
+        autoFillBtn.setOnAction(e->{
+            selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+
+        });
         addNAssignNewResource.setOnAction(e -> {
             Publisher tempPub = selectedPublisher;
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
@@ -560,7 +565,7 @@ public class Controller {
             updateCourseTable();
             resInfoList.getItems().clear();
             resInfoList.getItems().addAll(resList);
-            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         });
         update.setOnAction(e -> {
         });
@@ -575,12 +580,12 @@ public class Controller {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
         resourceTable.setOnMouseClicked(e -> {
-            onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
-        onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB),
+                new HBox(type, typeCB ,autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -602,9 +607,57 @@ public class Controller {
         return resourceEditPane;
     }
 
-    private void onResourceTableSelect(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+    private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+        VBox mainAddPane = new VBox(2);
 
-        Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
+        Dialog dlg = new Dialog();
+
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+        icon.setFitHeight(100);
+        icon.setFitWidth(100);
+        ComboBox<Resource> resources = new ComboBox();
+        //TODO: burn this with fire
+        resources.getItems().addAll(resList);
+        Label currentCBoxLbl = new Label("Resources : ");
+        ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
+        Button deleteBtn = new Button("Delete");
+
+        deleteBtn.setOnAction(e -> {
+            deleteResource(resources.getSelectionModel().getSelectedItem());
+            resources.getItems().clear();
+            resources.getItems().addAll(resList);
+
+        });
+        mainAddPane.getChildren().addAll(
+                new HBox(currentCBoxLbl, resources),
+                deleteBtn
+        );
+        mainAddPane.setSpacing(20);
+        mainAddPane.setAlignment(Pos.CENTER);
+        dlg.setTitle("Assigning Course");
+        dlg.setHeaderText("Assigning Course");
+
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(300);
+        dlg.getDialogPane().setContent(mainAddPane);
+        dlg.getDialogPane().getButtonTypes().addAll(fill, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+        if(dialogButton == fill){
+            onResourceTableSelect(resources.getSelectionModel().getSelectedItem(),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        }
+            return null;
+        });
+
+    }
+    private  void deleteResource(Resource res){
+        resList.remove(res);
+
+    }
+    private void onResourceTableSelect(Resource tempRes,TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+
         if (tempRes != null) {
             titleTF.setText(tempRes.getTitle());
             authorTF.setText(tempRes.getAuthor());
@@ -746,6 +799,7 @@ public class Controller {
 
     }
 
+
     public void selectCourse() {
         //TODO: add the template information transfer  to course functionality
         ArrayList<Course> tempCourses = new ArrayList<>();
@@ -847,4 +901,5 @@ public class Controller {
             }
         });
     }
+
 }
