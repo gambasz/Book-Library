@@ -29,7 +29,7 @@ public class Controller {
 
     private TableView<Resource> resourceTable;
     private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol;
-    private ArrayList<Course> courseList;
+    private ArrayList<Course> courseList,templateList;
     private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
     private ArrayList<Publisher> pubList;
@@ -37,6 +37,7 @@ public class Controller {
     private Resource selectedResource;
     private Publisher selectedPublisher;
     private Person selectedPerson;
+
 
     private final String addIconImg = "/frontend/media/add.png";
     private final String updateIconImg = "/frontend/media/upload.png";
@@ -54,9 +55,11 @@ public class Controller {
     @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
-    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType, courseTemplates;
+    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
+
+
 
     boolean debugging = true;
 
@@ -693,13 +696,16 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        courseTemplates = new ComboBox();
-        courseTemplates.getItems().addAll(profList);
+        ComboBox <Person> currentProfessor = new ComboBox();
+        currentProfessor.getItems().addAll(profList);
 
         Label currentCBoxLbl = new Label("Current Professor : ");
-
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
+        Button deleteBtn = new Button("Delete");
 
+        deleteBtn.setOnAction(e->{
+            deleteProfessor(currentProfessor.getSelectionModel().getSelectedItem());
+        });
 
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates)
@@ -727,6 +733,10 @@ public class Controller {
             }
             return null;
         });
+
+    }
+
+    private void deleteProfessor(Person selectedItem) {
 
     }
 
