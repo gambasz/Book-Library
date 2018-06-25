@@ -59,6 +59,11 @@ public class Course {
 
     }
 
+    public frontend.data.Course initCourseGUIBasic(){
+        frontend.data.Course tmp = new frontend.data.Course(this.id,this.title,this.department,this.description);
+        return tmp;
+    }
+
     public frontend.data.Course initCourseGUI(String year, String semester){
         ArrayList <frontend.data.Resource> tmpResource = new ArrayList<frontend.data.Resource>();
         tmpResource.add(this.resourceInstance[0].initResourceGUI());

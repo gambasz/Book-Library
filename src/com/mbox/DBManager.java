@@ -1479,6 +1479,14 @@ public class DBManager {
         return arr;
     }
 
+    public static ArrayList<frontend.data.Course> convertArrayCCBasic(ArrayList<com.mbox.Course> c){
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        for(int i=0;i<c.size();i++){
+            arr.add(c.get(i).initCourseGUIBasic());
+        }
+        return arr;
+    }
+
 
 
     public static ArrayList<frontend.data.Resource> findResourcesCourseReturnList(int courseID)

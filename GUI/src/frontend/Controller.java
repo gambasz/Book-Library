@@ -748,7 +748,7 @@ public class Controller {
     public void selectCourse() {
         //TODO: add the template information transfer  to course functionality
         ArrayList<Course> tempCourses = new ArrayList<>();
-
+        templateList = DBManager.convertArrayCCBasic(DBManager.getCourseFromTable());
         VBox mainAddPane = new VBox(2);
 
         Dialog dlg = new Dialog();
@@ -758,7 +758,7 @@ public class Controller {
         icon.setFitWidth(100);
         ComboBox<Course> courseTemplates = new ComboBox();
         //TODO: Course template method
-        courseTemplates.getItems().addAll();
+        courseTemplates.getItems().addAll(templateList);
 
         Label currentCBoxLbl = new Label("Course Templates : ");
 
