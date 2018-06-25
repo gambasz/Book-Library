@@ -1458,7 +1458,7 @@ public class DBManager {
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Publisher p = new Publisher(rs.getString(1),rs.getString(2),rs.getString(3));
+                Publisher p = new Publisher(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4));
                 arr.add(p);
             }
             return arr;
@@ -1477,7 +1477,13 @@ public class DBManager {
         }
         return arr;
     }
-
+    public static ArrayList<frontend.data.Publisher> convertArrayPubPub(ArrayList<com.mbox.Publisher> pub){
+        ArrayList<frontend.data.Publisher> arr = new ArrayList<>();
+        for(int i=0;i<pub.size();i++){
+            arr.add(pub.get(i).initPublisherGUI());
+        }
+        return arr;
+    }
     public static ArrayList<frontend.data.Course> convertArrayCCBasic(ArrayList<com.mbox.Course> c){
         ArrayList<frontend.data.Course> arr = new ArrayList<>();
         for(int i=0;i<c.size();i++){
