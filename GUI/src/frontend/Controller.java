@@ -46,9 +46,9 @@ public class Controller {
     private final String searchIconImg = "/frontend/media/search.png";
     private final String programeIconImg = "/frontend/media/icon.png";
     @FXML
-    TextField courseInfoCRN, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
+    TextField courseInfoDescrip, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
     @FXML
-    ListView resInfolList;
+    ListView resInfoList;
     @FXML
     Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn;
     @FXML
@@ -208,7 +208,7 @@ public class Controller {
             deleteBtn.setVisible(true);
             updateBtn.setManaged(true);
             deleteBtn.setManaged(true);
-            courseInfoCRN.setText("" + selectedCourse.getCRN());
+            courseInfoDescrip.setText("" + selectedCourse.getDescription());
             profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
             profInfoLName.setText(selectedCourse.getProfessor().getLastName());
             profInfoType.setValue(selectedCourse.getProfessor().getType());
@@ -220,11 +220,11 @@ public class Controller {
             ArrayList<Resource> tempRes = selectedCourse.getResource();
             resourceTable.getItems().clear();
             resourceTable.getItems().addAll(resList);
-            resInfolList.getItems().clear();
+            resInfoList.getItems().clear();
             resourceTable.getSelectionModel().select(null);
             for (int i = 0; i < tempRes.size(); i++) {
                 if (i < 3) {
-                    resInfolList.getItems().add(tempRes.get(i).getTitle());
+                    resInfoList.getItems().add(tempRes.get(i).getTitle());
                 }
                 resourceTable.getSelectionModel().select(tempRes.get(i));
             }
@@ -264,7 +264,7 @@ public class Controller {
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
                 selectedPerson,
-                courseInfoCRN.getText(),
+                courseInfoDescrip.getText(),
                 tempRes
         );
 
@@ -558,8 +558,8 @@ public class Controller {
 
             }
             updateCourseTable();
-            resInfolList.getItems().clear();
-            resInfolList.getItems().addAll(resList);
+            resInfoList.getItems().clear();
+            resInfoList.getItems().addAll(resList);
             onResourceTableSelect(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         });
         update.setOnAction(e -> {
@@ -766,7 +766,11 @@ public class Controller {
 
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
 
+        courseTemplates.setOnAction(e -> {
 
+
+            System.out.print(courseTemplates.getSelectionModel().getSelectedItem());
+        });
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates)
         );
@@ -785,27 +789,22 @@ public class Controller {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
 
-                selectedCourse = new Course();
-                courseInfoCRN.setText("" + selectedCourse.getCRN());
-                profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
-                profInfoLName.setText(selectedCourse.getProfessor().getLastName());
-                profInfoType.setValue(selectedCourse.getProfessor().getType());
-                selectedPerson = selectedCourse.getProfessor();
+                selectedCourse = courseTemplates.getSelectionModel().getSelectedItem();
+                courseInfoDescrip.setText(selectedCourse.getDescription());
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
-                semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
-                yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
-                ArrayList<Resource> tempRes = selectedCourse.getResource();
-                resourceTable.getItems().clear();
-                resourceTable.getItems().addAll(resList);
-                resInfolList.getItems().clear();
-                resourceTable.getSelectionModel().select(null);
-                for (int i = 0; i < tempRes.size(); i++) {
-                    if (i < 3) {
-                        resInfolList.getItems().add(tempRes.get(i).getTitle());
-                    }
-                    resourceTable.getSelectionModel().select(tempRes.get(i));
-                }
+                //TODO:// uncomment when resources added
+//                ArrayList<Resource> tempRes = selectedCourse.getResource();
+//                resourceTable.getItems().clear();
+//                resourceTable.getItems().addAll(resList);
+//                resInfoList.getItems().clear();
+//                resourceTable.getSelectionModel().select(null);
+//                for (int i = 0; i < tempRes.size(); i++) {
+//                    if (i < 3) {
+//                        resInfoList.getItems().add(tempRes.get(i).getTitle());
+//                    }
+//                    resourceTable.getSelectionModel().select(tempRes.get(i));
+//                }
             }
             return null;
         });
