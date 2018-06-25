@@ -1664,11 +1664,54 @@ public class DBManager {
         executeNoReturnQuery(String.format("DELETE FROM COURSECT WHERE ID = %d", c.getID()));
     }
 
-    public static void delete_person(frontend.data.Person p) {
-        executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", p.getID()));
-        executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", p.getID()));
-        executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", p.getID()));
-    }
+    //todo (GUIDO):
+    // Delete method person
+    // put delete method (course in gui)
+
+
+//    public static void delete_person(frontend.data.Person p) {
+//
+//        ArrayList<Integer> list_of_course_ids = new ArrayList<>();
+//        ArrayList<Integer> count_of_course_ids = new ArrayList<>();
+//        ArrayList<Integer> tmpids_for_deletion = new ArrayList<>();
+//        int i = 0;
+//        int old = 0;
+//
+//        try{
+//
+//            // get all the courses professor teaches.
+//            // delete the exact amount for every different course
+//            // execute the rest
+//
+//            Statement st = conn.createStatement();
+//
+//            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+//                    p.getID()));
+//
+//            while(rs.next()){
+//
+//                old = rs.getInt(1);
+//                if(old == list_of_course_ids.get(i)){
+//
+//                    i++;
+//                }
+//                list_of_course_ids.add(rs.getInt(old));
+//
+//            }
+//
+//
+//
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", p.getID()));
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", p.getID()));
+//            executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", p.getID()));
+//
+//        }catch(SQLException e){
+//
+//            System.out.println("Something went wrong with the delete_person function");
+//
+//        }
+//
+//    }
     public static ArrayList<frontend.data.Resource> getResourceList(){
         ArrayList<frontend.data.Resource> resList = new ArrayList<>();
         ArrayList<Resource> tempList = getResourceFromTable();
