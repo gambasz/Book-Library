@@ -259,10 +259,11 @@ public class Controller {
     }
 
     public void add() {
-        selectedPerson.setFirstName(profInfoFName.getText());
-        selectedPerson.setLastName(profInfoLName.getText());
-        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+//        selectedPerson.setFirstName(profInfoFName.getText());
+//        selectedPerson.setLastName(profInfoLName.getText());
+//        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
 
+        Person tempPerosn = new Person(selectedPerson);
 
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
@@ -272,12 +273,33 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                selectedPerson,
+                tempPerosn,
                 courseInfoCRN.getText(),
                 tempRes
         );
+        System.out.println( "PrfoessorID before changing" + tempCour.getProfessor().getID());
 
-        courseList.add(tempCour);
+
+        // I create a new object and then check if the information in the boxes are different form
+        // the Selected Course Object, then if there is a difference, I will add a new course/person/...
+        boolean courseChanged = false, professorChanged = false, resourceChanged = false;
+
+        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
+                tempCour.getProfessor().getLastName() != profInfoLName.getText();
+        // I don't check type rn. Need to check later with fk.. enum :))
+
+        if (professorChanged ) {
+        tempCour.getProfessor().setFirstName(profInfoFName.getText());
+        tempCour.getProfessor().setLastName(profInfoLName.getText());
+        tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+        int id = DBManager.insertPersonQuery(tempPerosn);
+        tempCour.getProfessor().setID(id);
+        }
+
+
+        System.out.println( "PrfoessorID before adding" + tempCour.getProfessor().getID());
+        courseList.add(tempCour); // later on it should be gone, nothing should not be in courseList manually
+        // Everything in coureseList should be get from the DB.
 
         DBManager.relationalInsertByID2(tempCour);
 

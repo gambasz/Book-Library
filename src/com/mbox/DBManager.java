@@ -3,6 +3,7 @@ import java.sql.*;
 import java.util.*;
 import com.mbox.Main;
 import com.sun.istack.internal.Nullable;
+import frontend.data.PersonType;
 import jdk.management.resource.ResourceContext;
 import jdk.management.resource.ResourceId;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -486,6 +487,29 @@ public class DBManager {
         return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
                 person.getFirstName(), person.getLastName(), person.getType());
     }
+
+    public static int insertPersonQuery(frontend.data.Person person) {
+        ResultSet rs; int id = 0;
+
+        String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
+                person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
+        try {
+            st.executeQuery(query);
+            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' OR LASTNAME='s'",
+                    person.getFirstName(), person.getLastName());
+            rs = st.executeQuery(query2);
+            while(rs.next()){
+
+                id = (rs.getInt(1));
+            }
+            return id;
+
+        }
+        catch (SQLException err){
+            System.out.println(err);}
+            return 0;
+    }
+
     public String insertCourseQuery(Course course){
 
         return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
