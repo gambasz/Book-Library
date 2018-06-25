@@ -48,7 +48,7 @@ public class Controller {
     @FXML
     ListView resInfolList;
     @FXML
-    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn;
+    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn;
     @FXML
     TableView<Course> tableTV;
     @FXML
@@ -171,18 +171,6 @@ public class Controller {
 
         String fName, lName;
         fName = lName = "";
-        //TODO: talk to mamali about this code
-//           String fName="", lName="";
-//        fName=lName="";
-//        int i = 0;
-
-//        for (String t : temp){
-//            i++;
-//            if (i==1)
-//            fName = t;
-//            if (i==2)
-//            lName = t;
-//        }
 
         String[] temp = profSearchTF.getText().split(" ");
         switch (temp.length) {
@@ -284,8 +272,7 @@ public class Controller {
         updateCourseTable();
     }
 
-    //TODO: look at it with guido how is it related with update button
-    public void updateCourseInformation() {
+    public void filterTableBasedOnSemesterNYear() {
 
         //has an exception when combobox is empty (program keeps running, needs to be fixed);
 
