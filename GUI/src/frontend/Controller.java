@@ -298,6 +298,7 @@ public class Controller {
     private void initTables() {
         setTablesSelectionProperty(tableTV);
         setTablesSelectionProperty(resourceTable);
+        //todo: when hash tables are done remove the *contains codes*
         //======================BEGIN CODE BACKEND
         DBManager.openConnection();
 
@@ -305,15 +306,22 @@ public class Controller {
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(52);
         for (int k = 0; k < pulledDatabase.size(); k++) {
             courseList.add(pulledDatabase.get(k));
-            resList.addAll(pulledDatabase.get(k).getResource());
+            for(Resource r : pulledDatabase.get(k).getResource()){
+                if(!resList.contains(r))
+                resList.add(r);
+
+            }
 
         }
 
         for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
-            profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
+            if (!profList.contains(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI()))
+                profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
         }
-        for (Resource tempR : resList)
-            pubList.add(tempR.getPublisher());
+        for (Resource tempR : resList) {
+            if (!pubList.contains(tempR.getPublisher()))
+                pubList.add(tempR.getPublisher());
+        }
         //====================== END CODE BACKEND
 
 
@@ -528,7 +536,7 @@ public class Controller {
         addGraphicToButtons(new ImageView(updateIconImg), update);
         Button autoFillBtn = new Button("Auto Fill");
 
-        autoFillBtn.setOnAction(e->{
+        autoFillBtn.setOnAction(e -> {
             selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
@@ -565,7 +573,7 @@ public class Controller {
             updateCourseTable();
             resInfoList.getItems().clear();
             resInfoList.getItems().addAll(resList);
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         });
         update.setOnAction(e -> {
         });
@@ -580,12 +588,12 @@ public class Controller {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
         resourceTable.setOnMouseClicked(e -> {
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
-        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB ,autoFillBtn),
+                new HBox(type, typeCB, autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -609,9 +617,9 @@ public class Controller {
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
         VBox mainAddPane = new VBox(2);
-
         Dialog dlg = new Dialog();
 
+        resList = DBManager.getResourceList();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
@@ -645,18 +653,20 @@ public class Controller {
 
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
-        if(dialogButton == fill){
-            onResourceTableSelect(resources.getSelectionModel().getSelectedItem(),titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
-        }
+            if (dialogButton == fill) {
+                onResourceTableSelect(resources.getSelectionModel().getSelectedItem(), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            }
             return null;
         });
 
     }
-    private  void deleteResource(Resource res){
+
+    private void deleteResource(Resource res) {
         resList.remove(res);
 
     }
-    private void onResourceTableSelect(Resource tempRes,TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+
+    private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
 
         if (tempRes != null) {
             titleTF.setText(tempRes.getTitle());
