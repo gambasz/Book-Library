@@ -29,7 +29,7 @@ public class Controller {
 
     private TableView<Resource> resourceTable;
     private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol;
-    private ArrayList<Course> courseList,templateList;
+    private ArrayList<Course> courseList, templateList;
     private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
     private ArrayList<Publisher> pubList;
@@ -58,7 +58,6 @@ public class Controller {
     ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
-
 
 
     boolean debugging = true;
@@ -696,22 +695,27 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        ComboBox <Person> currentProfessor = new ComboBox();
-        currentProfessor.getItems().addAll(profList);
+        ComboBox<Person> currentProfessors = new ComboBox();
+        currentProfessors.getItems().addAll(profList);
 
         Label currentCBoxLbl = new Label("Current Professor : ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
 
-        deleteBtn.setOnAction(e->{
-            deleteProfessor(currentProfessor.getSelectionModel().getSelectedItem());
+        deleteBtn.setOnAction(e -> {
+            deleteProfessor(currentProfessors.getSelectionModel().getSelectedItem());
+            currentProfessors.getItems().clear();
+            currentProfessors.getItems().addAll(profList);
+
         });
 
         mainAddPane.getChildren().addAll(
-                new HBox(currentCBoxLbl, courseTemplates)
+                new HBox(currentCBoxLbl, currentProfessors),
+                deleteBtn
+
         );
         mainAddPane.setSpacing(20);
-
+        mainAddPane.setAlignment(Pos.CENTER);
         dlg.setTitle("Assigning Professor");
         dlg.setHeaderText("Assigning Professor");
 
@@ -724,7 +728,7 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                selectedPerson = ((Person) (courseTemplates.getSelectionModel().getSelectedItem()));
+                selectedPerson = ((Person) (currentProfessors.getSelectionModel().getSelectedItem()));
                 profInfoFName.setText(selectedPerson.getFirstName());
                 profInfoLName.setText(selectedPerson.getLastName());
                 profInfoType.setValue(selectedPerson.getType());
@@ -736,7 +740,8 @@ public class Controller {
 
     }
 
-    private void deleteProfessor(Person selectedItem) {
+    private void deleteProfessor(Person selectedPerson) {
+        profList.remove(selectedPerson);
 
     }
 
@@ -751,7 +756,7 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        courseTemplates = new ComboBox();
+        ComboBox<Course> courseTemplates = new ComboBox();
         //TODO: Course template method
         courseTemplates.getItems().addAll();
 

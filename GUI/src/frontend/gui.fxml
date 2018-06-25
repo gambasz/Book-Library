@@ -261,7 +261,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <Button fx:id="filterBtn" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#updateCourseInformation" text="Filter" />
+                              <Button fx:id="filterBtn" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#filterTableBasedOnSemesterNYear" text="Filter" />
                            </children>
                            <opaqueInsets>
                               <Insets />
