@@ -254,7 +254,6 @@ public class Controller {
         selectedPerson.setLastName(profInfoLName.getText());
         selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
 
-
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
                 selectedCourse.getID(),
@@ -318,6 +317,9 @@ public class Controller {
             if (!profList.contains(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI()))
                 profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
         }
+        //Here I initialize pubList with method getPublisherFromTable()
+        pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
+        ///////////////////////////////////////////////////////////////
         for (Resource tempR : resList) {
             if (!pubList.contains(tempR.getPublisher()))
                 pubList.add(tempR.getPublisher());
