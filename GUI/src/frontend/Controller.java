@@ -195,10 +195,6 @@ public class Controller {
 
     }
 
-    public void guido(){
-        System.out.println("Hey");
-    }
-
     public void updateRowSelected() {
         selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
         if (selectedCourse != null) {
@@ -273,8 +269,6 @@ public class Controller {
 
         professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
                 tempCour.getProfessor().getLastName() != profInfoLName.getText();
-//        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
-//                tempCour.getDepartment() != courseInfoDescrip.getText();
         // I don't check type rn. Need to check later with fk.. enum :))
 
         if (professorChanged) {
@@ -284,13 +278,6 @@ public class Controller {
             int id = DBManager.insertPersonQuery(tempPerosn);
             tempCour.getProfessor().setID(id);
         }
-//        if(courseChanged){
-//            tempCour.setDepartment(courseInfoDepart.getText());
-//            tempCour.setTitle(courseInfoTitle.getText());
-//            tempCour.setDescription(courseInfoDescrip.getText());
-//            DBManager.insertCourseQuery(tempCour);
-//            System.out.println("New Course Added");
-//        }
 
 
         System.out.println("PrfoessorID before adding" + tempCour.getProfessor().getID());
