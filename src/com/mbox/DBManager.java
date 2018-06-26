@@ -1857,9 +1857,6 @@ public class DBManager {
 
 
 
-
-
-
 //            String query = "";
 //            for(int i = 0; i < to_be_deleted.size(); i++){
 //
@@ -1880,6 +1877,73 @@ public class DBManager {
         }
 
     }
+
+
+
+    public static void deletePerson(frontend.data.Person person){
+
+        try {
+
+            // get all the courses professor teaches.
+            // delete the exact amount for every different course
+            // execute the rest
+
+            Statement st = conn.createStatement();
+            Statement ops = conn.createStatement();
+            ResultSet kq;
+
+            int courseID = 0, i=0;
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d " +
+                            "ORDER BY COURSEID ASC", person.getID()));
+
+            while (rs.next()) {
+                courseID = rs.getInt(1);
+                kq = ops.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d ", courseID));
+                i=0;
+                while(kq.next()) {
+                    if (i == 0) {
+                        executeNoReturnQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
+                                kq.getInt(3)));
+                        System.out.println();
+                        i++;
+                    }
+                }
+
+            }
+//
+//            int previousone = 0;
+//            int thisone = 0;
+//            int i = 0;
+//
+//            while(list_of_course_ids.size() > i) {
+//
+//                thisone = list_of_course_ids.get(i);
+//
+//                if(i > 1){
+//
+//                    previousone = list_of_course_ids.get(i-1);
+//                }
+//
+//                if (thisone == previousone) {
+//
+//                    counter++;
+//
+//                }else {
+//
+//                    counter = 1;
+//                }
+//
+//                count_of_course_ids.add(counter);
+//                i++;
+//            }
+        }
+            catch (SQLException err){
+            System.out.println(err);
+            }
+        }
+
+
     public static ArrayList<frontend.data.Resource> getResourceList(){
         ArrayList<frontend.data.Resource> resList = new ArrayList<>();
         ArrayList<Resource> tempList = getResourceFromTable();
