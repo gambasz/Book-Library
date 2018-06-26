@@ -485,7 +485,7 @@ public class DBManager {
 
     //===========================================Insert Method Queries==================================================
 
-    public String insertPersonQuery(Person person) {
+    public static String insertPersonQuery(Person person) {
 
         return String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
                 person.getFirstName(), person.getLastName(), person.getType());
@@ -513,13 +513,41 @@ public class DBManager {
             return 0;
     }
 
-    public String insertCourseQuery(Course course){
+    public static String insertCourseQuery(Course course){
 
         return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
                         "('%s', '%s', '%s', '%s')", course.getTitle(), course.getCRN(), course.getDescription(),
                 course.getDepartment());
 
     }
+
+    public static int insertCourseQuery(frontend.data.Course course){
+        ResultSet rs; int id = 0;
+        String[] cSplit = course.getTitle().split(" ");
+
+        String query = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
+                        "('%s', '%s', '%s', '%s')", cSplit[0], cSplit[1], course.getDescription(),
+            course.getDepartment());
+
+        try {
+        st.executeQuery(query);
+        String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' and CNUMBER = '%s' and DESCRIPTION",
+                cSplit[0], cSplit[1], course.getDescription());
+        rs = st.executeQuery(query2);
+        while(rs.next()){
+
+            id = (rs.getInt(1));
+        }
+        return id;
+
+    }
+        catch (SQLException err){
+        System.out.println(err);}
+        return 0;
+}
+
+
+
     public String insertResourceQuery(Resource resource){
 
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
