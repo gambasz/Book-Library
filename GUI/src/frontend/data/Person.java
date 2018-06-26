@@ -22,6 +22,13 @@ public class Person {
         this.type = PersonType.valueOf(type);
     }
 
+    public Person(Person another) {
+        this.ID = another.getID();
+        this.lastName = another.getLastName();
+        this.firstName = another.getFirstName();
+        this.type = PersonType.valueOf(another.getType());
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
