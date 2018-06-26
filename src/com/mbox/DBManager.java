@@ -291,7 +291,7 @@ public class DBManager {
             ResultSet rs = st.executeQuery(getTableCourseSemesterQuery());
             while(rs.next()){
 
-                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2) + "|" + rs.getInt(3));
             }
 
         }catch(SQLException e){
@@ -1759,49 +1759,127 @@ public class DBManager {
     // put delete method (course in gui)
 
 
-//    public static void delete_person(frontend.data.Person p) {
+    public static void delete_person(frontend.data.Person p) {
+
+        ArrayList<Integer> list_of_course_ids = new ArrayList<>();
+        ArrayList<Integer> count_of_course_ids = new ArrayList<>();
+        ArrayList<Integer> to_be_deleted = new ArrayList<>();
+        int counter = 1;
+
+        try{
+
+            // get all the courses professor teaches.
+            // delete the exact amount for every different course
+            // execute the rest
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d " +
+                            "ORDER BY COURSEID ASC",
+                    p.getID()));
+
+            while(rs.next()){
+
+                list_of_course_ids.add(rs.getInt(1));
+
+            }
+
+            int previousone = 0;
+            int thisone = 0;
+            int i = 0;
+
+                while(list_of_course_ids.size() > i) {
+
+                    thisone = list_of_course_ids.get(i);
+
+                    if(i > 1){
+
+                        previousone = list_of_course_ids.get(i-1);
+                    }
+
+                    if (thisone == previousone) {
+
+                        counter++;
+
+                    }else {
+
+                        counter = 1;
+                    }
+
+                        count_of_course_ids.add(counter);
+                        i++;
+                }
+
+
+            Statement statement = conn.createStatement();
+            ResultSet result_set;
+            String query;
+            previousone = 0;
+            thisone = 0;
+            i = 0;
+
+            while(list_of_course_ids.size() > i){
+
+                query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", list_of_course_ids.get(i));
+                result_set = statement.executeQuery(query);
+
+                if(i > 1){
+
+                    previousone = list_of_course_ids.get(i-1);
+                }
+                    while(result_set.next()){
+
+                            if(previousone != thisone){
+
+                                to_be_deleted.add(result_set.getInt(3));
+                            }
+                    }
+
+                i++;
+
+            }
+
+            for(int a = 0; a < list_of_course_ids.size(); a++){
+
+                System.out.println(list_of_course_ids.get(a));
+            }
+
+            for(int b = 0; b < list_of_course_ids.size(); b++){
+
+                System.out.println(count_of_course_ids.get(b));
+            }
+
+            for(int j = 0; j < to_be_deleted.size(); j++){
+
+                System.out.println(to_be_deleted.get(j));
+            }
+
+
+
+
+
+
+
+//            String query = "";
+//            for(int i = 0; i < to_be_deleted.size(); i++){
 //
-//        ArrayList<Integer> list_of_course_ids = new ArrayList<>();
-//        ArrayList<Integer> count_of_course_ids = new ArrayList<>();
-//        ArrayList<Integer> tmpids_for_deletion = new ArrayList<>();
-//        int i = 0;
-//        int old = 0;
-//
-//        try{
-//
-//            // get all the courses professor teaches.
-//            // delete the exact amount for every different course
-//            // execute the rest
-//
-//            Statement st = conn.createStatement();
-//
-//            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
-//                    p.getID()));
-//
-//            while(rs.next()){
-//
-//                old = rs.getInt(1);
-//                if(old == list_of_course_ids.get(i)){
-//
-//                    i++;
-//                }
-//                list_of_course_ids.add(rs.getInt(old));
-//
+//                query = String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
+//                        to_be_deleted.get(i));
+//                System.out.println(query);
+//                //executeNoReturnQuery(query);
 //            }
-//
-//
-//
+
 //            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", p.getID()));
 //            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", p.getID()));
 //            executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", p.getID()));
-//
-//        }catch(SQLException e){
-//
-//            System.out.println("Something went wrong with the delete_person function");
-//
-//        }
-//
-//    }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with the delete_person function");
+
+        }
+
+    }
     public static ArrayList<frontend.data.Resource> getResourceList(){
         ArrayList<frontend.data.Resource> resList = new ArrayList<>();
         ArrayList<Resource> tempList = getResourceFromTable();
