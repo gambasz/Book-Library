@@ -534,17 +534,40 @@ public class DBManager {
 
     //============================================Update Methods Queries================================================
 
-    private String updatePersonQuery(Person person){
+    public static String updatePersonQuery(Person person){
 
         return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %d",
                 person.getFirstName(), person.getLastName(), person.getType(), person.getID());
     }
-    private String updateCourseQuery(Course course){
+
+    public static void updatePersonQuery(frontend.data.Person person) {
+
+        String query = String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID =%d",
+                person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()),person.getID());
+        try {
+            st.executeQuery(query);
+        }catch(Exception e){
+            System.out.println("Update fail because of person error");
+        }
+
+    }
+    public static String updateCourseQuery(Course course){
 
         return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s" +
-                        "WHERE ID = %d", course.getTitle(), course.getCRN(), course.getDescription(), course.getDepartment(),
+                        "WHERE ID = %d", course.getTitle().substring(0,4), course.getTitle().substring(4), course.getDescription(), course.getDepartment(),
                 course.getID());
 
+    }
+    public static void updateCourseQuery(frontend.data.Course c){
+        System.out.println("Title: " + c.getTitle().substring(0,4) + "  CNUMBER: "+ c.getTitle().substring(4)+
+        "  DESCRIPTION: "+ c.getDescription() + "  DEPARTMENT: " + c.getDepartment() + "  ID: " + c.getID());
+        String query = String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s' " +
+                "WHERE ID = %d",c.getTitle().substring(0,4),c.getTitle().substring(4),c.getDescription(),c.getDepartment(),c.getID());
+        try {
+            st.executeQuery(query);
+        }catch(Exception e){
+            System.out.println("Update fail because of course error");
+        }
     }
     private String updateResourceQuery(Resource resource){
 
@@ -1170,8 +1193,8 @@ public class DBManager {
             rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
             //it supposed to get a list of all persons teaching that course. Assuming one person for now.
             while (rs.next()) {
-                courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
-                courseList.add(new Course(cID, cTitle, cDepartment, cDescription, "CRN"));
+                courseArray[i] = new Course(cID, cTitle, cDescription, cDepartment, "CRN");
+                courseList.add(new Course(cID, cTitle, cDescription, cDepartment, "CRN"));
 
                 personID = rs.getInt(2);
                 rs = st.executeQuery(getPersonInTableQuery(personID));
@@ -1750,6 +1773,16 @@ public class DBManager {
             resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
         }
         return resList;
+    }
+
+    public static void updateCourseGUI(int courseID, String title, String description, String department){
+        Course c = new Course(courseID,title,description,department,courseID+"");
+        executeNoReturnQuery(updateCourseQuery(c));
+
+    }
+    public  static void updatePersonGUI(int personID, String fname, String lname, String type){
+        Person p = new Person(personID,fname,lname,type);
+        executeNoReturnQuery(updatePersonQuery(p));
     }
 }
 
