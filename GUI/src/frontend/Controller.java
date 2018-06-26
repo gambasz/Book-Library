@@ -186,17 +186,11 @@ public class Controller {
                 System.err.print("Improper input for professor search output");
 
         }
-        System.out.println(fName + " LName:\t" + lName);
 
-//        fName = temp[0];
-//        lName = temp[1];
-//        int year = Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
-//        String semester = semesterComBox.getSelectionModel().getSelectedItem().toString();
-//        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
+        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
         courseList = DBManager.searchByNameCourseList(fName, lName);
         System.out.println(courseList.get(0).toString());
-        System.out.println("It's ok now");
         updateCourseTable();
 
     }
@@ -266,7 +260,7 @@ public class Controller {
                 courseInfoDepart.getText(),
                 tempPerosn, courseInfoDescrip.getText(), tempRes);
 
-        System.out.println( "PrfoessorID before changing" + tempCour.getProfessor().getID());
+        System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
 
         // I create a new object and then check if the information in the boxes are different form
@@ -277,16 +271,16 @@ public class Controller {
                 tempCour.getProfessor().getLastName() != profInfoLName.getText();
         // I don't check type rn. Need to check later with fk.. enum :))
 
-        if (professorChanged ) {
-        tempCour.getProfessor().setFirstName(profInfoFName.getText());
-        tempCour.getProfessor().setLastName(profInfoLName.getText());
-        tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-        int id = DBManager.insertPersonQuery(tempPerosn);
-        tempCour.getProfessor().setID(id);
+        if (professorChanged) {
+            tempCour.getProfessor().setFirstName(profInfoFName.getText());
+            tempCour.getProfessor().setLastName(profInfoLName.getText());
+            tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+            int id = DBManager.insertPersonQuery(tempPerosn);
+            tempCour.getProfessor().setID(id);
         }
 
 
-        System.out.println( "PrfoessorID before adding" + tempCour.getProfessor().getID());
+        System.out.println("PrfoessorID before adding" + tempCour.getProfessor().getID());
         courseList.add(tempCour); // later on it should be gone, nothing should not be in courseList manually
         // Everything in coureseList should be get from the DB.
 
@@ -302,10 +296,8 @@ public class Controller {
         String semester = semesterComBox.getValue().toString();
         String year = yearComBox.getValue().toString();
 
-        System.out.println("|" + semester + "|" + year);
 
         int id = DBManager.getSemesterIDByName(semester, year);
-        System.out.println(id);
 
         courseList = DBManager.returnEverything(id);
 
@@ -326,12 +318,12 @@ public class Controller {
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(52);
         for (int k = 0; k < pulledDatabase.size(); k++) {
             courseList.add(pulledDatabase.get(k));
-            for(Resource r : pulledDatabase.get(k).getResource()){
-                if(!resList.contains(r))
-                resList.add(r);
+            for (Resource r : pulledDatabase.get(k).getResource()) {
+                if (!resList.contains(r))
+                    resList.add(r);
 
             }
-            System.out.println("If this is the error, desription:" +pulledDatabase.get(k).getDescription()+pulledDatabase.get(k).getDepartment());
+            System.out.println("If this is the error, desription:" + pulledDatabase.get(k).getDescription() + pulledDatabase.get(k).getDepartment());
 
         }
 
@@ -463,7 +455,7 @@ public class Controller {
                 tempPerson, courseInfoDescrip.getText(), tempRes);
 
 
-        System.out.println( "PrfoessorID before changing" + tempCour.getProfessor().getID());
+        System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
 
         // I create a new object and then check if the information in the boxes are different form
@@ -480,22 +472,22 @@ public class Controller {
         System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
         //TODO: Check again why the courseChanged keeps turning true @@ Khanh
         // I don't check type rn. Need to check later with fk.. enum :))
-        if(courseChanged){
+        if (courseChanged) {
             tempCour.setDepartment(courseInfoDepart.getText());
             tempCour.setTitle(courseInfoTitle.getText());
             tempCour.setDescription(courseInfoDescrip.getText());
             DBManager.updateCourseQuery(tempCour);
             System.out.println("Fixed this because there is no change");
         }
-        if (professorChanged ) {
+        if (professorChanged) {
             tempCour.getProfessor().setFirstName(profInfoFName.getText());
             tempCour.getProfessor().setLastName(profInfoLName.getText());
             tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
             DBManager.updatePersonQuery(tempPerson);
-            }
+        }
 
 
-        System.out.println( "PrfoessorID after being changed, it should be the same" + tempCour.getProfessor().getID());
+        System.out.println("PrfoessorID after being changed, it should be the same" + tempCour.getProfessor().getID());
         courseList.add(tempCour);// later on it should be gone, nothing should not be in courseList manually
         // Everything in coureseList should be get from the DB.
 
@@ -908,23 +900,27 @@ public class Controller {
         icon.setFitWidth(100);
         ComboBox<Course> courseTemplates = new ComboBox();
         setCourseTemplatesCellValue(courseTemplates);
-        //TODO: Course template method
         courseTemplates.getItems().addAll(templateList);
-
         Label currentCBoxLbl = new Label("Course Templates : ");
-
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
-
+        Button deleteBtn = new Button("Delete");
+        deleteBtn.setOnAction(e -> {
+                    deleteCourseTemplate(courseTemplates.getSelectionModel().getSelectedItem());
+                    courseTemplates.getItems().clear();
+                    courseTemplates.getItems().addAll(templateList);
+                }
+        );
         courseTemplates.setOnAction(e -> {
 
 
-            System.out.print(courseTemplates.getSelectionModel().getSelectedItem());
+            courseTemplates.getSelectionModel().getSelectedItem();
         });
         mainAddPane.getChildren().addAll(
-                new HBox(currentCBoxLbl, courseTemplates)
+                new HBox(currentCBoxLbl, courseTemplates),
+                deleteBtn
         );
         mainAddPane.setSpacing(20);
-
+        mainAddPane.setAlignment(Pos.CENTER);
         dlg.setTitle("Assigning Course");
         dlg.setHeaderText("Assigning Course");
 
@@ -958,6 +954,12 @@ public class Controller {
             return null;
         });
 
+
+    }
+
+    private void deleteCourseTemplate(Course selectedCourseTemplate) {
+
+        templateList.remove(selectedCourseTemplate);
 
     }
 
