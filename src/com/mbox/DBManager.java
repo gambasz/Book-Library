@@ -15,6 +15,8 @@ public class DBManager {
     public static Statement stt;
     public static Statement st3;
     public static Statement st4;
+    public static Statement st5;
+
     public static Connection conn;
     public DBManager() {
         //Method is empty for now
@@ -73,6 +75,7 @@ public class DBManager {
             stt=conn.createStatement();
             st3=conn.createStatement();
             st4=conn.createStatement();
+            st5=conn.createStatement();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1138,6 +1141,7 @@ public class DBManager {
         //So you may need to call the function N times with different courseID to get all information stored in table
         Course[] courseArray = new Course[20]; //Will make it a dynamic array list
         ArrayList<Course>  courseList = new ArrayList<>();
+        ResultSet rs5, rsTmp;
 
         int personID = 0, i=0, pID=0, cID = 0;
         int[] pr = new int[20], cr = new int[20];
@@ -1146,7 +1150,6 @@ public class DBManager {
 
         Person personTmp = new Person();
         Resource[] courseResources = new Resource[20];
-
 
         try {
 
@@ -1166,19 +1169,24 @@ public class DBManager {
 
 
             //=======================Finding and creating Persons list teaching that course=============================
+
             i = 0;
-            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
+            rsTmp = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
             //it supposed to get a list of all persons teaching that course. Assuming one person for now.
-            while (rs.next()) {
+            int j =0;
+            while (rsTmp.next()) {
+
                 courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
                 courseList.add(new Course(cID, cTitle, cDepartment, cDescription, "CRN"));
+                System.out.println("THis is the: " + j);
+                j++;
 
-                personID = rs.getInt(2);
-                rs = st.executeQuery(getPersonInTableQuery(personID));
+                personID = rsTmp.getInt(2);
+                rs5 = st5.executeQuery(getPersonInTableQuery(personID));
                 System.out.println("PersonID is: "+personID);
-                while(rs.next()) {
-                    personTmp = new Person(personID, rs.getString(3), rs.getString(4),
-                            rs.getString(2));
+                while (rs5.next()) {
+                    personTmp = new Person(personID, rs5.getString(3), rs5.getString(4),
+                            rs5.getString(2));
 
                     personTmp = setResourcesForPerson(personTmp);
 
@@ -1189,15 +1197,10 @@ public class DBManager {
 
                     i++;
                 }
+                System.out.println("Rad " + j);
 
 
             }
-
-            //=======================Just printing out data=============================================================
-//            System.out.println("Name :" + courseArray[0].getPersonInstance().getFirstName() + " " +
-//                    courseArray[0].getPersonInstance().getLastName() );
-//            System.out.println("Course :" + courseArray[0].getTitle());
-//            System.out.println("Resource :" + courseArray[0].getResourceInstance()[0].getTitle());
 
             return courseList;
 
@@ -1321,7 +1324,8 @@ public class DBManager {
     public static ArrayList<Integer> getCourseIdsBySemesterID(int id){
 
         int i = 0;
-        String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d", id);
+        String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d ORDER BY COURSEID ASC",
+                id);
         ArrayList<Integer> idsList= new ArrayList<Integer>();
 
         try{
@@ -1357,14 +1361,18 @@ public class DBManager {
     public static ArrayList<frontend.data.Course> returnEverything(int semesterid) {
         String[] semester = getSemesterNameByID(semesterid);
         semester[0] = semester[0].toUpperCase();
+        int lastCourseID = 0;
 
-        ArrayList<Integer> arr = getCourseIdsBySemesterID(semesterid);
+        ArrayList<Integer> courseIDs = getCourseIdsBySemesterID(semesterid);
 
         ArrayList<frontend.data.Course> hugeshit2 = new ArrayList<>();
 
-        for(int i = 0; i < arr.size(); i++){
-
-            ArrayList<Course> tmpCourse = DBManager.relationalReadByCourseID(arr.get(i));
+        for(int i = 0; i < courseIDs.size(); i++){
+            if (lastCourseID == courseIDs.get(i)){
+                continue;
+            }
+            ArrayList<Course> tmpCourse = DBManager.relationalReadByCourseID(courseIDs.get(i));
+            lastCourseID = courseIDs.get(i);
 
             for(int j = 0; j < tmpCourse.size(); j++) {
 

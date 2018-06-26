@@ -201,6 +201,10 @@ public class Controller {
 
     }
 
+    public void guido(){
+        System.out.println("Hey");
+    }
+
     public void updateRowSelected() {
         selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
         if (selectedCourse != null) {
