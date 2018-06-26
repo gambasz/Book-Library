@@ -335,8 +335,10 @@ public class Controller {
                 resList.add(r);
 
             }
+            System.out.println("If this is the error, desription:" +pulledDatabase.get(k).getDescription()+pulledDatabase.get(k).getDepartment());
 
         }
+
 
         for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
             if (!profList.contains(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI()))
@@ -449,6 +451,61 @@ public class Controller {
         //needs to show in the gui
 
     }
+
+    public void update() {
+        Person tempPerson = new Person(selectedPerson);
+        courseList.remove(selectedCourse);
+
+        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
+        Course tempCour = new Course(
+                selectedCourse.getID(),
+                tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
+                Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
+                semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+                courseInfoTitle.getText(),
+                courseInfoDepart.getText(),
+                tempPerson, courseInfoDescrip.getText(), tempRes);
+
+
+        System.out.println( "PrfoessorID before changing" + tempCour.getProfessor().getID());
+
+
+        // I create a new object and then check if the information in the boxes are different form
+        // the Selected Course Object, then if there is a difference, I will add a new course/person/...
+        boolean courseChanged = false, professorChanged = false, resourceChanged = false;
+
+        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
+                tempCour.getProfessor().getLastName() != profInfoLName.getText();
+
+        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
+                tempCour.getDepartment() != courseInfoDescrip.getText();
+        System.out.println(tempCour.getTitle() + " and " + courseInfoTitle.getText());
+        System.out.println(tempCour.getDescription() + " and " + courseInfoDescrip.getText());
+        System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
+        //TODO: Check again why the courseChanged keeps turning true @@ Khanh
+        // I don't check type rn. Need to check later with fk.. enum :))
+        if(courseChanged){
+            tempCour.setDepartment(courseInfoDepart.getText());
+            tempCour.setTitle(courseInfoTitle.getText());
+            tempCour.setDescription(courseInfoDescrip.getText());
+            DBManager.updateCourseQuery(tempCour);
+            System.out.println("Fixed this because there is no change");
+        }
+        if (professorChanged ) {
+            tempCour.getProfessor().setFirstName(profInfoFName.getText());
+            tempCour.getProfessor().setLastName(profInfoLName.getText());
+            tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+            DBManager.updatePersonQuery(tempPerson);
+            }
+
+
+        System.out.println( "PrfoessorID after being changed, it should be the same" + tempCour.getProfessor().getID());
+        courseList.add(tempCour);// later on it should be gone, nothing should not be in courseList manually
+        // Everything in coureseList should be get from the DB.
+
+        updateCourseTable();
+    }
+
 
     public void exportData() {
     }
