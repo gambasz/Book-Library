@@ -162,9 +162,9 @@ public class Controller {
     private void initComboBoxes() {
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
-        ArrayList<String> years = new ArrayList<>();
+        ArrayList<Integer> years = new ArrayList<>();
         for (int i = 2017; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
-            years.add("" + i);
+            years.add(i);
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
         profInfoType.getItems().addAll(PersonType.values());
@@ -670,7 +670,7 @@ public class Controller {
         addGraphicToButtons(new ImageView(deleteIconImg), delete);
         Button update = new Button();
         addGraphicToButtons(new ImageView(updateIconImg), update);
-        Button autoFillBtn = new Button("Auto Fill");
+        Button autoFillBtn = new Button("Auto Fill ");
 
         autoFillBtn.setOnAction(e -> {
             selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
