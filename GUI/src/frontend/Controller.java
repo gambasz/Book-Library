@@ -568,7 +568,7 @@ public class Controller {
 
     }
 
-    private void selectPublisher() {
+    private void selectPublisher(Button publisherBtn) {
         Dialog dlg = new Dialog();
         dlg.setTitle("Select Resource");
         dlg.setHeaderText("Select Resource");
@@ -591,7 +591,7 @@ public class Controller {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
-        publishersCB.setOnMouseClicked(e -> {
+        publishersCB.setOnAction(e -> {
             if (publishersCB.getSelectionModel().getSelectedItem() != null) {
                 Publisher tempPub = (Publisher) publishersCB.getSelectionModel().getSelectedItem();
                 nameTF.setText(tempPub.getName());
@@ -629,6 +629,9 @@ public class Controller {
 
 
         dlg.show();
+        dlg.setOnCloseRequest(e->{
+            publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
+        });
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
@@ -689,8 +692,7 @@ public class Controller {
 
 
         publisherBtn.setOnAction(e -> {
-            selectPublisher();
-            publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
+            selectPublisher(publisherBtn);
         });
         resourceTable.setOnMouseClicked(e -> {
             onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
