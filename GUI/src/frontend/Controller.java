@@ -678,41 +678,13 @@ public class Controller {
         });
 
         addNAssignNewResource.setOnAction(e -> {
-            Publisher tempPub = selectedPublisher;
-            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                    titleTF.getText(),
-                    authorTF.getText(),
-                    descriptionTF.getText(),
-                    false,
-                    Integer.parseInt(totalAmTF.getText()),
-                    Integer.parseInt(idTF.getText()),
-                    Integer.parseInt(currentAmTF.getText()),
-                    selectedPublisher
-            );
-            resList.add(temp);
-            resourceTable.getItems().clear();
-            resourceTable.getItems().addAll(resList);
-            selectedPublisher = tempPub;
-
-
+            addAndAssginNewResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
         delete.setOnAction(e -> {
-            ArrayList<Resource> temp = new ArrayList<>();
-            temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
-            for (Resource r : temp) {
-                resList.remove(r);
-                resourceTable.getItems().remove(r);
-                for (Course c : courseList) {
-                    c.getResource().remove(r);
-                }
-
-            }
-            updateCourseTable();
-            resInfoList.getItems().clear();
-            resInfoList.getItems().addAll(resList);
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            deleteResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, delete, update);
         });
         update.setOnAction(e -> {
+            updateResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
         HBox buttons = new HBox(addNAssignNewResource, update, delete);
 
@@ -752,6 +724,44 @@ public class Controller {
         resourceEditPane.setSpacing(20);
 
         return resourceEditPane;
+    }
+
+    private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+    }
+
+    private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
+        ArrayList<Resource> temp = new ArrayList<>();
+        temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
+        for (Resource r : temp) {
+            resList.remove(r);
+            resourceTable.getItems().remove(r);
+            for (Course c : courseList) {
+                c.getResource().remove(r);
+            }
+
+        }
+        updateCourseTable();
+        resInfoList.getItems().clear();
+        resInfoList.getItems().addAll(resList);
+        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+    }
+
+    private void addAndAssginNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+        Publisher tempPub = selectedPublisher;
+        Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                titleTF.getText(),
+                authorTF.getText(),
+                descriptionTF.getText(),
+                false,
+                Integer.parseInt(totalAmTF.getText()),
+                Integer.parseInt(idTF.getText()),
+                Integer.parseInt(currentAmTF.getText()),
+                selectedPublisher
+        );
+        resList.add(temp);
+        resourceTable.getItems().clear();
+        resourceTable.getItems().addAll(resList);
+        selectedPublisher = tempPub;
     }
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
