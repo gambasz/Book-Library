@@ -494,18 +494,34 @@ public class DBManager {
     public static int insertPersonQuery(frontend.data.Person person) {
         ResultSet rs; int id = 0;
 
-        String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
-                person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
-        try {
-            st.executeQuery(query);
-            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' OR LASTNAME='s'",
-                    person.getFirstName(), person.getLastName());
-            rs = st.executeQuery(query2);
-            while(rs.next()){
 
-                id = (rs.getInt(1));
+        try {
+            rs = st5.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' AND LASTNAME='%s' AND TYPE='%s'",
+                    person.getFirstName(), person.getLastName(), person.getType()));
+
+            while(rs.next()){
+                // Check if there is repetitive data in the db
+
+                if( person.getFirstName() == rs.getString(3)){
+                    return rs.getInt(1);
+                }
+                else{
+
+                    String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
+                            person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
+                    st.executeQuery(query);
+                    String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' OR LASTNAME='%s'",
+                            person.getFirstName(), person.getLastName());
+                    rs = st.executeQuery(query2);
+                    while(rs.next()){
+
+                        id = (rs.getInt(1));
+                    }
+                    return id;
+                }
             }
-            return id;
+
+
 
         }
         catch (SQLException err){
