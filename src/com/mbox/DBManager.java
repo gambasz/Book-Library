@@ -1884,10 +1884,6 @@ public class DBManager {
 
         try {
 
-            // get all the courses professor teaches.
-            // delete the exact amount for every different course
-            // execute the rest
-
             Statement st = conn.createStatement();
             Statement ops = conn.createStatement();
             ResultSet kq;
@@ -1911,32 +1907,13 @@ public class DBManager {
                 }
 
             }
-//
-//            int previousone = 0;
-//            int thisone = 0;
-//            int i = 0;
-//
-//            while(list_of_course_ids.size() > i) {
-//
-//                thisone = list_of_course_ids.get(i);
-//
-//                if(i > 1){
-//
-//                    previousone = list_of_course_ids.get(i-1);
-//                }
-//
-//                if (thisone == previousone) {
-//
-//                    counter++;
-//
-//                }else {
-//
-//                    counter = 1;
-//                }
-//
-//                count_of_course_ids.add(counter);
-//                i++;
-//            }
+
+            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d" ,
+                    person.getID()));
+            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d" ,
+                    person.getID()));
+            executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", person.getID()));
+
         }
             catch (SQLException err){
             System.out.println(err);
