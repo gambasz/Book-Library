@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -75,7 +74,7 @@ public class Controller {
      */
     public static void test() {
         System.out.print("TEST WORKED");
-    }
+        showError("1","5","2");    }
 
     @FXML
     public void initialize() {
@@ -678,7 +677,7 @@ public class Controller {
         });
 
         addNAssignNewResource.setOnAction(e -> {
-            addAndAssginNewResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
+            addAndAssignNewResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
         delete.setOnAction(e -> {
             deleteResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, delete, update);
@@ -702,10 +701,10 @@ public class Controller {
         });
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
-        HBox hiddenSpacer = new HBox(new Separator(),new Separator(),new Separator(),new Separator(),new Separator(),new Separator(),new Separator());
+        HBox hiddenSpacer = new HBox(new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator());
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB,hiddenSpacer,autoFillBtn),
+                new HBox(type, typeCB, hiddenSpacer, autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -746,7 +745,7 @@ public class Controller {
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
     }
 
-    private void addAndAssginNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+    private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                 titleTF.getText(),
@@ -1072,4 +1071,12 @@ public class Controller {
         });
     }
 
+    protected static void showError(String title,String headerMessage,String errorMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(errorMessage);
+
+        alert.showAndWait();
+    }
 }
