@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -195,7 +196,7 @@ public class Controller {
 
     }
 
-    public void guido(){
+    public void guido() {
         System.out.println("Hey");
     }
 
@@ -284,7 +285,7 @@ public class Controller {
             int id = DBManager.insertPersonQuery(tempPerosn);
             tempCour.getProfessor().setID(id);
         }
-        if(courseChanged){
+        if (courseChanged) {
             System.out.println(courseInfoDepart.getText());
             System.out.println(courseInfoDescrip.getText());
 
@@ -479,13 +480,13 @@ public class Controller {
         // the Selected Course Object, then if there is a difference, I will add a new course/person/...
         boolean courseChanged = false, professorChanged = false, resourceChanged = false;
 
-        if(tempPerson.getFirstName().equals(profInfoFName.getText()) &&
-                tempPerson.getLastName().equals(profInfoLName.getText())){
+        if (tempPerson.getFirstName().equals(profInfoFName.getText()) &&
+                tempPerson.getLastName().equals(profInfoLName.getText())) {
 
             professorChanged = false;
             System.out.println(professorChanged);
 
-        }else{
+        } else {
             professorChanged = true;
             System.out.println(professorChanged);
             System.out.println("=======================");
@@ -497,14 +498,14 @@ public class Controller {
             System.out.println("=======================");
         }
 
-        if(tempCour.getTitle().equals(courseInfoTitle.getText()) &&
+        if (tempCour.getTitle().equals(courseInfoTitle.getText()) &&
                 tempCour.getDescription().equals(courseInfoDepart.getText()) &&
-                tempCour.getDepartment().equals(courseInfoDescrip.getText())){
+                tempCour.getDepartment().equals(courseInfoDescrip.getText())) {
 
             courseChanged = false;
             System.out.println(courseChanged);
 
-        }else{
+        } else {
             courseChanged = true;
             System.out.println(courseChanged);
             System.out.println("=======================");
@@ -518,7 +519,6 @@ public class Controller {
             System.out.println(courseInfoDescrip.getText());
             System.out.println("=======================");
         }
-
 
 
 //        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
@@ -676,6 +676,7 @@ public class Controller {
             selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
+
         addNAssignNewResource.setOnAction(e -> {
             Publisher tempPub = selectedPublisher;
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
@@ -728,8 +729,11 @@ public class Controller {
 
         });
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
+        HBox hiddenSpacer = new HBox(new Separator(),new Separator(),new Separator(),new Separator(),new Separator(),new Separator(),new Separator());
+        hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB, autoFillBtn),
+                new HBox(type, typeCB,hiddenSpacer,autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -742,7 +746,6 @@ public class Controller {
 
         for (Node box : resourceEditPane.getChildren()) {
             ((HBox) box).setAlignment(Pos.CENTER_LEFT);
-
         }
         resourceEditPane.getChildren().add(buttons);
         resourceEditPane.setAlignment(Pos.CENTER);
