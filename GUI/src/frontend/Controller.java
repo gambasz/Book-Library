@@ -273,8 +273,8 @@ public class Controller {
 
         professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
                 tempCour.getProfessor().getLastName() != profInfoLName.getText();
-//        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
-//                tempCour.getDepartment() != courseInfoDescrip.getText();
+        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
+                tempCour.getDepartment() != courseInfoDescrip.getText();
         // I don't check type rn. Need to check later with fk.. enum :))
 
         if (professorChanged) {
@@ -285,10 +285,15 @@ public class Controller {
             tempCour.getProfessor().setID(id);
         }
         if(courseChanged){
+            System.out.println(courseInfoDepart.getText());
+            System.out.println(courseInfoDescrip.getText());
+
             tempCour.setDepartment(courseInfoDepart.getText());
             tempCour.setTitle(courseInfoTitle.getText());
             tempCour.setDescription(courseInfoDescrip.getText());
-            DBManager.insertCourseQuery(tempCour);
+            int cID = DBManager.insertCourseQuery(tempCour);
+            System.out.println("Course ID is: " + tempCour.getID()+"  Should be: " + cID);
+            tempCour.setID(cID);
             System.out.println("New Course Added");
         }
 

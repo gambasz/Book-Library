@@ -8,6 +8,7 @@ import jdk.management.resource.ResourceContext;
 import jdk.management.resource.ResourceId;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import java.io.*;
+import javax.sound.midi.SysexMessage;
 import javax.xml.transform.Result;
 
 public class DBManager {
@@ -502,9 +503,10 @@ public class DBManager {
 
             while(rs.next()) {
                 // Check if there is repetitive data in the db
-                if (person.getFirstName() == rs.getString(3)) {
-                    return rs.getInt(1);
-                }
+                return rs.getInt(1);
+//                if (person.getFirstName() == rs.getString(3)) {
+//                    return rs.getInt(1);
+//                }
             }
                     String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
                             person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
@@ -538,16 +540,18 @@ public class DBManager {
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
         String[] cSplit = course.getTitle().split(" ");
+        System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
         try {
 
-            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' and CNUMBER = '%s' and DESCRIPTION",
+            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s' AND DESCRIPTION = '%s'",
                     cSplit[0], cSplit[1], course.getDescription());
+            System.out.println(query2);
             rs = st.executeQuery(query2);
             while (rs.next()) {
-                boolean same = course.getTitle() == String.format(rs.getString(2)+" "+rs.getString(3)) &&
-                        course.getDescription() == rs.getString(4) &&
-                        course.getDepartment() == rs.getString(5);
-                if (same)
+//                boolean same = course.getTitle() == String.format(rs.getString(2)+" "+rs.getString(3)) &&
+//                        course.getDescription() == rs.getString(4) &&
+//                        course.getDepartment() == rs.getString(5);
+//                if (same)
                 id = (rs.getInt(1));
                 return id;
             }
@@ -557,19 +561,21 @@ public class DBManager {
 
 
                 st.executeQuery(query);
-                 query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' and CNUMBER = '%s' and DESCRIPTION",
+                 query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s' AND DESCRIPTION = '%s'",
                         cSplit[0], cSplit[1], course.getDescription());
                 rs = st.executeQuery(query2);
                 while (rs.next()) {
 
                     id = (rs.getInt(1));
                 }
+                System.out.println("ID dar akharin marhale hast: "+id);
                 return id;
 
 
         }
         catch (SQLException err){
-        System.out.println(err);}
+        System.out.println(err);
+        err.printStackTrace();}
         return 0;
 }
 
