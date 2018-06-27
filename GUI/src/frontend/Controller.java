@@ -264,7 +264,7 @@ public class Controller {
                 courseInfoDepart.getText(),
                 tempPerosn, courseInfoDescrip.getText(), tempRes);
 
-        System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
+        //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
 
         // I create a new object and then check if the information in the boxes are different form
@@ -292,7 +292,7 @@ public class Controller {
             tempCour.setTitle(courseInfoTitle.getText());
             tempCour.setDescription(courseInfoDescrip.getText());
             int cID = DBManager.insertCourseQuery(tempCour);
-            System.out.println("Course ID is: " + tempCour.getID()+"  Should be: " + cID);
+            //System.out.println("Course ID is: " + tempCour.getID()+"  Should be: " + cID);
             tempCour.setID(cID);
             System.out.println("New Course Added");
         }
