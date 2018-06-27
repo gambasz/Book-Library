@@ -74,8 +74,10 @@ public class Controller {
      */
     public static void test() {
         System.out.print("TEST WORKED");
-        showError("1","5","2");    }
-
+    }
+    public void guido() {
+        System.out.println("Hey");
+    }
     @FXML
     public void initialize() {
         courseList = new ArrayList<>();
@@ -194,11 +196,6 @@ public class Controller {
         updateCourseTable();
 
     }
-
-    public void guido() {
-        System.out.println("Hey");
-    }
-
     public void updateRowSelected() {
         selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
         if (selectedCourse != null) {
