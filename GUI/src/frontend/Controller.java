@@ -468,10 +468,9 @@ public class Controller {
                 tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
                 Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-                courseInfoTitle.getText(),
-                courseInfoDepart.getText(),
-                tempPerson, courseInfoDescrip.getText(), tempRes);
-
+                selectedCourse.getTitle(),
+                selectedCourse.getDepartment(),
+                tempPerson, selectedCourse.getDescription(), tempRes);
 
         System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -480,11 +479,54 @@ public class Controller {
         // the Selected Course Object, then if there is a difference, I will add a new course/person/...
         boolean courseChanged = false, professorChanged = false, resourceChanged = false;
 
-        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
-                tempCour.getProfessor().getLastName() != profInfoLName.getText();
+        if(tempPerson.getFirstName().equals(profInfoFName.getText()) &&
+                tempPerson.getLastName().equals(profInfoLName.getText())){
 
-        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
-                tempCour.getDepartment() != courseInfoDescrip.getText();
+            professorChanged = false;
+            System.out.println(professorChanged);
+
+        }else{
+            professorChanged = true;
+            System.out.println(professorChanged);
+            System.out.println("=======================");
+            System.out.println(tempPerson.getFirstName());
+            System.out.println(profInfoFName.getText());
+            System.out.println("=======================");
+            System.out.println(tempPerson.getLastName());
+            System.out.println(profInfoLName.getText());
+            System.out.println("=======================");
+        }
+
+        if(tempCour.getTitle().equals(courseInfoTitle.getText()) &&
+                tempCour.getDescription().equals(courseInfoDepart.getText()) &&
+                tempCour.getDepartment().equals(courseInfoDescrip.getText())){
+
+            courseChanged = false;
+            System.out.println(courseChanged);
+
+        }else{
+            courseChanged = true;
+            System.out.println(courseChanged);
+            System.out.println("=======================");
+            System.out.println(tempCour.getTitle());
+            System.out.println(courseInfoTitle.getText());
+            System.out.println("=======================");
+            System.out.println(tempCour.getDescription());
+            System.out.println(courseInfoDepart.getText());
+            System.out.println("=======================");
+            System.out.println(tempCour.getDepartment());
+            System.out.println(courseInfoDescrip.getText());
+            System.out.println("=======================");
+        }
+
+
+
+//        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
+//                tempCour.getProfessor().getLastName() != profInfoLName.getText();
+//
+//        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
+//                tempCour.getDepartment() != courseInfoDescrip.getText();
+
         System.out.println(tempCour.getTitle() + " and " + courseInfoTitle.getText());
         System.out.println(tempCour.getDescription() + " and " + courseInfoDescrip.getText());
         System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
