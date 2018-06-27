@@ -544,6 +544,7 @@ public class DBManager {
 
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
+        course.setTitle(course.getTitle().toUpperCase());
         String[] cSplit = course.getTitle().split(" ");
         System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
         try {
