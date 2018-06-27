@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -161,9 +162,9 @@ public class Controller {
     private void initComboBoxes() {
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
-        ArrayList<String> years = new ArrayList<>();
+        ArrayList<Integer> years = new ArrayList<>();
         for (int i = 2017; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
-            years.add("" + i);
+            years.add(i);
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
         profInfoType.getItems().addAll(PersonType.values());
@@ -195,7 +196,7 @@ public class Controller {
 
     }
 
-    public void guido(){
+    public void guido() {
         System.out.println("Hey");
     }
 
@@ -284,7 +285,7 @@ public class Controller {
             int id = DBManager.insertPersonQuery(tempPerosn);
             tempCour.getProfessor().setID(id);
         }
-        if(courseChanged){
+        if (courseChanged) {
             System.out.println(courseInfoDepart.getText());
             System.out.println(courseInfoDescrip.getText());
 
@@ -485,29 +486,28 @@ public class Controller {
         // the Selected Course Object, then if there is a difference, I will add a new course/person/...
         boolean courseChanged = false, professorChanged = false, resourceChanged = false;
 
-        if(tempPerson.getFirstName().equals(profInfoFName.getText()) &&
-                tempPerson.getLastName().equals(profInfoLName.getText())){
+        if (tempPerson.getFirstName().equals(profInfoFName.getText()) &&
+                tempPerson.getLastName().equals(profInfoLName.getText())) {
 
             professorChanged = false;
             System.out.println(professorChanged);
 
-        }else{
+        } else {
             professorChanged = true;
             System.out.println(professorChanged);
         }
 
-        if(tempCour.getTitle().equals(courseInfoTitle.getText()) &&
+        if (tempCour.getTitle().equals(courseInfoTitle.getText()) &&
                 tempCour.getDescription().equals(courseInfoDepart.getText()) &&
-                tempCour.getDepartment().equals(courseInfoDescrip.getText())){
+                tempCour.getDepartment().equals(courseInfoDescrip.getText())) {
 
             courseChanged = false;
             System.out.println(courseChanged);
 
-        }else{
+        } else {
             courseChanged = true;
             System.out.println(courseChanged);
         }
-
 
 
 //        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
@@ -661,48 +661,21 @@ public class Controller {
         addGraphicToButtons(new ImageView(deleteIconImg), delete);
         Button update = new Button();
         addGraphicToButtons(new ImageView(updateIconImg), update);
-        Button autoFillBtn = new Button("Auto Fill");
+        Button autoFillBtn = new Button("Auto Fill ");
 
         autoFillBtn.setOnAction(e -> {
             selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
+
         addNAssignNewResource.setOnAction(e -> {
-            Publisher tempPub = selectedPublisher;
-            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                    titleTF.getText(),
-                    authorTF.getText(),
-                    descriptionTF.getText(),
-                    false,
-                    Integer.parseInt(totalAmTF.getText()),
-                    Integer.parseInt(idTF.getText()),
-                    Integer.parseInt(currentAmTF.getText()),
-                    selectedPublisher
-            );
-            resList.add(temp);
-            resourceTable.getItems().clear();
-            resourceTable.getItems().addAll(resList);
-            selectedPublisher = tempPub;
-
-
+            addAndAssginNewResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
         delete.setOnAction(e -> {
-            ArrayList<Resource> temp = new ArrayList<>();
-            temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
-            for (Resource r : temp) {
-                resList.remove(r);
-                resourceTable.getItems().remove(r);
-                for (Course c : courseList) {
-                    c.getResource().remove(r);
-                }
-
-            }
-            updateCourseTable();
-            resInfoList.getItems().clear();
-            resInfoList.getItems().addAll(resList);
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            deleteResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, delete, update);
         });
         update.setOnAction(e -> {
+            updateResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
         HBox buttons = new HBox(addNAssignNewResource, update, delete);
 
@@ -719,8 +692,11 @@ public class Controller {
 
         });
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
+        HBox hiddenSpacer = new HBox(new Separator(),new Separator(),new Separator(),new Separator(),new Separator(),new Separator(),new Separator());
+        hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB, autoFillBtn),
+                new HBox(type, typeCB,hiddenSpacer,autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -733,13 +709,50 @@ public class Controller {
 
         for (Node box : resourceEditPane.getChildren()) {
             ((HBox) box).setAlignment(Pos.CENTER_LEFT);
-
         }
         resourceEditPane.getChildren().add(buttons);
         resourceEditPane.setAlignment(Pos.CENTER);
         resourceEditPane.setSpacing(20);
 
         return resourceEditPane;
+    }
+
+    private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+    }
+
+    private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
+        ArrayList<Resource> temp = new ArrayList<>();
+        temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
+        for (Resource r : temp) {
+            resList.remove(r);
+            resourceTable.getItems().remove(r);
+            for (Course c : courseList) {
+                c.getResource().remove(r);
+            }
+
+        }
+        updateCourseTable();
+        resInfoList.getItems().clear();
+        resInfoList.getItems().addAll(resList);
+        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+    }
+
+    private void addAndAssginNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+        Publisher tempPub = selectedPublisher;
+        Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                titleTF.getText(),
+                authorTF.getText(),
+                descriptionTF.getText(),
+                false,
+                Integer.parseInt(totalAmTF.getText()),
+                Integer.parseInt(idTF.getText()),
+                Integer.parseInt(currentAmTF.getText()),
+                selectedPublisher
+        );
+        resList.add(temp);
+        resourceTable.getItems().clear();
+        resourceTable.getItems().addAll(resList);
+        selectedPublisher = tempPub;
     }
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
