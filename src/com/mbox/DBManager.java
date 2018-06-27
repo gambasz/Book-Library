@@ -493,20 +493,19 @@ public class DBManager {
 
     public static int insertPersonQuery(frontend.data.Person person) {
         ResultSet rs; int id = 0;
+        //boolean exit = false;
 
 
         try {
             rs = st5.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' AND LASTNAME='%s' AND TYPE='%s'",
                     person.getFirstName(), person.getLastName(), person.getType()));
 
-            while(rs.next()){
+            while(rs.next()) {
                 // Check if there is repetitive data in the db
-
-                if( person.getFirstName() == rs.getString(3)){
+                if (person.getFirstName() == rs.getString(3)) {
                     return rs.getInt(1);
                 }
-                else{
-
+            }
                     String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
                             person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
                     st.executeQuery(query);
@@ -518,12 +517,11 @@ public class DBManager {
                         id = (rs.getInt(1));
                     }
                     return id;
-                }
+
             }
 
 
 
-        }
         catch (SQLException err){
             System.out.println(err);}
             return 0;
@@ -540,23 +538,36 @@ public class DBManager {
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
         String[] cSplit = course.getTitle().split(" ");
-
-        String query = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
-                        "('%s', '%s', '%s', '%s')", cSplit[0], cSplit[1], course.getDescription(),
-            course.getDepartment());
-
         try {
-        st.executeQuery(query);
-        String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' and CNUMBER = '%s' and DESCRIPTION",
-                cSplit[0], cSplit[1], course.getDescription());
-        rs = st.executeQuery(query2);
-        while(rs.next()){
 
-            id = (rs.getInt(1));
+            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' and CNUMBER = '%s' and DESCRIPTION",
+                    cSplit[0], cSplit[1], course.getDescription());
+            rs = st.executeQuery(query2);
+            while (rs.next()) {
+                boolean same = course.getTitle() == String.format(rs.getString(2)+" "+rs.getString(3)) &&
+                        course.getDescription() == rs.getString(4) &&
+                        course.getDepartment() == rs.getString(5);
+                if (same)
+                id = (rs.getInt(1));
+                return id;
+            }
+                String query = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
+                                "('%s', '%s', '%s', '%s')", cSplit[0], cSplit[1], course.getDescription(),
+                        course.getDepartment());
+
+
+                st.executeQuery(query);
+                 query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' and CNUMBER = '%s' and DESCRIPTION",
+                        cSplit[0], cSplit[1], course.getDescription());
+                rs = st.executeQuery(query2);
+                while (rs.next()) {
+
+                    id = (rs.getInt(1));
+                }
+                return id;
+
+
         }
-        return id;
-
-    }
         catch (SQLException err){
         System.out.println(err);}
         return 0;

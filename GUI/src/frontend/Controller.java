@@ -284,13 +284,13 @@ public class Controller {
             int id = DBManager.insertPersonQuery(tempPerosn);
             tempCour.getProfessor().setID(id);
         }
-//        if(courseChanged){
-//            tempCour.setDepartment(courseInfoDepart.getText());
-//            tempCour.setTitle(courseInfoTitle.getText());
-//            tempCour.setDescription(courseInfoDescrip.getText());
-//            DBManager.insertCourseQuery(tempCour);
-//            System.out.println("New Course Added");
-//        }
+        if(courseChanged){
+            tempCour.setDepartment(courseInfoDepart.getText());
+            tempCour.setTitle(courseInfoTitle.getText());
+            tempCour.setDescription(courseInfoDescrip.getText());
+            DBManager.insertCourseQuery(tempCour);
+            System.out.println("New Course Added");
+        }
 
 
         System.out.println("PrfoessorID before adding" + tempCour.getProfessor().getID());
