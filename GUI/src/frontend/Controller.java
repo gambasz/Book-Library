@@ -453,12 +453,18 @@ public class Controller {
 
     public void delete() {
 
-        DBManager.delete_relation_course(selectedCourse);
+        //System.out.println(selectedCourse.toString());
+        //DBManager.delete_relation_course(selectedCourse);
+        updateCourseTable();
         //needs to show in the gui
 
     }
 
     public void update() {
+
+        //(ga) flipped getDescription() and getDepartment() when creating tempCour. For some reason they are the other
+        // way around. Temporary fix.
+
         Person tempPerson = new Person(selectedPerson);
         courseList.remove(selectedCourse);
 
@@ -469,8 +475,8 @@ public class Controller {
                 Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 selectedCourse.getTitle(),
-                selectedCourse.getDepartment(),
-                tempPerson, selectedCourse.getDescription(), tempRes);
+                selectedCourse.getDescription(),
+                tempPerson, selectedCourse.getDepartment(), tempRes);
 
         System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -488,13 +494,6 @@ public class Controller {
         }else{
             professorChanged = true;
             System.out.println(professorChanged);
-            System.out.println("=======================");
-            System.out.println(tempPerson.getFirstName());
-            System.out.println(profInfoFName.getText());
-            System.out.println("=======================");
-            System.out.println(tempPerson.getLastName());
-            System.out.println(profInfoLName.getText());
-            System.out.println("=======================");
         }
 
         if(tempCour.getTitle().equals(courseInfoTitle.getText()) &&
@@ -507,16 +506,6 @@ public class Controller {
         }else{
             courseChanged = true;
             System.out.println(courseChanged);
-            System.out.println("=======================");
-            System.out.println(tempCour.getTitle());
-            System.out.println(courseInfoTitle.getText());
-            System.out.println("=======================");
-            System.out.println(tempCour.getDescription());
-            System.out.println(courseInfoDepart.getText());
-            System.out.println("=======================");
-            System.out.println(tempCour.getDepartment());
-            System.out.println(courseInfoDescrip.getText());
-            System.out.println("=======================");
         }
 
 
@@ -527,11 +516,13 @@ public class Controller {
 //        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
 //                tempCour.getDepartment() != courseInfoDescrip.getText();
 
-        System.out.println(tempCour.getTitle() + " and " + courseInfoTitle.getText());
-        System.out.println(tempCour.getDescription() + " and " + courseInfoDescrip.getText());
-        System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
+//        System.out.println(tempCour.getTitle() + " and " + courseInfoTitle.getText());
+//        System.out.println(tempCour.getDescription() + " and " + courseInfoDescrip.getText());
+//        System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
+
         //TODO: Check again why the courseChanged keeps turning true @@ Khanh
         // I don't check type rn. Need to check later with fk.. enum :))
+
         if (courseChanged) {
             tempCour.setDepartment(courseInfoDepart.getText());
             tempCour.setTitle(courseInfoTitle.getText());
