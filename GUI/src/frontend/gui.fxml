@@ -261,7 +261,10 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <Button fx:id="filterBtn" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#filterTableBasedOnSemesterNYear" text="Filter" />
+                              <Button fx:id="filterBtn" alignment="CENTER" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#filterTableBasedOnSemesterNYear" text="Filter">
+                                 <HBox.margin>
+                                    <Insets top="20.0" />
+                                 </HBox.margin></Button>
                            </children>
                            <opaqueInsets>
                               <Insets />
