@@ -540,12 +540,12 @@ public class DBManager {
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
         String[] cSplit = course.getTitle().split(" ");
-        System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
+        //System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
         try {
 
             String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s' AND DESCRIPTION = '%s'",
                     cSplit[0], cSplit[1], course.getDescription());
-            System.out.println(query2);
+            //System.out.println(query2);
             rs = st.executeQuery(query2);
             while (rs.next()) {
 //                boolean same = course.getTitle() == String.format(rs.getString(2)+" "+rs.getString(3)) &&
@@ -568,7 +568,7 @@ public class DBManager {
 
                     id = (rs.getInt(1));
                 }
-                System.out.println("ID dar akharin marhale hast: "+id);
+                //System.out.println("ID dar akharin marhale hast: "+id);
                 return id;
 
 
