@@ -495,6 +495,11 @@ public class DBManager {
     public static int insertPersonQuery(frontend.data.Person person) {
         ResultSet rs; int id = 0;
         //boolean exit = false;
+        person.setFirstName(person.getFirstName().toLowerCase());
+        person.setFirstName(person.getFirstName().substring(0,1).toUpperCase() + person.getFirstName().substring(1));
+
+        person.setLastName(person.getLastName().toLowerCase());
+        person.setLastName(person.getLastName().substring(0,1).toUpperCase() + person.getLastName().substring(1));
 
 
         try {
@@ -540,7 +545,7 @@ public class DBManager {
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
         String[] cSplit = course.getTitle().split(" ");
-        //System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
+        System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
         try {
 
             String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s' AND DESCRIPTION = '%s'",
@@ -1243,7 +1248,7 @@ public class DBManager {
 
             while(rs.next()) {
 
-                cTitle = rs.getString(2) + rs.getString(3);
+                cTitle = rs.getString(2) +" " + rs.getString(3);
                 cID = rs.getInt(1);
                 cDescription = rs.getString(4);
                 cDepartment = rs.getString(5);
