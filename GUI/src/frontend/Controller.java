@@ -894,7 +894,7 @@ public class Controller {
     }
 
     private void deleteProfessor(Person selectedPerson) {
-        //DBManager.delete_person(selectedPerson);
+        DBManager.deletePerson(selectedPerson);
         profList.remove(selectedPerson);
 
     }
