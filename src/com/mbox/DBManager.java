@@ -1144,37 +1144,43 @@ public class DBManager {
 
 
 
-    public static Resource[] findResourcesCourse(int courseID)
+    public static ArrayList<Resource> findResourcesCourse(int courseID)
     {
 
         ResultSet rs;
         int resourceID=0;
         int i = 0;
         Resource[] resourcesList = new Resource[20];
-
+        ArrayList<Resource> listResources = new ArrayList<Resource>();
 
         try {
 
         rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
+        //here all have a result set of all resources for courdeID
 
         while (rs.next()) {
             resourceID = rs.getInt(2);
-            rs = st.executeQuery(getResourceInTableQuery(resourceID));
-            //System.out.println("lol");
+            ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
 
-            while(rs.next()) {
+            while(rss.next()) {
                 System.out.println("");
                 // ID, Type, Title, Author, ISBN, total, current, desc
-                resourcesList[i] = new Resource(rs.getInt(1), rs.getString(2),
-                        rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), rs.getInt(7), rs.getString(8));
+                resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
+                        rss.getString(3), rss.getString(4), rss.getString(5),
+                        rss.getInt(6), rss.getInt(7), rss.getString(8));
+                listResources.add(new Resource(rss.getInt(1), rss.getString(2),
+                        rss.getString(3), rss.getString(4), rss.getString(5),
+                        rss.getInt(6), rss.getInt(7), rss.getString(8)));
                 setPublisherForResource(resourcesList[i]);
+                setPublisherForResource(listResources.get(i));
+
                 i++;
             }
 
         }
 
-            return resourcesList;
+            //return resourcesList;
+        return listResources;
         }
         catch (SQLException err){
             System.out.println(err);
@@ -1239,7 +1245,8 @@ public class DBManager {
         String cTitle = "", cDescription="", cDepartment="";
 
         Person personTmp = new Person();
-        Resource[] courseResources = new Resource[20];
+        //Resource[] courseResources = new Resource[20];
+        ArrayList<Resource> courseResources = new ArrayList<Resource>();
 
         try {
 
@@ -1282,9 +1289,10 @@ public class DBManager {
                     personTmp = setResourcesForPerson(personTmp);
 
                     courseArray[i].setPersonInstance(personTmp);
-                    courseArray[i].setResourceInstance(courseResources);
+                    //courseArray[i].setResourceInstance(courseResources);
+                    courseArray[i].setResourceInstances(courseResources);
                     courseList.get(i).setPersonInstance(personTmp);
-                    courseList.get(i).setResourceInstance(courseResources);
+                    courseList.get(i).setResourceInstances(courseResources);
 
                     i++;
                 }

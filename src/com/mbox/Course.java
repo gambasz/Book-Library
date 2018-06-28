@@ -67,7 +67,14 @@ public class Course {
 
     public frontend.data.Course initCourseGUI(String year, String semester){
         ArrayList <frontend.data.Resource> tmpResource = new ArrayList<frontend.data.Resource>();
-        tmpResource.add(this.resourceInstance[0].initResourceGUI());
+
+        //A method to convert resource arraylist to GUI resource array list
+        for (int i=0; i<this.resourceInstances.size(); i++ ){
+
+            tmpResource.add(this.resourceInstances.get(i).initResourceGUI());
+        }
+
+        //tmpResource.add(this.resourceInstance[0].initResourceGUI());
         year = "2018"; semester = "FALL";
 
 
