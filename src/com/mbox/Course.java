@@ -9,6 +9,7 @@ public class Course {
     private String title, crn, description, department;
     private Person personInstance;
     private Resource resourceInstance[];
+    private ArrayList<Resource> resourceInstances;
 
     public Course(){
 
@@ -117,6 +118,9 @@ public class Course {
         this.resourceInstance = resourceInst;
     }
 
+    public void setResourceInstances(ArrayList<Resource> resourceInstances){
+        this.resourceInstances = resourceInstances;
+    }
     public int getID(){
 
         return this.id;
@@ -150,6 +154,9 @@ public class Course {
     public Resource[] getResourceInstance(){
 
         return this.resourceInstance;
+    }
+    public ArrayList<Resource> getResourceInstances(){
+        return this.resourceInstances;
     }
 
     @Override
