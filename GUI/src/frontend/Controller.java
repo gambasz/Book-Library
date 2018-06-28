@@ -262,7 +262,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                selectedPerson, courseInfoDescrip.getText(), tempRes);
+                selectedPerson, courseInfoDescrip.getText(), selectedCourse.getResource());
 
         //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
