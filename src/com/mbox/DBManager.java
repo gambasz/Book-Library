@@ -1712,10 +1712,11 @@ public class DBManager {
                 System.out.println(person.initPersonGUI().toString());
                 //Restrict search by name with semester, haven’t test yet
 
-
+                //Need to fix the semester
                 for(int c=0;c<courseSemesterList.size();c++){
                     if(tempCourse.getID() == courseSemesterList.get(c).getID()
-                            && tempCourse.getProfessor().getID() == courseSemesterList.get(c).getProfessor().getID()){
+                            && tempCourse.getProfessor().getID() == courseSemesterList.get(c).getProfessor().getID()
+                            ){
                         tempCourse.setSEMESTER(semester);
                         tempCourse.setYEAR(Integer.parseInt(year));
                         arr.add(tempCourse);
