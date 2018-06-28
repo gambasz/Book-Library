@@ -193,7 +193,7 @@ public class Controller {
 
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
-        courseList = DBManager.searchByNameCourseList(fName, lName,semester,year);
+        courseList = DBManager.searchByNameCourseList(fName, lName, semester, year);
         System.out.println(courseList.size());
         updateCourseTable();
 
@@ -850,7 +850,6 @@ public class Controller {
         Dialog dlg = new Dialog();
         TitledPane resourceTitlePane = new TitledPane();
         VBox resourceEditPane = resourceDetailedView();
-        ComboBox listOFResources = new ComboBox();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
@@ -858,7 +857,6 @@ public class Controller {
 
         ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
-        listOFResources.getItems().addAll(resList);
         resourceTable.getItems().clear();
         resourceTable.getItems().addAll(selectedCourse.getResource());
         updateRowSelected();
@@ -886,11 +884,11 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
-               selectedCourse.getResource().clear();
-              selectedCourse.getResource().addAll(resourceTable.getItems());
-              resInfoList.getItems().clear();
-              for(Resource r: selectedCourse.getResource())
-                  resInfoList.getItems().add(r.getTitle());
+                selectedCourse.getResource().clear();
+                selectedCourse.getResource().addAll(resourceTable.getItems());
+                resInfoList.getItems().clear();
+                for (Resource r : selectedCourse.getResource())
+                    resInfoList.getItems().add(r.getTitle());
 
                 return null;
             }
@@ -916,20 +914,46 @@ public class Controller {
 
         Label currentCBoxLbl = new Label("Current Professor : ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
-        Button deleteBtn = new Button("Delete");
+        Button PersonResources = new Button("View Person's Resources");
 
+        Button deleteBtn = new Button("Delete");
+        PersonResources.setVisible(false);
+        PersonResources.setManaged(false);
+        currentProfessors.setOnAction(e -> {
+            System.out.print(currentProfessors.getSelectionModel().getSelectedItem());
+            if (currentProfessors.getSelectionModel().getSelectedItem() != null) {
+                PersonResources.setVisible(true);
+                PersonResources.setManaged(true);
+
+            } else {
+                PersonResources.setVisible(false);
+                PersonResources.setManaged(false);
+
+            }
+        });
         deleteBtn.setOnAction(e -> {
             deleteProfessor(currentProfessors.getSelectionModel().getSelectedItem());
             currentProfessors.getItems().clear();
             currentProfessors.getItems().addAll(profList);
 
         });
-
+        PersonResources.setOnAction(e -> {
+            ArrayList<Resource> tempRes =new ArrayList<>();
+            tempRes.addAll(resList);
+            System.out.print(tempRes);
+            currentProfessors.getSelectionModel().getSelectedItem().setResources(tempRes);
+            showPersonsResources(currentProfessors.getSelectionModel().getSelectedItem());
+        });
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, currentProfessors),
-                deleteBtn
+                new HBox(deleteBtn, PersonResources)
 
         );
+        for (Object tempElem : mainAddPane.getChildren()) {
+
+            ((HBox) tempElem).setSpacing(20);
+            ((HBox) tempElem).setAlignment(Pos.CENTER);
+        }
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
         dlg.setTitle("Assigning Professor");
@@ -950,6 +974,56 @@ public class Controller {
                 profInfoType.setValue(selectedPerson.getType());
 
 
+            }
+            return null;
+        });
+
+    }
+
+    private void showPersonsResources(Person selectedItem) {
+        VBox mainPane = new VBox();
+        Dialog dlg = new Dialog();
+        TitledPane resourceTitlePane = new TitledPane();
+        VBox resourceEditPane = resourceDetailedView();
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+
+
+        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+
+        resourceTable.getItems().clear();
+        if (selectedItem.getResources() != null)
+            resourceTable.getItems().addAll(selectedItem.getResources());
+        updateRowSelected();
+
+
+        resourceTitlePane.setContent(resourceEditPane);
+        resourceTitlePane.setText("Resource Details and Management");
+        resourceTitlePane.setAlignment(Pos.CENTER);
+
+        mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
+        mainPane.setAlignment(Pos.CENTER);
+
+
+        dlg.setTitle("Assigning Resource");
+        dlg.setHeaderText("Assigning Resource");
+
+        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(400);
+
+
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == assign) {
+                selectedItem.getResources().clear();
+                selectedItem.getResources().addAll(resourceTable.getItems());
+
+                return null;
             }
             return null;
         });
