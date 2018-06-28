@@ -251,7 +251,7 @@ public class Controller {
 //        selectedPerson.setLastName(profInfoLName.getText());
 //        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
 
-        Person tempPerosn = new Person(selectedPerson);
+        selectedPerson = new Person(selectedPerson);
 
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
@@ -261,7 +261,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                tempPerosn, courseInfoDescrip.getText(), tempRes);
+                selectedPerson, courseInfoDescrip.getText(), tempRes);
 
         //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -280,7 +280,7 @@ public class Controller {
             tempCour.getProfessor().setFirstName(profInfoFName.getText());
             tempCour.getProfessor().setLastName(profInfoLName.getText());
             tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-            int id = DBManager.insertPersonQuery(tempPerosn);
+            int id = DBManager.insertPersonQuery(selectedPerson);
             tempCour.getProfessor().setID(id);
         }
         if (courseChanged) {
@@ -888,6 +888,10 @@ public class Controller {
             if (dialogButton == assign) {
                selectedCourse.getResource().clear();
               selectedCourse.getResource().addAll(resourceTable.getItems());
+              resInfoList.getItems().clear();
+              for(Resource r: selectedCourse.getResource())
+                  resInfoList.getItems().add(r.getTitle());
+
                 return null;
             }
             return null;
@@ -904,6 +908,7 @@ public class Controller {
         Dialog dlg = new Dialog();
 
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         ComboBox<Person> currentProfessors = new ComboBox();
