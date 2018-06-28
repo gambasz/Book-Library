@@ -193,7 +193,7 @@ public class Controller {
 
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
-        courseList = DBManager.searchByNameCourseList(fName, lName, semester, year);
+        //courseList = DBManager.searchByNameCourseList(fName, lName, semester, year);
         System.out.println(courseList.size());
         updateCourseTable();
 
@@ -1116,7 +1116,13 @@ public class Controller {
 
     private void deleteCourseTemplate(Course selectedCourseTemplate) {
 
+        System.out.println(selectedCourseTemplate.toString());
+        DBManager.delete_course(selectedCourseTemplate);
         templateList.remove(selectedCourseTemplate);
+        courseList.remove(selectedCourseTemplate);
+        selectedCourseTemplate = null;
+        selectedCourse = null;
+        updateCourseTable();
 
     }
 
