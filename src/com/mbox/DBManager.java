@@ -1855,30 +1855,48 @@ public class DBManager {
 
             Statement st = conn.createStatement();
 
-            int idtmp = 0;
-            int asd = 0;
+            int id_relation_semester_course = 0;
+            int id_relation_course_person = 0;
+            int id_relation_course_resource = 0;
+            int counter = 0;
 
             ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d"
                     , c.getID()));
 
             while (rs.next()) {
 
-                asd++;
-                idtmp = rs.getInt(3);
+                counter++;
+                id_relation_semester_course = rs.getInt(3);
             }
 
-            if (asd > 1) {
+            if (counter > 1) {
 
-                    st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d AND ID = " +
-                            "%d", c.getID(), idtmp));
+                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
 
-            } else if (asd == 1) {
+                while(rs.next()){
+
+                    id_relation_course_person = rs.getInt(3);
+                }
+
+                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d", c.getID()));
+
+                while(rs.next()){
+
+                    id_relation_course_resource = rs.getInt(3);
+                }
+
+                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d AND ID = " +
+                            "%d", c.getID(), id_relation_semester_course));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d AND ID = " +
+                        "%d", c.getID(), id_relation_course_person));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d AND ID = " +
+                                "%d", c.getID(), id_relation_course_resource));
+
+            } else if (counter == 1) {
 
                 st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
                 st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
                 st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
-                        c.getID()));
-                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d",
                         c.getID()));
 
             } else{
