@@ -333,6 +333,10 @@ public class Controller {
 
 
         ArrayList<Course> pulledDatabase = DBManager.returnEverything(52);
+        if(pulledDatabase==null){
+            showError("Connection Error","Server did not return any  data","The returnEverything did not return any course");
+            pulledDatabase = new ArrayList<>();
+        }
         for (int k = 0; k < pulledDatabase.size(); k++) {
             courseList.add(pulledDatabase.get(k));
             for (Resource r : pulledDatabase.get(k).getResource()) {

@@ -587,7 +587,7 @@ public class DBManager {
 
 
 
-    public String insertResourceQuery(Resource resource){
+    public static String insertResourceQuery(Resource resource){
 
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
                         "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
@@ -1389,6 +1389,48 @@ public class DBManager {
 
     }
 
+    public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources){
+        try {
+            Statement st = conn.createStatement();
+
+            String title;
+            String type;
+            String author;
+            for (int i = 0; i < resources.size(); i++) {
+                int resourceID = 0;
+                title = resources.get(i).getTitle();
+                type = resources.get(i).getTYPE();
+                author = resources.get(i).getAuthor();
+
+                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",title,type,author);
+                ResultSet rs = st.executeQuery(query);
+
+                while(rs.next()){
+                    resourceID = rs.getInt(1);
+                }
+
+                if(resourceID == 0){
+                    Resource tempRes= new Resource(0,resources.get(i).getTYPE(),resources.get(i).getTitle(),resources.get(i).getAuthor(),
+                            resources.get(i).getISBN(),resources.get(i).getTotalAmount(),resources.get(i).getCurrentAmount(),
+                            resources.get(i).getDescription());
+                    st.executeQuery(insertResourceQuery(tempRes));
+                    rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
+                            resources.get(i).getTitle(),resources.get(i).getTYPE(),resources.get(i).getAuthor()));
+                    while(rs.next()){
+                        resourceID = rs.getInt(1);
+                    }
+                    resources.get(i).setID(resourceID);
+                } else {
+                    resources.get(i).setID(resourceID);
+                }
+
+
+            }
+        }catch(Exception e){
+            System.out.println("Error in returnIDinResource");
+        }
+    }
+
     //==================================================================================================================
     //                                                  Next
     //==================================================================================================================
@@ -1657,7 +1699,7 @@ public class DBManager {
         return null;
 
     }
-    public static ArrayList<frontend.data.Course> searchByNameCourseList(String fname, String lname, String semester, String year){
+    public static ArrayList<frontend.data.Course> searchByNameSemesterCourseList(String fname, String lname, String semester, String year){
         int semesterID = getSemesterIDByName(semester,year);
         ArrayList<frontend.data.Course> courseSemesterList = returnEverything(semesterID);
         ArrayList<frontend.data.Course> arr = new ArrayList<>();
@@ -1722,6 +1764,72 @@ public class DBManager {
                         arr.add(tempCourse);
                     }
                 }
+
+            }
+
+            return arr;
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("wtf");
+        }
+        return arr;
+    }
+
+
+    public static ArrayList<frontend.data.Course> searchByNameCourseList(String fname, String lname){
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        ArrayList<Integer> courseIDArr = new ArrayList<>();
+        Person person;
+        int personID=0;
+        String personType="";
+        lname = lname.substring(0,1).toUpperCase() + lname.substring(1).toLowerCase();
+        fname = fname.substring(0,1).toUpperCase() + fname.substring(1).toLowerCase();
+        int resourceID=0;
+        String cDescription="",cDepartment="",cTitle="";
+        Resource[] courseResources = new Resource[20];
+        ArrayList<frontend.data.Resource> resourceList = new ArrayList<>();
+        int cID=0;
+        try {
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' and LASTNAME = '%s' ", fname,lname);
+            Statement st = DBManager.conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                personID = rs.getInt(1);
+                personType = rs.getString(2);
+            }
+
+            person = new Person(personID,fname,lname,personType);
+            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = "+personID);
+            int i=0;
+            while(rs.next()){
+                courseIDArr.add(rs.getInt(1));
+                i++;
+            }
+
+            person = new Person(personID,fname, lname,personType);
+            System.out.println("This is the size of courseIDarr" + courseIDArr.size());
+            for(int a=0;a<courseIDArr.size();a++){
+
+                rs = st.executeQuery(getCourseInTableQuery(courseIDArr.get(a)));
+
+                while(rs.next()) {
+
+                    cTitle = rs.getString(2) + rs.getString(3);
+                    cID = rs.getInt(1);
+                    cDescription = rs.getString(4);
+                    cDepartment = rs.getString(5);
+                }
+
+                frontend.data.Course tempCourse = new frontend.data.Course(cID,cTitle,cDepartment,cDescription);
+                resourceList = findResourcesCourseReturnList(courseIDArr.get(a));
+
+                tempCourse.setResource(resourceList);
+                tempCourse.setProfessor(person.initPersonGUI());
+                System.out.println(cID+cTitle+cDepartment+cDescription);
+                System.out.println(person.initPersonGUI().toString());
+                //Restrict search by name with semester, haven’t test yet
+                arr.add(tempCourse);
+
 
             }
 
