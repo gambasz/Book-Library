@@ -48,7 +48,7 @@ public class Controller {
     @FXML
     TextField courseInfoDescrip, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
     @FXML
-    ListView resInfoList;
+    ListView<String> resInfoList;
     @FXML
     Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn;
     @FXML
@@ -75,9 +75,11 @@ public class Controller {
     public static void test() {
         System.out.print("TEST WORKED");
     }
+
     public void guido() {
         System.out.println("Hey");
     }
+
     @FXML
     public void initialize() {
         courseList = new ArrayList<>();
@@ -88,7 +90,6 @@ public class Controller {
         initResourcesTable();
         setCellValueOfColumns();
         tableTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        resourceTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         initTables();
         initCheckBoxes();
         addButtonGraphics();
@@ -196,6 +197,7 @@ public class Controller {
         updateCourseTable();
 
     }
+
     public void updateRowSelected() {
         selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
         if (selectedCourse != null) {
@@ -214,14 +216,13 @@ public class Controller {
             yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
             ArrayList<Resource> tempRes = selectedCourse.getResource();
             resourceTable.getItems().clear();
-            resourceTable.getItems().addAll(resList);
             resInfoList.getItems().clear();
             resourceTable.getSelectionModel().select(null);
             for (int i = 0; i < tempRes.size(); i++) {
                 if (i < 3) {
                     resInfoList.getItems().add(tempRes.get(i).getTitle());
                 }
-                resourceTable.getSelectionModel().select(tempRes.get(i));
+                resourceTable.getItems().add(tempRes.get(i));
             }
 
         }
@@ -629,7 +630,7 @@ public class Controller {
 
 
         dlg.show();
-        dlg.setOnCloseRequest(e->{
+        dlg.setOnCloseRequest(e -> {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
         dlg.setResultConverter(dialogButton -> {
@@ -642,7 +643,7 @@ public class Controller {
         });
     }
 
-    public VBox resourceDetailedView() {
+    private VBox resourceDetailedView() {
         VBox resourceEditPane = new VBox();
         Label title = new Label("Title: ");
         Label author = new Label(("Author: "));
@@ -660,7 +661,7 @@ public class Controller {
         TextField currentAmTF = new TextField();
         TextField descriptionTF = new TextField();
         Button publisherBtn = new Button("Click me to add a new Publisher");
-        ComboBox typeCB = new ComboBox();
+        ComboBox<String> typeCB = new ComboBox();
 
         typeCB.getItems().add("Books");
         Button addNAssignNewResource = new Button("Add and Assign");
@@ -733,14 +734,13 @@ public class Controller {
         for (Resource r : temp) {
             resList.remove(r);
             resourceTable.getItems().remove(r);
+            resInfoList.getItems().remove(r.getTitle());
             for (Course c : courseList) {
                 c.getResource().remove(r);
             }
 
         }
         updateCourseTable();
-        resInfoList.getItems().clear();
-        resInfoList.getItems().addAll(resList);
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
     }
 
@@ -757,8 +757,7 @@ public class Controller {
                 selectedPublisher
         );
         resList.add(temp);
-        resourceTable.getItems().clear();
-        resourceTable.getItems().addAll(resList);
+        resourceTable.getItems().add(temp);
         selectedPublisher = tempPub;
     }
 
@@ -860,7 +859,7 @@ public class Controller {
 
         listOFResources.getItems().addAll(resList);
         resourceTable.getItems().clear();
-        resourceTable.getItems().addAll(resList);
+        resourceTable.getItems().addAll(selectedCourse.getResource());
         updateRowSelected();
 
 
@@ -886,8 +885,8 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
-                for (Resource r : resourceTable.getSelectionModel().getSelectedItems())
-                    System.out.println(r);
+               selectedCourse.getResource().clear();
+              selectedCourse.getResource().addAll(resourceTable.getItems());
                 return null;
             }
             return null;
@@ -1070,7 +1069,7 @@ public class Controller {
         });
     }
 
-    protected static void showError(String title,String headerMessage,String errorMessage) {
+    protected static void showError(String title, String headerMessage, String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(headerMessage);
