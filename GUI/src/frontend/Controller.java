@@ -174,7 +174,8 @@ public class Controller {
 
 
     public void search() {
-
+        String semester = semesterComBox.getValue().toString();
+        String year = yearComBox.getValue().toString();
         String fName, lName;
         fName = lName = "";
 
@@ -192,8 +193,8 @@ public class Controller {
 
         // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
-        courseList = DBManager.searchByNameCourseList(fName, lName);
-        System.out.println(courseList.get(0).toString());
+        courseList = DBManager.searchByNameCourseList(fName, lName,semester,year);
+        System.out.println(courseList.size());
         updateCourseTable();
 
     }

@@ -1657,7 +1657,9 @@ public class DBManager {
         return null;
 
     }
-    public static ArrayList<frontend.data.Course> searchByNameCourseList(String fname, String lname){
+    public static ArrayList<frontend.data.Course> searchByNameCourseList(String fname, String lname, String semester, String year){
+        int semesterID = getSemesterIDByName(semester,year);
+        ArrayList<frontend.data.Course> courseSemesterList = returnEverything(semesterID);
         ArrayList<frontend.data.Course> arr = new ArrayList<>();
         ArrayList<Integer> courseIDArr = new ArrayList<>();
         Person person;
@@ -1688,7 +1690,7 @@ public class DBManager {
             }
 
         person = new Person(personID,fname, lname,personType);
-
+            System.out.println("This is the size of courseIDarr" + courseIDArr.size());
             for(int a=0;a<courseIDArr.size();a++){
 
                 rs = st.executeQuery(getCourseInTableQuery(courseIDArr.get(a)));
@@ -1708,27 +1710,18 @@ public class DBManager {
                 tempCourse.setProfessor(person.initPersonGUI());
                 System.out.println(cID+cTitle+cDepartment+cDescription);
                 System.out.println(person.initPersonGUI().toString());
-                //Restrict search by name with semester, haven't test yet
-
-//                int semesterID = 0;
-//                ArrayList<frontend.data.Course> courseListSemester = new ArrayList<>();
-//                rs = st.executeQuery(String.format("SELECT * FROM SEMESTER WHERE YEAR = '%d' AND SEMESTER = '%s'",year,semester));
-//                while(rs.next()){
-//                    semesterID = rs.getInt(1);
-//                }
-//                courseListSemester = returnEverything(semesterID);
-//                for(int c=0;c<courseListSemester.size();c++){
-//                    if(tempCourse.equals(courseListSemester.get(c))){
-
-//                        arr.add(tempCourse);
-//                    }
-//                }
+                //Restrict search by name with semester, haven’t test yet
 
 
+                for(int c=0;c<courseSemesterList.size();c++){
+                    if(tempCourse.getID() == courseSemesterList.get(c).getID()
+                            && tempCourse.getProfessor().getID() == courseSemesterList.get(c).getProfessor().getID()){
+                        tempCourse.setSEMESTER(semester);
+                        tempCourse.setYEAR(Integer.parseInt(year));
+                        arr.add(tempCourse);
+                    }
+                }
 
-
-
-                arr.add(tempCourse);
             }
 
             return arr;

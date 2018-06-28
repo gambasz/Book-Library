@@ -90,7 +90,7 @@ public class Course {
     }
 
     public void setYEAR(int YEAR) {
-        this.YEAR.set(YEAR);
+        this.YEAR = new SimpleIntegerProperty(YEAR);
     }
 
     public String getSEMESTER() {
