@@ -253,7 +253,7 @@ public class Controller {
 
         selectedPerson = new Person(selectedPerson);
 
-        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
+        ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
         Course tempCour = new Course(
                 selectedCourse.getID(),
                 tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
