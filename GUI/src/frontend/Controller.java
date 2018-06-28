@@ -453,6 +453,9 @@ public class Controller {
     public void delete() {
 
         DBManager.delete_relation_course(selectedCourse);
+        courseList.remove(selectedCourse);
+        selectedCourse = null;
+        updateCourseTable();
         //needs to show in the gui
 
     }
