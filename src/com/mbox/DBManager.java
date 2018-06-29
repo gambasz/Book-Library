@@ -1418,18 +1418,27 @@ public class DBManager {
                 }
 
                 if(resourceID == 0){
+                    //Errorrrrrrrrrr
                     Resource tempRes= new Resource(0,resources.get(i).getTYPE(),resources.get(i).getTitle(),resources.get(i).getAuthor(),
                             resources.get(i).getISBN(),resources.get(i).getTotalAmount(),resources.get(i).getCurrentAmount(),
                             resources.get(i).getDescription());
+
+
                     st.executeQuery(insertResourceQuery(tempRes));
+                    // Errorrrrrrrr
+
+
                     rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
                             resources.get(i).getTitle(),resources.get(i).getTYPE(),resources.get(i).getAuthor()));
                     while(rs.next()){
                         resourceID = rs.getInt(1);
+
                     }
                     resources.get(i).setID(resourceID);
+                    System.out.println("Error??? in resourceId = 0");
                 } else {
                     resources.get(i).setID(resourceID);
+                    System.out.println("Error??? in resourceID !=0");
                 }
 
 
