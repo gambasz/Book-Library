@@ -1,5 +1,6 @@
 package frontend.data;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Person {
@@ -7,7 +8,15 @@ public class Person {
     private String lastName, firstName;
     private int ID;
     private Enum type;
+    private ArrayList<Resource> resources;
 
+    public Person(String lastName, String firstName, int ID, Enum type, ArrayList<Resource> resources) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.ID = ID;
+        this.type = type;
+        this.resources = resources;
+    }
 
     public Person(String lastName, String firstName, String type) {
         this.lastName = lastName;
@@ -20,6 +29,25 @@ public class Person {
         this.firstName = firstName;
         this.ID = ID;
         this.type = PersonType.valueOf(type);
+    }
+
+    public Person(Person another) {
+        this.ID = another.getID();
+        this.lastName = another.getLastName();
+        this.firstName = another.getFirstName();
+        this.type = PersonType.valueOf(another.getType());
+    }
+
+    public void setType(Enum type) {
+        this.type = type;
+    }
+
+    public ArrayList<Resource> getResources() {
+        return resources;
+    }
+
+    public void setResources(ArrayList<Resource> resources) {
+        this.resources = resources;
     }
 
     public void setLastName(String lastName) {

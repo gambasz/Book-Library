@@ -9,6 +9,7 @@ public class Course {
     private String title, crn, description, department;
     private Person personInstance;
     private Resource resourceInstance[];
+    private ArrayList<Resource> resourceInstances;
 
     public Course(){
 
@@ -25,7 +26,7 @@ public class Course {
 
         this.id = id;
         this.title = title;
-        this.crn = crn;
+        this.crn = ""+id;
         this.description = desc;
         this.department = dept;
     }
@@ -59,9 +60,21 @@ public class Course {
 
     }
 
+    public frontend.data.Course initCourseGUIBasic(){
+        frontend.data.Course tmp = new frontend.data.Course(this.id,this.title,this.department,this.description);
+        return tmp;
+    }
+
     public frontend.data.Course initCourseGUI(String year, String semester){
         ArrayList <frontend.data.Resource> tmpResource = new ArrayList<frontend.data.Resource>();
-        tmpResource.add(this.resourceInstance[0].initResourceGUI());
+
+        //A method to convert resource arraylist to GUI resource array list
+        for (int i=0; i<this.resourceInstances.size(); i++ ){
+
+            tmpResource.add(this.resourceInstances.get(i).initResourceGUI());
+        }
+
+        //tmpResource.add(this.resourceInstance[0].initResourceGUI());
         year = "2018"; semester = "FALL";
 
 
@@ -112,6 +125,9 @@ public class Course {
         this.resourceInstance = resourceInst;
     }
 
+    public void setResourceInstances(ArrayList<Resource> resourceInstances){
+        this.resourceInstances = resourceInstances;
+    }
     public int getID(){
 
         return this.id;
@@ -145,6 +161,9 @@ public class Course {
     public Resource[] getResourceInstance(){
 
         return this.resourceInstance;
+    }
+    public ArrayList<Resource> getResourceInstances(){
+        return this.resourceInstances;
     }
 
     @Override

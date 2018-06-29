@@ -24,17 +24,8 @@
                         <HBox alignment="CENTER_LEFT" spacing="25.0">
                            <children>
                               <Label style="-fx-font-weight: bold;" text="Course Details" />
-                              <Button mnemonicParsing="false" prefWidth="150.0" text="Find and Auto Fill Info" onAction="#selectCourse" />
+                              <Button mnemonicParsing="false" onAction="#selectCourse" prefWidth="150.0" text="Find and Auto Fill Info" />
                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
-                           <children>
-                              <Label text="CRN" />
-                              <TextField fx:id="courseInfoCRN" />
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
                         </HBox>
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
@@ -49,6 +40,15 @@
                            <children>
                               <Label text="Department" />
                               <TextField fx:id="courseInfoDepart" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="15.0">
+                           <children>
+                              <Label text="Description" />
+                              <TextField fx:id="courseInfoDescrip" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -111,7 +111,7 @@
                            <children>
                               <VBox alignment="CENTER_LEFT" spacing="5.0">
                                  <children>
-                                    <ListView fx:id="resInfolList" prefWidth="200.0" />
+                                    <ListView fx:id="resInfoList" prefWidth="200.0" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER_RIGHT">
@@ -161,7 +161,7 @@
                      </padding>
                      <children>
                         <Button fx:id="addBtn" mnemonicParsing="false" onAction="#add" text="Add New" />
-                        <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#updateCourseInformation" text="Commit" />
+                        <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#update" text="Commit" />
                         <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#delete" text="Delete" />
                      </children>
                   </HBox>
@@ -261,7 +261,10 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <Button mnemonicParsing="false" onMouseClicked="#updateCourseInformation" text="Filter" />
+                              <Button fx:id="filterBtn" alignment="CENTER" mnemonicParsing="false" onAction="#filterTableBasedOnSemesterNYear" onMouseClicked="#filterTableBasedOnSemesterNYear" text="Filter">
+                                 <HBox.margin>
+                                    <Insets top="20.0" />
+                                 </HBox.margin></Button>
                            </children>
                            <opaqueInsets>
                               <Insets />
@@ -272,8 +275,8 @@
                   <TableView fx:id="tableTV" editable="true">
                     <columns>
                         <TableColumn fx:id="timeCol" prefWidth="75.0" text="Semester" />
-                      <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Professor" />
-                        <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" resizable="false" text="Course" />
+                      <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Professor" />
+                        <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Course" />
                         <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />
                         <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="475.0" text="Current Resources" />
                     </columns>
