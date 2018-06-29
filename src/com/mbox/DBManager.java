@@ -1150,7 +1150,7 @@ public class DBManager {
         ResultSet rs;
         int resourceID=0;
         int i = 0;
-        Resource[] resourcesList = new Resource[20];
+        //Resource[] resourcesList = new Resource[20];
         ArrayList<Resource> listResources = new ArrayList<Resource>();
 
         try {
@@ -1165,13 +1165,13 @@ public class DBManager {
             while(rss.next()) {
                 System.out.println("");
                 // ID, Type, Title, Author, ISBN, total, current, desc
-                resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
-                        rss.getString(3), rss.getString(4), rss.getString(5),
-                        rss.getInt(6), rss.getInt(7), rss.getString(8));
+//                resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
+//                        rss.getString(3), rss.getString(4), rss.getString(5),
+//                        rss.getInt(6), rss.getInt(7), rss.getString(8));
                 listResources.add(new Resource(rss.getInt(1), rss.getString(2),
                         rss.getString(3), rss.getString(4), rss.getString(5),
                         rss.getInt(6), rss.getInt(7), rss.getString(8)));
-                setPublisherForResource(resourcesList[i]);
+//                setPublisherForResource(resourcesList[i]);
                 setPublisherForResource(listResources.get(i));
 
                 i++;
