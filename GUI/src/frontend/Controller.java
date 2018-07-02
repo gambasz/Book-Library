@@ -542,6 +542,7 @@ public class Controller {
         //TODO: Check again why the courseChanged keeps turning true @@ Khanh
         // I don't check type rn. Need to check later with fk.. enum :))
         if (courseChanged) {
+
             tempCour.setDepartment(courseInfoDepart.getText());
             tempCour.setTitle(courseInfoTitle.getText());
             tempCour.setDescription(courseInfoDescrip.getText());
