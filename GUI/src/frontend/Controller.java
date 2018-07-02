@@ -254,8 +254,6 @@ public class Controller {
 //        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
 
         selectedPerson = new Person(selectedPerson);
-
-        //ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getItems());
         
         Course tempCour = new Course(
