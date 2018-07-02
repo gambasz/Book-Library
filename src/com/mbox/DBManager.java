@@ -631,8 +631,15 @@ public class DBManager {
     public static void updateCourseQuery(frontend.data.Course c){
         System.out.println("Title: " + c.getTitle().substring(0,4) + "  CNUMBER: "+ c.getTitle().substring(4)+
         "  DESCRIPTION: "+ c.getDescription() + "  DEPARTMENT: " + c.getDepartment() + "  ID: " + c.getID());
+
+        String titletochange = c.getTitle();
+        titletochange = titletochange.replaceAll("\\s","");
+        String[] part = titletochange.split("(?<=\\D)(?=\\d)");
+        System.out.println(part[0]);
+        System.out.println(part[1]);
+
         String query = String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s' " +
-                "WHERE ID = %d",c.getTitle().substring(0,4),c.getTitle().substring(4),c.getDescription(),c.getDepartment(),c.getID());
+                "WHERE ID = %d",part[0],part[1],c.getDescription(),c.getDepartment(),c.getID());
         try {
             st.executeQuery(query);
         }catch(Exception e){
