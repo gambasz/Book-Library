@@ -38,6 +38,8 @@ public class Controller {
     private Resource selectedResource;
     private Publisher selectedPublisher;
     private Person selectedPerson;
+    private int defaultSemester = 5;
+
 
 
     private final String addIconImg = "/frontend/media/add.png";
@@ -333,7 +335,7 @@ public class Controller {
         DBManager.openConnection();
 
 
-        ArrayList<Course> pulledDatabase = DBManager.returnEverything(52);
+        ArrayList<Course> pulledDatabase = DBManager.returnEverything(defaultSemester);
         if(pulledDatabase==null){
             showError("Connection Error","Server did not return any  data","The returnEverything did not return any course");
             pulledDatabase = new ArrayList<>();
