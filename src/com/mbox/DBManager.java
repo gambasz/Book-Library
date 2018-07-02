@@ -545,7 +545,10 @@ public class DBManager {
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
         course.setTitle(course.getTitle().toUpperCase());
-        String[] cSplit = course.getTitle().split(" ");
+        course.setTitle(course.getTitle().replaceAll( "\\s ",""));
+        //String[] cSplit = course.getTitle().split(" ");
+        String[] cSplit = course.getTitle().split("(?<=\\D)(?=\\d)");
+
         System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
         try {
 
@@ -1360,6 +1363,9 @@ public class DBManager {
         // Fall 2018 ID = 52
 //        int semesterid = 57;
         ArrayList<frontend.data.Resource> r = c.getResource();
+
+        System.out.println();
+        System.out.println("CHECKING "+r.size());
 
         int[] resourceidlist = new int[r.size()];
 

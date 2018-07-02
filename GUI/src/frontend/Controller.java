@@ -255,8 +255,8 @@ public class Controller {
 
         selectedPerson = new Person(selectedPerson);
 
-        //ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
-        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
+        ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
+        //ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
         Course tempCour = new Course(
                 selectedCourse.getID(),
                 tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
@@ -264,7 +264,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                selectedPerson, courseInfoDescrip.getText(), selectedCourse.getResource());
+                selectedPerson, courseInfoDescrip.getText(), tempRes);
 
         //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -866,7 +866,7 @@ public class Controller {
         icon.setFitWidth(75);
 
 
-        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+        ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
         resourceTable.getItems().clear();
         resourceTable.getItems().addAll(selectedCourse.getResource());
