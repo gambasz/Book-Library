@@ -255,10 +255,8 @@ public class Controller {
 
         selectedPerson = new Person(selectedPerson);
 
-
-
         //ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
-        //ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
+        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getItems());
         
         Course tempCour = new Course(
                 selectedCourse.getID(),
@@ -267,7 +265,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                selectedPerson, courseInfoDescrip.getText(), selectedCourse.getResource());
+                selectedPerson, courseInfoDescrip.getText(), tempRes);
 
         //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
