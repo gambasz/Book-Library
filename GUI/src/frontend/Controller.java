@@ -255,8 +255,11 @@ public class Controller {
 
         selectedPerson = new Person(selectedPerson);
 
-        ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
+
+
+        //ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
         //ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
+        
         Course tempCour = new Course(
                 selectedCourse.getID(),
                 tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
@@ -264,7 +267,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 courseInfoTitle.getText(),
                 courseInfoDepart.getText(),
-                selectedPerson, courseInfoDescrip.getText(), tempRes);
+                selectedPerson, courseInfoDescrip.getText(), selectedCourse.getResource());
 
         //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -739,6 +742,7 @@ public class Controller {
     }
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
@@ -772,6 +776,8 @@ public class Controller {
         resList.add(temp);
         resourceTable.getItems().add(temp);
         selectedPublisher = tempPub;
+        DBManager.setIDinResourceFromArrayList(resList);
+        System.out.println("This is add button");
     }
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
@@ -871,6 +877,7 @@ public class Controller {
 
         resourceTable.getItems().clear();
         resourceTable.getItems().addAll(selectedCourse.getResource());
+
         updateRowSelected();
 
 
@@ -892,10 +899,11 @@ public class Controller {
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
 
-
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
+                //TODO: this is where the assign button locates
+                System.out.println("Is this the assign one?");
                 selectedCourse.getResource().clear();
                 selectedCourse.getResource().addAll(resourceTable.getItems());
                 resInfoList.getItems().clear();
