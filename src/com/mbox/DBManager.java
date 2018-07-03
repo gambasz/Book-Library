@@ -1422,13 +1422,14 @@ public class DBManager {
                     personTmp = new Person(personID, rs5.getString(3), rs5.getString(4),
                             rs5.getString(2));
 
-                    personTmp = setResourcesForPerson(personTmp);
 
-                    courseArray[i].setPersonInstance(personTmp);
+                    personTmp = setResourcesForPerson(personTmp);
+                    //courseArray[i].setPersonInstance(personTmp);
                     //courseArray[i].setResourceInstance(courseResources);
-                    courseArray[i].setResourceInstances(courseResources);
+                    //courseArray[i].setResourceInstances(courseResources);
                     courseList.get(i).setPersonInstance(personTmp);
                     courseList.get(i).setResourceInstances(courseResources);
+
 
                     i++;
                 }
@@ -1511,7 +1512,7 @@ public class DBManager {
         executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
                 " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",id, semesterid));
 
-        
+
         executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
                 " (COURSEID, PERSONID) VALUES ('%d', '%d')",id ,personid));
 
@@ -1539,6 +1540,103 @@ public class DBManager {
 
 
     }
+    public static void deleteRelationCoursePersonResources(frontend.data.Course c){
+        ResultSet rs;
+        int personID = c.getProfessor().getID();
+        int courseID = c.getID();
+        int[] resourcePerson = new int[5];
+        int[] resourceCourse = new int[5];
+        int[] commonResource = new int[5];
+        try {
+            int i=0,j=0;
+            rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID =%d", courseID));
+            while(rs.next()){
+                resourceCourse[i] = rs.getInt(2);
+                i++;
+            }
+
+            rs = st.executeQuery(String.format("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID =%d", personID));
+            while(rs.next()){
+                resourcePerson[j] = rs.getInt(2);
+                j++;
+            }
+            for(int a=0;i<resourceCourse.length;i++){
+                for(int e=0;e<resourcePerson.length;e++){
+                    if(resourceCourse[a]==resourcePerson[e]){
+                        commonResource[a] = resourceCourse[e];
+                    }
+                }
+            }
+
+            for(int d=0;d<commonResource.length;d++){
+                executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID =%d",commonResource[d]));
+                executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE RESOURCEID= %d",commonResource[d]));
+                System.out.println("These are IDs that have been deleted" +commonResource[d]);
+            }
+
+
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+    }
+
+    public static void insertRelationCourseResources(frontend.data.Course c){
+
+        //getting all the data
+        int id = c.getID();
+
+        int personid = c.getProfessor().getID();
+
+        ArrayList<frontend.data.Resource> r = c.getResource();
+
+
+
+        int[] resourceidlist = new int[r.size()];
+
+        for(int i = 0; i < c.getResource().size(); i++){
+
+            resourceidlist[i] = r.get(i).getID();
+        }
+
+
+
+        for(int j = 0; j < resourceidlist.length; j++){
+
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                    " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",id, resourceidlist[j]));
+        }
+
+
+        for(int k = 0; k < resourceidlist.length; k++){
+
+
+            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+                    " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",personid,resourceidlist[k]);
+            executeNoReturnQuery(tempQuery);
+
+
+            // there is a problm with this
+            System.out.println("Testing purpose:\n" + tempQuery +"\n\n\n\n");
+        }
+
+        for(int l = 0; l < resourceidlist.length; l++){
+
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                            " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                    resourceidlist[l]));
+        }
+
+
+    }
+
 
     public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources){
         try {
