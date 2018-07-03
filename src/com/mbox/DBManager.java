@@ -1382,6 +1382,11 @@ public class DBManager {
             resourceidlist[i] = r.get(i).getID();
         }
 
+
+        executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
+                " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",id, semesterid));
+
+        
         executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
                 " (COURSEID, PERSONID) VALUES ('%d', '%d')",id ,personid));
 
@@ -1391,8 +1396,7 @@ public class DBManager {
                     " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",id, resourceidlist[j]));
         }
 
-        executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
-                " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",id, semesterid));
+
 
         for(int k = 0; k < resourceidlist.length; k++){
 
