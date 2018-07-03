@@ -1455,7 +1455,7 @@ public class DBManager {
             //=======================Finding and creating Persons list teaching that course=============================
 
             i = 0;
-            rsTmp = st.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
+            rsTmp = stTemp2.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = " + courseID);
             //it supposed to get a list of all persons teaching that course. Assuming one person for now.
 
             int j =0;
