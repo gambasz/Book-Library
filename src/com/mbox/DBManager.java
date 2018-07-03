@@ -741,8 +741,8 @@ public class DBManager {
 
                 //insert this new id into the semester_course table
 
-                statement.executeQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE (COURSEID, SEMESTERID) VALUES(%d, %d)", new_id, semester_id));
-                statement.executeQuery(String.format("INSERT INTO RELATION_COURSE_PERSON (COURSEID, PERSONID) VALUES (%d, %d)", new_id, c.getProfessor().getID()));
+                statement.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = %d, SEMESTERID = %d WHERE COURSEID = %d", new_id, semester_id, c.getID()));
+                statement.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = %d, PERSONID = %d WHERE COURSEID = %d", new_id, c.getProfessor().getID(), c.getID()));
 
                 if(c.getResource().isEmpty()){
 

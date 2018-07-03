@@ -530,7 +530,6 @@ public class Controller {
             DBManager.updateCourseQuery2(tempCour);
 
             //why isnt the table updating??
-            courseList.remove(selectedCourse);
 
         }else{
 
@@ -539,11 +538,14 @@ public class Controller {
         }
         //TODO: THIS is Khanh
 
+        courseList.remove(selectedCourse);
+        updateCourseTable();
+        courseList.add(tempCour);
         updateCourseTable();
 
 
+
         DBManager.insertRelationCourseResources(tempCour);
-        //updateCourseTable();
 
 
 //
