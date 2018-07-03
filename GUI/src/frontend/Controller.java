@@ -862,7 +862,7 @@ public class Controller {
     }
 
     private void deleteResource(Resource res) {
-        resList.remove(res);
+//        resList.remove(res);
 
     }
 
@@ -938,7 +938,7 @@ public class Controller {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 //TODO: this is where the assign button locates
-                System.out.println("Is this the assign one?");
+
                 selectedCourse.getResource().clear();
                 selectedCourse.getResource().addAll(resourceTable.getItems());
                 resInfoList.getItems().clear();
