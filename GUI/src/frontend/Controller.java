@@ -531,13 +531,15 @@ public class Controller {
 
             //why isnt the table updating??
             courseList.remove(selectedCourse);
-            updateCourseTable();
 
         }else{
 
             // do nothing
 
         }
+
+        updateCourseTable();
+
 
         //updateCourseTable();
 

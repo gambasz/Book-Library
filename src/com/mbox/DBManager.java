@@ -660,6 +660,52 @@ public class DBManager {
         // if course does not exist, create it and assign it.
         // if both do exist, just update
 
+        //getting the person id
+
+        String person_name = c.getProfessor().getFirstName();
+        String person_last_name = c.getProfessor().getLastName();
+        String person_type = c.getProfessor().getType();
+
+        int id_1 = -1;
+
+        //check if exists:
+
+        try{
+
+            ResultSet rs_1 = st3.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = '%s' AND TYPE = '%s'",
+                    person_name, person_last_name, person_type));
+
+            while(rs_1.next()){
+
+                id_1 = rs_1.getInt(1);
+            }
+
+            // if -1 means it found nothing
+            if(id_1 == -1){
+
+                //create a new person
+
+                System.out.println("It got here");
+            }else{
+
+                c.getProfessor().setID(id_1);
+                System.out.println("or here");
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong when looking for professors.");
+
+        }
+
+
+        //getting the semester:
+
+        String semester = c.getSEMESTER();
+        String year = String.valueOf(c.getYEAR());
+
+        int semester_id = getSemesterIDByName(semester, year);
+
         // get c number:
 
         String title = c.getTitle();
@@ -695,7 +741,17 @@ public class DBManager {
 
                 //insert this new id into the semester_course table
 
-                statement.executeQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE (COURSEID, SEMESTERID) VALUES(%d, %d)", new_id, 5));
+                statement.executeQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE (COURSEID, SEMESTERID) VALUES(%d, %d)", new_id, semester_id));
+                statement.executeQuery(String.format("INSERT INTO RELATION_COURSE_PERSON (COURSEID, PERSONID) VALUES (%d, %d)", new_id, c.getProfessor().getID()));
+
+                if(c.getResource().isEmpty()){
+
+                }else{
+
+                    statement.executeQuery(String.format("INSERT INTO RELATION)_COURSE_RESOURCES (COURSEID, RESOURCEID) VALUES (%d, %d)", new_id, c.getResource().get(0).getID()));
+
+                }
+
 
 
             }else{
