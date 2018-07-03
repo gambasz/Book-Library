@@ -469,7 +469,7 @@ public class Controller {
 
     public void update() {
         Person tempPerson = new Person(selectedPerson);
-
+        DBManager.deleteRelationCoursePersonResources(selectedCourse);
         //right now does not check the resource. Changes them to whatever the value on the left is.
         ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
 
@@ -480,7 +480,7 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 selectedCourse.getTitle(),
                 selectedCourse.getDepartment(),
-                tempPerson, selectedCourse.getDescription(), tempRes);
+                tempPerson, selectedCourse.getDescription(), selectedCourse.getResource());
 
 //       System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -538,7 +538,9 @@ public class Controller {
             // do nothing
 
         }
+        //TODO: THIS is Khanh
 
+        DBManager.insertRelationCourseResources(tempCour);
         //updateCourseTable();
 
 
