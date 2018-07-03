@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class Person {
 
-    private int id;
+    private int id, commonid = 0;
     private String first_name, last_name, type;
     Resource resourcePerson[];
 
@@ -77,6 +77,10 @@ public class Person {
         this.resourcePerson = resourcesPerson;
     }
 
+    public void setCommonid(int commonid){
+        this.commonid = commonid;
+    }
+
     public int getID(){
 
         return this.id;
@@ -102,6 +106,9 @@ public class Person {
     public Resource[] getResourcePerson(){
 
         return this.resourcePerson;
+    }
+    public int getCommonid(){
+        return this.commonid;
     }
 
     @Override

@@ -10,6 +10,7 @@ public class Course {
     private Person personInstance;
     private Resource resourceInstance[];
     private ArrayList<Resource> resourceInstances;
+    private int commonID = 0;
 
     public Course(){
 
@@ -115,6 +116,10 @@ public class Course {
 
     }
 
+    public void setCommonID(int commonID) {
+        this.commonID = commonID;
+    }
+
     public void setPersonInstance(Person personInst){
 
         this.personInstance = personInst;
@@ -123,6 +128,10 @@ public class Course {
     public void setResourceInstance(Resource[] resourceInst){
 
         this.resourceInstance = resourceInst;
+    }
+
+    public int getCommonID() {
+        return commonID;
     }
 
     public void setResourceInstances(ArrayList<Resource> resourceInstances){

@@ -1326,6 +1326,52 @@ public class DBManager {
 
     }
 
+
+    public static ArrayList<Resource> findResourcesCourse(int courseID, int commonID){
+
+        ResultSet rs;
+        int resourceID=0;
+        int i = 0;
+        ArrayList<Resource> listResources = new ArrayList<Resource>();
+
+        try {
+
+            rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d AND COMMONID = %d",
+                    courseID, commonID));
+            //here all have a result set of all resources for courdeID
+
+            while (rs.next()) {
+                resourceID = rs.getInt(2);
+                ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
+
+                while(rss.next()) {
+                    System.out.println("");
+                    // ID, Type, Title, Author, ISBN, total, current, desc
+                    listResources.add(new Resource(rss.getInt(1), rss.getString(2),
+                            rss.getString(3), rss.getString(4), rss.getString(5),
+                            rss.getInt(6), rss.getInt(7), rss.getString(8)));
+                    listResources.get(i).setCommonID(commonID);
+                    setPublisherForResource(listResources.get(i));
+
+                    i++;
+                }
+
+            }
+
+            return listResources;
+        }
+        catch (SQLException err){
+            System.out.println(err);
+            err.printStackTrace();
+        }
+        // Adding the list of the resources to the person object
+        return null;
+
+    }
+
+
+
+
     public static Resource setPublisherForResource(Resource resource1){
         ResultSet rss;
         ResultSet rs2;
@@ -1375,7 +1421,7 @@ public class DBManager {
         ArrayList<Course>  courseList = new ArrayList<>();
         ResultSet rs5, rsTmp;
 
-        int personID = 0, i=0, pID=0, cID = 0;
+        int personID = 0, i=0, pID=0, cID = 0, commonID =0;
         int[] pr = new int[20], cr = new int[20];
         ResultSet rs;
         String cTitle = "", cDescription="", cDepartment="";
@@ -1385,6 +1431,11 @@ public class DBManager {
         ArrayList<Resource> courseResources = new ArrayList<Resource>();
 
         try {
+            Statement stTemp = conn.createStatement();
+            Statement stTemp2 = conn.createStatement();
+
+            ResultSet rsTemp;
+
 
             //=======================Getting information to create the course object====================================
 
@@ -1410,17 +1461,27 @@ public class DBManager {
             int j =0;
             while (rsTmp.next()) {
 
-                courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
+                //courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
                 courseList.add(new Course(cID, cTitle, cDepartment, cDescription, "CRN"));
-                System.out.println("THis is the: " + j);
+                System.out.println("This is the: " + j);
                 j++;
 
                 personID = rsTmp.getInt(2);
-                rs5 = st5.executeQuery(getPersonInTableQuery(personID));
-                System.out.println("PersonID is: "+personID);
-                while (rs5.next()) {
-                    personTmp = new Person(personID, rs5.getString(3), rs5.getString(4),
-                            rs5.getString(2));
+                commonID = rsTmp.getInt("commonid");
+                System.out.println("Commonid is: "+commonID);
+                System.out.println("PersonID is: "+personID +"\n");
+                courseList.get(i).setCommonID(commonID);
+
+                rsTemp = stTemp.executeQuery(getPersonInTableQuery(personID));
+                System.out.println("rsTemp: " + rsTemp.getFetchSize());
+                while (rsTemp.next()) {
+                    // I'm getting all the info for each person,
+                    // this loop would run n times for n persons, but must be only one result
+                    //meaning the loop runs only once each time.
+
+                    personTmp = new Person(personID, rsTemp.getString(3), rsTemp.getString(4),
+                            rsTemp.getString(2));
+                    personTmp.setCommonid(commonID);
 
 
                     personTmp = setResourcesForPerson(personTmp);
@@ -1428,8 +1489,10 @@ public class DBManager {
                     //courseArray[i].setResourceInstance(courseResources);
                     //courseArray[i].setResourceInstances(courseResources);
                     courseList.get(i).setPersonInstance(personTmp);
-                    courseList.get(i).setResourceInstances(courseResources);
 
+                    //mneed to check for resources with the same commonid
+                    courseResources = findResourcesCourse(courseID, commonID);
+                    courseList.get(i).setResourceInstances(courseResources);
 
                     i++;
                 }
@@ -1463,12 +1526,14 @@ public class DBManager {
             if(!input.contains("exit")){
                 String[] values = input.split(" ");
 
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
+                        " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[4])));
+
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
                         " (COURSEID, PERSONID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[1])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
                         " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[2])));
-                executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
-                        " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",Integer.parseInt(values[0]),Integer.parseInt(values[4])));
+
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
                         " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",Integer.parseInt(values[1]),Integer.parseInt(values[2])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +

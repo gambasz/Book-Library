@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -327,45 +328,56 @@ public class Controller {
      * populates the table with initial values
      */
     private void initTables() {
-        setTablesSelectionProperty(tableTV);
-        setTablesSelectionProperty(resourceTable);
-        //todo: when hash tables are done remove the *contains codes*
-        //======================BEGIN CODE BACKEND
-        DBManager.openConnection();
+        try {
+
+            setTablesSelectionProperty(tableTV);
+            setTablesSelectionProperty(resourceTable);
+            //todo: when hash tables are done remove the *contains codes*
+            //======================BEGIN CODE BACKEND
+            DBManager.openConnection();
+
+            ArrayList<Course> pulledDatabase = DBManager.returnEverything(defaultSemester);
 
 
-        ArrayList<Course> pulledDatabase = DBManager.returnEverything(defaultSemester);
-        if(pulledDatabase==null){
-            showError("Connection Error","Server did not return any  data","The returnEverything did not return any course");
-            pulledDatabase = new ArrayList<>();
-        }
-        for (int k = 0; k < pulledDatabase.size(); k++) {
-            courseList.add(pulledDatabase.get(k));
-            for (Resource r : pulledDatabase.get(k).getResource()) {
-                if (!resList.contains(r))
-                    resList.add(r);
+            if (pulledDatabase == null) {
+                showError("Connection Error", "Server did not return any  data", "The returnEverything did not return any course");
+                pulledDatabase = new ArrayList<>();
+            }
+            for (int k = 0; k < pulledDatabase.size(); k++) {
+                courseList.add(pulledDatabase.get(k));
+                for (Resource r : pulledDatabase.get(k).getResource()) {
+                    if (!resList.contains(r))
+                        resList.add(r);
+
+                }
+                //System.out.println("If this is the error, desription:" + pulledDatabase.get(k).getDescription() + pulledDatabase.get(k).getDepartment());
 
             }
-            System.out.println("If this is the error, desription:" + pulledDatabase.get(k).getDescription() + pulledDatabase.get(k).getDepartment());
+
+
+            for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
+                if (!profList.contains(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI()))
+                    profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
+            }
+            //Here I initialize pubList with method getPublisherFromTable()
+            pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
+            ///////////////////////////////////////////////////////////////
+            for (Resource tempR : resList) {
+                if (!pubList.contains(tempR.getPublisher()))
+                    pubList.add(tempR.getPublisher());
+            }
+            //====================== END CODE BACKEND
+
+
+            updateCourseTable();
 
         }
+        catch (Exception e){
+            e.printStackTrace();
+            showError("Connection Error","Server did not return any  data",
+                    "Check you connection and try again :-)");
 
-
-        for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
-            if (!profList.contains(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI()))
-                profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
         }
-        //Here I initialize pubList with method getPublisherFromTable()
-        pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
-        ///////////////////////////////////////////////////////////////
-        for (Resource tempR : resList) {
-            if (!pubList.contains(tempR.getPublisher()))
-                pubList.add(tempR.getPublisher());
-        }
-        //====================== END CODE BACKEND
-
-
-        updateCourseTable();
     }
 
     private void setTablesSelectionProperty(TableView table) {

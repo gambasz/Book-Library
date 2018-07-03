@@ -5,7 +5,7 @@ import java.sql.*;
 public class Resource {
 
     private String type, title, author, isbn, description;
-    private int total_amount, current_amount, id;
+    private int total_amount, current_amount, id, commonID = 0;
     private Publisher publisherInstance;
 
     public Resource(){
@@ -22,8 +22,13 @@ public class Resource {
 
     }
 
+
+
+
+
     public Resource(int id, String type, String title, String author, String isbn, int total, int current,
                     String desc){
+
 
         this.id = id;
         this.type = type;
@@ -63,6 +68,9 @@ public class Resource {
     }
 
 
+    public void setCommonID(int commonID) {
+        this.commonID = commonID;
+    }
 
     public void setID(int id){
 
@@ -158,6 +166,11 @@ public class Resource {
     public Publisher getPublisherInstance(){
 
         return this.publisherInstance;
+    }
+
+    public int getCommonID() {
+
+        return commonID;
     }
 
 
