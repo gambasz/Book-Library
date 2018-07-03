@@ -650,6 +650,75 @@ public class DBManager {
             System.out.println("Update fail because of course error");
         }
     }
+
+    //==================================
+
+    // does not check person for now
+    public static void updateCourseQuery2(frontend.data.Course c){
+
+        // check if the course already exists, check if the person already exists.
+        // if course does not exist, create it and assign it.
+        // if both do exist, just update
+
+        // get c number:
+
+        String title = c.getTitle();
+        String cnumber;
+        title = title.replaceAll("\\s","");
+        String[] part = title.split("(?<=\\D)(?=\\d)");
+
+        title = part[0];
+        cnumber = part[1];
+
+        int id = -1;
+        int new_id = -1;
+        // determine if that course exists:
+
+        try{
+
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
+                    title, cnumber));
+
+
+            while(rs.next()){
+
+                id = rs.getInt(1);
+            }
+
+            // if -1 means that it does not exist
+            if(id == -1){
+
+                //create it here
+                new_id = insertCourseQuery(c);
+
+
+                //insert this new id into the semester_course table
+
+                statement.executeQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE (COURSEID, SEMESTERID) VALUES(%d, %d)", new_id, 5));
+
+
+            }else{
+
+                //execute update method here
+                executeNoReturnQuery(String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s' " +
+                        "WHERE ID = %d",title, cnumber,c.getDescription(),c.getDepartment(),c.getID()));
+
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Turns out we are getting an exception @ updateCourseQuery2()");
+
+        }
+
+
+
+    }
+
+
+    //==================================
+
     private String updateResourceQuery(Resource resource){
 
         return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s, " +
