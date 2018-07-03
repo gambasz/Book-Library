@@ -1297,13 +1297,14 @@ public class DBManager {
                     personTmp = new Person(personID, rs5.getString(3), rs5.getString(4),
                             rs5.getString(2));
 
-                    personTmp = setResourcesForPerson(personTmp);
 
-                    courseArray[i].setPersonInstance(personTmp);
+                    personTmp = setResourcesForPerson(personTmp);
+                    //courseArray[i].setPersonInstance(personTmp);
                     //courseArray[i].setResourceInstance(courseResources);
-                    courseArray[i].setResourceInstances(courseResources);
+                    //courseArray[i].setResourceInstances(courseResources);
                     courseList.get(i).setPersonInstance(personTmp);
                     courseList.get(i).setResourceInstances(courseResources);
+
 
                     i++;
                 }
@@ -1386,7 +1387,7 @@ public class DBManager {
         executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
                 " (COURSEID, SEMESTERID) VALUES ('%d', '%d')",id, semesterid));
 
-        
+
         executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
                 " (COURSEID, PERSONID) VALUES ('%d', '%d')",id ,personid));
 
