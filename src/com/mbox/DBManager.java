@@ -1550,20 +1550,27 @@ public class DBManager {
         try {
             int i=0,j=0;
             rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID =%d", courseID));
+            System.out.println("This is courseID:" + courseID);
             while(rs.next()){
                 resourceCourse[i] = rs.getInt(2);
+                System.out.println(resourceCourse[i]);
                 i++;
             }
+            System.out.println("This is size of course_resource array"+ i);
 
             rs = st.executeQuery(String.format("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID =%d", personID));
+            System.out.println("this is personID" + personID);
             while(rs.next()){
                 resourcePerson[j] = rs.getInt(2);
+                System.out.println(resourcePerson[j]);
                 j++;
+
             }
-            for(int a=0;i<resourceCourse.length;i++){
+            System.out.println("This is size of course_resource array"+ j);
+            for(int a=0;a<resourceCourse.length;a++){
                 for(int e=0;e<resourcePerson.length;e++){
                     if(resourceCourse[a]==resourcePerson[e]){
-                        commonResource[a] = resourceCourse[e];
+                        commonResource[a] = resourcePerson[e];
                     }
                 }
             }
