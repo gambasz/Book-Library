@@ -343,8 +343,11 @@ public class Controller {
                 showError("Connection Error", "Server did not return any  data", "The returnEverything did not return any course");
                 pulledDatabase = new ArrayList<>();
             }
+
             for (int k = 0; k < pulledDatabase.size(); k++) {
                 courseList.add(pulledDatabase.get(k));
+                System.out.println("TESTING COMMONID: Title: "+pulledDatabase.get(k).getTitle()+
+                        "\tcommonID: "+ pulledDatabase.get(k).getCommonID());
                 for (Resource r : pulledDatabase.get(k).getResource()) {
                     if (!resList.contains(r))
                         resList.add(r);

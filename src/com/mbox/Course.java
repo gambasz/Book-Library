@@ -81,6 +81,7 @@ public class Course {
 
         frontend.data.Course tmp = new frontend.data.Course(this.id, this.id, Integer.valueOf(year),semester, this.title, this.department,
                 this.personInstance.initPersonGUI(), this.description, tmpResource);
+        tmp.setCommonID(this.commonID);
         return tmp;
 
     }
