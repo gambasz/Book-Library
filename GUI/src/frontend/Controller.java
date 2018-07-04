@@ -254,59 +254,66 @@ public class Controller {
 //        selectedPerson.setLastName(profInfoLName.getText());
 //        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
 
-        selectedPerson = new Person(selectedPerson);
-        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getItems());
-        
-        Course tempCour = new Course(
-                selectedCourse.getID(),
-                tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
-                Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
-                semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-                courseInfoTitle.getText(),
-                courseInfoDepart.getText(),
-                selectedPerson, courseInfoDescrip.getText(), tempRes);
+        if (selectedCourse != null) {
+            selectedPerson = new Person(selectedPerson);
+            ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getItems());
 
-        //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
+            Course tempCour = new Course(
+                    selectedCourse.getID(),
+                    tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
+                    Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
+                    semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+                    courseInfoTitle.getText(),
+                    courseInfoDepart.getText(),
+                    selectedPerson, courseInfoDescrip.getText(), tempRes);
+
+            //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
 
-        // I create a new object and then check if the information in the boxes are different form
-        // the Selected Course Object, then if there is a difference, I will add a new course/person/...
-        boolean courseChanged = false, professorChanged = false, resourceChanged = false;
+            // I create a new object and then check if the information in the boxes are different form
+            // the Selected Course Object, then if there is a difference, I will add a new course/person/...
+            boolean courseChanged = false, professorChanged = false, resourceChanged = false;
 
-        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
-                tempCour.getProfessor().getLastName() != profInfoLName.getText();
-        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
-                tempCour.getDepartment() != courseInfoDescrip.getText();
-        // I don't check type rn. Need to check later with fk.. enum :))
+            professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
+                    tempCour.getProfessor().getLastName() != profInfoLName.getText();
+            courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
+                    tempCour.getDepartment() != courseInfoDescrip.getText();
+            // I don't check type rn. Need to check later with fk.. enum :))
 
-        if (professorChanged) {
-            tempCour.getProfessor().setFirstName(profInfoFName.getText());
-            tempCour.getProfessor().setLastName(profInfoLName.getText());
-            tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-            int id = DBManager.insertPersonQuery(selectedPerson);
-            tempCour.getProfessor().setID(id);
+            if (professorChanged) {
+                tempCour.getProfessor().setFirstName(profInfoFName.getText());
+                tempCour.getProfessor().setLastName(profInfoLName.getText());
+                tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+                int id = DBManager.insertPersonQuery(selectedPerson);
+                tempCour.getProfessor().setID(id);
+            }
+            if (courseChanged) {
+                System.out.println(courseInfoDepart.getText());
+                System.out.println(courseInfoDescrip.getText());
+
+                tempCour.setDepartment(courseInfoDepart.getText());
+                tempCour.setTitle(courseInfoTitle.getText());
+                tempCour.setDescription(courseInfoDescrip.getText());
+                int cID = DBManager.insertCourseQuery(tempCour);
+                //System.out.println("Course ID is: " + tempCour.getID()+"  Should be: " + cID);
+                tempCour.setID(cID);
+                System.out.println("New Course Added");
+            }
+
+
+            System.out.println("PrfoessorID before adding" + tempCour.getProfessor().getID());
+            courseList.add(tempCour); // later on it should be gone, nothing should not be in courseList manually
+            // Everything in coureseList should be get from the DB.
+
+            DBManager.relationalInsertByID2(tempCour);
+
+            updateCourseTable();
         }
-        if (courseChanged) {
-            System.out.println(courseInfoDepart.getText());
-            System.out.println(courseInfoDescrip.getText());
-
-            tempCour.setDepartment(courseInfoDepart.getText());
-            tempCour.setTitle(courseInfoTitle.getText());
-            tempCour.setDescription(courseInfoDescrip.getText());
-            int cID = DBManager.insertCourseQuery(tempCour);
-            //System.out.println("Course ID is: " + tempCour.getID()+"  Should be: " + cID);
-            tempCour.setID(cID);
-            System.out.println("New Course Added");
+        else{
+            System.out.println("Not selected");
+            showError("Selection error", "No course selected",
+                    "Please select a course to add, update or delete");
         }
-
-
-        System.out.println("PrfoessorID before adding" + tempCour.getProfessor().getID());
-        courseList.add(tempCour); // later on it should be gone, nothing should not be in courseList manually
-        // Everything in coureseList should be get from the DB.
-
-        DBManager.relationalInsertByID2(tempCour);
-
-        updateCourseTable();
     }
 
     public void filterTableBasedOnSemesterNYear() {
@@ -354,6 +361,7 @@ public class Controller {
 
                 }
                 //System.out.println("If this is the error, desription:" + pulledDatabase.get(k).getDescription() + pulledDatabase.get(k).getDepartment());
+                //
 
             }
 
@@ -394,6 +402,8 @@ public class Controller {
                         final int index = row.getIndex();
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
+                            System.out.println("Deselect, isSelected is false");
+                            resetSelect();
                             event.consume();
                             updateRowSelected();
                         }
@@ -901,57 +911,62 @@ public class Controller {
      */
     public void openResourceView() {
         //TODO: migrate Publisher add and modify window
-
-        VBox mainPane = new VBox();
-        Dialog dlg = new Dialog();
-        TitledPane resourceTitlePane = new TitledPane();
-        VBox resourceEditPane = resourceDetailedView();
-        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
-        icon.setFitHeight(75);
-        icon.setFitWidth(75);
-
-
-        ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
-
-        resourceTable.getItems().clear();
-        resourceTable.getItems().addAll(selectedCourse.getResource());
-
-        updateRowSelected();
+        if(selectedCourse!= null) {
+            VBox mainPane = new VBox();
+            Dialog dlg = new Dialog();
+            TitledPane resourceTitlePane = new TitledPane();
+            VBox resourceEditPane = resourceDetailedView();
+            ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+            icon.setFitHeight(75);
+            icon.setFitWidth(75);
 
 
-        resourceTitlePane.setContent(resourceEditPane);
-        resourceTitlePane.setText("Resource Details and Management");
-        resourceTitlePane.setAlignment(Pos.CENTER);
+            ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
-        mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
-        mainPane.setAlignment(Pos.CENTER);
+            resourceTable.getItems().clear();
+            resourceTable.getItems().addAll(selectedCourse.getResource());
 
-
-        dlg.setTitle("Assigning Resource");
-        dlg.setHeaderText("Assigning Resource");
-
-        dlg.setGraphic(icon);
-        dlg.getDialogPane().setMinWidth(400);
+            updateRowSelected();
 
 
-        dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+            resourceTitlePane.setContent(resourceEditPane);
+            resourceTitlePane.setText("Resource Details and Management");
+            resourceTitlePane.setAlignment(Pos.CENTER);
 
-        dlg.show();
-        dlg.setResultConverter(dialogButton -> {
-            if (dialogButton == assign) {
-                //TODO: this is where the assign button locates
+            mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
+            mainPane.setAlignment(Pos.CENTER);
 
-                selectedCourse.getResource().clear();
-                selectedCourse.getResource().addAll(resourceTable.getItems());
-                resInfoList.getItems().clear();
-                for (Resource r : selectedCourse.getResource())
-                    resInfoList.getItems().add(r.getTitle());
 
+            dlg.setTitle("Assigning Resource");
+            dlg.setHeaderText("Assigning Resource");
+
+            dlg.setGraphic(icon);
+            dlg.getDialogPane().setMinWidth(400);
+
+
+            dlg.getDialogPane().setContent(mainPane);
+            dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+            dlg.show();
+            dlg.setResultConverter(dialogButton -> {
+                if (dialogButton == assign) {
+                    //TODO: this is where the assign button locates
+
+                    selectedCourse.getResource().clear();
+                    selectedCourse.getResource().addAll(resourceTable.getItems());
+                    resInfoList.getItems().clear();
+                    for (Resource r : selectedCourse.getResource())
+                        resInfoList.getItems().add(r.getTitle());
+
+                    return null;
+                }
                 return null;
-            }
-            return null;
-        });
+            });
+        }
+        else{
+            showError("Selection error", "No course selected",
+                    "Please select a course to add, update or delete");
+        }
     }
 
     /**

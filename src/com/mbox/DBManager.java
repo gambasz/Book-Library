@@ -1449,7 +1449,7 @@ public class DBManager {
                 cDepartment = rs.getString(5);
                 System.out.println("courseID "+courseID);
             }
-            courseResources = findResourcesCourse(courseID);
+            //courseResources = findResourcesCourse(courseID);
 
 
             //=======================Finding and creating Persons list teaching that course=============================
