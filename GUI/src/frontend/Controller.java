@@ -496,7 +496,13 @@ public class Controller {
         Person tempPerson = new Person(selectedPerson);
         DBManager.deleteRelationCoursePersonResources(selectedCourse);
         //right now does not check the resource. Changes them to whatever the value on the left is.
-        ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getSelectionModel().getSelectedItems());
+
+        ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
+        System.out.println("Test in update if course has commonID" + selectedCourse.getCommonID());
+
+        for(int i=0;i<tempRes.size();i++){
+            System.out.println("This is elements in tempRes " + tempRes.get(i).toString());
+        }
 
         Course tempCour = new Course(
                 selectedCourse.getID(),
@@ -505,7 +511,8 @@ public class Controller {
                 semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                 selectedCourse.getTitle(),
                 selectedCourse.getDepartment(),
-                tempPerson, selectedCourse.getDescription(), selectedCourse.getResource());
+                tempPerson, selectedCourse.getDescription(), tempRes);
+        tempCour.setCommonID(selectedCourse.getCommonID());
 
 //       System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -797,7 +804,7 @@ public class Controller {
         ArrayList<Resource> temp = new ArrayList<>();
         temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
         for (Resource r : temp) {
-            resList.remove(r);
+//            resList.remove(r);
             resourceTable.getItems().remove(r);
             resInfoList.getItems().remove(r.getTitle());
             for (Course c : courseList) {
@@ -826,6 +833,7 @@ public class Controller {
         selectedPublisher = tempPub;
         DBManager.setIDinResourceFromArrayList(resList);
         System.out.println("This is add button");
+        //add(+) button is fine
     }
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
@@ -875,7 +883,7 @@ public class Controller {
     }
 
     private void deleteResource(Resource res) {
-//        resList.remove(res);
+        resList.remove(res);
 
     }
 
@@ -954,10 +962,11 @@ public class Controller {
 
                     selectedCourse.getResource().clear();
                     selectedCourse.getResource().addAll(resourceTable.getItems());
+
                     resInfoList.getItems().clear();
                     for (Resource r : selectedCourse.getResource())
                         resInfoList.getItems().add(r.getTitle());
-
+//Everything is fine here
                     return null;
                 }
                 return null;

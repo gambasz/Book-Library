@@ -20,7 +20,7 @@ public class Course {
     private SimpleStringProperty title, department, description;
     private Person professor;
     private ArrayList<Resource> resource;
-    private int commonID = 0;
+    private int commonID=0;
 
 
 

@@ -57,12 +57,14 @@ public class Course {
 
         frontend.data.Course tmp = new frontend.data.Course(this.id, this.id, 2018,"FALL", this.title, this.department,
                 this.personInstance.initPersonGUI(), this.description, tmpResource);
+        tmp.setCommonID(this.commonID);
         return tmp;
 
     }
 
     public frontend.data.Course initCourseGUIBasic(){
         frontend.data.Course tmp = new frontend.data.Course(this.id,this.title,this.department,this.description);
+        tmp.setCommonID(this.commonID);
         return tmp;
     }
 

@@ -592,7 +592,7 @@ public class DBManager {
 
 
     public static String insertResourceQuery(Resource resource){
-
+//TODO: Khanh is here. IF in description, someone writes in it's a.... It will mistakenly understand that 'it's a test'(which three ' )
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
                         "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
@@ -1472,6 +1472,8 @@ public class DBManager {
                 System.out.println("PersonID is: "+personID +"\n");
                 courseList.get(i).setCommonID(commonID);
 
+
+
                 rsTemp = stTemp.executeQuery(getPersonInTableQuery(personID));
                 System.out.println("rsTemp: " + rsTemp.getFetchSize());
                 while (rsTemp.next()) {
@@ -1609,54 +1611,18 @@ public class DBManager {
         ResultSet rs;
         int personID = c.getProfessor().getID();
         int courseID = c.getID();
-        int[] resourcePerson = new int[5];
-        int[] resourceCourse = new int[5];
-        int[] commonResource = new int[5];
+
         try {
-            int i=0,j=0;
-            rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID =%d", courseID));
-            System.out.println("This is courseID:" + courseID);
-            while(rs.next()){
-                resourceCourse[i] = rs.getInt(2);
-                System.out.println(resourceCourse[i]);
-                i++;
-            }
-            System.out.println("This is size of course_resource array"+ i);
 
-            rs = st.executeQuery(String.format("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID =%d", personID));
-            System.out.println("this is personID" + personID);
-            while(rs.next()){
-                resourcePerson[j] = rs.getInt(2);
-                System.out.println(resourcePerson[j]);
-                j++;
-
-            }
-            System.out.println("This is size of course_resource array"+ j);
-            for(int a=0;a<resourceCourse.length;a++){
-                for(int e=0;e<resourcePerson.length;e++){
-                    if(resourceCourse[a]==resourcePerson[e]){
-                        commonResource[a] = resourcePerson[e];
-                    }
-                }
-            }
-
-            for(int d=0;d<commonResource.length;d++){
-                executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID =%d",commonResource[d]));
-                executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE RESOURCEID= %d",commonResource[d]));
-                System.out.println("These are IDs that have been deleted" +commonResource[d]);
-            }
-
+                executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE" +
+                        " COURSEID = '%d' AND COMMONID = '%d'",courseID,c.getCommonID()));
+                executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
+                        " PERSONID = '%d' AND COMMONID = '%d'",personID,c.getCommonID()));
 
         }catch(Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
-
-
-
-
-
 
     }
 
@@ -1664,6 +1630,7 @@ public class DBManager {
 
         //getting all the data
         int id = c.getID();
+        int commonID = c.getCommonID();
 
         int personid = c.getProfessor().getID();
 
@@ -1683,27 +1650,18 @@ public class DBManager {
         for(int j = 0; j < resourceidlist.length; j++){
 
             executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                    " (COURSEID, RESOURCEID) VALUES ('%d', '%d')",id, resourceidlist[j]));
-        }
-
-
-        for(int k = 0; k < resourceidlist.length; k++){
-
+                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')",id, resourceidlist[j],commonID));
 
             String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-                    " (PERSONID, RESOURCEID) VALUES ('%d', '%d')",personid,resourceidlist[k]);
+                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')",personid,resourceidlist[j], commonID);
             executeNoReturnQuery(tempQuery);
-
 
             // there is a problm with this
             System.out.println("Testing purpose:\n" + tempQuery +"\n\n\n\n");
-        }
-
-        for(int l = 0; l < resourceidlist.length; l++){
 
             executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                            " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
-                    resourceidlist[l]));
+                            " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(j).getPublisher().getID(),
+                    resourceidlist[j]));
         }
 
 
@@ -1717,6 +1675,7 @@ public class DBManager {
             String title;
             String type;
             String author;
+
             for (int i = 0; i < resources.size(); i++) {
                 int resourceID = 0;
                 title = resources.get(i).getTitle();
@@ -1736,13 +1695,14 @@ public class DBManager {
                             resources.get(i).getISBN(),resources.get(i).getTotalAmount(),resources.get(i).getCurrentAmount(),
                             resources.get(i).getDescription());
 
-
-                    st.executeQuery(insertResourceQuery(tempRes));
+                    String tempQr = insertResourceQuery(tempRes);
+                    System.out.println(tempQr);
+                    st.executeQuery(tempQr);
                     // Errorrrrrrrr
 
 
                     rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
-                            resources.get(i).getTitle(),resources.get(i).getTYPE(),resources.get(i).getAuthor()));
+                            tempRes.getTitle(),tempRes.getType(),tempRes.getAuthor()));
                     while(rs.next()){
                         resourceID = rs.getInt(1);
 
@@ -1758,6 +1718,7 @@ public class DBManager {
             }
         }catch(Exception e){
             System.out.println("Error in returnIDinResource");
+            e.printStackTrace();
         }
     }
 

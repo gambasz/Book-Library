@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Resource {
     private String TYPE, title, author, description, ISBN;
     private boolean mcUnique;
-    private int totalAmount, ID, currentAmount;
+    private int totalAmount, ID, currentAmount, commonID=0;
     private Publisher publisher;
 
     public Resource(String TYPE, int ID) {
