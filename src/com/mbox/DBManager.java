@@ -1238,30 +1238,41 @@ public class DBManager {
 
 
     public static Person setResourcesForPerson(Person person1){
-        ResultSet rss;
+        ResultSet rss, rss2;
+
         int resourceID;
         int i = 0;
 
-        Resource[] resourcesList = new Resource[20];
+        //Resource[] resourcesList = new Resource[20];
+        ArrayList<Resource> tempResourceList = new ArrayList<Resource>();
 
         try {
-            rss = stt.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + person1.getID());
+            Statement stTemp = conn.createStatement();
+
+            rss = stTemp.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + person1.getID());
             while (rss.next()) {
                 //there will be a list of all reousrces ID that is owned by Person
                 resourceID = rss.getInt(2);
 
-                rss = st3.executeQuery(getResourceInTableQuery(resourceID));
-                while(rss.next()) {
+                rss2 = st3.executeQuery(getResourceInTableQuery(resourceID));
+                while(rss2.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
-                    resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
-                            rss.getString(3), rss.getString(4), rss.getString(5),
-                            rss.getInt(6), rss.getInt(7), rss.getString(8));
-                    setPublisherForResource(resourcesList[i]);
+//                    resourcesList[i] = new Resource(rss2.getInt(1), rss2.getString(2),
+//                            rss2.getString(3), rss2.getString(4), rss2.getString(5),
+//                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8));
+
+                    tempResourceList.add( new Resource(rss2.getInt(1), rss2.getString(2),
+                            rss2.getString(3), rss2.getString(4), rss2.getString(5),
+                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8)) );
+
+                    //setPublisherForResource(resourcesList[i]);
+                    setPublisherForResource(tempResourceList.get(i));
 
                     i++;
                 }
             }
-            person1.setResourcesPerson(resourcesList);
+            //person1.setResourcesPerson(resourcesList);
+            person1.setResourceList(tempResourceList);
             return person1;
         }
         catch (SQLException err){
