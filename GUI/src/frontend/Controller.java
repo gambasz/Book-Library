@@ -76,7 +76,7 @@ public class Controller {
      * - marking all the filter checkboxes to true
      */
     public static void test() {
-        System.out.print("TEST WORKED");
+        System.out.print("The program started running now!");
     }
 
     public void guido() {
@@ -353,8 +353,6 @@ public class Controller {
 
             for (int k = 0; k < pulledDatabase.size(); k++) {
                 courseList.add(pulledDatabase.get(k));
-                System.out.println("TESTING COMMONID: Title: "+pulledDatabase.get(k).getTitle()+
-                        "\tcommonID: "+ pulledDatabase.get(k).getCommonID());
                 for (Resource r : pulledDatabase.get(k).getResource()) {
                     if (!resList.contains(r))
                         resList.add(r);
