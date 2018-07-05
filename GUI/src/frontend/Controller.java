@@ -568,10 +568,12 @@ public class Controller {
             // do nothing
 
         }
-        //TODO: THIS is Khanh
+
 
         courseList.remove(selectedCourse);
-        updateCourseTable();
+        //TODO: THIS is Khanh'change, remember to cut and add when pull
+//       updateCourseTable();
+// call this method twice can mess up the courseList
         courseList.add(tempCour);
         updateCourseTable();
 
@@ -707,7 +709,13 @@ public class Controller {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
-                pubList.add(selectedPublisher);
+
+
+                //TODO: Khanh, put this thing in if statement
+                if(!DBManager.availablePublisher(selectedPublisher)) {
+                    pubList.add(selectedPublisher);
+                }
+
                 return null;
             }
             return null;
@@ -797,7 +805,7 @@ public class Controller {
     }
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
-
+//make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
@@ -807,11 +815,9 @@ public class Controller {
 //            resList.remove(r);
             resourceTable.getItems().remove(r);
             resInfoList.getItems().remove(r.getTitle());
-            for (Course c : courseList) {
-                c.getResource().remove(r);
+            //TODO: THIS is Khanh'change, remember to cut and add when pull
+            selectedCourse.getResource().remove(r);
             }
-
-        }
         updateCourseTable();
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
     }
@@ -884,6 +890,7 @@ public class Controller {
 
     private void deleteResource(Resource res) {
         resList.remove(res);
+
 
     }
 

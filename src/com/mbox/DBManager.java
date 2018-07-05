@@ -599,9 +599,9 @@ public class DBManager {
                 resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
 
     }
-    public String insertPublisherQuery(Publisher publisher){
+    public static String insertPublisherQuery(Publisher publisher){
 
-        return String.format("INSERT INTO PUBLISHER (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
+        return String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
                 publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription());
 
     }
@@ -1620,7 +1620,10 @@ public class DBManager {
                         " PERSONID = '%d' AND COMMONID = '%d'",personID,c.getCommonID()));
                 executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE"+
                         " COURSEID = '%d' AND COMMONID = '%d'", courseID,c.getCommonID()));
-
+                for(int i=0;i< c.getResource().size();i++) {
+                    executeNoReturnQuery(String.format("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE" +
+                            " RESOURCEID = '%d'", c.getResource().get(i).getID()));
+                }
         }catch(Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -1671,11 +1674,30 @@ public class DBManager {
             System.out.println("ResourceID of this course" + c.getResource().get(0).getID());
 
 
-
-            executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                            " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(j).getPublisher().getID(),
-                    resourceidlist[j]));
         }
+        try {
+        for(int k=0; k < resourceidlist.length;k++) {
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
+                    "PUBLISHERID = '%d'" ,r.get(k).getID(),r.get(k).getPublisher().getID()));
+            int resourceID=0;
+            while (rs.next()) {
+                resourceID = rs.getInt(2);
+                }
+            System.out.println("resourceID now " + resourceID);
+            if (resourceID == 0) {
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
+                        resourceidlist[k]));
+                System.out.println(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
+                        resourceidlist[k]));
+            }
+        }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
 
 
     }
@@ -1733,6 +1755,59 @@ public class DBManager {
             System.out.println("Error in returnIDinResource");
             e.printStackTrace();
         }
+    }
+
+    public static boolean availablePublisher(frontend.data.Publisher p){
+        try {
+            Statement st = conn.createStatement();
+
+            String title;
+            String info;
+            String descrip;
+            int pubID = 0;
+
+                title = p.getName();
+                info = p.getContacts();
+                descrip = p.getDescription();
+
+                String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' AND CONTACT_INFO ='%s' AND DESCRIPTION ='%s'",title,info,descrip);
+                ResultSet rs = st.executeQuery(query);
+
+                while(rs.next()){
+                    pubID = rs.getInt(1);
+                }
+
+                if(pubID == 0){
+                    //Errorrrrrrrrrr
+                    Publisher tempPub= new Publisher(0,title,info,descrip);
+
+                    String tempQr = insertPublisherQuery(tempPub);
+                    System.out.println(tempQr);
+                    st.executeQuery(tempQr);
+                    // Errorrrrrrrr
+
+
+                    rs = st.executeQuery(String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' AND CONTACT_INFO ='%s' AND DESCRIPTION ='%s'",
+                            title,info,descrip));
+                    while(rs.next()){
+                        pubID = rs.getInt(1);
+
+                    }
+                    p.setID(pubID);
+                    return false;
+
+                } else {
+                    p.setID(pubID);
+                    return true;
+                    }
+
+
+
+        }catch(Exception e){
+            System.out.println("Error in availablePublisher");
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //==================================================================================================================
