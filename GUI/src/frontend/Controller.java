@@ -76,7 +76,7 @@ public class Controller {
      * - marking all the filter checkboxes to true
      */
     public static void test() {
-        System.out.print("TEST WORKED");
+        System.out.print("The program started running now!");
     }
 
     public void guido() {
@@ -353,8 +353,6 @@ public class Controller {
 
             for (int k = 0; k < pulledDatabase.size(); k++) {
                 courseList.add(pulledDatabase.get(k));
-                System.out.println("TESTING COMMONID: Title: "+pulledDatabase.get(k).getTitle()+
-                        "\tcommonID: "+ pulledDatabase.get(k).getCommonID());
                 for (Resource r : pulledDatabase.get(k).getResource()) {
                     if (!resList.contains(r))
                         resList.add(r);
@@ -454,8 +452,8 @@ public class Controller {
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Course, String> c) {
                 Course cTemp = c.getValue();
                 StringBuffer temp = new StringBuffer();
-                temp.append(cTemp.getSEMESTER().substring(0, 3));
-                temp.append(" ∈");
+                temp.append(cTemp.getSEMESTER());
+                temp.append("-");
                 temp.append(cTemp.getYEAR());
                 return new SimpleStringProperty(temp.toString());
             }
@@ -806,6 +804,7 @@ public class Controller {
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
+
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
@@ -1082,8 +1081,15 @@ public class Controller {
         ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
         resourceTable.getItems().clear();
-        if (selectedItem.getResources() != null)
+       com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
+       selectedItem = tempPerson.initPersonGUI();
+        if (selectedItem.getResources() != null){
             resourceTable.getItems().addAll(selectedItem.getResources());
+            for (Resource resource : selectedItem.getResources()){
+                System.out.println("The reosurce is: "+resource.getTitle());
+            }
+
+        }
         updateRowSelected();
 
 
@@ -1108,12 +1114,12 @@ public class Controller {
 
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
-            if (dialogButton == assign) {
-                selectedItem.getResources().clear();
-                selectedItem.getResources().addAll(resourceTable.getItems());
-
-                return null;
-            }
+//            if (dialogButton == assign) {
+//                selectedItem.getResources().clear();
+//                selectedItem.getResources().addAll(resourceTable.getItems());
+//
+//                return null;
+//            }
             return null;
         });
 

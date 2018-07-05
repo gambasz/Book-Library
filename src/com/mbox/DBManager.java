@@ -1,15 +1,8 @@
 package com.mbox;
 import java.sql.*;
 import java.util.*;
-import com.mbox.Main;
-import com.sun.istack.internal.Nullable;
 import frontend.data.PersonType;
-import jdk.management.resource.ResourceContext;
-import jdk.management.resource.ResourceId;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import java.io.*;
-import javax.sound.midi.SysexMessage;
-import javax.xml.transform.Result;
 
 public class DBManager {
     public static Statement st;
@@ -1245,30 +1238,41 @@ public class DBManager {
 
 
     public static Person setResourcesForPerson(Person person1){
-        ResultSet rss;
+        ResultSet rss, rss2;
+
         int resourceID;
         int i = 0;
 
-        Resource[] resourcesList = new Resource[20];
+        //Resource[] resourcesList = new Resource[20];
+        ArrayList<Resource> tempResourceList = new ArrayList<Resource>();
 
         try {
-            rss = stt.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + person1.getID());
+            Statement stTemp = conn.createStatement();
+
+            rss = stTemp.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + person1.getID());
             while (rss.next()) {
                 //there will be a list of all reousrces ID that is owned by Person
                 resourceID = rss.getInt(2);
 
-                rss = st3.executeQuery(getResourceInTableQuery(resourceID));
-                while(rss.next()) {
+                rss2 = st3.executeQuery(getResourceInTableQuery(resourceID));
+                while(rss2.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
-                    resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
-                            rss.getString(3), rss.getString(4), rss.getString(5),
-                            rss.getInt(6), rss.getInt(7), rss.getString(8));
-                    setPublisherForResource(resourcesList[i]);
+//                    resourcesList[i] = new Resource(rss2.getInt(1), rss2.getString(2),
+//                            rss2.getString(3), rss2.getString(4), rss2.getString(5),
+//                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8));
+
+                    tempResourceList.add( new Resource(rss2.getInt(1), rss2.getString(2),
+                            rss2.getString(3), rss2.getString(4), rss2.getString(5),
+                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8)) );
+
+                    //setPublisherForResource(resourcesList[i]);
+                    setPublisherForResource(tempResourceList.get(i));
 
                     i++;
                 }
             }
-            person1.setResourcesPerson(resourcesList);
+            //person1.setResourcesPerson(resourcesList);
+            person1.setResourceList(tempResourceList);
             return person1;
         }
         catch (SQLException err){
@@ -1345,7 +1349,6 @@ public class DBManager {
                 ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
 
                 while(rss.next()) {
-                    System.out.println("");
                     // ID, Type, Title, Author, ISBN, total, current, desc
                     listResources.add(new Resource(rss.getInt(1), rss.getString(2),
                             rss.getString(3), rss.getString(4), rss.getString(5),
@@ -1415,11 +1418,13 @@ public class DBManager {
 
 
     public static ArrayList<Course> relationalReadByCourseID(int courseID) {
+        long startTime = System.nanoTime();
+
         // This method is only accept ONE courseID and will find all relations to that course
         //So you may need to call the function N times with different courseID to get all information stored in table
-        Course[] courseArray = new Course[20]; //Will make it a dynamic array list
+        //Course[] courseArray = new Course[20]; //Will make it a dynamic array list
         ArrayList<Course>  courseList = new ArrayList<>();
-        ResultSet rs5, rsTmp;
+        ResultSet rsTmp;
 
         int personID = 0, i=0, pID=0, cID = 0, commonID =0;
         int[] pr = new int[20], cr = new int[20];
@@ -1447,7 +1452,7 @@ public class DBManager {
                 cID = rs.getInt(1);
                 cDescription = rs.getString(4);
                 cDepartment = rs.getString(5);
-                System.out.println("courseID "+courseID);
+                System.out.println("\ncourseID "+courseID);
             }
             //courseResources = findResourcesCourse(courseID);
 
@@ -1463,19 +1468,18 @@ public class DBManager {
 
                 //courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
                 courseList.add(new Course(cID, cTitle, cDepartment, cDescription, "CRN"));
-                System.out.println("This is the: " + j);
+                System.out.println("\nThis is the: " + j);
                 j++;
 
                 personID = rsTmp.getInt(2);
                 commonID = rsTmp.getInt("commonid");
                 System.out.println("Commonid is: "+commonID);
-                System.out.println("PersonID is: "+personID +"\n");
+                System.out.println("PersonID is: "+personID);
                 courseList.get(i).setCommonID(commonID);
 
 
 
                 rsTemp = stTemp.executeQuery(getPersonInTableQuery(personID));
-                System.out.println("rsTemp: " + rsTemp.getFetchSize());
                 while (rsTemp.next()) {
                     // I'm getting all the info for each person,
                     // this loop would run n times for n persons, but must be only one result
@@ -1498,11 +1502,13 @@ public class DBManager {
 
                     i++;
                 }
-                System.out.println("Rad " + j);
 
 
             }
 
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("It took this time to run Read Relational: "+duration/1000000+ "ms For "+courseList.size()+" courses.\n");
             return courseList;
 
         }catch(Exception e){

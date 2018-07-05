@@ -1,6 +1,7 @@
 package com.mbox;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Resource {
 
@@ -66,6 +67,7 @@ public class Resource {
                 this.description, true, this.total_amount, this.id, this.current_amount, this.publisherInstance.initPublisherGUI());
         return tmp;
     }
+
 
 
     public void setCommonID(int commonID) {

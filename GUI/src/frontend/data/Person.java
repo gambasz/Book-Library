@@ -101,4 +101,12 @@ public class Person {
         return firstName.concat(" ").concat(lastName).concat(" | ").concat(type.toString());
 
     }
+
+
+
+    public com.mbox.Person initPersonBackend(){
+
+        com.mbox.Person person1 = new com.mbox.Person(this.getID(), this.firstName, this.lastName, this.type.toString());
+        return person1;
+    }
 }
