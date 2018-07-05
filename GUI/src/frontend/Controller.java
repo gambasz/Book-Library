@@ -203,6 +203,7 @@ public class Controller {
     }
 
     public void updateRowSelected() {
+        // Filling textboxes on the left, selectedcourse
         selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
         if (selectedCourse != null) {
             updateBtn.setVisible(true);
@@ -344,7 +345,6 @@ public class Controller {
             DBManager.openConnection();
 
             ArrayList<Course> pulledDatabase = DBManager.returnEverything(defaultSemester);
-
 
             if (pulledDatabase == null) {
                 showError("Connection Error", "Server did not return any  data", "The returnEverything did not return any course");
@@ -1176,6 +1176,7 @@ public class Controller {
                 courseInfoDescrip.setText(selectedCourse.getDescription());
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
+
                 //TODO:// uncomment when resources added
 //                ArrayList<Resource> tempRes = selectedCourse.getResource();
 //                resourceTable.getItems().clear();

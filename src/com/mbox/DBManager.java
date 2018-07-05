@@ -1448,10 +1448,10 @@ public class DBManager {
 
             while(rs.next()) {
 
-                cTitle = rs.getString(2) +" " + rs.getString(3);
-                cID = rs.getInt(1);
-                cDescription = rs.getString(4);
-                cDepartment = rs.getString(5);
+                cTitle = rs.getString("TITLE") +" " + rs.getString("CNUMBER");
+                cID = rs.getInt("ID");
+                cDescription = rs.getString("DESCRIPTION");
+                cDepartment = rs.getString("DEPARTMENT");
                 System.out.println("\ncourseID "+courseID);
             }
             //courseResources = findResourcesCourse(courseID);
@@ -1467,7 +1467,7 @@ public class DBManager {
             while (rsTmp.next()) {
 
                 //courseArray[i] = new Course(cID, cTitle, cDepartment, cDescription, "CRN");
-                courseList.add(new Course(cID, cTitle, cDepartment, cDescription, "CRN"));
+                courseList.add(new Course(cID, cTitle, cDescription,cDepartment, "CRN"));
                 System.out.println("\nThis is the: " + j);
                 j++;
 
@@ -1820,6 +1820,7 @@ public class DBManager {
             for(int j = 0; j < tmpCourse.size(); j++) {
 
                 hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester[0],semester[1]));
+
 
             }
         }
