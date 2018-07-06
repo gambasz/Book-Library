@@ -1377,7 +1377,7 @@ public class Controller {
 
         } else {
 
-            Person newperson = new Person(profInfoLName.getText(), profInfoFName.getText(), -1,
+            Person newperson = new Person("Webb", "Alla", -1,
                     profInfoType.getSelectionModel().getSelectedItem().toString());
 
             new_course.setProfessor(newperson);
@@ -1395,7 +1395,7 @@ public class Controller {
 
         } else {
 
-            new_course.setTitle(courseInfoTitle.getText());
+            new_course.setTitle("CMSC140");
             new_course.setDepartment(courseInfoDepart.getText());
             new_course.setDescription(courseInfoDescrip.getText());
             new_course.setCommonID(selectedCourse.getCommonID());

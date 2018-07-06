@@ -2528,12 +2528,13 @@ public class DBManager {
                 st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = %d WHERE ID = %d",
                         c.get(1).getID(), c.get(0).getCommonID()));
 
-                frontend.data.Person professor = c.get(1).getProfessor();
-                c.get(1).getProfessor().setID(find_person_by_name(professor));
+
+                c.get(1).getProfessor().setID(find_person_by_name(c.get(1).getProfessor()));
+                System.out.println(c.get(1).getProfessor().getID());
 
 
                 st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = %d, PERSONID = %d WHERE " +
-                                "ID = %d", c.get(1).getID(), professor.getID(),
+                                "COMMONID = %d", c.get(1).getID(), c.get(1).getProfessor().getID(),
                         c.get(0).getCommonID()));
 
             }catch(SQLException e){
@@ -2608,12 +2609,11 @@ public class DBManager {
         try{
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = " +
-                    "'%s'", p.getFirstName(), p.getLastName()));
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = '%s'", p.getFirstName(), p.getLastName()));
 
             while(rs.next()){
 
-                id = rs.getInt("id");
+                id = rs.getInt("ID");
             }
 
             if(id == -1){
@@ -2626,7 +2626,7 @@ public class DBManager {
 
                 while(rs.next()){
 
-                    id = rs.getInt("id");
+                    id = rs.getInt("ID");
                 }
 
                 return id;
