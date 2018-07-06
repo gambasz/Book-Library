@@ -14,12 +14,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The main controller class for th gui fxml file that has all the functionality need to provide a smooth user experience.
@@ -623,11 +629,7 @@ public class Controller {
     }
 
 
-    public void exportData() {
-    }
 
-    public void importData() {
-    }
 
     /**
      * Handles the filter check boxes action
@@ -1259,4 +1261,69 @@ public class Controller {
 
         alert.showAndWait();
     }
+    public void showExportView(){
+        Dialog dlg = new Dialog();
+
+        CheckBox pubInfo = new CheckBox("All Publisher Info");
+        CheckBox resNPubInfo = new CheckBox("  All the resources data, associate with publisher");
+        CheckBox personWResInfo = new CheckBox("All the Person with resources associated");
+        CheckBox courseWResInfo = new CheckBox(" All the courses with resources associated.");
+
+        Button exportNSave = new Button("Export");
+        exportNSave.setOnAction(e->{
+            pickSaveFile(dlg);
+        });
+        VBox checkboxPane = new VBox(20);
+        checkboxPane.getChildren().addAll(pubInfo,resNPubInfo,personWResInfo,courseWResInfo);
+        checkboxPane.setAlignment(Pos.CENTER_LEFT);
+
+        VBox mainPane = new VBox(20);
+        mainPane.getChildren().addAll(checkboxPane,exportNSave);
+        mainPane.setAlignment(Pos.CENTER);
+
+        dlg.setTitle("Exporting");
+        dlg.setHeaderText("Exporting Data");
+//        dlg.setGraphic(icon);
+        dlg.getDialogPane().setMinWidth(300);
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+
+            return null;
+        });
+
+
+
+    }
+
+    private void pickSaveFile(Dialog dlg) {
+        FileChooser fileChooser = new FileChooser();
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+        //Show save file dialog
+        File file = fileChooser.showSaveDialog(null);
+        if(file != null){
+            SaveFile("Hello text here", file);}
+    }
+
+    private void SaveFile(String content, File file){
+        try {
+            FileWriter fileWriter = null;
+
+            fileWriter = new FileWriter(file);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void importData() {
+    }
+
 }
