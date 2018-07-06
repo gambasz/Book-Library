@@ -46,6 +46,7 @@ public class Controller {
     private Publisher selectedPublisher;
     private Person selectedPerson;
     private int defaultSemester = 5;
+    private boolean isPersonResourcesView = false;
 
 
 
@@ -1029,6 +1030,7 @@ public class Controller {
         });
         PersonResources.setOnAction(e -> {
             ArrayList<Resource> tempRes =new ArrayList<>();
+            isPersonResourcesView = true;
             tempRes.addAll(resList);
             System.out.print(tempRes);
             currentProfessors.getSelectionModel().getSelectedItem().setResources(tempRes);
@@ -1080,7 +1082,7 @@ public class Controller {
         icon.setFitWidth(75);
 
 
-        ButtonType assign = new ButtonType("Assign the  Selected Resources", ButtonBar.ButtonData.OK_DONE);
+        ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
         resourceTable.getItems().clear();
        com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
