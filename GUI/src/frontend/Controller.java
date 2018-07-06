@@ -1267,6 +1267,7 @@ public class Controller {
     }
     public void showExportView(){
         Dialog dlg = new Dialog();
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
 
         CheckBox pubInfo = new CheckBox("All Publisher Info");
         CheckBox resNPubInfo = new CheckBox("  All the resources data, associate with publisher");
@@ -1287,7 +1288,7 @@ public class Controller {
 
         dlg.setTitle("Exporting");
         dlg.setHeaderText("Exporting Data");
-//        dlg.setGraphic(icon);
+        dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
