@@ -2496,17 +2496,17 @@ public class DBManager {
         }else if(c.get(0).equals(c.get(1))){
 
 
-            //needs to check for non existing professors
-            frontend.data.Person professor = c.get(0).getProfessor();
+            //needs to check for non existing professor
+            
+            c.get(0).getProfessor().setID(find_person_by_name(c.get(0).getProfessor()));
 
-            professor.setID(find_person_by_name(professor));
 
             try{
 
                 Statement st = conn.createStatement();
 
                 st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET PERSONID = %d WHERE " +
-                        "COMMONID = %d", professor.getID(), c.get(0).getCommonID()));
+                        "COMMONID = %d", c.get(0).getProfessor().getID(), c.get(0).getCommonID()));
 
             }catch(SQLException e){
 

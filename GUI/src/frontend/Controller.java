@@ -1333,14 +1333,6 @@ public class Controller {
 
     public void newupdate() {
 
-        // get selected course, person and resource
-        // compare it with new data
-
-        //if same -> do nothing
-        // if just course change -> change course
-        // if just person changed -> change person
-        // if both changed, change both
-
 //        if(selected_course.getResource().equals(resList)){
 //
 //            System.out.println("This works!");
@@ -1357,47 +1349,56 @@ public class Controller {
 //            }
 //        }
 
+
         ArrayList<Course> courses = new ArrayList<>();
         ArrayList<Resource> selected_resources = selectedCourse.getResource();
         ArrayList<Resource> new_resources = resList;
 
+
+        String newname = profInfoFName.getText();
+        String newlastname = profInfoLName.getText();
+        String newtype = profInfoType.getSelectionModel().getSelectedItem().toString();
+
+
         Person selected_person = selectedPerson;
-        Person new_person = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
+        Person new_person = new Person(newlastname, newname, newtype);
 
         //checking person
 
         Course selected_course = selectedCourse;
-        Course new_course = new Course(-1, courseInfoTitle.getText(), courseInfoDepart.getText(),
-                courseInfoDescrip.getText());
+        String newcoursetitle = courseInfoTitle.getText();
+        String newcoursedepartment = courseInfoDepart.getText();
+        String newcoursedescription = courseInfoDescrip.getText();
+
+        Course new_course = new Course(-1, newcoursetitle, newcoursedepartment, newcoursedescription);
 
         //if they are the same
-        if (false) {
+
+        if(selected_person.getFirstName() == new_person.getFirstName() && selected_person.getLastName() == new_person.getLastName()) {
 
             new_course.setProfessor(selected_person);
+            System.out.println("The two people are the same");
 
         } else {
 
-            Person newperson = new Person("Webb", "Alla", -1,
-                    profInfoType.getSelectionModel().getSelectedItem().toString());
-
-            new_course.setProfessor(newperson);
+            new_course.setProfessor(new_person);
+            System.out.println("Two people are different");
 
         }
 
         //checking course
 
         //if they are the same
-        if (false) {
 
-            courses.set(0, selected_course);
-            courses.set(1, selected_course);
+        if (selected_course.getTitle() == new_course.getTitle() && selected_course.getDepartment() == new_course.getDepartment() && selected_course.getDescription() == new_course.getDescription()) {
+
+            courses.add(selected_course);
+            courses.add(selected_course);
             DBManager.updateCourseQuery123(courses);
+            System.out.println("This never runs");
 
         } else {
 
-            new_course.setTitle("CMSC140");
-            new_course.setDepartment(courseInfoDepart.getText());
-            new_course.setDescription(courseInfoDescrip.getText());
             new_course.setCommonID(selectedCourse.getCommonID());
 
             courses.add(selected_course);
