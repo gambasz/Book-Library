@@ -497,135 +497,139 @@ public class Controller {
     }
 
     public void update() {
-        Person tempPerson = new Person(selectedPerson);
-        DBManager.deleteRelationCoursePersonResources(selectedCourse);
-        //right now does not check the resource. Changes them to whatever the value on the left is.
 
-        ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
-        System.out.println("Test in update if course has commonID" + selectedCourse.getCommonID());
-
-        for(int i=0;i<tempRes.size();i++){
-            System.out.println("This is elements in tempRes " + tempRes.get(i).toString());
-        }
-
-        Course tempCour = new Course(
-                selectedCourse.getID(),
-                selectedCourse.getID(),
-                Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
-                semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-                selectedCourse.getTitle(),
-                selectedCourse.getDepartment(),
-                tempPerson, selectedCourse.getDescription(), tempRes);
-        tempCour.setCommonID(selectedCourse.getCommonID());
-
-//       System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
-
-        boolean person_changed = false;
-        boolean course_changed = false;
+        newupdate();
 
 
-        // Checks if there has been any changes to the person and if so puts it inside of the tempCour object
-        if (tempPerson.getFirstName().equals(profInfoFName.getText()) &&
-                tempPerson.getLastName().equals(profInfoLName.getText()) &&
-                tempPerson.getType().equals(profInfoType.getSelectionModel().getSelectedItem().toString())) {
-
-            person_changed = false;
-
-        } else {
-            tempPerson.setFirstName(profInfoFName.getText());
-            tempPerson.setLastName(profInfoLName.getText());
-            tempPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-
-            tempCour.setProfessor(tempPerson);
-
-            person_changed = true;
-        }
-
-
-        if (tempCour.getTitle().equals(courseInfoTitle.getText()) &&
-                tempCour.getDescription().equals(courseInfoDescrip.getText()) &&
-                tempCour.getDepartment().equals(courseInfoDepart.getText())) {
-
-            course_changed = false;
-
-        } else {
-
-            tempCour.setTitle(courseInfoTitle.getText());
-            tempCour.setDescription(courseInfoDescrip.getText());
-            tempCour.setDepartment(courseInfoDepart.getText());
-
-            course_changed = true;
-            System.out.println(course_changed);
-
-        }
-
-        if(course_changed){
-
-            //upload it to the database
-
-            DBManager.updateCourseQuery2(tempCour);
-
-            //why isnt the table updating??
-
-        }else{
-
-            // do nothing
-
-        }
-
-
-        courseList.remove(selectedCourse);
-        //TODO: THIS is Khanh'change, remember to cut and add when pull
-//       updateCourseTable();
-// call this method twice can mess up the courseList
-        courseList.add(tempCour);
-        updateCourseTable();
-
-
-
-        DBManager.insertRelationCourseResources(tempCour);
-
-
+//        Person tempPerson = new Person(selectedPerson);
+//        DBManager.deleteRelationCoursePersonResources(selectedCourse);
+//        //right now does not check the resource. Changes them to whatever the value on the left is.
+//
+//        ArrayList<Resource> tempRes = new ArrayList<Resource>(selectedCourse.getResource());
+//        System.out.println("Test in update if course has commonID" + selectedCourse.getCommonID());
+//
+//        for(int i=0;i<tempRes.size();i++){
+//            System.out.println("This is elements in tempRes " + tempRes.get(i).toString());
+//        }
+//
+//        Course tempCour = new Course(
+//                selectedCourse.getID(),
+//                selectedCourse.getID(),
+//                Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
+//                semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+//                selectedCourse.getTitle(),
+//                selectedCourse.getDepartment(),
+//                tempPerson, selectedCourse.getDescription(), tempRes);
+//        tempCour.setCommonID(selectedCourse.getCommonID());
+//
+////       System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
+//
+//        boolean person_changed = false;
+//        boolean course_changed = false;
 //
 //
-//        // I create a new object and then check if the information in the boxes are different form
-//        // the Selected Course Object, then if there is a difference, I will add a new course/person/...
-//        boolean courseChanged = false, professorChanged = false, resourceChanged = false;
+//        // Checks if there has been any changes to the person and if so puts it inside of the tempCour object
+//        if (tempPerson.getFirstName().equals(profInfoFName.getText()) &&
+//                tempPerson.getLastName().equals(profInfoLName.getText()) &&
+//                tempPerson.getType().equals(profInfoType.getSelectionModel().getSelectedItem().toString())) {
+//
+//            person_changed = false;
+//
+//        } else {
+//            tempPerson.setFirstName(profInfoFName.getText());
+//            tempPerson.setLastName(profInfoLName.getText());
+//            tempPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+//
+//            tempCour.setProfessor(tempPerson);
+//
+//            person_changed = true;
+//        }
 //
 //
+//        if (tempCour.getTitle().equals(courseInfoTitle.getText()) &&
+//                tempCour.getDescription().equals(courseInfoDescrip.getText()) &&
+//                tempCour.getDepartment().equals(courseInfoDepart.getText())) {
 //
+//            course_changed = false;
 //
-////        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
-////                tempCour.getProfessor().getLastName() != profInfoLName.getText();
-////
-////        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
-////                tempCour.getDepartment() != courseInfoDescrip.getText();
+//        } else {
 //
-//        System.out.println(tempCour.getTitle() + " and " + courseInfoTitle.getText());
-//        System.out.println(tempCour.getDescription() + " and " + courseInfoDescrip.getText());
-//        System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
-//        //TODO: Check again why the courseChanged keeps turning true @@ Khanh
-//        // I don't check type rn. Need to check later with fk.. enum :))
-//        if (courseChanged) {
-//
-//            tempCour.setDepartment(courseInfoDepart.getText());
 //            tempCour.setTitle(courseInfoTitle.getText());
 //            tempCour.setDescription(courseInfoDescrip.getText());
-//            DBManager.updateCourseQuery(tempCour);
-//            System.out.println("Fixed this because there is no change");
-//        }
-//        if (professorChanged) {
-//            tempCour.getProfessor().setFirstName(profInfoFName.getText());
-//            tempCour.getProfessor().setLastName(profInfoLName.getText());
-//            tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-//            DBManager.updatePersonQuery(tempPerson);
+//            tempCour.setDepartment(courseInfoDepart.getText());
+//
+//            course_changed = true;
+//            System.out.println(course_changed);
+//
 //        }
 //
+//        if(course_changed){
 //
-//        System.out.println("PrfoessorID after being changed, it should be the same" + tempCour.getProfessor().getID());
-//        courseList.add(tempCour);// later on it should be gone, nothing should not be in courseList manually
-//        // Everything in coureseList should be get from the DB.
+//            //upload it to the database
 //
+//            DBManager.updateCourseQuery2(tempCour);
+//
+//            //why isnt the table updating??
+//
+//        }else{
+//
+//            // do nothing
+//
+//        }
+//
+//
+//        courseList.remove(selectedCourse);
+//        //TODO: THIS is Khanh'change, remember to cut and add when pull
+////       updateCourseTable();
+//// call this method twice can mess up the courseList
+//        courseList.add(tempCour);
+//        updateCourseTable();
+//
+//
+//
+//        DBManager.insertRelationCourseResources(tempCour);
+//
+//
+////
+////
+////        // I create a new object and then check if the information in the boxes are different form
+////        // the Selected Course Object, then if there is a difference, I will add a new course/person/...
+////        boolean courseChanged = false, professorChanged = false, resourceChanged = false;
+////
+////
+////
+////
+//////        professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
+//////                tempCour.getProfessor().getLastName() != profInfoLName.getText();
+//////
+//////        courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
+//////                tempCour.getDepartment() != courseInfoDescrip.getText();
+////
+////        System.out.println(tempCour.getTitle() + " and " + courseInfoTitle.getText());
+////        System.out.println(tempCour.getDescription() + " and " + courseInfoDescrip.getText());
+////        System.out.println(tempCour.getDepartment() + " and " + courseInfoDepart.getText());
+////        //TODO: Check again why the courseChanged keeps turning true @@ Khanh
+////        // I don't check type rn. Need to check later with fk.. enum :))
+////        if (courseChanged) {
+////
+////            tempCour.setDepartment(courseInfoDepart.getText());
+////            tempCour.setTitle(courseInfoTitle.getText());
+////            tempCour.setDescription(courseInfoDescrip.getText());
+////            DBManager.updateCourseQuery(tempCour);
+////            System.out.println("Fixed this because there is no change");
+////        }
+////        if (professorChanged) {
+////            tempCour.getProfessor().setFirstName(profInfoFName.getText());
+////            tempCour.getProfessor().setLastName(profInfoLName.getText());
+////            tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+////            DBManager.updatePersonQuery(tempPerson);
+////        }
+////
+////
+////        System.out.println("PrfoessorID after being changed, it should be the same" + tempCour.getProfessor().getID());
+////        courseList.add(tempCour);// later on it should be gone, nothing should not be in courseList manually
+////        // Everything in coureseList should be get from the DB.
+////
     }
 
 
@@ -1324,6 +1328,91 @@ public class Controller {
     }
 
     public void importData() {
+    }
+
+    public void newupdate() {
+
+        // get selected course, person and resource
+        // compare it with new data
+
+        //if same -> do nothing
+        // if just course change -> change course
+        // if just person changed -> change person
+        // if both changed, change both
+
+//        if(selected_course.getResource().equals(resList)){
+//
+//            System.out.println("This works!");
+//        }else{
+//
+//            System.out.println("It does not");
+//
+//
+//            for(int i = 0; i < selected_course.getResource().size(); i++){
+//
+//                System.out.println(selected_course.getResource().get(i).toString());
+//                System.out.println("++++++++++");
+//                System.out.println(resInfoList.getItems().toString());
+//            }
+//        }
+
+        ArrayList<Course> courses = new ArrayList<>();
+        ArrayList<Resource> selected_resources = selectedCourse.getResource();
+        ArrayList<Resource> new_resources = resList;
+
+        Person selected_person = selectedPerson;
+        Person new_person = new Person(profInfoLName.getText(), profInfoFName.getText(), profInfoType.getSelectionModel().getSelectedItem().toString());
+
+        //checking person
+
+        Course selected_course = selectedCourse;
+        Course new_course = new Course(-1, courseInfoTitle.getText(), courseInfoDepart.getText(),
+                courseInfoDescrip.getText());
+
+        //if they are the same
+        if (false) {
+
+            new_course.setProfessor(selected_person);
+
+        } else {
+
+            Person newperson = new Person(profInfoLName.getText(), profInfoFName.getText(), -1,
+                    profInfoType.getSelectionModel().getSelectedItem().toString());
+
+            new_course.setProfessor(newperson);
+
+        }
+
+        //checking course
+
+        //if they are the same
+        if (false) {
+
+            courses.set(0, selected_course);
+            courses.set(1, selected_course);
+            DBManager.updateCourseQuery123(courses);
+
+        } else {
+
+            new_course.setTitle(courseInfoTitle.getText());
+            new_course.setDepartment(courseInfoDepart.getText());
+            new_course.setDescription(courseInfoDescrip.getText());
+            new_course.setCommonID(selectedCourse.getCommonID());
+
+            courses.add(selected_course);
+            courses.add(new_course);
+
+            DBManager.updateCourseQuery123(courses);
+
+//            courseList.remove(selectedCourse);
+//            courseList.add(new_course);
+
+            System.out.println(selectedCourse.toString());
+            System.out.println(selected_course.toString());
+            System.out.println(new_course.toString());
+            //updateCourseTable();
+
+        }
     }
 
 }

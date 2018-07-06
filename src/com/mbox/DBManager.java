@@ -2486,6 +2486,166 @@ public class DBManager {
         Person p = new Person(personID,fname,lname,type);
         executeNoReturnQuery(updatePersonQuery(p));
     }
+
+    public static void updateCourseQuery123(ArrayList<frontend.data.Course> c) {
+
+        if(c.isEmpty()){
+
+            System.out.println("Course array is empty. Something went wrong.");
+
+        }else if(c.get(0).equals(c.get(1))){
+
+
+            //needs to check for non existing professors
+            frontend.data.Person professor = c.get(0).getProfessor();
+
+            professor.setID(find_person_by_name(professor));
+
+            try{
+
+                Statement st = conn.createStatement();
+
+                st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET PERSONID = %d WHERE " +
+                        "COMMONID = %d", professor.getID(), c.get(0).getCommonID()));
+
+            }catch(SQLException e){
+
+                System.out.println("Something went wrong when adding a new professor to the RELATION_COURSE_PERSON TABLE");
+
+            }
+
+            System.out.println("Second IF in updateCourseQuery123()");
+
+        }else{
+
+            try{
+
+                Statement st = conn.createStatement();
+
+                c.get(1).setID(find_courseid_by_title(c.get(1)));
+
+                // if it exists
+                st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = %d WHERE ID = %d",
+                        c.get(1).getID(), c.get(0).getCommonID()));
+
+                frontend.data.Person professor = c.get(1).getProfessor();
+                c.get(1).getProfessor().setID(find_person_by_name(professor));
+
+
+                st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = %d, PERSONID = %d WHERE " +
+                                "ID = %d", c.get(1).getID(), professor.getID(),
+                        c.get(0).getCommonID()));
+
+            }catch(SQLException e){
+
+                System.out.println("Something went wrong when trying to update course and person table");
+            }
+
+        }
+
+    }
+
+    public static int find_courseid_by_title(frontend.data.Course c){
+
+        String title = c.getTitle();
+        String cnumber;
+
+        title = title.replaceAll("\\s","");
+        String[] part = title.split("(?<=\\D)(?=\\d)");
+
+        title = part[0];
+        cnumber = part[1];
+
+        int id = -1;
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
+                    title, cnumber));
+
+            while(rs.next()){
+
+                id = rs.getInt("id");
+            }
+
+            if(id == -1){
+
+                st.executeQuery(String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
+                        "('%s', '%s', '%s', '%s')" , title, cnumber, c.getDescription(), c.getDepartment()));
+
+
+                rs= st.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
+                        title, cnumber));
+
+                while(rs.next()){
+
+                    id = rs.getInt("id");
+                }
+
+                return id;
+
+            }else{
+
+                return id;
+            }
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong when trying to create / find a course @ find_courseid_by_title()");
+        }
+
+        return -999;
+
+    }
+
+    public static int find_person_by_name(frontend.data.Person p){
+
+        int id = -1;
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = " +
+                    "'%s'", p.getFirstName(), p.getLastName()));
+
+            while(rs.next()){
+
+                id = rs.getInt("id");
+            }
+
+            if(id == -1){
+
+                st.executeQuery(String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES('%s', '%s', '%s')"
+                        ,p.getFirstName(), p.getLastName(), p.getType()));
+
+                rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = " +
+                        "'%s'", p.getFirstName(), p.getLastName()));
+
+                while(rs.next()){
+
+                    id = rs.getInt("id");
+                }
+
+                return id;
+
+            }else{
+                return id;
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong when trying to find a person @ find_person_by_name()");
+        }
+
+        return -999;
+
+    }
+
+
+
 }
 
 
