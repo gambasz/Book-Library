@@ -2644,6 +2644,25 @@ public class DBManager {
 
 
 
+    public static void insertPersonResources(frontend.data.Person person){
+
+        int commonID = 0;
+
+       //TODO: Here it should first call the method for checking repetitive resources, and make sure  ...
+       // There is a completely clean list of resources
+
+        for(frontend.data.Resource resource : person.getResources()) {
+
+            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", person.getID(),
+                    resource.getID(), commonID);
+            executeNoReturnQuery(tempQuery);
+        }
+        System.out.println("All resources succesfully imported to db for person");
+
+        }
+
+
 }
 
 

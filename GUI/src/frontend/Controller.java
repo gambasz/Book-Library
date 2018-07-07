@@ -838,24 +838,28 @@ public class Controller {
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB)
         {
-            Publisher tempPub = selectedPublisher;
-            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                    titleTF.getText(),
-                    authorTF.getText(),
-                    descriptionTF.getText(),
-                    false,
-                    Integer.parseInt(totalAmTF.getText()),
-                    Integer.parseInt(idTF.getText()),
-                    Integer.parseInt(currentAmTF.getText()),
-                    selectedPublisher
-            );
-            resList.add(temp);
-            resourceTable.getItems().add(temp);
-            selectedPublisher = tempPub;
-            DBManager.setIDinResourceFromArrayList(resList);
-            System.out.println("This is add button");
-            //add(+) button is fine
-
+            if (!isPersonResourcesView) {
+                Publisher tempPub = selectedPublisher;
+                Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                        titleTF.getText(),
+                        authorTF.getText(),
+                        descriptionTF.getText(),
+                        false,
+                        Integer.parseInt(totalAmTF.getText()),
+                        Integer.parseInt(idTF.getText()),
+                        Integer.parseInt(currentAmTF.getText()),
+                        selectedPublisher
+                );
+                resList.add(temp);
+                resourceTable.getItems().add(temp);
+                selectedPublisher = tempPub;
+                DBManager.setIDinResourceFromArrayList(resList);
+                System.out.println("This is add button");
+                //add(+) button is fine
+            }
+            else{
+                DBManager.insertPersonResources(selectedPerson);
+            }
 
     }
 
@@ -942,6 +946,7 @@ public class Controller {
      * It creates Resource objects and assign the resources as the Professor for the course object
      */
     public void openResourceView() {
+        isPersonResourcesView = false;
         //TODO: migrate Publisher add and modify window
         if(selectedCourse!= null) {
             VBox mainPane = new VBox();
@@ -1096,6 +1101,7 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
+        selectedPerson = selectedItem;
 
 
         ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
