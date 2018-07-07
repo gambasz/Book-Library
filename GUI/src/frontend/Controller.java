@@ -814,7 +814,36 @@ public class Controller {
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
+        selectedResource = resourceTable.getSelectionModel().getSelectedItem();
+        String new_title = titleTF.getText();
+        String new_author = authorTF.getText();
+        int new_total = Integer.parseInt(totalAmTF.getText());
+        int new_current = Integer.parseInt(currentAmTF.getText());
+        String new_descrip = descriptionTF.getText();
+        String new_type = typeCB.getSelectionModel().getSelectedItem().toString();
+        Publisher new_publisher = selectedPublisher;
 
+
+
+
+        if(selectedResource.getTYPE() == new_type && selectedResource.getTitle()==new_title
+                && selectedResource.getAuthor() == new_author && selectedResource.getCurrentAmount() == new_current
+                && selectedResource.getTotalAmount() == new_total && selectedResource.getDescription() == new_descrip){
+            System.out.println("Everything is the same, no change, so do nothing");
+            DBManager.updatePublisherForResource(selectedResource,selectedPublisher);
+            selectedResource.setPublisher(selectedPublisher);
+
+        }
+        else {
+            com.mbox.Resource tempRes = new com.mbox.Resource(selectedResource.getID(),new_type,new_title,new_author,"123",new_total,new_current,new_descrip);
+            DBManager.executeNoReturnQuery(DBManager.updateResourceQuery(tempRes));
+            System.out.println("Updated resource with ID: " + selectedResource.getID());
+            DBManager.updatePublisherForResource(tempRes.initResourceGUI(),selectedPublisher);
+            selectedResource.setPublisher(selectedPublisher);
+        }
+        System.out.println("Publisher  now is " + selectedPublisher);
+        //check if this resource and publisher already had relation or not, delete the old one and add the new one
+        // what if there is no publisher yet? the publisherID should be 0
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
@@ -1373,6 +1402,8 @@ public class Controller {
         ArrayList<Course> courses = new ArrayList<>();
         ArrayList<Resource> selected_resources = selectedCourse.getResource();
         ArrayList<Resource> new_resources = resList;
+        //delete all exist relation between course and its resources
+        DBManager.deleteRelationCoursePersonResources(selectedCourse);
 
 
         String newname = profInfoFName.getText();
@@ -1435,6 +1466,10 @@ public class Controller {
             //updateCourseTable();
 
         }
+        new_course.setResource(selected_resources);
+
+        //add new relation between current resources in course instance and that course
+        DBManager.insertRelationCourseResources(new_course);
     }
 
 }
