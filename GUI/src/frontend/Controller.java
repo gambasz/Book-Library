@@ -411,7 +411,6 @@ public class Controller {
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
                             System.out.println("Deselect, isSelected is false");
-                            resetSelect();
                             event.consume();
                             updateRowSelected();
                         }

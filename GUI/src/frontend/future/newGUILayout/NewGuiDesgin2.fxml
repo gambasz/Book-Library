@@ -5,6 +5,8 @@
 <?import com.gluonhq.charm.glisten.control.Icon?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -16,30 +18,32 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <JFXTreeTableView prefHeight="268.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <columns>
             <TreeTableColumn prefWidth="132.0" text="Course" />
             <TreeTableColumn prefWidth="114.0" text="Professor" />
-            <TreeTableColumn prefWidth="353.0" text="Resources" />
+            <TreeTableColumn prefWidth="232.0" text="Resources" />
+            <TreeTableColumn prefWidth="121.0" text="Actions" />
          </columns>
       </JFXTreeTableView>
    </center>
    <top>
-      <GridPane prefHeight="101.0" prefWidth="600.0" style="-fx-background-color: purple;" BorderPane.alignment="CENTER">
+      <GridPane alignment="CENTER" prefHeight="101.0" prefWidth="600.0" style="-fx-background-color: purple;" BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.0" minWidth="10.0" prefWidth="110.66666412353516" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.33333587646484" minWidth="10.0" prefWidth="293.33333587646484" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="117.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="78.33331298828125" minWidth="0.0" prefWidth="78.33331298828125" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="19.666666984558105" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="35.333333015441895" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="54.66666793823242" minHeight="4.333335876464844" prefHeight="46.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXTextField promptText="Search" style="-fx-prompt-text-fill: grey;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <JFXTextField prefHeight="36.0" prefWidth="290.0" promptText="Search" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <focusColor>
                   <LinearGradient endX="1.0" endY="1.0">
                      <stops>
@@ -57,34 +61,46 @@
                   </LinearGradient>
                </unFocusColor>
             </JFXTextField>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="2147483647">
+            <Pane prefHeight="101.0" prefWidth="219.0" GridPane.rowSpan="2147483647">
                <children>
-                  <ImageView fitHeight="92.0" fitWidth="108.0" layoutX="14.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="92.0" fitWidth="141.0" layoutX="-8.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../media/icon.png" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
+            <Button minHeight="20.0" minWidth="35.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="59.0" style="-fx-background-color: purple;" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <graphic>
+                  <Icon cache="true" cacheHint="QUALITY" content="FILTER_LIST" depthTest="DISABLE" opacity="0.65" prefHeight="16.0" prefWidth="62.0">
+                     <padding>
+                        <Insets left="25.0" />
+                     </padding>
+                  </Icon>
+               </graphic>
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
    </top>
    <bottom>
       <BottomNavigation style="-fx-background-color: #8B008B;" BorderPane.alignment="CENTER">
           <actionItems>
-              <BottomNavigationButton selected="true" style="-fx-background-color: purple;" text="Recent">
+              <BottomNavigationButton selected="true" style="-fx-background-color: purple;" text="Export">
                   <graphic>
-                      <Icon content="RECENT_ACTORS" />
+                      <Icon content="FOLDER_OPEN" />
                   </graphic>
               </BottomNavigationButton>
-              <BottomNavigationButton style="-fx-background-color: purple;" text="Favourite">
+              <BottomNavigationButton style="-fx-background-color: purple;" text="Add">
                   <graphic>
-                      <Icon content="FAVORITE" />
+                      <Icon content="ADD_CIRCLE" />
                   </graphic>
               </BottomNavigationButton>
-              <BottomNavigationButton style="-fx-background-color: purple;" text="Nearby">
+              <BottomNavigationButton style="-fx-background-color: purple;" text="Import">
                   <graphic>
-                      <Icon content="NEAR_ME" />
+                      <Icon content="SAVE" />
                   </graphic>
               </BottomNavigationButton>
           </actionItems>
