@@ -538,8 +538,7 @@ public class DBManager {
     public static int insertCourseQuery(frontend.data.Course course){
         ResultSet rs; int id = 0;
         course.setTitle(course.getTitle().toUpperCase());
-        course.setTitle(course.getTitle().replaceAll( "\\s ",""));
-        //String[] cSplit = course.getTitle().split(" ");
+        course.setTitle(course.getTitle().replaceAll( "\\s",""));
         String[] cSplit = course.getTitle().split("(?<=\\D)(?=\\d)");
 
         System.out.println("INsertCOurseFunction: CourseTitle: "+ cSplit[0] +" CourseN: "+cSplit[1]);
@@ -550,7 +549,6 @@ public class DBManager {
             //System.out.println(query2);
             rs = st.executeQuery(query2);
             while (rs.next()) {
-                System.out.println("Hey omadim inja: " + rs.getInt(1));
 //                boolean same = course.getTitle() == String.format(rs.getString(2)+" "+rs.getString(3)) &&
 //                        course.getDescription() == rs.getString(4) &&
 //                        course.getDepartment() == rs.getString(5);

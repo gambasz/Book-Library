@@ -211,32 +211,35 @@ public class Controller {
 
     public void updateRowSelected() {
         // Filling textboxes on the left, selectedcourse
-        selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
-        if (selectedCourse != null) {
-            updateBtn.setVisible(true);
-            deleteBtn.setVisible(true);
-            updateBtn.setManaged(true);
-            deleteBtn.setManaged(true);
-            courseInfoDescrip.setText("" + selectedCourse.getDescription());
-            profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
-            profInfoLName.setText(selectedCourse.getProfessor().getLastName());
-            profInfoType.setValue(selectedCourse.getProfessor().getType());
-            selectedPerson = selectedCourse.getProfessor();
-            courseInfoTitle.setText(selectedCourse.getTitle());
-            courseInfoDepart.setText(selectedCourse.getDepartment());
-            semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
-            yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
-            ArrayList<Resource> tempRes = selectedCourse.getResource();
-            resourceTable.getItems().clear();
-            resInfoList.getItems().clear();
-            resourceTable.getSelectionModel().select(null);
-            for (int i = 0; i < tempRes.size(); i++) {
-                if (i < 3) {
-                    resInfoList.getItems().add(tempRes.get(i).getTitle());
-                }
-                resourceTable.getItems().add(tempRes.get(i));
-            }
 
+        if (!isPersonResourcesView) {
+            selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
+            if (selectedCourse != null) {
+                updateBtn.setVisible(true);
+                deleteBtn.setVisible(true);
+                updateBtn.setManaged(true);
+                deleteBtn.setManaged(true);
+                courseInfoDescrip.setText("" + selectedCourse.getDescription());
+                profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
+                profInfoLName.setText(selectedCourse.getProfessor().getLastName());
+                profInfoType.setValue(selectedCourse.getProfessor().getType());
+                selectedPerson = selectedCourse.getProfessor();
+                courseInfoTitle.setText(selectedCourse.getTitle());
+                courseInfoDepart.setText(selectedCourse.getDepartment());
+                semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
+                yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
+                ArrayList<Resource> tempRes = selectedCourse.getResource();
+                resourceTable.getItems().clear();
+                resInfoList.getItems().clear();
+                resourceTable.getSelectionModel().select(null);
+                for (int i = 0; i < tempRes.size(); i++) {
+                    if (i < 3) {
+                        resInfoList.getItems().add(tempRes.get(i).getTitle());
+                    }
+                    resourceTable.getItems().add(tempRes.get(i));
+                }
+
+            }
         }
     }
 
@@ -815,37 +818,45 @@ public class Controller {
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
-        ArrayList<Resource> temp = new ArrayList<>();
-        temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
-        for (Resource r : temp) {
+        if (!isPersonResourcesView) {
+            ArrayList<Resource> temp = new ArrayList<>();
+            temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
+            for (Resource r : temp) {
 //            resList.remove(r);
-            resourceTable.getItems().remove(r);
-            resInfoList.getItems().remove(r.getTitle());
-            //TODO: THIS is Khanh'change, remember to cut and add when pull
-            selectedCourse.getResource().remove(r);
+                resourceTable.getItems().remove(r);
+                resInfoList.getItems().remove(r.getTitle());
+                //TODO: THIS is Khanh'change, remember to cut and add when pull
+                selectedCourse.getResource().remove(r);
             }
-        updateCourseTable();
-        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
-    }
+            updateCourseTable();
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        }
 
-    private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
-        Publisher tempPub = selectedPublisher;
-        Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                titleTF.getText(),
-                authorTF.getText(),
-                descriptionTF.getText(),
-                false,
-                Integer.parseInt(totalAmTF.getText()),
-                Integer.parseInt(idTF.getText()),
-                Integer.parseInt(currentAmTF.getText()),
-                selectedPublisher
-        );
-        resList.add(temp);
-        resourceTable.getItems().add(temp);
-        selectedPublisher = tempPub;
-        DBManager.setIDinResourceFromArrayList(resList);
-        System.out.println("This is add button");
-        //add(+) button is fine
+        else System.out.println("Kor khondi");
+
+        }
+
+    private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB)
+        {
+            Publisher tempPub = selectedPublisher;
+            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                    titleTF.getText(),
+                    authorTF.getText(),
+                    descriptionTF.getText(),
+                    false,
+                    Integer.parseInt(totalAmTF.getText()),
+                    Integer.parseInt(idTF.getText()),
+                    Integer.parseInt(currentAmTF.getText()),
+                    selectedPublisher
+            );
+            resList.add(temp);
+            resourceTable.getItems().add(temp);
+            selectedPublisher = tempPub;
+            DBManager.setIDinResourceFromArrayList(resList);
+            System.out.println("This is add button");
+            //add(+) button is fine
+
+
     }
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
@@ -1033,6 +1044,7 @@ public class Controller {
 
         });
         PersonResources.setOnAction(e -> {
+            // When the opening resources for person view button pressed
             ArrayList<Resource> tempRes =new ArrayList<>();
             isPersonResourcesView = true;
             tempRes.addAll(resList);
