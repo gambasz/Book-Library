@@ -768,12 +768,12 @@ public class DBManager {
 
     //==================================
 
-    private String updateResourceQuery(Resource resource){
+    public static String updateResourceQuery(Resource resource){
 
-        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s, " +
-                        "TOTAL_AMOUNT = %d, CURRENT_AMOUNT = %d, DESCRIPTION = '%s' WHERE ID = %d",
+        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', " +
+                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s' WHERE ID = '%d'",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(),resource.getID());
 
     }
     private String updatePublisherQuery(Publisher publisher){
@@ -2645,7 +2645,15 @@ public class DBManager {
     }
 
 
+    public static void updatePublisherForResource(frontend.data.Resource r, frontend.data.Publisher p){
+        try{
+            st.executeQuery("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID =" + r.getID());
 
+            st.executeQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE (RESOURCEID, PUBLISHERID) VALUES ('%d','%d')", r.getID(),p.getID()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
 
 
