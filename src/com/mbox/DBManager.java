@@ -2012,7 +2012,7 @@ public class DBManager {
         try {
 
 
-            String query = String.format("SELECT * FROM PUBLISHERS");
+            String query = String.format("SELECT * FROM PUBLISHERS ORDER BY TITLE ASC");
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
@@ -2702,6 +2702,32 @@ public class DBManager {
         System.out.println("done!");
         return sb.toString();
 
+    }
+
+    public static String exportCSVPublisherInfo() {
+
+        ArrayList<Publisher> allPublishers = getPublisherFromTable();
+//        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("id,");
+        sb.append("Title,");
+        sb.append("Contact Info,");
+        sb.append("Description");
+        sb.append('\n');
+
+        for (Publisher publisher : allPublishers) {
+            sb.append(publisher.getID());
+            sb.append(",");
+            sb.append(publisher.getTitle());
+            sb.append(",");
+            sb.append(publisher.getContactInformation());
+            sb.append(",");
+            sb.append(publisher.getDescription());
+            sb.append("\n");
+
+        }
+
+        return sb.toString();
     }
 
 }

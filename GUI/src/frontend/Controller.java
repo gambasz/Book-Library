@@ -1401,8 +1401,13 @@ public class Controller {
         //Show save file dialog
         File file = fileChooser.showSaveDialog(null);
         String coureseResourcesString ="";
+
+        //TODO: Raja, we need to find out which checkboxes are marked, and only export those data
+        
         try {
             coureseResourcesString = DBManager.exportCSVCourseResources();
+            //coureseResourcesString = DBManager.exportCSVPublisherInfo(); TODO: this function return a CSV String of publishers
+
         }
         catch (FileNotFoundException e){
             e.printStackTrace();
