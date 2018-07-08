@@ -19,12 +19,16 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * The main controller class for th gui fxml file that has all the functionality need to provide a smooth user experience.
@@ -1347,16 +1351,23 @@ public class Controller {
     public void showExportView() {
         Dialog dlg = new Dialog();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+        Map<String, Boolean> checkBoxes = new HashMap();
 
         CheckBox pubInfo = new CheckBox("All Publisher Info");
         CheckBox resNPubInfo = new CheckBox("  All the resources data, associate with publisher");
         CheckBox personWResInfo = new CheckBox("All the Person with resources associated");
         CheckBox courseWResInfo = new CheckBox(" All the courses with resources associated.");
 
+        checkBoxes.put("publishers", pubInfo.isSelected());
+        checkBoxes.put("resources_publisher", resNPubInfo.isSelected());
+        checkBoxes.put("person_resources", personWResInfo.isSelected());
+        checkBoxes.put("course_resources", courseWResInfo.isSelected());
+
         Button exportNSave = new Button("Export");
         exportNSave.setOnAction(e -> {
-            pickSaveFile(dlg);
+            pickSaveFile(dlg, checkBoxes);
         });
+
         VBox checkboxPane = new VBox(20);
         checkboxPane.getChildren().addAll(pubInfo, resNPubInfo, personWResInfo, courseWResInfo);
         checkboxPane.setAlignment(Pos.CENTER_LEFT);
@@ -1382,15 +1393,22 @@ public class Controller {
 
     }
 
-    private void pickSaveFile(Dialog dlg) {
+    private void pickSaveFile(Dialog dlg, Map<String, Boolean> checkBoxes) {
         FileChooser fileChooser = new FileChooser();
         //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         //Show save file dialog
         File file = fileChooser.showSaveDialog(null);
+        String coureseResourcesString ="";
+        try {
+            coureseResourcesString = DBManager.exportCSVCourseResources();
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
         if (file != null) {
-            SaveFile("Hello text here", file);
+            SaveFile(coureseResourcesString, file);
         }
     }
 
@@ -1433,7 +1451,7 @@ public class Controller {
         ArrayList<Resource> selected_resources = selectedCourse.getResource();
         ArrayList<Resource> new_resources = resList;
         //delete all exist relation between course and its resources
-        DBManager.deleteRelationCoursePersonResources(selectedCourse);
+        //DBManager.deleteRelationCoursePersonResources(selectedCourse);
 
 
         String newname = profInfoFName.getText();

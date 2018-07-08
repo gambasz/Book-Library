@@ -3,6 +3,9 @@ import java.sql.*;
 import java.util.*;
 import frontend.data.PersonType;
 import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class DBManager {
     public static Statement st;
@@ -1302,36 +1305,38 @@ public class DBManager {
     }
 
 
-    public static ArrayList<Resource> findResourcesCourse(int courseID) {
+    public static ArrayList<Resource> findResourcesCourseAvoidRepetitive(int courseID) {
 
         ResultSet rs;
-        int resourceID = 0;
-        int i = 0;
+        int resourceID = 0,
+         i = 0, before =-1;
         //Resource[] resourcesList = new Resource[20];
         ArrayList<Resource> listResources = new ArrayList<Resource>();
 
         try {
 
-            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID);
+            rs = st.executeQuery("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = " + courseID +
+                    "ORDER BY RESOURCEID ASC");
             //here all have a result set of all resources for courdeID
 
             while (rs.next()) {
-                resourceID = rs.getInt(2);
-                ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
+                resourceID = rs.getInt("RESOURCEID");
+                if (before != resourceID) {
+                    before = resourceID;
+                    ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
 
-                while (rss.next()) {
-                    System.out.println("");
-                    // ID, Type, Title, Author, ISBN, total, current, desc
-//                resourcesList[i] = new Resource(rss.getInt(1), rss.getString(2),
-//                        rss.getString(3), rss.getString(4), rss.getString(5),
-//                        rss.getInt(6), rss.getInt(7), rss.getString(8));
-                    listResources.add(new Resource(rss.getInt(1), rss.getString(2),
-                            rss.getString(3), rss.getString(4), rss.getString(5),
-                            rss.getInt(6), rss.getInt(7), rss.getString(8)));
+                    while (rss.next()) {
+                        System.out.println("");
+                        // ID, Type, Title, Author, ISBN, total, current, desc
+
+                        listResources.add(new Resource(rss.getInt(1), rss.getString(2),
+                                rss.getString(3), rss.getString(4), rss.getString(5),
+                                rss.getInt(6), rss.getInt(7), rss.getString(8)));
 //                setPublisherForResource(resourcesList[i]);
-                    setPublisherForResource(listResources.get(i));
+                        setPublisherForResource(listResources.get(i));
 
-                    i++;
+                        i++;
+                    }
                 }
 
             }
@@ -1342,7 +1347,8 @@ public class DBManager {
             System.out.println(err);
         }
         // Adding the list of the resources to the person object
-        return null;
+        listResources.clear();
+        return listResources;
 
     }
 
@@ -1742,21 +1748,21 @@ public class DBManager {
                     resources.get(i).setID(resourceID);
                     continue;
                 }
-                    Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
-                            resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
-                            resources.get(i).getDescription());
+                Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
+                        resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
+                        resources.get(i).getDescription());
 
-                    String tempQr = insertResourceQuery(tempRes);
-                    System.out.println(tempQr);
-                    st.executeQuery(tempQr);
+                String tempQr = insertResourceQuery(tempRes);
+                System.out.println(tempQr);
+                st.executeQuery(tempQr);
 
-                    rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
-                            tempRes.getTitle(), tempRes.getType(), tempRes.getAuthor()));
-                    while (rs.next()) {
-                        resourceID = rs.getInt(1);
-                        resources.get(i).setID(resourceID);
+                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
+                        tempRes.getTitle(), tempRes.getType(), tempRes.getAuthor()));
+                while (rs.next()) {
+                    resourceID = rs.getInt(1);
+                    resources.get(i).setID(resourceID);
 
-                    }
+                }
             }
 
         } catch (Exception e) {
@@ -1940,7 +1946,7 @@ public class DBManager {
         try {
 
 
-            String query = String.format("SELECT * FROM PERSON");
+            String query = String.format("SELECT * FROM PERSON ORDER BY LASTNAME ASC");
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
@@ -1961,7 +1967,7 @@ public class DBManager {
         try {
 
 
-            String query = String.format("SELECT * FROM COURSECT");
+            String query = String.format("SELECT * FROM COURSECT ORDER BY CNUMBER ASC");
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
@@ -1983,7 +1989,7 @@ public class DBManager {
         try {
 
 
-            String query = String.format("SELECT * FROM RESOURCES");
+            String query = String.format("SELECT * FROM RESOURCES ORDER BY TITLE ASC");
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
@@ -2668,8 +2674,37 @@ public class DBManager {
 
     }
 
-}
 
+    public static String exportCSVCourseResources() throws FileNotFoundException {
+        ArrayList<Course> allCourses = getCourseFromTable();
+        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("id,"); sb.append("Title,"); sb.append("Description,"); sb.append("Department,");
+        sb.append("Resources -->");
+        sb.append('\n');
+
+        for (Course course : allCourses) {
+            course.setResourceInstances(findResourcesCourseAvoidRepetitive(course.getID()));
+            sb.append(course.getID()); sb.append(",");
+            sb.append(course.getTitle()); sb.append(",");
+            sb.append(course.getDescription()); sb.append(",");
+            sb.append(course.getDepartment()); sb.append(",");
+            for (Resource resource : course.getResourceInstances()){
+                sb.append(resource.getTitle());
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            sb.append("\n");
+        }
+
+        //pw.write(sb.toString());
+        pw.close();
+        System.out.println("done!");
+        return sb.toString();
+
+    }
+
+}
 
 
 
