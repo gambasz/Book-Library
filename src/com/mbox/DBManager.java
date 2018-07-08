@@ -563,13 +563,8 @@ public class DBManager {
 
             String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s'",
                     cSplit[0], cSplit[1]);
-            //System.out.println(query2);
             rs = st.executeQuery(query2);
             while (rs.next()) {
-//                boolean same = course.getTitle() == String.format(rs.getString(2)+" "+rs.getString(3)) &&
-//                        course.getDescription() == rs.getString(4) &&
-//                        course.getDepartment() == rs.getString(5);
-//                if (same)
                 id = (rs.getInt(1));
                 return id;
             }
@@ -1724,6 +1719,8 @@ public class DBManager {
 
 
     public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources) {
+
+
         try {
             Statement st = conn.createStatement();
 
@@ -1740,12 +1737,11 @@ public class DBManager {
                 String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'", title, type, author);
                 ResultSet rs = st.executeQuery(query);
 
-                while (rs.next()) {
+                if (rs.next()) {
                     resourceID = rs.getInt(1);
+                    resources.get(i).setID(resourceID);
+                    continue;
                 }
-
-                if (resourceID == 0) {
-                    //Errorrrrrrrrrr
                     Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
                             resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
                             resources.get(i).getDescription());
@@ -1753,24 +1749,16 @@ public class DBManager {
                     String tempQr = insertResourceQuery(tempRes);
                     System.out.println(tempQr);
                     st.executeQuery(tempQr);
-                    // Errorrrrrrrr
-
 
                     rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
                             tempRes.getTitle(), tempRes.getType(), tempRes.getAuthor()));
                     while (rs.next()) {
                         resourceID = rs.getInt(1);
+                        resources.get(i).setID(resourceID);
 
                     }
-                    resources.get(i).setID(resourceID);
-                    System.out.println("Error??? in resourceId = 0");
-                } else {
-                    resources.get(i).setID(resourceID);
-                    System.out.println("Error??? in resourceID !=0");
-                }
-
-
             }
+
         } catch (Exception e) {
             System.out.println("Error in returnIDinResource");
             e.printStackTrace();
@@ -2666,12 +2654,12 @@ public class DBManager {
     public static void insertPersonResources(frontend.data.Person person) {
 
         int commonID = 0;
-
-        //TODO: Here it should first call the method for checking repetitive resources, and make sure  ...
-        // There is a completely clean list of resources
+        setIDinResourceFromArrayList(person.getResources());
+        executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
+                " PERSONID = '%d' ", person.getID()));
 
         for (frontend.data.Resource resource : person.getResources()) {
-
+            System.out.println("insertgin to courseID: " +resource.getID());
             String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
                             " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", person.getID(),
                     resource.getID(), commonID);

@@ -44,6 +44,7 @@ public class Controller {
     private Resource selectedResource;
     private Publisher selectedPublisher;
     private Person selectedPerson;
+
     private int defaultSemester = 5;
     private boolean isPersonResourcesView = false;
 
@@ -709,6 +710,7 @@ public class Controller {
         });
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
+                //TODO: Assign the publisher button
                 selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
 
 
@@ -837,7 +839,6 @@ public class Controller {
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
-        if (!isPersonResourcesView) {
             ArrayList<Resource> temp = new ArrayList<>();
             temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
             for (Resource r : temp) {
@@ -845,16 +846,20 @@ public class Controller {
                 resourceTable.getItems().remove(r);
                 resInfoList.getItems().remove(r.getTitle());
                 //TODO: THIS is Khanh'change, remember to cut and add when pull
+                if (!isPersonResourcesView)
                 selectedCourse.getResource().remove(r);
+                else{
+                    selectedPerson.getResources().remove(r);
+                    for (Resource resource : selectedPerson.getResources())
+                        System.out.println("ID: "+resource.getID()+" Title: "+resource.getTitle());
+                }
             }
             updateCourseTable();
             onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
-        } else System.out.println("Kor khondi");
-
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
-        if (!isPersonResourcesView) {
+
             Publisher tempPub = selectedPublisher;
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                     titleTF.getText(),
@@ -866,6 +871,7 @@ public class Controller {
                     Integer.parseInt(currentAmTF.getText()),
                     selectedPublisher
             );
+        if (!isPersonResourcesView) {
             resList.add(temp);
             resourceTable.getItems().add(temp);
             selectedPublisher = tempPub;
@@ -873,8 +879,19 @@ public class Controller {
             System.out.println("This is add button");
             //add(+) button is fine
         } else {
-            DBManager.insertPersonResources(selectedPerson);
+            for (Resource resource : selectedPerson.getResources()){
+                System.out.println("ResourceID After *BEFORE* to list: "+ resource.getID());
+            }
+            System.out.println("add button person section");
+            resourceTable.getItems().add(temp);
+            selectedPublisher = tempPub;
+            selectedPerson.getResources().add(temp);
+            //DBManager.insertPersonResources(selectedPerson);
+            for (Resource resource : selectedPerson.getResources()){
+                System.out.println("ResourceID After adding to list: "+ resource.getID());
+            }
         }
+
 
     }
 
@@ -1003,14 +1020,13 @@ public class Controller {
             dlg.setResultConverter(dialogButton -> {
                 if (dialogButton == assign) {
                     //TODO: this is where the assign button locates
-
                     selectedCourse.getResource().clear();
                     selectedCourse.getResource().addAll(resourceTable.getItems());
 
                     resInfoList.getItems().clear();
                     for (Resource r : selectedCourse.getResource())
                         resInfoList.getItems().add(r.getTitle());
-//Everything is fine here
+
                     return null;
                 }
                 return null;
@@ -1152,14 +1168,13 @@ public class Controller {
         resourceTable.getItems().clear();
         com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
         selectedItem = tempPerson.initPersonGUI();
+        selectedPerson = selectedItem;
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
-            for (Resource resource : selectedItem.getResources()) {
-                System.out.println("The reosurce is: " + resource.getTitle());
-            }
+
 
         }
-        updateRowSelected();
+        //updateRowSelected();
 
 
         resourceTitlePane.setContent(resourceEditPane);
@@ -1171,7 +1186,7 @@ public class Controller {
 
 
         dlg.setTitle("Assigning Resource");
-        dlg.setHeaderText("Assigning Resource");
+        dlg.setHeaderText("Assigning Resource for "+selectedItem.getFirstName()+" "+selectedPerson.getLastName());
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
@@ -1183,12 +1198,14 @@ public class Controller {
 
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
-//            if (dialogButton == assign) {
+            if (dialogButton == assign) {
+                DBManager.insertPersonResources(selectedPerson);
+
 //                selectedItem.getResources().clear();
 //                selectedItem.getResources().addAll(resourceTable.getItems());
-//
-//                return null;
-//            }
+
+                return null;
+            }
             return null;
         });
 
