@@ -1607,11 +1607,11 @@ public class DBManager {
         }
 
 
-        for (int k = 0; k < resourceidlist.length; k++) {
-
-            executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-                    " (PERSONID, RESOURCEID) VALUES ('%d', '%d')", personid, resourceidlist[k]));
-        }
+//        for (int k = 0; k < resourceidlist.length; k++) {
+//
+//            executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+//                    " (PERSONID, RESOURCEID) VALUES ('%d', '%d')", personid, resourceidlist[k]));
+//        }
 
         for (int l = 0; l < resourceidlist.length; l++) {
 
@@ -1678,13 +1678,13 @@ public class DBManager {
             executeNoReturnQuery(tempQuerry);
             System.out.println(tempQuerry);
 
-            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", personid, resourceidlist[j], commonID);
-            executeNoReturnQuery(tempQuery);
+//            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+//                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", personid, resourceidlist[j], commonID);
+//            executeNoReturnQuery(tempQuery);
 
 
             // there is a problm with this
-            System.out.println("Testing purpose:\n" + tempQuery + "\n\n\n\n");
+//            System.out.println("Testing purpose:\n" + tempQuery + "\n\n\n\n");
             System.out.println("Course ID " + c.getID() + " and commonID in course " + c.getCommonID());
 
             System.out.println("ResourceID of this course" + c.getResource().get(0).getID());
@@ -2659,13 +2659,12 @@ public class DBManager {
                 " PERSONID = '%d' ", person.getID()));
 
         for (frontend.data.Resource resource : person.getResources()) {
-            System.out.println("insertgin to courseID: " +resource.getID());
             String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
                             " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", person.getID(),
                     resource.getID(), commonID);
             executeNoReturnQuery(tempQuery);
         }
-        System.out.println("All resources succesfully imported to db for person");
+        System.out.println("All resources succesfully imported to db for the person!");
 
     }
 

@@ -850,8 +850,6 @@ public class Controller {
                 selectedCourse.getResource().remove(r);
                 else{
                     selectedPerson.getResources().remove(r);
-                    for (Resource resource : selectedPerson.getResources())
-                        System.out.println("ID: "+resource.getID()+" Title: "+resource.getTitle());
                 }
             }
             updateCourseTable();
