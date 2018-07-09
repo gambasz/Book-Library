@@ -499,6 +499,8 @@ public class Controller {
 
     public void update() {
         if (selectedCourse != null) {
+            courseList.remove(selectedCourse);
+            DBManager.deleteRelationCourseResources(selectedCourse);
 
 
             Boolean courseChanged = false;
@@ -518,7 +520,7 @@ public class Controller {
             ArrayList<Resource> selected_resources = selectedCourse.getResource();
             ArrayList<Resource> new_resources = resList;
             //delete all exist relation between course and its resources
-            DBManager.deleteRelationCourseResources(selectedCourse);
+
 
 
             String newname = profInfoFName.getText();
@@ -551,6 +553,8 @@ public class Controller {
 
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
+            courseList.add(selectedCourse);
+            updateCourseTable();
 
 
         } else {
