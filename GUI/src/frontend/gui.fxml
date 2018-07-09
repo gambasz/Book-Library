@@ -180,7 +180,7 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="CRN" textAlignment="CENTER" underline="true" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="CommonID" textAlignment="CENTER" underline="true" />
                                     <TextField fx:id="crnSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>

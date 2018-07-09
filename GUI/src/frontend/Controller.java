@@ -109,6 +109,9 @@ public class Controller {
             test();
         }
 
+        // Department textbox in the serach is disabled. As default always computer sciece
+        departSearchTF.setDisable(true);
+
     }
 
     private void addButtonGraphics() {
@@ -185,28 +188,30 @@ public class Controller {
 
 
     public void search() {
-        String semester = semesterComBox.getValue().toString();
-        String year = yearComBox.getValue().toString();
-        String fName, lName;
-        fName = lName = "";
 
-        String[] temp = profSearchTF.getText().split(" ");
-        switch (temp.length) {
-            case 2:
-                lName = temp[1];
-            case 1:
-                fName = temp[0];
-                break;
-            default:
-                System.err.print("Improper input for professor search output");
+        // get the info in all the comboboxes
+            //check if they are empty.
 
+        String commonid = "";
+        String professorname = "";
+        String coursename = "";
+        String resource = "";
+
+        if(!crnSearchTF.getText().isEmpty()){
+            commonid = crnSearchTF.getText();
+        }
+        if(!profSearchTF.getText().isEmpty()){
+            professorname = profSearchTF.getText();
+        }
+        if(!courseSearchTF.getText().isEmpty()){
+            coursename = courseSearchTF.getText();
+        }
+        if(!resourceSearchTF.getText().isEmpty()){
+            resource = resourceSearchTF.getText();
         }
 
-        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
 
-        //courseList = DBManager.searchByNameCourseList(fName, lName, semester, year);
-        System.out.println(courseList.size());
-        updateCourseTable();
+
 
     }
 
@@ -1378,6 +1383,32 @@ public class Controller {
     }
 
     public void importData() {
+    }
+
+    public void oldsearch(){
+
+        //        String semester = semesterComBox.getValue().toString();
+//        String year = yearComBox.getValue().toString();
+//        String fName, lName;
+//        fName = lName = "";
+//
+//        String[] temp = profSearchTF.getText().split(" ");
+//        switch (temp.length) {
+//            case 2:
+//                lName = temp[1];
+//            case 1:
+//                fName = temp[0];
+//                break;
+//            default:
+//                System.err.print("Improper input for professor search output");
+//
+//        }
+
+        // TODO :: BACKEND JOB CREATE A DATA MANAGER AND RETURN THE RESULTS
+
+        //courseList = DBManager.searchByNameCourseList(fName, lName, semester, year);
+//        System.out.println(courseList.size());
+//        updateCourseTable();
     }
 
 

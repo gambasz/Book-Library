@@ -2836,6 +2836,102 @@ public class DBManager {
         }
         return sb.toString();
     }
+
+    public static ArrayList<frontend.data.Course> getClassByCommonID(int id){
+
+        ArrayList<frontend.data.Course> c_array = new ArrayList<>();
+
+
+
+        return c_array;
+    }
+
+    public static ArrayList<frontend.data.Resource> findResourcesByCommonID(int id){
+
+        ArrayList<Integer> resids = new ArrayList<>();
+        ArrayList<frontend.data.Resource> asdf = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMOND=%d",
+                    id));
+
+            while(rs.next()){
+
+                resids.add(rs.getInt("RESOURCEID"));
+
+            }
+
+
+        }catch(SQLException e){
+
+        }
+
+        return asdf;
+
+    }
+
+    public static frontend.data.Resource getResourceByID(int id){
+
+        frontend.data.Resource resource = new frontend.data.Resource("", -1);
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                //resource  = new frontend.data.Resource();
+            }
+
+        }catch(SQLException e){
+
+        }
+
+        return resource;
+    }
+
+    public static frontend.data.Publisher findPublisherByID(int id){
+
+        frontend.data.Publisher publisher = new frontend.data.Publisher(-1, "", "", "");
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PUBLISHERS WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                publisher.setID(rs.getInt("ID"));
+                publisher.setName(rs.getString("TITLE"));
+                publisher.setDescription(rs.getString("DESCRIPTION"));
+                publisher.setContacts(rs.getString("CONTACT_INFO"));
+            }
+
+
+            if(publisher.getID() == -1){
+
+                System.out.println("Nothing was found.");
+
+            }else{
+
+                return publisher;
+            }
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong when trying to findPublisherByID(int id)");
+
+        }
+
+        return publisher;
+
+    }
 }
 
 
