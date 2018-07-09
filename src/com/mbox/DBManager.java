@@ -1559,9 +1559,9 @@ public class DBManager {
                         " (COURSEID, PERSONID) VALUES ('%d', '%d')", Integer.parseInt(values[0]), Integer.parseInt(values[1])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
                         " (COURSEID, RESOURCEID) VALUES ('%d', '%d')", Integer.parseInt(values[0]), Integer.parseInt(values[2])));
-
-                executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-                        " (PERSONID, RESOURCEID) VALUES ('%d', '%d')", Integer.parseInt(values[1]), Integer.parseInt(values[2])));
+//
+//                executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
+//                        " (PERSONID, RESOURCEID) VALUES ('%d', '%d')", Integer.parseInt(values[1]), Integer.parseInt(values[2])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                         " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", Integer.parseInt(values[3]), Integer.parseInt(values[2])));
                 System.out.println("Added ID");

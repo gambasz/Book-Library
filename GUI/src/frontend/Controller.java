@@ -372,10 +372,6 @@ public class Controller {
             }
 
 
-            for (int i = 0; i < com.mbox.DBManager.getPersonFromTable().size(); i++) {
-                if (!profList.contains(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI()))
-                    profList.add(com.mbox.DBManager.getPersonFromTable().get(i).initPersonGUI());
-            }
             //Here I initialize pubList with method getPublisherFromTable()
             pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
             ///////////////////////////////////////////////////////////////
@@ -1049,6 +1045,13 @@ public class Controller {
      */
     public void selectProf() {
         VBox mainAddPane = new VBox(2);
+
+        ArrayList<com.mbox.Person> allPersonTemp= com.mbox.DBManager.getPersonFromTable();
+        profList.clear();
+        for (int i = 0; i < allPersonTemp.size(); i++) {
+            if (!profList.contains(allPersonTemp.get(i).initPersonGUI()))
+                profList.add(allPersonTemp.get(i).initPersonGUI());
+        }
 
         Dialog dlg = new Dialog();
 
