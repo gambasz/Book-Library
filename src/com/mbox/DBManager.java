@@ -1667,8 +1667,6 @@ public class DBManager {
 
         ArrayList<frontend.data.Resource> r = c.getResource();
 
-        executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
-                " (COURSEID, PERSONID, COMMONID) VALUES ('%d','%d','%d')", id, personid, commonID));
 
 
         int[] resourceidlist = new int[r.size()];
