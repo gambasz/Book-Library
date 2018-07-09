@@ -1412,7 +1412,7 @@ public class Controller {
         if(checkBoxes[2]){
             File exportFile = pickSaveFile(" All Person with Resources");
             //todo:: modifity this for person with resources
-            saveFile(DBManager.exportCSVCourseResources(),exportFile);
+            saveFile(DBManager.exportCSVPersonResources(),exportFile);
 
         }
         if(checkBoxes[3]){

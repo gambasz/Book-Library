@@ -1,11 +1,14 @@
 package com.mbox;
-import java.sql.*;
-import java.util.*;
+
 import frontend.data.PersonType;
-import java.io.*;
-import java.io.File;
+
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class DBManager {
     public static Statement st;
@@ -1309,7 +1312,7 @@ public class DBManager {
 
         ResultSet rs;
         int resourceID = 0,
-         i = 0, before =-1;
+                i = 0, before = -1;
         //Resource[] resourcesList = new Resource[20];
         ArrayList<Resource> listResources = new ArrayList<Resource>();
 
@@ -2678,21 +2681,28 @@ public class DBManager {
     public static String exportCSVCourseResources() {
         ArrayList<Course> allCourses = getCourseFromTable();
         StringBuilder sb = new StringBuilder();
-        sb.append("id,"); sb.append("Title,"); sb.append("Description,"); sb.append("Department,");
+        sb.append("id,");
+        sb.append("Title,");
+        sb.append("Description,");
+        sb.append("Department,");
         sb.append("Resources -->");
         sb.append('\n');
 
         for (Course course : allCourses) {
             course.setResourceInstances(findResourcesCourseAvoidRepetitive(course.getID()));
-            sb.append(course.getID()); sb.append(",");
-            sb.append(course.getTitle()); sb.append(",");
-            sb.append(course.getDescription()); sb.append(",");
-            sb.append(course.getDepartment()); sb.append(",");
-            for (Resource resource : course.getResourceInstances()){
+            sb.append(course.getID());
+            sb.append(",");
+            sb.append(course.getTitle());
+            sb.append(",");
+            sb.append(course.getDescription());
+            sb.append(",");
+            sb.append(course.getDepartment());
+            sb.append(",");
+            for (Resource resource : course.getResourceInstances()) {
                 sb.append(resource.getTitle());
                 sb.append(",");
             }
-            sb.deleteCharAt(sb.length()-1);
+            sb.deleteCharAt(sb.length() - 1);
             sb.append("\n");
         }
 
@@ -2729,7 +2739,7 @@ public class DBManager {
     }
 
 
-    public static String exportCSVResourcePublisher(){
+    public static String exportCSVResourcePublisher() {
         ArrayList<Resource> allResources = getResourceFromTable();
 
 //        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
@@ -2746,7 +2756,7 @@ public class DBManager {
         sb.append("Publisher contact info");
         sb.append('\n');
 
-        for ( Resource resource : allResources ){
+        for (Resource resource : allResources) {
             setPublisherForResource(resource);
             sb.append(resource.getID());
             sb.append(",");
@@ -2773,7 +2783,7 @@ public class DBManager {
 
     }
 
-    public static void exportCSVPersonResources(){
+    public static String exportCSVPersonResources() {
         ArrayList<Person> allPerson = getPersonFromTable();
 
 //        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
@@ -2784,8 +2794,18 @@ public class DBManager {
         sb.append("Type,");
         sb.append("Resources");
         sb.append('\n');
+        for (Person p : allPerson) {
+            sb.append(p.getID() + ",");
+            sb.append(p.getFirstName() + ",");
+            sb.append(p.getType() + ",");
+            for (Resource res : p.getResourceList()) {
+                sb.append(res.getTitle() + ",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append('\n');
 
-
+        }
+        return sb.toString();
     }
 }
 
