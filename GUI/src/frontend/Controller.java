@@ -41,7 +41,6 @@ public class Controller {
     private ArrayList<Resource> resList;
     private ArrayList<Publisher> pubList;
     private Course selectedCourse;
-    private Course selectedCourseTemplate;
     private Resource selectedResource;
     private Publisher selectedPublisher;
     private Person selectedPerson;
@@ -1273,7 +1272,8 @@ public class Controller {
             if (dialogButton == fill) {
 
                 selectedCourse = courseTemplates.getSelectionModel().getSelectedItem();
-                selectedCourseTemplate = courseTemplates.getSelectionModel().getSelectedItem();
+                ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getItems());
+                selectedCourse.setResource(tempRes);
                 courseInfoDescrip.setText(selectedCourse.getDescription());
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
