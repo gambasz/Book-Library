@@ -1679,10 +1679,7 @@ public class DBManager {
         for (int j = 0; j < resourceidlist.length; j++) {
             String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
                     " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, resourceidlist[j], commonID);
-            System.out.println(tempQuerry);
-
             executeNoReturnQuery(tempQuerry);
-            System.out.println(tempQuerry);
 
 //            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
 //                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", personid, resourceidlist[j], commonID);
@@ -1691,9 +1688,7 @@ public class DBManager {
 
             // there is a problm with this
 //            System.out.println("Testing purpose:\n" + tempQuery + "\n\n\n\n");
-            System.out.println("Course ID " + c.getID() + " and commonID in course " + c.getCommonID());
 
-            System.out.println("ResourceID of this course" + c.getResource().get(0).getID());
 
 
         }
@@ -1711,10 +1706,7 @@ public class DBManager {
                     executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                                     " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
                             resourceidlist[k]));
-                    System.out.println(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            resourceidlist[k]));
-                }
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2845,10 +2837,10 @@ public class DBManager {
         return sb.toString();
     }
 
-    public static void getAllResourcesNeededForPerson(frontend.data.Person person){
+    public static void getAllResourcesNeededForPerson(frontend.data.Person person) {
         //GO to person-course, get a list of commonids of the courses being teached by the person
         ResultSet rss, rs;
-        int commonID=0;
+        int commonID = 0;
         ArrayList<frontend.data.Resource> resourcesList = new ArrayList<frontend.data.Resource>();
 
         try {
@@ -2857,20 +2849,114 @@ public class DBManager {
 
             rss = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = '%d'",
                     person.getID()));
-            while(rss.next()){
+            while (rss.next()) {
                 commonID = (rss.getInt("COMMONID"));
                 rs = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID = '%d' ORDER BY RESOURCEID ASC",
                         person.getID()));
-                while(rs.next()){
+                while (rs.next()) {
                     //resourcesList.add(new frontend.data.Resource())
 
                 }
 
             }
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ArrayList<frontend.data.Course> getClassByCommonID(int id){
+
+        ArrayList<frontend.data.Course> c_array = new ArrayList<>();
+
+
+
+        return c_array;
+    }
+
+    public static ArrayList<frontend.data.Resource> findResourcesByCommonID(int id){
+
+        ArrayList<Integer> resids = new ArrayList<>();
+        ArrayList<frontend.data.Resource> asdf = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMOND=%d",
+                    id));
+
+            while(rs.next()){
+
+                resids.add(rs.getInt("RESOURCEID"));
+
+            }
+
+
+        }catch(SQLException e){
+
+        }
+
+        return asdf;
+
+    }
+
+    public static frontend.data.Resource getResourceByID(int id){
+
+        frontend.data.Resource resource = new frontend.data.Resource("", -1);
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                //resource  = new frontend.data.Resource();
+            }
+
+        }catch(SQLException e){
+
+        }
+
+        return resource;
+    }
+
+    public static frontend.data.Publisher findPublisherByID(int id){
+
+        frontend.data.Publisher publisher = new frontend.data.Publisher(-1, "", "", "");
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PUBLISHERS WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                publisher.setID(rs.getInt("ID"));
+                publisher.setName(rs.getString("TITLE"));
+                publisher.setDescription(rs.getString("DESCRIPTION"));
+                publisher.setContacts(rs.getString("CONTACT_INFO"));
+            }
+
+
+            if(publisher.getID() == -1){
+
+                System.out.println("Nothing was found.");
+
+            }else{
+
+                return publisher;
+            }
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong when trying to findPublisherByID(int id)");
+
+        }
+
+        return publisher;
 
     }
 }
