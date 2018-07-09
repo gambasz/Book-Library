@@ -2837,31 +2837,56 @@ public class DBManager {
         return sb.toString();
     }
 
-    public static void getAllResourcesNeededForPerson(frontend.data.Person person) {
+    public static ArrayList<frontend.data.Resource> getAllResourcesNeededForPerson(frontend.data.Person person) {
+
         //GO to person-course, get a list of commonids of the courses being teached by the person
-        ResultSet rss, rs;
-        int commonID = 0;
+        ResultSet rss, rs, rs3;
+        int commonID = 0, before=0;
         ArrayList<frontend.data.Resource> resourcesList = new ArrayList<frontend.data.Resource>();
+        ArrayList<Integer> listOfIDs= new ArrayList<Integer>();
+        Resource tempResource;
 
         try {
             Statement st = conn.createStatement();
             Statement st2 = conn.createStatement();
+            Statement st3 = conn.createStatement();
 
             rss = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = '%d'",
                     person.getID()));
             while (rss.next()) {
                 commonID = (rss.getInt("COMMONID"));
                 rs = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID = '%d' ORDER BY RESOURCEID ASC",
-                        person.getID()));
+                        commonID));
+
                 while (rs.next()) {
-                    //resourcesList.add(new frontend.data.Resource())
+
+                    if (before != rs.getInt("RESOURCEID") &&
+                            !listOfIDs.contains(new Integer(rs.getInt("RESOURCEID")))) {
+
+                        before = rs.getInt("RESOURCEID");
+                        listOfIDs.add(before);
+                        rs3 = st3.executeQuery(getResourceInTableQuery(rs.getInt("RESOURCEID")));
+
+                        while (rs3.next()) {
+                            // ID, Type, Title, Author, ISBN, total, current, desc
+                            tempResource = new Resource(rs3.getInt(1), rs3.getString(2),
+                                    rs3.getString(3), rs3.getString(4), rs3.getString(5),
+                                    rs3.getInt(6), rs3.getInt(7), rs3.getString(8));
+                            tempResource.setCommonID(commonID);
+                            setPublisherForResource(tempResource);
+                            resourcesList.add(tempResource.initResourceGUI());
+                        }
+                    }
 
                 }
-
             }
-        } catch (SQLException e) {
+
+            return resourcesList;
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
+        return resourcesList;
     }
 
     public static ArrayList<frontend.data.Course> getClassByCommonID(int id){
