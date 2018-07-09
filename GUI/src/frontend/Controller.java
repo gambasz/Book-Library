@@ -19,16 +19,12 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * The main controller class for th gui fxml file that has all the functionality need to provide a smooth user experience.
@@ -491,18 +487,17 @@ public class Controller {
     }
 
     public void delete() {
-    if(selectedCourse!=null) {
-        Course deleteme = selectedCourse;
-        DBManager.delete_relation_course(deleteme);
-        courseList.remove(deleteme);
-        selectedCourse = null;
-        updateCourseTable();
-        //needs to show in the gui
-    }
-    else{
-        showError("Selection error", "No course selected",
-                "Please select a course to add, update or delete");
-    }
+        if (selectedCourse != null) {
+            Course deleteme = selectedCourse;
+            DBManager.delete_relation_course(deleteme);
+            courseList.remove(deleteme);
+            selectedCourse = null;
+            updateCourseTable();
+            //needs to show in the gui
+        } else {
+            showError("Selection error", "No course selected",
+                    "Please select a course to add, update or delete");
+        }
     }
 
     public void update() {
@@ -640,8 +635,7 @@ public class Controller {
 ////        courseList.add(tempCour);// later on it should be gone, nothing should not be in courseList manually
 ////        // Everything in coureseList should be get from the DB.
 ////
-        }
-        else {
+        } else {
             showError("Selection error", "No course selected",
                     "Please select a course to add, update or delete");
         }
@@ -854,36 +848,36 @@ public class Controller {
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
-            ArrayList<Resource> temp = new ArrayList<>();
-            temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
-            for (Resource r : temp) {
+        ArrayList<Resource> temp = new ArrayList<>();
+        temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
+        for (Resource r : temp) {
 //            resList.remove(r);
-                resourceTable.getItems().remove(r);
-                resInfoList.getItems().remove(r.getTitle());
-                //TODO: THIS is Khanh'change, remember to cut and add when pull
-                if (!isPersonResourcesView)
+            resourceTable.getItems().remove(r);
+            resInfoList.getItems().remove(r.getTitle());
+            //TODO: THIS is Khanh'change, remember to cut and add when pull
+            if (!isPersonResourcesView)
                 selectedCourse.getResource().remove(r);
-                else{
-                    selectedPerson.getResources().remove(r);
-                }
+            else {
+                selectedPerson.getResources().remove(r);
             }
-            updateCourseTable();
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        }
+        updateCourseTable();
+        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 
-            Publisher tempPub = selectedPublisher;
-            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                    titleTF.getText(),
-                    authorTF.getText(),
-                    descriptionTF.getText(),
-                    false,
-                    Integer.parseInt(totalAmTF.getText()),
-                    Integer.parseInt(idTF.getText()),
-                    Integer.parseInt(currentAmTF.getText()),
-                    selectedPublisher
-            );
+        Publisher tempPub = selectedPublisher;
+        Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                titleTF.getText(),
+                authorTF.getText(),
+                descriptionTF.getText(),
+                false,
+                Integer.parseInt(totalAmTF.getText()),
+                Integer.parseInt(idTF.getText()),
+                Integer.parseInt(currentAmTF.getText()),
+                selectedPublisher
+        );
         if (!isPersonResourcesView) {
             resList.add(temp);
             resourceTable.getItems().add(temp);
@@ -892,16 +886,16 @@ public class Controller {
             System.out.println("This is add button");
             //add(+) button is fine
         } else {
-            for (Resource resource : selectedPerson.getResources()){
-                System.out.println("ResourceID After *BEFORE* to list: "+ resource.getID());
+            for (Resource resource : selectedPerson.getResources()) {
+                System.out.println("ResourceID After *BEFORE* to list: " + resource.getID());
             }
             System.out.println("add button person section");
             resourceTable.getItems().add(temp);
             selectedPublisher = tempPub;
             selectedPerson.getResources().add(temp);
             //DBManager.insertPersonResources(selectedPerson);
-            for (Resource resource : selectedPerson.getResources()){
-                System.out.println("ResourceID After adding to list: "+ resource.getID());
+            for (Resource resource : selectedPerson.getResources()) {
+                System.out.println("ResourceID After adding to list: " + resource.getID());
             }
         }
 
@@ -1126,7 +1120,7 @@ public class Controller {
                 new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(deleteBtn,addProfessor, PersonResources)
+                new HBox(deleteBtn, addProfessor, PersonResources)
 
         );
         for (Object tempElem : mainAddPane.getChildren()) {
@@ -1199,7 +1193,7 @@ public class Controller {
 
 
         dlg.setTitle("Assigning Resource");
-        dlg.setHeaderText("Assigning Resource for "+selectedItem.getFirstName()+" "+selectedPerson.getLastName());
+        dlg.setHeaderText("Assigning Resource for " + selectedItem.getFirstName() + " " + selectedPerson.getLastName());
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
@@ -1363,7 +1357,9 @@ public class Controller {
     public void showExportView() {
         Dialog dlg = new Dialog();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
-        Map<String, Boolean> checkBoxes = new HashMap();
+        icon.setFitHeight(255);
+        icon.setFitWidth(255);
+        Boolean[] checkBoxes = new Boolean[4];
 
         CheckBox pubInfo = new CheckBox("All Publisher Info");
         CheckBox resNPubInfo = new CheckBox("  All the resources data, associate with publisher");
@@ -1371,15 +1367,13 @@ public class Controller {
         CheckBox courseWResInfo = new CheckBox(" All the courses with resources associated.");
 
 
-
         Button exportNSave = new Button("Export");
         exportNSave.setOnAction(e -> {
-            checkBoxes.put("publishers", pubInfo.isSelected());
-            checkBoxes.put("resources_publisher", resNPubInfo.isSelected());
-            checkBoxes.put("person_resources", personWResInfo.isSelected());
-            checkBoxes.put("course_resources", courseWResInfo.isSelected());
-
-            pickSaveFile(dlg, checkBoxes);
+            checkBoxes[0] = pubInfo.isSelected();
+            checkBoxes[1] = resNPubInfo.isSelected();
+            checkBoxes[2] = personWResInfo.isSelected();
+            checkBoxes[3] = courseWResInfo.isSelected();
+            exportData(checkBoxes);
         });
 
         VBox checkboxPane = new VBox(20);
@@ -1406,31 +1400,44 @@ public class Controller {
 
     }
 
-    private void pickSaveFile(Dialog dlg, Map<String, Boolean> checkBoxes) {
-        FileChooser fileChooser = new FileChooser();
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(extFilter);
-        //Show save file dialog
-        File file = fileChooser.showSaveDialog(null);
-        String coureseResourcesString ="";
-        System.out.println(checkBoxes.get("publishers"));
+    private void exportData(Boolean[] checkBoxes) {
+        if(checkBoxes[0]){
+            File exportFile = pickSaveFile(" All Publishers");
+            saveFile(DBManager.exportCSVPublisherInfo(),exportFile);
+        }
+        if(checkBoxes[1]){
+            File exportFile = pickSaveFile(" All Resources with Publishers");
+            saveFile(DBManager.exportCSVResourcePublisher(),exportFile);
+        }
+        if(checkBoxes[2]){
+            File exportFile = pickSaveFile(" All Person with Resources");
+            //todo:: modifity this for person with resources
+            saveFile(DBManager.exportCSVCourseResources(),exportFile);
 
-        //TODO: Raja, we need to find out which checkboxes are marked, and only export those data
+        }
+        if(checkBoxes[3]){
+            File exportFile = pickSaveFile(" All Courses with Resources ");
+            saveFile(DBManager.exportCSVCourseResources(),exportFile);
 
-            coureseResourcesString = DBManager.exportCSVCourseResources();
-            //coureseResourcesString = DBManager.exportCSVPublisherInfo(); TODO: this function return a CSV String of publishers
-
-        if (file != null) {
-            SaveFile(coureseResourcesString, file);
         }
     }
 
-    private void SaveFile(String content, File file) {
-        try {
-            FileWriter fileWriter = null;
+    private File pickSaveFile(String titleActionText) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Exporting" + titleActionText);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(null);
 
-            fileWriter = new FileWriter(file);
+        if (file != null) {
+            return file;
+        }
+        return null;
+    }
+
+    private void saveFile(String content, File file) {
+        try {
+            FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(content);
             fileWriter.close();
         } catch (IOException ex) {
