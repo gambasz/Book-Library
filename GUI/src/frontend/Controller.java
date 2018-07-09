@@ -1477,7 +1477,7 @@ public class Controller {
         ArrayList<Resource> selected_resources = selectedCourse.getResource();
         ArrayList<Resource> new_resources = resList;
         //delete all exist relation between course and its resources
-        //DBManager.deleteRelationCoursePersonResources(selectedCourse);
+        DBManager.deleteRelationCourseResources(selectedCourse);
 
 
         String newname = profInfoFName.getText();

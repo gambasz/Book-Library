@@ -1633,7 +1633,7 @@ public class DBManager {
 
     }
 
-    public static void deleteRelationCoursePersonResources(frontend.data.Course c) {
+    public static void deleteRelationCourseResources(frontend.data.Course c) {
         ResultSet rs;
         int personID = c.getProfessor().getID();
         int courseID = c.getID();
@@ -1642,10 +1642,10 @@ public class DBManager {
 
             executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE" +
                     " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
-                    " PERSONID = '%d' AND COMMONID = '%d'", personID, c.getCommonID()));
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE" +
-                    " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
+//                    " PERSONID = '%d' AND COMMONID = '%d'", personID, c.getCommonID()));
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE" +
+//                    " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
             for (int i = 0; i < c.getResource().size(); i++) {
                 executeNoReturnQuery(String.format("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE" +
                         " RESOURCEID = '%d'", c.getResource().get(i).getID()));
