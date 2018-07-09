@@ -281,7 +281,6 @@ public class Controller {
 
             //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
-
             // I create a new object and then check if the information in the boxes are different form
             // the Selected Course Object, then if there is a difference, I will add a new course/person/...
             boolean courseChanged = false, professorChanged = false, resourceChanged = false;
@@ -1375,6 +1374,8 @@ public class Controller {
 
     public void importData() {
     }
+
+
 
 
 }

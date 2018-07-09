@@ -2844,6 +2844,35 @@ public class DBManager {
         }
         return sb.toString();
     }
+
+    public static void getAllResourcesNeededForPerson(frontend.data.Person person){
+        //GO to person-course, get a list of commonids of the courses being teached by the person
+        ResultSet rss, rs;
+        int commonID=0;
+        ArrayList<frontend.data.Resource> resourcesList = new ArrayList<frontend.data.Resource>();
+
+        try {
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+
+            rss = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = '%d'",
+                    person.getID()));
+            while(rss.next()){
+                commonID = (rss.getInt("COMMONID"));
+                rs = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID = '%d' ORDER BY RESOURCEID ASC",
+                        person.getID()));
+                while(rs.next()){
+                    //resourcesList.add(new frontend.data.Resource())
+
+                }
+
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
 }
 
 
