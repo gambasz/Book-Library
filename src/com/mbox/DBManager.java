@@ -1680,10 +1680,7 @@ public class DBManager {
         for (int j = 0; j < resourceidlist.length; j++) {
             String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
                     " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, resourceidlist[j], commonID);
-            System.out.println(tempQuerry);
-
             executeNoReturnQuery(tempQuerry);
-            System.out.println(tempQuerry);
 
 //            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
 //                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", personid, resourceidlist[j], commonID);
@@ -1692,9 +1689,7 @@ public class DBManager {
 
             // there is a problm with this
 //            System.out.println("Testing purpose:\n" + tempQuery + "\n\n\n\n");
-            System.out.println("Course ID " + c.getID() + " and commonID in course " + c.getCommonID());
 
-            System.out.println("ResourceID of this course" + c.getResource().get(0).getID());
 
 
         }
@@ -1712,10 +1707,7 @@ public class DBManager {
                     executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                                     " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
                             resourceidlist[k]));
-                    System.out.println(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            resourceidlist[k]));
-                }
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();

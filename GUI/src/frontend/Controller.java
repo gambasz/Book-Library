@@ -1471,8 +1471,8 @@ public class Controller {
 //                System.out.println(resInfoList.getItems().toString());
 //            }
 //        }
-
-
+//TODO: Khanh is here. The setSemester method should be fixed so I can update the table when changed the new resource
+        courseList.remove(selectedCourse);
         ArrayList<Course> courses = new ArrayList<>();
         ArrayList<Resource> selected_resources = selectedCourse.getResource();
         ArrayList<Resource> new_resources = resList;
@@ -1496,6 +1496,8 @@ public class Controller {
         String newcoursedescription = courseInfoDescrip.getText();
 
         Course new_course = new Course(-1, newcoursetitle, newcoursedepartment, newcoursedescription);
+        new_course.setSEMESTER(selectedCourse.getSEMESTER());
+        new_course.setYEAR(selectedCourse.getYEAR());
 
         //if they are the same
 
@@ -1542,8 +1544,11 @@ public class Controller {
         }
         new_course.setResource(selected_resources);
 
+
         //add new relation between current resources in course instance and that course
         DBManager.insertRelationCourseResources(new_course);
+        courseList.add(new_course);
+        updateCourseTable();
     }
 
 }
