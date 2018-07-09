@@ -490,19 +490,24 @@ public class Controller {
     }
 
     public void delete() {
-
+    if(selectedCourse!=null) {
         Course deleteme = selectedCourse;
         DBManager.delete_relation_course(deleteme);
         courseList.remove(deleteme);
         selectedCourse = null;
         updateCourseTable();
         //needs to show in the gui
-
+    }
+    else{
+        showError("Selection error", "No course selected",
+                "Please select a course to add, update or delete");
+    }
     }
 
     public void update() {
+        if (selectedCourse != null) {
 
-        newupdate();
+            newupdate();
 
 
 //        Person tempPerson = new Person(selectedPerson);
@@ -634,6 +639,11 @@ public class Controller {
 ////        courseList.add(tempCour);// later on it should be gone, nothing should not be in courseList manually
 ////        // Everything in coureseList should be get from the DB.
 ////
+        }
+        else {
+            showError("Selection error", "No course selected",
+                    "Please select a course to add, update or delete");
+        }
     }
 
 

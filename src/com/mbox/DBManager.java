@@ -2730,6 +2730,50 @@ public class DBManager {
         return sb.toString();
     }
 
+
+    public static String exportCSVResourcePublisher(){
+        ArrayList<Resource> allResources = getResourceFromTable();
+
+//        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("id,");
+        sb.append("Type,");
+        sb.append("Title,");
+        sb.append("Author,");
+        sb.append("ISBN,");
+        sb.append("Total amount,");
+        sb.append("Current amount,");
+        sb.append("Description,");
+        sb.append("Publisher Title,");
+        sb.append("Publisher contact info");
+        sb.append('\n');
+
+        for ( Resource resource : allResources ){
+            setPublisherForResource(resource);
+            sb.append(resource.getID());
+            sb.append(",");
+            sb.append(resource.getType());
+            sb.append(",");
+            sb.append(resource.getTitle());
+            sb.append(",");
+            sb.append(resource.getAuthor());
+            sb.append(",");
+            sb.append(resource.getISBN());
+            sb.append(",");
+            sb.append(resource.getTotalAmount());
+            sb.append(",");
+            sb.append(resource.getCurrentAmount());
+            sb.append(",");
+            sb.append(resource.getDescription());
+            sb.append(",");
+            sb.append(resource.getPublisherInstance().getTitle());
+            sb.append(",");
+            sb.append(resource.getPublisherInstance().getContactInformation());
+            sb.append("\n");
+        }
+        return sb.toString();
+
+    }
 }
 
 
