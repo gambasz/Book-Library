@@ -1633,7 +1633,7 @@ public class DBManager {
 
     }
 
-    public static void deleteRelationCoursePersonResources(frontend.data.Course c) {
+    public static void deleteRelationCourseResources(frontend.data.Course c) {
         ResultSet rs;
         int personID = c.getProfessor().getID();
         int courseID = c.getID();
@@ -1642,10 +1642,10 @@ public class DBManager {
 
             executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE" +
                     " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
-                    " PERSONID = '%d' AND COMMONID = '%d'", personID, c.getCommonID()));
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE" +
-                    " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
+//                    " PERSONID = '%d' AND COMMONID = '%d'", personID, c.getCommonID()));
+//            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE" +
+//                    " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
             for (int i = 0; i < c.getResource().size(); i++) {
                 executeNoReturnQuery(String.format("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE" +
                         " RESOURCEID = '%d'", c.getResource().get(i).getID()));
@@ -1667,9 +1667,6 @@ public class DBManager {
 
         ArrayList<frontend.data.Resource> r = c.getResource();
 
-        executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
-                " (COURSEID, PERSONID, COMMONID) VALUES ('%d','%d','%d')", id, personid, commonID));
-
 
         int[] resourceidlist = new int[r.size()];
 
@@ -1682,10 +1679,7 @@ public class DBManager {
         for (int j = 0; j < resourceidlist.length; j++) {
             String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
                     " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, resourceidlist[j], commonID);
-            System.out.println(tempQuerry);
-
             executeNoReturnQuery(tempQuerry);
-            System.out.println(tempQuerry);
 
 //            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
 //                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", personid, resourceidlist[j], commonID);
@@ -1694,9 +1688,7 @@ public class DBManager {
 
             // there is a problm with this
 //            System.out.println("Testing purpose:\n" + tempQuery + "\n\n\n\n");
-            System.out.println("Course ID " + c.getID() + " and commonID in course " + c.getCommonID());
 
-            System.out.println("ResourceID of this course" + c.getResource().get(0).getID());
 
 
         }
@@ -1714,10 +1706,7 @@ public class DBManager {
                     executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                                     " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
                             resourceidlist[k]));
-                    System.out.println(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            resourceidlist[k]));
-                }
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2551,6 +2540,43 @@ public class DBManager {
         }
 
     }
+
+
+    public static void updateCourseAndPerson(frontend.data.Course c) {
+
+
+
+            c.getProfessor().setID(find_person_by_name(c.getProfessor()));
+
+            try {
+
+                Statement st = conn.createStatement();
+
+                System.out.println("Course title: "+c.getTitle()+"id: "+c.getID() + "person name: "+ c.getProfessor().getFirstName()+" "+c.getProfessor().getLastName()+
+                "Person ID: " + c.getProfessor().getID() + "\nResources list: "+c.getResource()+" Commonid: "+c.getCommonID());
+
+
+
+                st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = %d WHERE ID = %d",
+                        c.getID(), c.getCommonID()));
+
+
+                c.getProfessor().setID(find_person_by_name(c.getProfessor()));
+                System.out.println(c.getProfessor().getID());
+
+
+                st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = %d, PERSONID = %d WHERE " +
+                                "COMMONID = %d", c.getID(), c.getProfessor().getID(),
+                        c.getCommonID()));
+
+            } catch (SQLException e) {
+
+                System.out.println("Something went wrong when trying to update course and person table");
+            }
+
+        }
+
+
 
     public static int find_courseid_by_title(frontend.data.Course c) {
 
