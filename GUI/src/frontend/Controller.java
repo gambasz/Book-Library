@@ -1368,13 +1368,15 @@ public class Controller {
         CheckBox personWResInfo = new CheckBox("All the Person with resources associated");
         CheckBox courseWResInfo = new CheckBox(" All the courses with resources associated.");
 
-        checkBoxes.put("publishers", pubInfo.isSelected());
-        checkBoxes.put("resources_publisher", resNPubInfo.isSelected());
-        checkBoxes.put("person_resources", personWResInfo.isSelected());
-        checkBoxes.put("course_resources", courseWResInfo.isSelected());
+
 
         Button exportNSave = new Button("Export");
         exportNSave.setOnAction(e -> {
+            checkBoxes.put("publishers", pubInfo.isSelected());
+            checkBoxes.put("resources_publisher", resNPubInfo.isSelected());
+            checkBoxes.put("person_resources", personWResInfo.isSelected());
+            checkBoxes.put("course_resources", courseWResInfo.isSelected());
+
             pickSaveFile(dlg, checkBoxes);
         });
 
@@ -1393,7 +1395,6 @@ public class Controller {
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
 
-
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
 
@@ -1411,17 +1412,13 @@ public class Controller {
         //Show save file dialog
         File file = fileChooser.showSaveDialog(null);
         String coureseResourcesString ="";
+        System.out.println(checkBoxes.get("publishers"));
 
         //TODO: Raja, we need to find out which checkboxes are marked, and only export those data
-        
-        try {
+
             coureseResourcesString = DBManager.exportCSVCourseResources();
             //coureseResourcesString = DBManager.exportCSVPublisherInfo(); TODO: this function return a CSV String of publishers
 
-        }
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
         if (file != null) {
             SaveFile(coureseResourcesString, file);
         }

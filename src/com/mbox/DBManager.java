@@ -2675,9 +2675,8 @@ public class DBManager {
     }
 
 
-    public static String exportCSVCourseResources() throws FileNotFoundException {
+    public static String exportCSVCourseResources() {
         ArrayList<Course> allCourses = getCourseFromTable();
-        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
         StringBuilder sb = new StringBuilder();
         sb.append("id,"); sb.append("Title,"); sb.append("Description,"); sb.append("Department,");
         sb.append("Resources -->");
@@ -2698,7 +2697,6 @@ public class DBManager {
         }
 
         //pw.write(sb.toString());
-        pw.close();
         System.out.println("done!");
         return sb.toString();
 
