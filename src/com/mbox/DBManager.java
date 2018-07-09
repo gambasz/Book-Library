@@ -1667,6 +1667,7 @@ public class DBManager {
 
         ArrayList<frontend.data.Resource> r = c.getResource();
 
+
         int[] resourceidlist = new int[r.size()];
 
         for (int i = 0; i < c.getResource().size(); i++) {
