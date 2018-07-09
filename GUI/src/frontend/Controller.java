@@ -1540,10 +1540,10 @@ public class Controller {
             //updateCourseTable();
 
         }
-        new_course.setResource(selected_resources);
+        //new_course.setResource(selected_resources);
 
         //add new relation between current resources in course instance and that course
-        DBManager.insertRelationCourseResources(new_course);
+        //DBManager.insertRelationCourseResources(new_course);
     }
 
 }
