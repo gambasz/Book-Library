@@ -1084,7 +1084,7 @@ public class Controller {
 
         });
         currentProfessors.setOnAction(e -> {
-            System.out.print(currentProfessors.getSelectionModel().getSelectedItem());
+            System.out.println(currentProfessors.getSelectionModel().getSelectedItem());
             if (currentProfessors.getSelectionModel().getSelectedItem() != null) {
                 profInfoFNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getFirstName());
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
@@ -1402,21 +1402,21 @@ public class Controller {
 
     private void exportData(Boolean[] checkBoxes) {
         if(checkBoxes[0]){
-            File exportFile = pickSaveFile(" All Publishers");
+            File exportFile = pickSaveFile("All Publishers");
             saveFile(DBManager.exportCSVPublisherInfo(),exportFile);
         }
         if(checkBoxes[1]){
-            File exportFile = pickSaveFile(" All Resources with Publishers");
+            File exportFile = pickSaveFile("All Resources with Publishers");
             saveFile(DBManager.exportCSVResourcePublisher(),exportFile);
         }
         if(checkBoxes[2]){
-            File exportFile = pickSaveFile(" All Person with Resources");
+            File exportFile = pickSaveFile("All Persons with Resources");
             //todo:: modifity this for person with resources
             saveFile(DBManager.exportCSVPersonResources(),exportFile);
 
         }
         if(checkBoxes[3]){
-            File exportFile = pickSaveFile(" All Courses with Resources ");
+            File exportFile = pickSaveFile("All Courses with Resources");
             saveFile(DBManager.exportCSVCourseResources(),exportFile);
 
         }
@@ -1424,10 +1424,12 @@ public class Controller {
 
     private File pickSaveFile(String titleActionText) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(titleActionText);
         fileChooser.setTitle("Exporting" + titleActionText);
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(null);
+
 
         if (file != null) {
             return file;

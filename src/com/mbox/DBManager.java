@@ -2792,14 +2792,17 @@ public class DBManager {
         sb.append("First Name,");
         sb.append("Last Name,");
         sb.append("Type,");
-        sb.append("Resources");
+        sb.append("Resources-->");
         sb.append('\n');
-        for (Person p : allPerson) {
-            sb.append(p.getID() + ",");
-            sb.append(p.getFirstName() + ",");
-            sb.append(p.getType() + ",");
-            for (Resource res : p.getResourceList()) {
-                sb.append(res.getTitle() + ",");
+
+        for (Person person : allPerson) {
+            setResourcesForPerson(person);
+            sb.append(person.getID() + ",");
+            sb.append(person.getFirstName() + ",");
+            sb.append(person.getLastName() + ",");
+            sb.append(person.getType() + ",");
+            for (Resource resource : person.getResourceList()) {
+                sb.append(resource.getTitle() + ",");
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append('\n');
