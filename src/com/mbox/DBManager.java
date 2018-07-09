@@ -1668,7 +1668,6 @@ public class DBManager {
         ArrayList<frontend.data.Resource> r = c.getResource();
 
 
-
         int[] resourceidlist = new int[r.size()];
 
         for (int i = 0; i < c.getResource().size(); i++) {
@@ -2541,6 +2540,43 @@ public class DBManager {
         }
 
     }
+
+
+    public static void updateCourseAndPerson(frontend.data.Course c) {
+
+
+
+            c.getProfessor().setID(find_person_by_name(c.getProfessor()));
+
+            try {
+
+                Statement st = conn.createStatement();
+
+                System.out.println("Course title: "+c.getTitle()+"id: "+c.getID() + "person name: "+ c.getProfessor().getFirstName()+" "+c.getProfessor().getLastName()+
+                "Person ID: " + c.getProfessor().getID() + "\nResources list: "+c.getResource()+" Commonid: "+c.getCommonID());
+
+
+
+                st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = %d WHERE ID = %d",
+                        c.getID(), c.getCommonID()));
+
+
+                c.getProfessor().setID(find_person_by_name(c.getProfessor()));
+                System.out.println(c.getProfessor().getID());
+
+
+                st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = %d, PERSONID = %d WHERE " +
+                                "COMMONID = %d", c.getID(), c.getProfessor().getID(),
+                        c.getCommonID()));
+
+            } catch (SQLException e) {
+
+                System.out.println("Something went wrong when trying to update course and person table");
+            }
+
+        }
+
+
 
     public static int find_courseid_by_title(frontend.data.Course c) {
 
