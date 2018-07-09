@@ -2772,6 +2772,21 @@ public class DBManager {
         return sb.toString();
 
     }
+
+    public static void exportCSVPersonResources(){
+        ArrayList<Person> allPerson = getPersonFromTable();
+
+//        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("id,");
+        sb.append("First Name,");
+        sb.append("Last Name,");
+        sb.append("Type,");
+        sb.append("Resources");
+        sb.append('\n');
+
+
+    }
 }
 
 
