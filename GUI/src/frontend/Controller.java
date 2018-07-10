@@ -316,12 +316,8 @@ public class Controller {
                 System.out.println("New Course Added");
             }
 
-
-            System.out.println("PrfoessorID before adding" + tempCour.getProfessor().getID());
-            courseList.add(tempCour); // later on it should be gone, nothing should not be in courseList manually
-            // Everything in coureseList should be get from the DB.
-
-            DBManager.relationalInsertByID2(tempCour);
+            tempCour = DBManager.relationalInsertByID2(tempCour);
+            courseList.add(tempCour);
 
             updateCourseTable();
         } else {
