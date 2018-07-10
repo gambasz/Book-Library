@@ -2926,16 +2926,16 @@ public class DBManager {
         return c_array;
     }
 
-    public static ArrayList<frontend.data.Resource> findResourcesByCommonID(int id){
+    public static ArrayList<frontend.data.Resource> find_resources_by_commonid(int id){
 
         ArrayList<Integer> resids = new ArrayList<>();
-        ArrayList<frontend.data.Resource> asdf = new ArrayList<>();
+        ArrayList<frontend.data.Resource> reslist = new ArrayList<>();
 
         try{
 
             Statement st = conn.createStatement();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMOND=%d",
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID=%d",
                     id));
 
             while(rs.next()){
@@ -2944,38 +2944,82 @@ public class DBManager {
 
             }
 
+            for(int i = 0; i < resids.size(); i++){
+
+                reslist.add(find_resource_by_id(resids.get(i)));
+
+            }
+
+            return reslist;
+
 
         }catch(SQLException e){
 
+            System.out.println("Something went wrong with find_resources_by_commonid(int id)");
+
         }
 
-        return asdf;
+        return reslist;
 
     }
 
-    public static frontend.data.Resource getResourceByID(int id){
+    public static frontend.data.Resource find_resource_by_id(int id){
 
         frontend.data.Resource resource = new frontend.data.Resource("", -1);
+        frontend.data.Publisher publisher = new frontend.data.Publisher("","","");
+        int publisherid = -1;
 
         try{
 
             Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = %d", id));
+            ResultSet rs2 = st2.executeQuery(String.format("SELECT * FROM RESOURCES WHERE ID = %d", id));
+
 
             while(rs.next()){
 
-                //resource  = new frontend.data.Resource();
+                publisherid = rs.getInt("PUBLISHERID");
+
             }
 
+            if (publisherid == -1){
+
+                //Assign empty publisher
+                System.out.println("Something went wrong");
+            }else{
+
+                publisher = find_publisher_by_id(publisherid);
+
+            }
+
+            while (rs2.next()) {
+
+                resource.setID(rs2.getInt("ID"));
+                resource.setTYPE(rs2.getString("TYPE"));
+                resource.setTitle(rs2.getString("TITLE"));
+                resource.setAuthor(rs2.getString("AUTHOR"));
+                resource.setISBN(rs2.getString("ISBN"));
+                resource.setTotalAmount(rs2.getInt("TOTAL_AMOUNT"));
+                resource.setCurrentAmount(rs2.getInt("CURRENT_AMOUNT"));
+                resource.setDescription(rs2.getString("DESCRIPTION"));
+                resource.setPublisher(publisher);
+
+            }
+
+            return resource;
+
         }catch(SQLException e){
+
+            System.out.println("Something went wrong when trying to execute find_resource_by_id(int id)");
 
         }
 
         return resource;
     }
 
-    public static frontend.data.Publisher findPublisherByID(int id){
+    public static frontend.data.Publisher find_publisher_by_id(int id){
 
         frontend.data.Publisher publisher = new frontend.data.Publisher(-1, "", "", "");
 

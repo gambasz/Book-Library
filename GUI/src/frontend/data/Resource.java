@@ -63,8 +63,8 @@ public class Resource {
         return this.ISBN;
     }
 
-    public void setISBN() {
-        this.ISBN = ISBN;
+    public void setISBN(String isbn) {
+        this.ISBN = isbn;
     }
 
     public int getCurrentAmount() {
