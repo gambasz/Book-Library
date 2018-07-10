@@ -486,15 +486,26 @@ public class Controller {
     public void exit() {
         System.exit(0);
     }
+    //thjanks :)) hard to see
 
     public void delete() {
+        System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle()+ "ObjID: " + selectedCourse.hashCode());
         if (selectedCourse != null) {
-            Course deleteme = selectedCourse;
-            DBManager.delete_relation_course(deleteme);
-            courseList.remove(deleteme);
+            System.out.println("CommonID: " +selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
+            DBManager.delete_relation_course(selectedCourse);
+            System.out.println("CommonID: " +selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
+            System.out.println("SelectedCourse TItle: " + selectedCourse.getTitle()+ "ObjID: " +selectedCourse.hashCode());
+            courseList.remove(selectedCourse);
             selectedCourse = null;
             updateCourseTable();
-            //needs to show in the gui
+
+            //wtfffff :)) they can have the same hashcode even if they are not equal..
+            // yeah! thats our problem! We have one CMS203 with CommonID 222 and other one with CommonID 99 and ohter professor
+            // but both have the same hashchode!
+  //can we override by the method remove by searching for commonID ? :))
+            // in that case we need to be restrict about commonID
+            // maybe but its hard.. I still don't know how to fix @@
+
         } else {
             showError("Selection error", "No course selected",
                     "Please select a course to add, update or delete");
