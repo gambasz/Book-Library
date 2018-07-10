@@ -179,17 +179,17 @@ public class Course {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return ID == course.ID;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(ID);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Course course = (Course) o;
+//        return ID == course.ID;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(commonID);
+//    }
 }
