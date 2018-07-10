@@ -1555,6 +1555,7 @@ public class DBManager {
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
                         " (COURSEID, SEMESTERID) VALUES ('%d', '%d')", Integer.parseInt(values[0]), Integer.parseInt(values[4])));
 
+
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
                         " (COURSEID, PERSONID) VALUES ('%d', '%d')", Integer.parseInt(values[0]), Integer.parseInt(values[1])));
                 executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
@@ -1571,7 +1572,7 @@ public class DBManager {
         }
     }
 
-    public static void relationalInsertByID2(frontend.data.Course c) {
+    public static frontend.data.Course relationalInsertByID2(frontend.data.Course c) {
 
         //getting all the data
         int id = c.getID();
@@ -1581,7 +1582,7 @@ public class DBManager {
         String title = c.getTitle();
         String dept = c.getDepartment();
         String desc = c.getDescription();
-        int personid = c.getProfessor().getID();
+        int personid = c.getProfessor().getID(), commonID=0;
         int semesterid = getSemesterIDByName(semester, year);
 
         System.out.println(personid);
@@ -1601,35 +1602,44 @@ public class DBManager {
             resourceidlist[i] = r.get(i).getID();
         }
 
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs;
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
+                    " (COURSEID, SEMESTERID) VALUES ('%d', '%d')", id, semesterid));
+            rs = st.executeQuery("select id from (select * from RELATION_SEMESTER_COURSE  order by id desc) where rownum = 1");
+            if(rs.next()){
+                commonID = rs.getInt("ID");
+            }
 
-        executeNoReturnQuery(String.format("INSERT INTO RELATION_SEMESTER_COURSE" +
-                " (COURSEID, SEMESTERID) VALUES ('%d', '%d')", id, semesterid));
+
+            executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
+                    " (COURSEID, PERSONID) VALUES ('%d', '%d')", id, personid));
+
+            for (int j = 0; j < resourceidlist.length; j++) {
+
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                        " (COURSEID, RESOURCEID) VALUES ('%d', '%d')", id, resourceidlist[j]));
+            }
 
 
-        executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_PERSON" +
-                " (COURSEID, PERSONID) VALUES ('%d', '%d')", id, personid));
+            for (int l = 0; l < resourceidlist.length; l++) {
 
-        for (int j = 0; j < resourceidlist.length; j++) {
+                executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                        resourceidlist[l]));
 
-            executeNoReturnQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                    " (COURSEID, RESOURCEID) VALUES ('%d', '%d')", id, resourceidlist[j]));
+
+            }
+            c.setCommonID(commonID);
+            return c;
+
         }
 
-
-//        for (int k = 0; k < resourceidlist.length; k++) {
-//
-//            executeNoReturnQuery(String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-//                    " (PERSONID, RESOURCEID) VALUES ('%d', '%d')", personid, resourceidlist[k]));
-//        }
-
-        for (int l = 0; l < resourceidlist.length; l++) {
-
-            executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                            " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
-                    resourceidlist[l]));
-
+        catch (SQLException e){
+            e.printStackTrace();
         }
-
+        return c;
 
     }
 
