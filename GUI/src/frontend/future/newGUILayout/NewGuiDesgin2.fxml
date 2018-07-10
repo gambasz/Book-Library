@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import com.gluonhq.charm.glisten.control.Icon?>
+<?xml version="1.0" encoding="UTF-8"?><?import com.gluonhq.charm.glisten.control.Icon?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>

@@ -506,11 +506,11 @@ public class Controller {
             Boolean courseChanged = false;
             courseChanged = selectedCourse.getTitle() != courseInfoTitle.getText() || selectedCourse.getDescription() != courseInfoDepart.getText() ||
                     selectedCourse.getDepartment() != courseInfoDescrip.getText();
-            if(courseChanged) {
+            if (courseChanged) {
                 Course comboBoxesCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                         courseInfoDescrip.getText());
                 //comboBoxesCourse.setCommonID(selectedCourse.getCommonID());
-                comboBoxesCourse.setID( DBManager.insertCourseQuery(comboBoxesCourse));
+                comboBoxesCourse.setID(DBManager.insertCourseQuery(comboBoxesCourse));
                 selectedCourse.setTitle(comboBoxesCourse.getTitle());
                 selectedCourse.setDepartment(comboBoxesCourse.getDepartment());
                 selectedCourse.setDescription(comboBoxesCourse.getDescription());
@@ -520,7 +520,6 @@ public class Controller {
             ArrayList<Resource> selected_resources = selectedCourse.getResource();
             ArrayList<Resource> new_resources = resList;
             //delete all exist relation between course and its resources
-
 
 
             String newname = profInfoFName.getText();
@@ -973,7 +972,7 @@ public class Controller {
     public void selectProf() {
         VBox mainAddPane = new VBox(2);
 
-        ArrayList<com.mbox.Person> allPersonTemp= com.mbox.DBManager.getPersonFromTable();
+        ArrayList<com.mbox.Person> allPersonTemp = com.mbox.DBManager.getPersonFromTable();
         profList.clear();
         for (int i = 0; i < allPersonTemp.size(); i++) {
             if (!profList.contains(allPersonTemp.get(i).initPersonGUI()))
@@ -1003,15 +1002,22 @@ public class Controller {
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button PersonResources = new Button("View Person's Resources");
         Button addProfessor = new Button("Add");
+        Button NAME_ME_SOMETHING_ELSE = new Button("?");
 
         Button deleteBtn = new Button("Delete");
+
         PersonResources.setVisible(false);
         PersonResources.setManaged(false);
+        NAME_ME_SOMETHING_ELSE.setVisible(false);
+        NAME_ME_SOMETHING_ELSE.setManaged(false);
         addProfessor.setOnMouseClicked(e -> {
             addNewProfessor(profInfoFNameTf.getText(), profInfoLNameTf.getText(), profInfoTypeCB.getSelectionModel().getSelectedItem());
             currentProfessors.getItems().clear();
             currentProfessors.getItems().addAll(profList);
 
+        });
+        NAME_ME_SOMETHING_ELSE.setOnMouseClicked(e -> {
+            resourcePersonDiffView(currentProfessors.getSelectionModel().getSelectedItem());
         });
         currentProfessors.setOnAction(e -> {
             System.out.println(currentProfessors.getSelectionModel().getSelectedItem());
@@ -1023,9 +1029,14 @@ public class Controller {
                 PersonResources.setVisible(true);
                 PersonResources.setManaged(true);
 
+                NAME_ME_SOMETHING_ELSE.setVisible(true);
+                NAME_ME_SOMETHING_ELSE.setManaged(true);
             } else {
                 PersonResources.setVisible(false);
                 PersonResources.setManaged(false);
+
+                NAME_ME_SOMETHING_ELSE.setVisible(false);
+                NAME_ME_SOMETHING_ELSE.setManaged(false);
 
             }
         });
@@ -1049,7 +1060,7 @@ public class Controller {
                 new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(deleteBtn, addProfessor, PersonResources)
+                new HBox(deleteBtn, addProfessor, NAME_ME_SOMETHING_ELSE, PersonResources)
 
         );
         for (Object tempElem : mainAddPane.getChildren()) {
@@ -1081,6 +1092,46 @@ public class Controller {
             return null;
         });
 
+    }
+
+    private void resourcePersonDiffView(Person selectedItem) {
+        Dialog dlg = new Dialog();
+        HBox mainPane = new HBox();
+//        System.out.print(selectedPerson.getResources());
+
+        //TODO :: add naming consistency ---- Rajashow
+        ListView<Resource> profResources = new ListView<>();
+        ListView<Resource> allResources = new ListView<>();
+        ListView<Resource> diffResources = new ListView<>();
+
+        profResources.getItems().addAll();
+        allResources.getItems().addAll();
+        diffResources.getItems().addAll();
+
+        Label professorSResourcesLbl = new Label(selectedItem.getLastName().concat("'s Resources"));
+        Label resourcesLbl = new Label("Required Resources");
+        Label diffResourcesLbl = new Label("Required Difference ");
+
+        professorSResourcesLbl.setStyle("-fx-text-fill: white");
+        resourcesLbl.setStyle("-fx-text-fill: white");
+        diffResourcesLbl.setStyle("-fx-text-fill: white");
+
+        mainPane.getChildren().addAll(
+                new VBox(20, professorSResourcesLbl, profResources),
+                new VBox(20, resourcesLbl, allResources),
+                new VBox(20, diffResourcesLbl, diffResources)
+        );
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setStyle("-fx-border-radius: 10px;");
+        for (Node temp : mainPane.getChildren()) {
+            VBox child = (VBox) temp;
+            child.setAlignment(Pos.CENTER);
+            child.setStyle("-fx-background-color: grey;");
+
+        }
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+        dlg.show();
     }
 
     private void addNewProfessor(String firstName, String lastName, Object type) {
@@ -1330,23 +1381,23 @@ public class Controller {
     }
 
     private void exportData(Boolean[] checkBoxes) {
-        if(checkBoxes[0]){
+        if (checkBoxes[0]) {
             File exportFile = pickSaveFile("All Publishers");
-            saveFile(DBManager.exportCSVPublisherInfo(),exportFile);
+            saveFile(DBManager.exportCSVPublisherInfo(), exportFile);
         }
-        if(checkBoxes[1]){
+        if (checkBoxes[1]) {
             File exportFile = pickSaveFile("All Resources with Publishers");
-            saveFile(DBManager.exportCSVResourcePublisher(),exportFile);
+            saveFile(DBManager.exportCSVResourcePublisher(), exportFile);
         }
-        if(checkBoxes[2]){
+        if (checkBoxes[2]) {
             File exportFile = pickSaveFile("All Persons with Resources");
             //todo:: modifity this for person with resources
-            saveFile(DBManager.exportCSVPersonResources(),exportFile);
+            saveFile(DBManager.exportCSVPersonResources(), exportFile);
 
         }
-        if(checkBoxes[3]){
+        if (checkBoxes[3]) {
             File exportFile = pickSaveFile("All Courses with Resources");
-            saveFile(DBManager.exportCSVCourseResources(),exportFile);
+            saveFile(DBManager.exportCSVCourseResources(), exportFile);
 
         }
     }
