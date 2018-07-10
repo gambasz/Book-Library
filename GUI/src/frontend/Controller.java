@@ -221,10 +221,7 @@ public class Controller {
         if (!isPersonResourcesView) {
             selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
             if (selectedCourse != null) {
-                updateBtn.setVisible(true);
-                deleteBtn.setVisible(true);
-                updateBtn.setManaged(true);
-                deleteBtn.setManaged(true);
+                setChildVisiblity(true, updateBtn, deleteBtn);
                 courseInfoDescrip.setText("" + selectedCourse.getDescription());
                 profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
                 profInfoLName.setText(selectedCourse.getProfessor().getLastName());
@@ -260,10 +257,7 @@ public class Controller {
      */
     public void resetSelect() {
         tableTV.getSelectionModel().clearSelection();
-        updateBtn.setVisible(false);
-        deleteBtn.setVisible(false);
-        updateBtn.setManaged(false);
-        deleteBtn.setManaged(false);
+        setChildVisiblity(false, updateBtn, deleteBtn);
     }
 
     public void add() {
@@ -885,15 +879,9 @@ public class Controller {
             selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
-            update.setVisible(true);
-            delete.setVisible(true);
-            update.setManaged(true);
-            delete.setManaged(true);
+            setChildVisiblity(true,update,delete);
         } else {
-            update.setVisible(false);
-            delete.setVisible(false);
-            update.setManaged(false);
-            delete.setManaged(false);
+            setChildVisiblity(false,update,delete);
         }
     }
 
