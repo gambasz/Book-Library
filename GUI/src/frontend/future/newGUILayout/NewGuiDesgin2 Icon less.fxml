@@ -15,14 +15,14 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.future.newGUILayout.MainPageController">
    <center>
       <JFXTreeTableView fx:id="courseTable" prefHeight="268.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <columns>
             <TreeTableColumn fx:id="courseColumn" prefWidth="132.0" text="Course" />
-            <TreeTableColumn fx:id="professorColumn" prefWidth="114.0" text="Professor" />
-            <TreeTableColumn fx:id="resourcesColumn" prefWidth="270.0000305175781" text="Resources" />
-            <TreeTableColumn fx:id="actionColumn" prefWidth="124.0" text="Actions" />
+            <TreeTableColumn fx:id="professorColumn" prefWidth="136.0" text="Professor" />
+            <TreeTableColumn fx:id="resourcesColumn" maxWidth="1.7976931348623157E308" prefWidth="313.0000305175781" text="Resources" />
+            <TreeTableColumn fx:id="actionColumn" maxWidth="56.0" minWidth="56.0" prefWidth="56.0" resizable="false" text="Actions" />
          </columns>
       </JFXTreeTableView>
    </center>
@@ -61,12 +61,12 @@
                </unFocusColor>
             </JFXTextField>
             <Pane prefHeight="119.0" prefWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2147483647" />
-            <Button minHeight="20.0" minWidth="35.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="59.0" style="-fx-background-color: purple;" text="filter" textAlignment="RIGHT" GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <Button fx:id="filterBtn" minHeight="20.0" minWidth="35.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="59.0" style="-fx-background-color: purple;" text="filter" textAlignment="RIGHT" GridPane.columnIndex="4" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="15.0" />
                </GridPane.margin>
             </Button>
-            <ImageView fitHeight="92.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+            <ImageView fx:id="programIcon" fitHeight="92.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
                <image>
                   <Image url="@../../media/icon.png" />
                </image>
