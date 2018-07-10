@@ -1,6 +1,5 @@
 package com.mbox;
 
-import java.sql.*;
 import java.util.ArrayList;
 
 public class Course {
@@ -185,93 +184,7 @@ public class Course {
                 " " + "Department: " + this.department;
     }
 
-    //------- DB SEARCH METHODS --------------
 
-    public String searchByIDQuery(int id){
-
-        return String.format("SELECT * FROM COURSE_CATALOG WHERE ID=%s", id);
-
-    }
-
-    public String searchByTitleQuery(String t){
-
-        return String.format("SELECT * FROM COURSE_CATALOG WHERE TITLE='%s'", t);
-
-    }
-
-    public String searchByCRN(String crn){
-
-        return String.format("SELECT * FROM COURSE_CATALOG WHERE CNUMBER='%s'", crn);
-
-    }
-
-    public String searchByDepartment(String dp){
-
-        return String.format("SELECT * FROM COURSE_CATALOG WHERE DEPARTMENT='%s'", dp);
-
-    }
-
-    //----------- DB ADD METHODS -------------------
-    public String addToDBOLD(){
-
-        return String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES ('%s', '%s', '%s', '%s')", this.title, this.crn, this.description, this.department);
-
-    }
-
-    // --- DB UPDATE METHOD ---
-    public String update(int identifier, String t, String c, String d, String desc) {
-
-        this.id = identifier;
-        this.title = t;
-        this.crn = c;
-        this.description = d;
-        this.department = desc;
-        return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s' WHERE ID = %s", this.title, this.crn, this.description, this.department, this.id);
-    }
-
-    public String getAllSemesters(){
-
-        //while(rs.next()){
-
-          //  System.out.println(String.valueOf(rs.getInt(1)) + " " + rs.getString(2) + " " + rs.getString(3));
-        return "";
-        }
-
-    // INSERT TO DB AND GET INTO OBJECT:
-
-    public void addToDB(){
-
-        try {
-
-            insertToDB();
-
-            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM COURSECT");
-
-
-            while(rs.next()){
-                this.id = rs.getInt(1);
-                this.title = rs.getString(2);
-                this.crn = rs.getString(3);
-                this.description = rs.getString(4);
-                this.department = rs.getString(5);
-            }
-        }catch (Exception e){
-
-        }
-    }
-
-    private void insertToDB(){
-
-        String quer = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES ('%s', '%s', '%s', '%s')", this.title, this.crn, this.description, this.department);
-
-        try{
-            DBManager.st.executeQuery(quer);
-        }catch(Exception e){
-
-        }
-
-
-    }
 
 }
 

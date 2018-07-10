@@ -1,7 +1,5 @@
 package com.mbox;
 import frontend.data.PersonType;
-
-import java.sql.*;
 import java.util.ArrayList;
 
 public class Person {
@@ -154,52 +152,6 @@ public class Person {
 
         return String.format("SELECT * FROM PERSON WHERE TYPE='%s'", this.getType());
 
-    }
-
-    // -----DB INSERT METHODS------------------
-
-    public void addToDB(){
-
-        try {
-
-            insertToDB();
-
-            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM PERSON");
-
-
-            while(rs.next()){
-                this.id = rs.getInt(1);
-                this.type = rs.getString(2);
-                this.first_name = rs.getString(3);
-                this.last_name = rs.getString(4);
-            }
-        }catch (Exception e){
-
-        }
-    }
-
-    private void insertToDB(){
-
-        String quer = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
-
-        try{
-            DBManager.st.executeQuery(quer);
-        }catch(Exception e){
-
-        }
-
-
-    }
-
-
-    //-------DB METHODS UPDATE by ID--
-    public String update(int identifier, String first, String last, String type) {
-
-        this.id = identifier;
-        this.first_name = first;
-        this.last_name = last;
-        this.type = type;
-        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s", first, last, type, this.id);
     }
 
 
