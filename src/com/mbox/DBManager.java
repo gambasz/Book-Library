@@ -2875,13 +2875,70 @@ public class DBManager {
     }
 
 
+    public static ArrayList<frontend.data.Course> find_courses_by_professor_name(String name){
+
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> personids = new ArrayList<>();
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+            Statement st3 = conn.createStatement();
+            ResultSet rs3;
+
+            ResultSet rs = st.executeQuery("SELECT * FROM PERSON WHERE FIRSTNAME LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                personids.add(rs.getInt("ID"));
+            }
+
+            ResultSet rs2 = st.executeQuery("SELECT * FROM PERSON WHERE LASTNAME LIKE '%"+name+"%'");
+
+            while(rs2.next()){
+
+                personids.add(rs2.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < personids.size(); i++){
+
+                 rs3 = st3.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+
+                while(rs3.next()){
+
+                    courseids.add(rs3.getInt("COMMONID"));
+                }
+
+            }
+
+            for(int i = 0; i < courseids.size(); i++){
+
+                courses.add(find_class_by_commonid(courseids.get(i)));
+            }
+
+            return courses;
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_course_by_professor_name(String name)");
+        }
+
+        return courses;
+
+
+    }
 
     public static frontend.data.Course find_class_by_commonid(int id){
 
-        //also needs to add person into the course object.
-
+        frontend.data.Person person = find_person_by_commonid(id);
         frontend.data.Course course = new frontend.data.Course();
         ArrayList<frontend.data.Resource> resources = find_resources_by_commonid(id);
+
+
         int courseid = -1;
 
         try{
@@ -2911,6 +2968,7 @@ public class DBManager {
             }
 
             course.setResource(resources);
+            course.setProfessor(person);
 
             return course;
 
@@ -2957,6 +3015,62 @@ public class DBManager {
 
         return reslist;
 
+    }
+
+    public static frontend.data.Person find_person_by_commonid(int id){
+
+        frontend.data.Person person = new frontend.data.Person("","",frontend.data.PersonType.valueOf("CourseInstructor").toString());
+
+        int idtmp = -1;
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = %d", id));
+
+            while(rs.next()){
+
+                idtmp = rs.getInt("PERSONID");
+            }
+
+            person = find_person_by_id(idtmp);
+
+            return person;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_person_by_commonid(int id)");
+        }
+
+        return person;
+    }
+
+    public static frontend.data.Person find_person_by_id(int id){
+
+        frontend.data.Person person = new frontend.data.Person("","",frontend.data.PersonType.valueOf("CourseInstructor").toString());
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                person.setID(id);
+                person.setType(rs.getString("TYPE"));
+                person.setFirstName(rs.getString("FIRSTNAME"));
+                person.setLastName(rs.getString("LASTNAME"));
+            }
+
+            return person;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_resources_by_commonid(int id)");
+        }
+
+        return person;
     }
 
     public static frontend.data.Resource find_resource_by_id(int id){
