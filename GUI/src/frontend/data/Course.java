@@ -1,5 +1,6 @@
 package frontend.data;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -63,7 +64,10 @@ public class Course {
     }
 
     public void setDescription(String description) {
-        this.description.set(description);
+        SimpleStringProperty tmp = new SimpleStringProperty();
+        tmp.set(description);
+
+        this.description = tmp;
     }
 
     public int getID() {
@@ -119,7 +123,11 @@ public class Course {
     }
 
     public void setTitle(String title) {
-        this.title.set(title);
+
+        SimpleStringProperty tmp = new SimpleStringProperty();
+        tmp.set(title);
+
+        this.title = tmp;
     }
 
     public String getDepartment() {
@@ -131,7 +139,10 @@ public class Course {
     }
 
     public void setDepartment(String department) {
-        this.department.set(department);
+        SimpleStringProperty tmp = new SimpleStringProperty();
+        tmp.set(department);
+
+        this.department = tmp;
     }
 
     public Person getProfessor() {
@@ -169,17 +180,17 @@ public class Course {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return ID == course.ID;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(ID);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Course course = (Course) o;
+//        return ID == course.ID;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(commonID);
+//    }
 }

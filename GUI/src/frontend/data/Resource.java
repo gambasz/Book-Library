@@ -63,8 +63,8 @@ public class Resource {
         return this.ISBN;
     }
 
-    public void setISBN() {
-        this.ISBN = ISBN;
+    public void setISBN(String isbn) {
+        this.ISBN = isbn;
     }
 
     public int getCurrentAmount() {
@@ -139,20 +139,20 @@ public class Resource {
         this.mcUnique = mcUnique;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Resource resource = (Resource) o;
-        return Objects.equals(TYPE, resource.TYPE) &&
-                Objects.equals(ID, resource.ID);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(TYPE, ID);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Resource resource = (Resource) o;
+//        return Objects.equals(TYPE, resource.TYPE) &&
+//                Objects.equals(ID, resource.ID);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(TYPE, ID);
+//    }
 
     @Override
     public String toString() {
