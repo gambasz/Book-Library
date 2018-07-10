@@ -66,7 +66,7 @@
                   <Insets left="15.0" />
                </GridPane.margin>
             </Button>
-            <ImageView fx:id="programIcon" fitHeight="92.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="SOMETIMES">
+            <ImageView fx:id="programIcon" fitHeight="92.0" fitWidth="123.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <image>
                   <Image url="@../../media/icon.png" />
                </image>
@@ -85,9 +85,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="exportBtn" mnemonicParsing="false" prefHeight="62.0" prefWidth="431.0" style="-fx-background-color: purple;" text="Export" />
-            <Button fx:id="addBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="466.0" style="-fx-background-color: purple;" text="Add" GridPane.columnIndex="1" />
-            <Button fx:id="ImportBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="508.0" style="-fx-background-color: purple;" text="Import" GridPane.columnIndex="2" />
+            <Button fx:id="exportBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: purple;" text="Export" />
+            <Button fx:id="addBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: purple;" text="Add" GridPane.columnIndex="1" />
+            <Button fx:id="ImportBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: purple;" text="Import" GridPane.columnIndex="2" />
          </children>
       </GridPane>
    </bottom>

@@ -30,23 +30,58 @@ public class MainPageController {
     private JFXTextField searchBar;
 
     @FXML
-    private Button filterBtn;
-
-    @FXML
     private ImageView programIcon;
 
     @FXML
-    private Button exportBtn;
+    private Button exportBtn, addBtn, ImportBtn, filterBtn;
 
-    @FXML
-    private Button addBtn;
-
-    @FXML
-    private Button ImportBtn;
 
     @FXML
     void initialize() {
+        initButtonActions();
+        makeTheLogoScale();
         TreeItem<?> courseTree = new TreeItem<>();
     }
 
+    private void makeTheLogoScale() {
+        double iconWRatio = programIcon.getFitWidth()/programIcon.getScene().getWidth();
+        double iconHRatio = programIcon.getFitHeight()/programIcon.getScene().getHeight();
+
+        programIcon.fitWidthProperty().addListener(p->{
+            programIcon.setFitWidth(iconWRatio*programIcon.getScene().getWidth());
+        });
+        programIcon.fitHeightProperty().addListener(p->{
+            programIcon.setFitWidth(iconHRatio*programIcon.getScene().getHeight());
+        });
     }
+
+    private void initButtonActions() {
+        exportBtn.setOnMouseClicked(e -> {
+            openExportView();
+        });
+        addBtn.setOnMouseClicked(e -> {
+            openAddCourseView();
+        });
+        ImportBtn.setOnMouseClicked(e -> {
+            openImportView();
+        });
+        filterBtn.setOnMouseClicked(e -> {
+            showFilterOption();
+        });
+
+    }
+
+    private void openImportView() {
+    }
+
+    private void showFilterOption() {
+    }
+
+    private void openAddCourseView() {
+    }
+
+    private void openExportView() {
+
+    }
+
+}

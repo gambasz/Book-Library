@@ -35,11 +35,11 @@ public class AddCourseViewController {
     @FXML
     private void initialize() {
         setCellFactory();
-        initButtonButtonActions();
+        initButtonActions();
 
     }
 
-    private void initButtonButtonActions() {
+    private void initButtonActions() {
         courseTemplateFillBtn.setOnMouseClicked(e -> {
             openCourseTemplateSelectionView();
         });
