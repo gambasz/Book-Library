@@ -2916,16 +2916,16 @@ public class DBManager {
         return c_array;
     }
 
-    public static ArrayList<frontend.data.Resource> findResourcesByCommonID(int id){
+    public static ArrayList<frontend.data.Resource> find_resources_by_commonid(int id){
 
         ArrayList<Integer> resids = new ArrayList<>();
-        ArrayList<frontend.data.Resource> asdf = new ArrayList<>();
+        ArrayList<frontend.data.Resource> reslist = new ArrayList<>();
 
         try{
 
             Statement st = conn.createStatement();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMOND=%d",
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID=%d",
                     id));
 
             while(rs.next()){
@@ -2934,12 +2934,22 @@ public class DBManager {
 
             }
 
+            for(int i = 0; i < resids.size(); i++){
+
+                reslist.add(find_resource_by_id(resids.get(i)));
+
+            }
+
+            return reslist;
+
 
         }catch(SQLException e){
 
+            System.out.println("Something went wrong with find_resources_by_commonid(int id)");
+
         }
 
-        return asdf;
+        return reslist;
 
     }
 
