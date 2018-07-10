@@ -82,19 +82,19 @@ public class Person {
         this.type = PersonType.valueOf(type);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(ID, person.ID)&& Objects.equals(lastName, person.lastName)&& Objects.equals(firstName, person.firstName)&& Objects.equals(type, person.type);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(lastName, firstName,type, ID);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Person person = (Person) o;
+//        return Objects.equals(ID, person.ID)&& Objects.equals(lastName, person.lastName)&& Objects.equals(firstName, person.firstName)&& Objects.equals(type, person.type);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(lastName, firstName,type, ID);
+//    }
 
     @Override
     public String toString() {
