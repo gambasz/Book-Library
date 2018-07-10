@@ -2239,58 +2239,17 @@ public class DBManager {
     public static void delete_relation_course(frontend.data.Course c) {
 
         try {
-
+            int commonID = c.getCommonID();
             Statement st = conn.createStatement();
 
-            int id_relation_semester_course = 0;
-            int id_relation_course_person = 0;
-            int id_relation_course_resource = 0;
-            int counter = 0;
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d"
-                    , c.getID()));
 
-            while (rs.next()) {
-
-                counter++;
-                id_relation_semester_course = rs.getInt(3);
-            }
-
-            if (counter > 1) {
-
-                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
-
-                while (rs.next()) {
-
-                    id_relation_course_person = rs.getInt(3);
-                }
-
-                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d", c.getID()));
-
-                while (rs.next()) {
-
-                    id_relation_course_resource = rs.getInt(3);
-                }
-
-                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d AND ID = " +
-                        "%d", c.getID(), id_relation_semester_course));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d AND ID = " +
-                        "%d", c.getID(), id_relation_course_person));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d AND ID = " +
-                        "%d", c.getID(), id_relation_course_resource));
-
-            } else if (counter == 1) {
-
-                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
-                        c.getID()));
-
-            } else {
-
-                System.out.println("There is nada.");
-
-            }
+                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = " +
+                        "%d", commonID));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE  COMMONID = " +
+                        "%d", commonID));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = " +
+                        "%d", commonID));
 
 
         } catch (SQLException e) {
