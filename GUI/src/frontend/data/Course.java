@@ -63,7 +63,10 @@ public class Course {
     }
 
     public void setDescription(String description) {
-        this.description.set(description);
+        SimpleStringProperty tmp = new SimpleStringProperty();
+        tmp.set(description);
+
+        this.description = tmp;
     }
 
     public int getID() {
@@ -119,7 +122,11 @@ public class Course {
     }
 
     public void setTitle(String title) {
-        this.title.set(title);
+
+        SimpleStringProperty tmp = new SimpleStringProperty();
+        tmp.set(title);
+
+        this.title = tmp;
     }
 
     public String getDepartment() {
@@ -131,7 +138,10 @@ public class Course {
     }
 
     public void setDepartment(String department) {
-        this.department.set(department);
+        SimpleStringProperty tmp = new SimpleStringProperty();
+        tmp.set(department);
+
+        this.department = tmp;
     }
 
     public Person getProfessor() {

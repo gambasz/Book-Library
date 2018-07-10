@@ -2907,13 +2907,50 @@ public class DBManager {
 
 
 
-    public static ArrayList<frontend.data.Course> getClassByCommonID(int id){
+    public static frontend.data.Course find_class_by_commonid(int id){
 
-        ArrayList<frontend.data.Course> c_array = new ArrayList<>();
+        //also needs to add person into the course object.
+
+        frontend.data.Course course = new frontend.data.Course();
+        ArrayList<frontend.data.Resource> resources = find_resources_by_commonid(id);
+        int courseid = -1;
+
+        try{
+
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
+                    id));
+
+            while (rs.next()) {
+
+                courseid = rs.getInt("COURSEID");
+
+            }
 
 
+            ResultSet rs2 = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", courseid));
+            course.setCommonID(id);
 
-        return c_array;
+            while(rs2.next()){
+
+                course.setID(rs2.getInt("ID"));
+                course.setTitle(rs2.getString("TITLE") + rs2.getString("CNUMBER"));
+                course.setDescription(rs2.getString("DESCRIPTION"));
+                course.setDepartment(rs2.getString("DEPARTMENT"));
+            }
+
+            course.setResource(resources);
+
+            return course;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_class_by_commonid()");
+        }
+
+        return course;
     }
 
     public static ArrayList<frontend.data.Resource> find_resources_by_commonid(int id){
