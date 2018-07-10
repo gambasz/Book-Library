@@ -34,23 +34,6 @@ import java.util.logging.Logger;
  */
 public class Controller {
 
-    private TableView<Resource> resourceTable;
-    private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol;
-    private ArrayList<Course> courseList, templateList;
-    private ArrayList<Person> profList;
-    private ArrayList<Resource> resList;
-    private ArrayList<Publisher> pubList;
-    private Course selectedCourse;
-    private Course selectedCourseTemplate;
-
-    private Resource selectedResource;
-    private Publisher selectedPublisher;
-    private Person selectedPerson;
-
-    private int defaultSemester = 5;
-    private boolean isPersonResourcesView = false;
-
-
     private final String addIconImg = "/frontend/media/add.png";
     private final String updateIconImg = "/frontend/media/upload.png";
     private final String deleteIconImg = "/frontend/media/delete.png";
@@ -70,9 +53,20 @@ public class Controller {
     ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
-
-
     boolean debugging = true;
+    private TableView<Resource> resourceTable;
+    private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol;
+    private ArrayList<Course> courseList, templateList;
+    private ArrayList<Person> profList;
+    private ArrayList<Resource> resList;
+    private ArrayList<Publisher> pubList;
+    private Course selectedCourse;
+    private Course selectedCourseTemplate;
+    private Resource selectedResource;
+    private Publisher selectedPublisher;
+    private Person selectedPerson;
+    private int defaultSemester = 5;
+    private boolean isPersonResourcesView = false;
 
     /**
      * This is initializes the start state.
@@ -85,6 +79,15 @@ public class Controller {
      */
     public static void test() {
         System.out.print("The program started running now!");
+    }
+
+    protected static void showError(String title, String headerMessage, String errorMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(headerMessage);
+        alert.setContentText(errorMessage);
+
+        alert.showAndWait();
     }
 
     public void guido() {
@@ -186,31 +189,28 @@ public class Controller {
         profInfoType.getItems().addAll(PersonType.values());
     }
 
-
     public void search() {
 
         // get the info in all the comboboxes
-            //check if they are empty.
+        //check if they are empty.
 
         String commonid = "";
         String professorname = "";
         String coursename = "";
         String resource = "";
 
-        if(!crnSearchTF.getText().isEmpty()){
+        if (!crnSearchTF.getText().isEmpty()) {
             commonid = crnSearchTF.getText();
         }
-        if(!profSearchTF.getText().isEmpty()){
+        if (!profSearchTF.getText().isEmpty()) {
             professorname = profSearchTF.getText();
         }
-        if(!courseSearchTF.getText().isEmpty()){
+        if (!courseSearchTF.getText().isEmpty()) {
             coursename = courseSearchTF.getText();
         }
-        if(!resourceSearchTF.getText().isEmpty()){
+        if (!resourceSearchTF.getText().isEmpty()) {
             resource = resourceSearchTF.getText();
         }
-
-
 
 
     }
@@ -428,7 +428,6 @@ public class Controller {
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-
     private void setCellValueOfColumns() {
         courseCol.setCellValueFactory(
                 new PropertyValueFactory<Course, String>("title"));
@@ -481,7 +480,6 @@ public class Controller {
         authorCol.setCellValueFactory(new
                 PropertyValueFactory<Resource, String>("author"));
     }
-
 
     public void exit() {
         System.exit(0);
@@ -565,7 +563,6 @@ public class Controller {
                     "Please select a course to add, update or delete");
         }
     }
-
 
     /**
      * Handles the filter check boxes action
@@ -904,7 +901,6 @@ public class Controller {
         }
     }
 
-
     /**
      * Assign a new Resources to Course.
      * It creates Resource objects and assign the resources as the Professor for the course object
@@ -1101,36 +1097,48 @@ public class Controller {
     private void resourcePersonDiffView(Person selectedItem) {
         Dialog dlg = new Dialog();
         HBox mainPane = new HBox();
-//        System.out.print(selectedPerson.getResources());
+
+        ArrayList<Resource> diffResArr = new ArrayList<>();
 
         //TODO :: add naming consistency ---- Rajashow
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
+        try {
+            profResources.getItems().addAll(selectedPerson.getResources());
+            allResources.getItems().addAll(resList);
 
-        profResources.getItems().addAll();
-        allResources.getItems().addAll();
-        diffResources.getItems().addAll();
+            diffResArr.addAll(resList);
+            diffResArr.removeAll(selectedPerson.getResources());
+
+            diffResources.getItems().addAll(diffResArr);
+        } catch (Exception ex) {
+            if (debugging)
+                System.out.print(ex.getMessage());
+        }
+
 
         Label professorSResourcesLbl = new Label(selectedItem.getLastName().concat("'s Resources"));
         Label resourcesLbl = new Label("Required Resources");
         Label diffResourcesLbl = new Label("Required Difference ");
 
-        professorSResourcesLbl.setStyle("-fx-text-fill: white");
-        resourcesLbl.setStyle("-fx-text-fill: white");
-        diffResourcesLbl.setStyle("-fx-text-fill: white");
-
+        professorSResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
+        resourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
+        diffResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         mainPane.getChildren().addAll(
-                new VBox(20, professorSResourcesLbl, profResources),
-                new VBox(20, resourcesLbl, allResources),
-                new VBox(20, diffResourcesLbl, diffResources)
+                new VBox(5, professorSResourcesLbl, profResources),
+                new VBox(5, resourcesLbl, allResources),
+                new VBox(5, diffResourcesLbl, diffResources)
         );
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setStyle("-fx-border-radius: 10px;");
         for (Node temp : mainPane.getChildren()) {
-            VBox child = (VBox) temp;
-            child.setAlignment(Pos.CENTER);
-            child.setStyle("-fx-background-color: grey;");
+            if (temp.getClass().equals(VBox.class)) {
+                VBox child = (VBox) temp;
+                child.setAlignment(Pos.CENTER);
+                child.setStyle("-fx-background-color: grey;-fx-border-color: black;");
+
+            }
 
         }
         dlg.getDialogPane().setContent(mainPane);
@@ -1205,7 +1213,6 @@ public class Controller {
         profList.remove(selectedPerson);
 
     }
-
 
     public void selectCourse() {
         //TODO: add the template information transfer  to course functionality
@@ -1327,15 +1334,6 @@ public class Controller {
         });
     }
 
-    protected static void showError(String title, String headerMessage, String errorMessage) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(headerMessage);
-        alert.setContentText(errorMessage);
-
-        alert.showAndWait();
-    }
-
     public void showExportView() {
         Dialog dlg = new Dialog();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
@@ -1433,7 +1431,7 @@ public class Controller {
     public void importData() {
     }
 
-    public void oldsearch(){
+    public void oldsearch() {
 
         //        String semester = semesterComBox.getValue().toString();
 //        String year = yearComBox.getValue().toString();
@@ -1458,8 +1456,6 @@ public class Controller {
 //        System.out.println(courseList.size());
 //        updateCourseTable();
     }
-
-
 
 
 }
