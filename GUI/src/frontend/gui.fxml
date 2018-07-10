@@ -10,8 +10,10 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.Controller">
    <children>
@@ -23,7 +25,10 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" spacing="25.0">
                            <children>
-                              <Label style="-fx-font-weight: bold;" text="Course Details" />
+                              <Label style="-fx-font-weight: Bold;" text="Course Details" underline="true">
+                                 <effect>
+                                    <ColorAdjust brightness="-1.0" contrast="1.0" hue="1.0" saturation="-1.0" />
+                                 </effect></Label>
                               <Button mnemonicParsing="false" onAction="#selectCourse" prefWidth="150.0" text="Find and Auto Fill Info" />
                            </children>
                         </HBox>
@@ -63,7 +68,10 @@
                      <children>
                         <HBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="65.0">
                            <children>
-                              <Label style="-fx-font-weight: bold;" text="Professor" textAlignment="CENTER" />
+                              <Label style="-fx-font-weight: bold;" text="Professor" textAlignment="CENTER" underline="true">
+                                 <effect>
+                                    <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
+                                 </effect></Label>
                               <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectProf" text="FInd &amp; Auto Fill Info" />
                            </children>
                            <padding>
@@ -106,7 +114,10 @@
                   <Separator prefWidth="200.0" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label fx:id="resInfoLbl1" style="-fx-font-weight: bold;" text="Resources" />
+                        <Label fx:id="resInfoLbl1" style="-fx-font-weight: bold;" text="Resources" underline="true">
+                           <effect>
+                              <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
+                           </effect></Label>
                         <HBox prefWidth="99.0" spacing="10.0">
                            <children>
                               <VBox alignment="CENTER_LEFT" spacing="5.0">
@@ -129,7 +140,10 @@
                   <Separator prefWidth="200.0" />
                   <VBox>
                      <children>
-                        <Label style="-fx-font-weight: bold;" text="Semester" />
+                        <Label style="-fx-font-weight: bold;" text="Semester" underline="true">
+                           <effect>
+                              <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
+                           </effect></Label>
                         <VBox>
                            <children>
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
@@ -180,7 +194,7 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="CommonID" textAlignment="CENTER" underline="true" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="CommonID" textAlignment="CENTER" />
                                     <TextField fx:id="crnSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
@@ -189,7 +203,7 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" underline="true" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" />
                                     <TextField fx:id="profSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
@@ -198,7 +212,7 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" underline="true" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" />
                                     <TextField fx:id="courseSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
@@ -207,7 +221,7 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" underline="true" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" />
                                     <TextField fx:id="departSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
@@ -216,7 +230,7 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" underline="true" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" />
                                     <TextField fx:id="resourceSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
@@ -299,6 +313,9 @@
                <HBox.margin>
                   <Insets right="25.0" />
                </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
             </Button>
             <Button fx:id="exit" mnemonicParsing="false" onAction="#exit" text="Exit" />
          </children>
