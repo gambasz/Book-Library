@@ -2889,6 +2889,24 @@ public class DBManager {
         return resourcesList;
     }
 
+
+    public static ArrayList<frontend.data.Resource> findDifferene(frontend.data.Person person, ArrayList<frontend.data.Resource> personRequiredResources){
+
+        ArrayList<frontend.data.Resource> differences = new ArrayList<frontend.data.Resource>();
+
+
+        for (frontend.data.Resource resource : personRequiredResources){
+            if (!person.getResources().contains(resource)){
+                differences.add(resource);
+            }
+        }
+
+        return differences;
+
+    }
+
+
+
     public static ArrayList<frontend.data.Course> getClassByCommonID(int id){
 
         ArrayList<frontend.data.Course> c_array = new ArrayList<>();

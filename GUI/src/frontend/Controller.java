@@ -1111,8 +1111,6 @@ public class Controller {
         selectedPerson = selectedItem;
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
-
-
         }
         //updateRowSelected();
 
