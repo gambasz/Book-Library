@@ -1105,13 +1105,27 @@ public class Controller {
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
         try {
-            profResources.getItems().addAll(selectedPerson.getResources());
-            allResources.getItems().addAll(resList);
+// Do not delete this
+//            profResources.getItems().addAll(selectedPerson.getResources());
+//            allResources.getItems().addAll(resList);
+//            diffResArr.addAll(resList);
+//            diffResArr.removeAll(selectedPerson.getResources());
+//            diffResources.getItems().addAll(diffResArr);
 
-            diffResArr.addAll(resList);
-            diffResArr.removeAll(selectedPerson.getResources());
 
-            diffResources.getItems().addAll(diffResArr);
+            com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
+            selectedItem = tempPerson.initPersonGUI();
+            if (selectedItem.getResources() != null) {
+                profResources.getItems().addAll(selectedItem.getResources());
+            }
+
+            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem);
+            if (allRequiredResources != null) {
+                allResources.getItems().addAll(allRequiredResources);
+                diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
+            }
+
+
         } catch (Exception ex) {
             if (debugging)
                 System.out.print(ex.getMessage());
