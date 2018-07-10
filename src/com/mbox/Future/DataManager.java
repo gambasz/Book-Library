@@ -23,6 +23,26 @@ public class DataManager {
         this.Database = new DataBaseManager();
     }
 
+    public HashSet<Object> getDifference(HashSet<Object> setA, HashSet setB) {
+        HashSet<Object> differenceSet = new HashSet<>(setA);
+        differenceSet.remove(setB);
+        return differenceSet;
+    }
+
+    public HashSet<Object> getUnion(HashSet<Object> setA, HashSet setB) {
+        HashSet<Object> unionSet = new HashSet<>(setA);
+        unionSet.addAll(setB);
+        return unionSet;
+    }
+
+    public HashSet<Object> getIntersection(HashSet<Object> setA, HashSet setB) {
+        HashSet<Object> intersectionSet = new HashSet<>(setA);
+        intersectionSet.removeIf(obj -> {
+            return !setB.contains(obj);
+        });
+        return intersectionSet;
+    }
+
     //direct insert
     public HashSet<Course> addCourse(Course newCourse) {
         courseList.add(newCourse);
