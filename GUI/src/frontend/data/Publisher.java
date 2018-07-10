@@ -53,19 +53,19 @@ public class Publisher {
         this.name = name;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Publisher publisher = (Publisher) o;
-//        return ID == publisher.ID;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//
-//        return Objects.hash(ID);
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Publisher publisher = (Publisher) o;
+        return ID == publisher.ID;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(ID);
+    }
 
     @Override
     public String toString() {
