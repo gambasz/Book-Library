@@ -1108,9 +1108,17 @@ public class Controller {
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
 
-        profResources.getItems().addAll();
-        allResources.getItems().addAll();
-        diffResources.getItems().addAll();
+        com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
+        selectedItem = tempPerson.initPersonGUI();
+//        selectedPerson = selectedItem;
+        if (selectedItem.getResources() != null) {
+            profResources.getItems().addAll(selectedItem.getResources());
+        }
+        ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem);
+        if (allRequiredResources != null) {
+            allResources.getItems().addAll(allRequiredResources);
+            diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources ));
+        }
 
         Label professorSResourcesLbl = new Label(selectedItem.getLastName().concat("'s Resources"));
         Label resourcesLbl = new Label("Required Resources");
