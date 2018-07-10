@@ -1002,10 +1002,8 @@ public class Controller {
 
         Button deleteBtn = new Button("Delete");
 
-        PersonResources.setVisible(false);
-        PersonResources.setManaged(false);
-        NAME_ME_SOMETHING_ELSE.setVisible(false);
-        NAME_ME_SOMETHING_ELSE.setManaged(false);
+
+        setChildVisiblity(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
         addProfessor.setOnMouseClicked(e -> {
             addNewProfessor(profInfoFNameTf.getText(), profInfoLNameTf.getText(), profInfoTypeCB.getSelectionModel().getSelectedItem());
             currentProfessors.getItems().clear();
@@ -1022,17 +1020,12 @@ public class Controller {
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
                 profInfoTypeCB.setValue(currentProfessors.getSelectionModel().getSelectedItem().getType());
 
-                PersonResources.setVisible(true);
-                PersonResources.setManaged(true);
+                setChildVisiblity(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
 
-                NAME_ME_SOMETHING_ELSE.setVisible(true);
-                NAME_ME_SOMETHING_ELSE.setManaged(true);
+
             } else {
-                PersonResources.setVisible(false);
-                PersonResources.setManaged(false);
+                setChildVisiblity(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
 
-                NAME_ME_SOMETHING_ELSE.setVisible(false);
-                NAME_ME_SOMETHING_ELSE.setManaged(false);
 
             }
         });
@@ -1087,6 +1080,14 @@ public class Controller {
             }
             return null;
         });
+
+    }
+
+    private void setChildVisiblity(Boolean state, Node... args) {
+        for (Node arg : args) {
+            arg.setVisible(state);
+            arg.setManaged(state);
+        }
 
     }
 
