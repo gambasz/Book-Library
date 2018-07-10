@@ -1104,11 +1104,17 @@ public class Controller {
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
-        try {
+        setCellFactoryForProfDiffvView(profResources);
+        setCellFactoryForProfDiffvView(allResources);
+        setCellFactoryForProfDiffvView(diffResources);
+
+        try
+
+        {
 // Do not delete this
 //            profResources.getItems().addAll(selectedPerson.getResources());
 //            allResources.getItems().addAll(resList);
-//            diffResArr.addAll(resList);
+//            diffResArr.addAll( DBManager.getAllResourcesNeededForPerson(selectedItem));
 //            diffResArr.removeAll(selectedPerson.getResources());
 //            diffResources.getItems().addAll(diffResArr);
 
@@ -1126,7 +1132,10 @@ public class Controller {
             }
 
 
-        } catch (Exception ex) {
+        } catch (
+                Exception ex)
+
+        {
             if (debugging)
                 System.out.print(ex.getMessage());
         }
@@ -1139,14 +1148,23 @@ public class Controller {
         professorSResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         resourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         diffResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
-        mainPane.getChildren().addAll(
-                new VBox(5, professorSResourcesLbl, profResources),
-                new VBox(5, resourcesLbl, allResources),
-                new VBox(5, diffResourcesLbl, diffResources)
-        );
+        mainPane.getChildren().
+
+                addAll(
+                        new VBox(5, professorSResourcesLbl, profResources),
+                        new
+
+                                VBox(5, resourcesLbl, allResources),
+                        new
+
+                                VBox(5, diffResourcesLbl, diffResources)
+                );
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setStyle("-fx-border-radius: 10px;");
-        for (Node temp : mainPane.getChildren()) {
+        for (
+                Node temp : mainPane.getChildren())
+
+        {
             if (temp.getClass().equals(VBox.class)) {
                 VBox child = (VBox) temp;
                 child.setAlignment(Pos.CENTER);
@@ -1155,9 +1173,34 @@ public class Controller {
             }
 
         }
-        dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+        dlg.getDialogPane().
+
+                setContent(mainPane);
+        dlg.getDialogPane().
+
+                getButtonTypes().
+
+                addAll(ButtonType.CLOSE);
         dlg.show();
+    }
+
+    private void setCellFactoryForProfDiffvView(ListView<Resource> diffListview) {
+        diffListview.setCellFactory(new Callback<ListView<Resource>, ListCell<Resource>>() {
+            @Override
+            public ListCell<Resource> call(ListView<Resource> param) {
+                return new ListCell<Resource>() {
+                    @Override
+                    protected void updateItem(Resource item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        } else {
+                            setText(item.getTitle());
+                        }
+                    }
+                };
+            }
+        });
     }
 
     private void addNewProfessor(String firstName, String lastName, Object type) {
