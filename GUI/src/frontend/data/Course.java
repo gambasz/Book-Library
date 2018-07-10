@@ -20,8 +20,13 @@ public class Course {
     private SimpleStringProperty title, department, description;
     private Person professor;
     private ArrayList<Resource> resource;
+    private int commonID;
+
+
+
 
     public Course() {
+        commonID =0;
     }
 
     public Course(int CRN, int YEAR, String SEMESTER) {
@@ -64,6 +69,9 @@ public class Course {
     public int getID() {
         return ID;
     }
+
+    public int getCommonID() { return commonID; }
+    public void setCommonID(int commonID) { this.commonID = commonID; }
 
     public void setID(int ID) {
         this.ID = ID;

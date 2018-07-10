@@ -2,12 +2,17 @@ package com.mbox;
 import frontend.data.PersonType;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Person {
 
-    private int id;
+    private int id, commonid = 0;
     private String first_name, last_name, type;
     Resource resourcePerson[];
+
+
+    ArrayList<Resource> resourceList = new ArrayList<Resource>();
+
 
     public Person(){
 
@@ -16,7 +21,6 @@ public class Person {
         last_name = "";
         type = "";
         this.resourcePerson = new Resource[20];
-
 
     }
 
@@ -77,10 +81,19 @@ public class Person {
         this.resourcePerson = resourcesPerson;
     }
 
+    public void setCommonid(int commonid){
+        this.commonid = commonid;
+    }
+
     public int getID(){
 
         return this.id;
     }
+
+    public void setResourceList(ArrayList<Resource> resourceList) {
+        this.resourceList = resourceList;
+    }
+
 
     public String getFirstName(){
 
@@ -102,6 +115,13 @@ public class Person {
     public Resource[] getResourcePerson(){
 
         return this.resourcePerson;
+    }
+    public int getCommonid(){
+        return this.commonid;
+    }
+    public ArrayList<Resource> getResourceList() {
+
+        return resourceList;
     }
 
     @Override
@@ -182,6 +202,18 @@ public class Person {
         return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s", first, last, type, this.id);
     }
 
+
+    private ArrayList<frontend.data.Resource> initResourceListGUI(ArrayList<Resource> tempList){
+        ArrayList<frontend.data.Resource> returnedList = new ArrayList<frontend.data.Resource>();
+        for (Resource resource : tempList){
+            returnedList.add(resource.initResourceGUI());
+        }
+
+        return returnedList;
+
+    }
+
+
     public frontend.data.Person initPersonGUI(){
 
         PersonType enumTmp;
@@ -194,8 +226,10 @@ public class Person {
 
         }
         frontend.data.Person p = new frontend.data.Person(this.last_name,this.first_name,this.id, enumTmp.toString());
+        p.setResources(initResourceListGUI(this.resourceList));
         return p;
     }
+
 
 
 }
