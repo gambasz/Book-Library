@@ -1093,7 +1093,11 @@ public class Controller {
     private void resourcePersonDiffView(Person selectedItem) {
         Dialog dlg = new Dialog();
         HBox mainPane = new HBox();
-
+        String title = selectedItem.getLastName()
+                .concat(", ")
+                .concat(selectedItem.getFirstName())
+                .concat(selectedItem.getType());
+        dlg.setTitle(title + "?");
         ArrayList<Resource> diffResArr = new ArrayList<>();
 
         //TODO :: add naming consistency ---- Rajashow
