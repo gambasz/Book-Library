@@ -2545,6 +2545,26 @@ public class DBManager {
 
         }
 
+    public static void updateSemester(frontend.data.Course c) {
+
+        int semesterID = getSemesterIDByName(c.getSEMESTER(),c.getYEAR()+"");
+        int commonID = c.getCommonID();
+
+        try {
+
+            Statement st = conn.createStatement();
+
+
+            st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET SEMESTERID = %d WHERE ID = %d",
+                    semesterID,commonID));
+
+        } catch (SQLException e) {
+
+            System.out.println("Something went wrong when trying to update course and person table");
+        }
+
+    }
+
 
 
     public static int find_courseid_by_title(frontend.data.Course c) {
