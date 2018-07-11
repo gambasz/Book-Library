@@ -1232,7 +1232,8 @@ public class Controller {
     }
 
     private void addNewProfessor(String firstName, String lastName, Object type) {
-        Person tempNewPerson = new Person(firstName, lastName, (String) type);
+        Person tempNewPerson = new Person(lastName, firstName, type.toString()
+        );
         profList.add(tempNewPerson);
         DBManager.insertPersonQuery(tempNewPerson);
     }
