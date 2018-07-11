@@ -477,12 +477,12 @@ public class Controller {
     //thjanks :)) hard to see
 
     public void delete() {
-        System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle()+ "ObjID: " + selectedCourse.hashCode());
+        System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
         if (selectedCourse != null) {
-            System.out.println("CommonID: " +selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
+            System.out.println("CommonID: " + selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
             DBManager.delete_relation_course(selectedCourse);
-            System.out.println("CommonID: " +selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
-            System.out.println("SelectedCourse TItle: " + selectedCourse.getTitle()+ "ObjID: " +selectedCourse.hashCode());
+            System.out.println("CommonID: " + selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
+            System.out.println("SelectedCourse TItle: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
             courseList.remove(selectedCourse);
             selectedCourse = null;
             updateCourseTable();
@@ -490,7 +490,7 @@ public class Controller {
             //wtfffff :)) they can have the same hashcode even if they are not equal..
             // yeah! thats our problem! We have one CMS203 with CommonID 222 and other one with CommonID 99 and ohter professor
             // but both have the same hashchode!
-  //can we override by the method remove by searching for commonID ? :))
+            //can we override by the method remove by searching for commonID ? :))
             // in that case we need to be restrict about commonID
             // maybe but its hard.. I still don't know how to fix @@
 
@@ -694,12 +694,15 @@ public class Controller {
         addNAssignNewResource.setOnAction(e -> {
             addAndAssignNewResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
+
         delete.setOnAction(e -> {
             deleteResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, delete, update);
         });
+
         update.setOnAction(e -> {
             updateResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
+
         HBox buttons = new HBox(addNAssignNewResource, update, delete);
 
         buttons.setSpacing(20);
@@ -709,12 +712,23 @@ public class Controller {
         publisherBtn.setOnAction(e -> {
             selectPublisher(publisherBtn);
         });
+
         resourceTable.setOnMouseClicked(e -> {
             onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
-        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        //TODO Test this line
+        try{
+            Resource tempRes =resourceTable.getSelectionModel().getSelectedItems().get(0);
+            onResourceTableSelect(tempRes, titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+
+        }catch (Exception ex){
+            if (debugging){
+                System.out.print("Hey the esourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+            }
+        }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
+
         HBox hiddenSpacer = new HBox(new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator());
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
@@ -732,6 +746,7 @@ public class Controller {
         for (Node box : resourceEditPane.getChildren()) {
             ((HBox) box).setAlignment(Pos.CENTER_LEFT);
         }
+
         resourceEditPane.getChildren().add(buttons);
         resourceEditPane.setAlignment(Pos.CENTER);
         resourceEditPane.setSpacing(20);
@@ -880,6 +895,7 @@ public class Controller {
     private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
 
         if (tempRes != null) {
+
             titleTF.setText(tempRes.getTitle());
             authorTF.setText(tempRes.getAuthor());
             idTF.setText(String.valueOf(tempRes.getID()));
@@ -890,9 +906,9 @@ public class Controller {
             selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
-            setChildVisiblity(true,update,delete);
+            setChildVisiblity(true, update, delete);
         } else {
-            setChildVisiblity(false,update,delete);
+            setChildVisiblity(false, update, delete);
         }
     }
 
@@ -902,58 +918,64 @@ public class Controller {
      */
     public void openResourceView() {
         isPersonResourcesView = false;
-        //TODO: migrate Publisher add and modify window
+        //TODO: migrate Publi sher add and modify window
+
         if (selectedCourse != null) {
-            VBox mainPane = new VBox();
-            Dialog dlg = new Dialog();
-            TitledPane resourceTitlePane = new TitledPane();
-            VBox resourceEditPane = resourceDetailedView();
-            ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
-            icon.setFitHeight(75);
-            icon.setFitWidth(75);
+            try {
+                VBox mainPane = new VBox();
+                Dialog dlg = new Dialog();
+                TitledPane resourceTitlePane = new TitledPane();
+                VBox resourceEditPane = resourceDetailedView();
+                ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+                icon.setFitHeight(75);
+                icon.setFitWidth(75);
 
 
-            ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
+                ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
-            resourceTable.getItems().clear();
-            resourceTable.getItems().addAll(selectedCourse.getResource());
+                resourceTable.getItems().clear();
+                resourceTable.getItems().addAll(selectedCourse.getResource());
 
-            updateRowSelected();
-
-
-            resourceTitlePane.setContent(resourceEditPane);
-            resourceTitlePane.setText("Resource Details and Management");
-            resourceTitlePane.setAlignment(Pos.CENTER);
-
-            mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
-            mainPane.setAlignment(Pos.CENTER);
+                updateRowSelected();
 
 
-            dlg.setTitle("Assigning Resource");
-            dlg.setHeaderText("Assigning Resource");
+                resourceTitlePane.setContent(resourceEditPane);
+                resourceTitlePane.setText("Resource Details and Management");
+                resourceTitlePane.setAlignment(Pos.CENTER);
 
-            dlg.setGraphic(icon);
-            dlg.getDialogPane().setMinWidth(400);
+                mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
+                mainPane.setAlignment(Pos.CENTER);
 
 
-            dlg.getDialogPane().setContent(mainPane);
-            dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+                dlg.setTitle("Assigning Resource");
+                dlg.setHeaderText("Assigning Resource");
 
-            dlg.show();
-            dlg.setResultConverter(dialogButton -> {
-                if (dialogButton == assign) {
-                    //TODO: this is where the assign button locates
-                    selectedCourse.getResource().clear();
-                    selectedCourse.getResource().addAll(resourceTable.getItems());
+                dlg.setGraphic(icon);
+                dlg.getDialogPane().setMinWidth(400);
 
-                    resInfoList.getItems().clear();
-                    for (Resource r : selectedCourse.getResource())
-                        resInfoList.getItems().add(r.getTitle());
 
+                dlg.getDialogPane().setContent(mainPane);
+                dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
+
+                dlg.show();
+                dlg.setResultConverter(dialogButton -> {
+                    if (dialogButton == assign) {
+                        //TODO: this is where the assign button locates
+                        selectedCourse.getResource().clear();
+                        selectedCourse.getResource().addAll(resourceTable.getItems());
+
+                        resInfoList.getItems().clear();
+                        for (Resource r : selectedCourse.getResource())
+                            resInfoList.getItems().add(r.getTitle());
+
+                        return null;
+                    }
                     return null;
-                }
-                return null;
-            });
+                });
+            } catch (Exception ex) {
+                showError("test", "test", ex.getMessage());
+            }
+
         } else {
             showError("Selection error", "No course selected",
                     "Please select a course to add, update or delete");
