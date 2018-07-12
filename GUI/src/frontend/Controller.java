@@ -264,6 +264,8 @@ public class Controller {
 //        selectedPerson.setFirstName(profInfoFName.getText());
 //        selectedPerson.setLastName(profInfoLName.getText());
 //        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+//        int semesterID = DBManager.getSemesterIDByName(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+//                yearComBoxEdit.getSelectionModel().getSelectedItem().toString());
 
         if (selectedCourse != null) {
             selectedPerson = new Person(selectedPerson);
@@ -501,6 +503,8 @@ public class Controller {
     }
 
     public void update() {
+//        int semesterID = DBManager.getSemesterIDByName(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+//                yearComBoxEdit.getSelectionModel().getSelectedItem().toString());
         if (selectedCourse != null) {
             courseList.remove(selectedCourse);
             DBManager.deleteRelationCourseResources(selectedCourse);
@@ -547,11 +551,13 @@ public class Controller {
                 System.out.println("Two people are different");
 
             }
-
+            selectedCourse.setYEAR(Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()));
+            selectedCourse.setSEMESTER(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString());
 
             selectedCourse.setResource(selected_resources);
 
             DBManager.updateCourseAndPerson(selectedCourse);
+            DBManager.updateSemester(selectedCourse);
 
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
@@ -1226,8 +1232,10 @@ public class Controller {
     }
 
     private void addNewProfessor(String firstName, String lastName, Object type) {
-        Person tempNewPerson = new Person(firstName, lastName, (String) type);
+        Person tempNewPerson = new Person(lastName, firstName, type.toString()
+        );
         profList.add(tempNewPerson);
+        DBManager.insertPersonQuery(tempNewPerson);
     }
 
     private void showPersonsResources(Person selectedItem) {
