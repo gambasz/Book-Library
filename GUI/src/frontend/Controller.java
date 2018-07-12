@@ -77,7 +77,7 @@ public class Controller {
      * - initializes the resource table
      * - marking all the filter checkboxes to true
      */
-    public static void test() {
+    public void test() {
         System.out.print("The program started running now!");
     }
 
@@ -724,12 +724,12 @@ public class Controller {
 
         });
         //TODO Test this line
-        try{
-            Resource tempRes =resourceTable.getSelectionModel().getSelectedItems().get(0);
+        try {
+            Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
             onResourceTableSelect(tempRes, titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
-        }catch (Exception ex){
-            if (debugging){
+        } catch (Exception ex) {
+            if (debugging) {
                 System.out.print("Hey the esourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
             }
         }
@@ -1312,12 +1312,20 @@ public class Controller {
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        ComboBox<Course> courseTemplates = new ComboBox();
+        ComboBox<Course> courseTemplates = new ComboBox<Course>();
         setCourseTemplatesCellValue(courseTemplates);
         courseTemplates.getItems().addAll(templateList);
         Label currentCBoxLbl = new Label("Course Templates : ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
+        Button addBtn = new Button("Add");
+        addBtn.setOnMouseClicked(e -> {
+            Course tempCourseCreated = addCourseTemplate();
+            courseTemplates.getItems().clear();
+            courseTemplates.getItems().addAll(templateList);
+            courseTemplates.getSelectionModel().select(tempCourseCreated);
+
+        });
         deleteBtn.setOnAction(e -> {
                     deleteCourseTemplate(courseTemplates.getSelectionModel().getSelectedItem());
                     courseTemplates.getItems().clear();
@@ -1325,13 +1333,12 @@ public class Controller {
                 }
         );
         courseTemplates.setOnAction(e -> {
-
-
             courseTemplates.getSelectionModel().getSelectedItem();
         });
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates),
-                deleteBtn
+                deleteBtn,
+                addBtn
         );
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
@@ -1371,6 +1378,52 @@ public class Controller {
         });
 
 
+    }
+
+    private Course addCourseTemplate() {
+        Dialog dlg = new Dialog();
+        VBox mainPane = new VBox();
+        dlg.setTitle("Add New Course Template");
+
+        Label tile = new Label("Tile:    ");
+        Label description = new Label("Description: ");
+        Label department = new Label("Department: ");
+        TextField tileTf = new TextField();
+        TextField descriptionTf = new TextField();
+        TextField departmentTf = new TextField();
+
+        ButtonType addBtn = new ButtonType("Create new Course Template", ButtonBar.ButtonData.OK_DONE);
+
+        mainPane.getChildren().addAll(
+                new HBox(25, tile, tileTf),
+                new HBox(25, description, descriptionTf),
+                new HBox(25, department, departmentTf)
+        );
+        for (Node node : mainPane.getChildren()) {
+            HBox child = (HBox) node;
+            child.setAlignment(Pos.CENTER);
+        }
+        mainPane.setSpacing(20);
+        mainPane.setAlignment(Pos.CENTER);
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().setMinWidth(600);
+        dlg.getDialogPane().setMinHeight(300);
+        dlg.getDialogPane().getButtonTypes().addAll(addBtn, ButtonType.CANCEL);
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == addBtn) {
+                Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), descriptionTf.getText(), departmentTf.getText());
+                addNewCourseTemplate(tempNewCourseTemplate);
+                return tempNewCourseTemplate;
+            }
+            return null;
+        });
+        dlg.showAndWait();
+        return (Course) dlg.resultProperty().getValue();
+//        Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), descriptionTf.getText(), departmentTf.getText());
+    }
+
+    private void addNewCourseTemplate(Course tempNewCourseTemplate) {
+        templateList.add(tempNewCourseTemplate);
     }
 
     private void deleteCourseTemplate(Course selectedCourseTemplate) {
