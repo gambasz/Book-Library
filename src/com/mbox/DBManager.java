@@ -3177,8 +3177,78 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
+    public static ArrayList<frontend.data.Course> find_classes_by_course_name(String name){
 
-    public static ArrayList<frontend.data.Course> find_courses_by_professor_name(String name){
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> classids = new ArrayList<>();
+        ArrayList<Integer> tmp;
+
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE TITLE LIKE '%"+name+"%' OR CNUMBER LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                courseids.add(rs.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < courseids.size(); i++){
+
+                tmp = find_classids_by_courseid(courseids.get(i));
+                for(int j = 0; j < tmp.size(); j++){
+
+                    classids.add(tmp.get(j));
+                }
+
+            }
+
+
+
+            for(int i = 0; i < classids.size(); i++){
+
+                courses.add(find_class_by_commonid(classids.get(i)));
+            }
+
+            return courses;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_classes_by_course_name(String name)");
+        }
+
+        return courses;
+
+    }
+
+    public static ArrayList<Integer> find_classids_by_courseid(int id){
+
+        ArrayList<Integer> classids = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", id));
+
+            while(rs.next()){
+
+                classids.add(rs.getInt("ID"));
+            }
+
+            return classids;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_classid_by_courseid(int id)");
+        }
+
+        return classids;
+    }
+
+    public static ArrayList<frontend.data.Course> find_classes_by_professor_name(String name){
 
         ArrayList<Integer> courseids = new ArrayList<>();
         ArrayList<Integer> personids = new ArrayList<>();
