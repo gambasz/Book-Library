@@ -2899,8 +2899,8 @@ public class DBManager {
         ArrayList<frontend.data.Course> courses = new ArrayList<>();
         ArrayList<Integer> courseids = new ArrayList<>();
         ArrayList<Integer> classids = new ArrayList<>();
+        ArrayList<Integer> tmp;
 
-        ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
 
         try{
 
@@ -2915,22 +2915,14 @@ public class DBManager {
 
             for(int i = 0; i < courseids.size(); i++){
 
-                tmp.add(find_classids_by_courseid(courseids.get(i)));
-            }
+                tmp = find_classids_by_courseid(courseids.get(i));
+                for(int j = 0; j < tmp.size(); j++){
 
-            for(int i = 0; i < tmp.size(); i++){
-
-                System.out.println("TMP SIZE: tmp.get("+i+")" + tmp.get(i).size());
-            }
-
-
-            for(int i = 0; i < tmp.size(); i++){
-
-                for(int j = 0; j < tmp.get(i).size(); j++){
-
-                    classids.add(tmp.get(i).get(j));
+                    classids.add(tmp.get(j));
                 }
+
             }
+
 
 
             for(int i = 0; i < classids.size(); i++){
