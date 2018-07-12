@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class DBManager {
@@ -138,21 +140,20 @@ public class DBManager {
     }
 
 
-    public static String[] getSemesterNameByID(int id) {
+    public static Semester getSemesterNameByID(int id) {
 
         try {
             Statement st = conn.createStatement();
             String query = String.format("SELECT * FROM SEMESTER WHERE ID='%s'", id);
             ResultSet rs = st.executeQuery(query);
-            String semester[] = new String[2];
-            semester[0] = "FALL";
-            semester[1] = "2018";
+            Semester semester = new Semester();
 
-            while (rs.next()) {
-                semester[0] = rs.getString(2);
-                semester[1] = rs.getString(3);
+            if (rs.next()) {
+                semester.year = rs.getInt("YEAR");
+                semester.season = rs.getString("SEASON");
+
             }
-
+            semester.setId(id);
             return semester;
 
         } catch (SQLException e) {
@@ -1536,6 +1537,289 @@ public class DBManager {
     }
 
 
+
+
+//======================================================================================================================
+//                                 Efficient new methods, reading db
+// =====================================================================================================================
+
+    public static frontend.data.Resource setPublisherForResource2(frontend.data.Resource resource1) {
+        ResultSet rss, rs2;
+        int publisherID = 0, i = 0;
+
+        frontend.data.Publisher publisherInstance = new frontend.data.Publisher();
+
+        try {
+            Statement stpublisher1 = conn.createStatement();
+            Statement stpublisher2 = conn.createStatement();
+
+            rs2 = stpublisher1.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +
+                    resource1.getID() +" ORDER BY PUBLISHERID DESC");
+
+            if (rs2.next()) {
+                //there will be a list of all reousrces ID that is owned by Person
+                publisherID = rs2.getInt("PUBLISHERID");
+
+                    rss = stpublisher2.executeQuery(getPublisherInTableQuery(publisherID));
+                    if (rss.next()) {
+
+                        publisherInstance = new frontend.data.Publisher(rss.getInt("ID"),
+                                rss.getString("TITLE"),
+                                rss.getString("CONTACT_INFO"), rss.getString("DESCRIPTION"));
+                        i++;
+                    }
+                    resource1.setPublisher(publisherInstance);
+
+
+            }
+            return resource1;
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+        return resource1;
+
+    }
+
+public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseID, int commonID, Map<Integer, frontend.data.Resource> tempCach ) {
+
+    ResultSet rs, rss;
+    int resourceID = 0, i = 0;
+    Statement stTemp;
+    frontend.data.Resource tempResource;
+    ArrayList<frontend.data.Resource> listResources = new ArrayList<frontend.data.Resource>();
+//    Map<Integer, frontend.data.Resource> tempCach = new HashMap<Integer, frontend.data.Resource>();
+
+    try {
+        stTemp = conn.createStatement();
+
+        rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d AND COMMONID = %d",
+                courseID, commonID));
+        //here all have a result set of all resources for courdeID
+
+        while (rs.next()) {
+            resourceID = rs.getInt("RESOURCEID");
+
+            if(tempCach.containsKey(resourceID))
+                listResources.add(tempCach.get(resourceID));
+
+            else {
+
+                rss = stTemp.executeQuery(getResourceInTableQuery(resourceID));
+
+                if (rss.next()) {
+                    // ID, Type, Title, Author, ISBN, total, current, desc
+                    tempResource = new frontend.data.Resource(rss.getInt("ID"),
+                            rss.getString("ISBN"), rss.getString("TYPE"),
+                            rss.getString("TITLE"), rss.getString("AUTHOR"),
+                            rss.getString("DESCRIPTION"), rss.getInt("TOTAL_AMOUNT"),
+                            rss.getInt("CURRENT_AMOUNT"));
+
+                    listResources.add(tempResource);
+                    setPublisherForResource2(listResources.get(i));
+                    tempCach.put(resourceID, tempResource);
+
+                    i++;
+                }
+            }
+        }
+
+        return listResources;
+    } catch (SQLException err) {
+        System.out.println(err);
+        err.printStackTrace();
+    }
+    // Adding the list of the resources to the person object
+    return null;
+
+}
+
+    public static ArrayList<frontend.data.Course> relationalReadByCourseID2(Map<Integer, ArrayList<Integer>> courseIds, Semester semester ) {
+        long startTime = System.nanoTime();
+
+        ArrayList<frontend.data.Course> courseList = new ArrayList<>();
+
+        Map<Integer, frontend.data.Person> cachedPersons = new HashMap<Integer, frontend.data.Person>();
+            Map<Integer, frontend.data.Resource> cachedResources = new HashMap<Integer, frontend.data.Resource>();
+
+        //Map<Integer, Course> cachedCourses = new HashMap<Integer, Course>();  Think about caching course later on
+
+
+        int personID = 0, i, cID = 0, courseID =0;
+        ResultSet rs, rsTmp, rsTemp;
+        Statement stTemp, stTemp2;
+
+        String cTitle = "", cDescription = "", cDepartment = "";
+
+        frontend.data.Person personTmp = new frontend.data.Person();
+        ArrayList<frontend.data.Resource> courseResources = new ArrayList<frontend.data.Resource>();
+
+        try {
+             stTemp = conn.createStatement();
+             stTemp2 = conn.createStatement();
+
+            //=======================Getting information to create the course====================================
+            i = 0;
+            for (Map.Entry<Integer, ArrayList<Integer>> entry : courseIds.entrySet()){
+                // Technically there should be only one entry, since there is only one key
+                // Big O (1)
+                courseID = entry.getKey();
+
+            rs = st.executeQuery(getCourseInTableQuery(courseID));
+
+            if (rs.next()) {
+                cID = rs.getInt("ID");
+                cTitle = rs.getString("TITLE") + " " + rs.getString("CNUMBER");
+                cDescription = rs.getString("DESCRIPTION");
+                cDepartment = rs.getString("DEPARTMENT");
+                System.out.println("\ncourseID " + courseID);
+            }
+
+            else return courseList;
+
+            //=======================Finding and creating Person teaching the course=============================
+
+
+                for (Integer tempCommonID: entry.getValue()) {
+                    // Big O (commonIDs.Size)
+
+                    rsTmp = stTemp2.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = " +
+                            tempCommonID);
+                    if(rsTmp.next()){
+                        courseList.add(new frontend.data.Course(cID, tempCommonID, semester.year, semester.season,
+                                cTitle, cDepartment, personTmp, cDescription, courseResources));
+                        courseList.get(i).setCommonID(tempCommonID);
+
+                        personID = rsTmp.getInt("PERSONID");
+
+                        if(cachedPersons.containsKey(personID))
+
+                            courseList.get(i).setProfessor(cachedPersons.get(personID));
+
+                        else {
+                            rsTemp = stTemp.executeQuery(getPersonInTableQuery(personID));
+                            if (rsTemp.next()) {
+
+                                PersonType enumTmp;
+                                switch (rsTemp.getString("TYPE")){
+                                    case "ProgramCoordinator" : enumTmp = PersonType.ProgramCoordinator; break;
+                                    case "CourseCoordinator" : enumTmp = PersonType.CourseCoordinator; break;
+                                    case "CourseInstructor" : enumTmp = PersonType.CourseInstructor; break;
+                                    default: enumTmp = PersonType.CourseInstructor;
+                                }
+
+                                personTmp = new frontend.data.Person( rsTemp.getString("LASTNAME"),
+                                        rsTemp.getString("FIRSTNAME"), personID,
+                                        enumTmp.toString());
+
+                                    cachedPersons.put(personID, personTmp);
+
+                                courseList.get(i).setProfessor(personTmp);
+                            }
+                            else{
+                                personTmp = new frontend.data.Person("NOT FOUND",
+                                        "NOT FOUND", personID,"CourseInstructor");
+                                courseList.get(i).setProfessor(personTmp);
+                            }
+
+                        }
+                        //=======================Finding and creating course resources=============================
+
+
+                        courseResources = findResourcesCourse2(courseID, tempCommonID, cachedResources);
+                        courseList.get(i).setResource(courseResources);
+                        i++;
+
+                    }
+
+                }
+
+            }
+
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("It took this time to run Read Relational: " + duration / 1000000 + "ms For " +
+                    courseList.size() + " courses.\n");
+            return courseList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static Map<Integer, ArrayList<Integer>> getCourseIdsBySemesterID2(int id) {
+
+        int i = 0, before =0;
+        Map<Integer, ArrayList<Integer>> courseIDs = new HashMap<Integer, ArrayList<Integer>>();
+        String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d ORDER BY COURSEID ASC",
+                id);
+        ArrayList<Integer> commonIDs = new ArrayList<Integer>();
+
+
+        try {
+
+            Statement st = DBManager.conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                if (before == rs.getInt("COURSEID")) {
+                    commonIDs.add(rs.getInt("ID"));
+
+                }
+                else{
+                    before = rs.getInt("COURSEID");
+                    commonIDs = new ArrayList<Integer>();
+                    commonIDs.add(rs.getInt("ID"));
+                    courseIDs.put(rs.getInt("COURSEID"), commonIDs);
+                }
+            }
+
+            return courseIDs;
+
+
+        } catch (SQLException e) {
+
+            System.out.println("Something went wrong");
+
+        }
+
+        return courseIDs;
+    }
+
+
+    public static ArrayList<frontend.data.Course> returnEverything2(int semesterid) {
+        Semester semester = getSemesterNameByID(semesterid);
+        int lastCourseID = 0;
+        Map<Integer, ArrayList<Integer>> courseIDs = getCourseIdsBySemesterID2(semesterid);
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+        courses = relationalReadByCourseID2(courseIDs, semester);
+
+
+//        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+//        for (int i = 0; i < courseIDs.size(); i++) {
+//            if (lastCourseID == courseIDs.get(i)) {
+//                continue;
+//            }
+//            ArrayList<Course> tmpCourse = DBManager.relationalReadByCourseID(courseIDs.get(i));
+//            lastCourseID = courseIDs.get(i);
+//
+//            for (int j = 0; j < tmpCourse.size(); j++) {
+//
+//                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.year, semester.season));
+
+
+        return courses;
+    }
+
+
+//======================================================================================================================
+//                                       End of Efficient new methods, reading db
+// =====================================================================================================================
+
+
     //==================================================================================================================
     //==================================================================================================================
 
@@ -1886,8 +2170,7 @@ public class DBManager {
 
 
     public static ArrayList<frontend.data.Course> returnEverything(int semesterid) {
-        String[] semester = getSemesterNameByID(semesterid);
-        semester[0] = semester[0].toUpperCase();
+        Semester semester = getSemesterNameByID(semesterid);
         int lastCourseID = 0;
 
         ArrayList<Integer> courseIDs = getCourseIdsBySemesterID(semesterid);
@@ -1903,7 +2186,7 @@ public class DBManager {
 
             for (int j = 0; j < tmpCourse.size(); j++) {
 
-                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester[0], semester[1]));
+                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.year, semester.season));
 
 
             }

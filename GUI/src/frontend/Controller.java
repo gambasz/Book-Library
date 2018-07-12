@@ -333,7 +333,7 @@ public class Controller {
 
         int id = DBManager.getSemesterIDByName(semester, year);
 
-        courseList = DBManager.returnEverything(id);
+        courseList = DBManager.returnEverything2(id);
 
         updateCourseTable();
     }
@@ -350,7 +350,7 @@ public class Controller {
             //======================BEGIN CODE BACKEND
             DBManager.openConnection();
 
-            ArrayList<Course> pulledDatabase = DBManager.returnEverything(defaultSemester);
+            ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemester);
 
             if (pulledDatabase == null) {
                 showError("Connection Error", "Server did not return any  data", "The returnEverything did not return any course");

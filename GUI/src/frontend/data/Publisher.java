@@ -7,6 +7,12 @@ public class Publisher {
     int ID;
     private String description, name, contacts;
 
+    public Publisher() {
+        this.name = "Default name";
+        this.contacts = "Default contact info";
+        this.description = "Default description";
+    }
+
     public Publisher(String name, String contacts, String Description) {
         this.name = name;
         this.contacts = contacts;

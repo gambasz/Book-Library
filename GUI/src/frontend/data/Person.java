@@ -10,6 +10,13 @@ public class Person {
     private Enum type;
     private ArrayList<Resource> resources;
 
+    public Person() {
+        this.ID = 0;
+        this.lastName = "Default last name";
+        this.firstName = "Default first name";
+        this.type = PersonType.CourseInstructor;
+    }
+
     public Person(String lastName, String firstName, int ID, Enum type, ArrayList<Resource> resources) {
         this.lastName = lastName;
         this.firstName = firstName;

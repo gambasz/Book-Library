@@ -59,6 +59,18 @@ public class Resource {
         this.publisher = publisher;
     }
 
+    public Resource( int ID, String ISBN, String TYPE, String title, String author, String description, int totalAmount, int currentAmount) {
+        this.ISBN = ISBN;
+        this.TYPE = TYPE;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.totalAmount = totalAmount;
+        this.ID = ID;
+        this.currentAmount = currentAmount;
+    }
+
     public String getISBN() {
         return this.ISBN;
     }
@@ -144,14 +156,13 @@ public class Resource {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resource resource = (Resource) o;
-        return Objects.equals(TYPE, resource.TYPE) &&
-                Objects.equals(ID, resource.ID);
+        return Objects.equals(ID, resource.ID);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(TYPE, ID);
+        return Objects.hash(ID);
     }
 
     @Override

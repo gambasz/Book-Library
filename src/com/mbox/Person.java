@@ -1,6 +1,8 @@
 package com.mbox;
 import frontend.data.PersonType;
 import java.util.ArrayList;
+import java.util.Objects;
+
 
 public class Person {
 
@@ -181,6 +183,20 @@ public class Person {
         p.setResources(initResourceListGUI(this.resourceList));
         return p;
     }
+
+//        @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Person person = (Person) o;
+//        return Objects.equals(id, person.id)&& Objects.equals(last_name, person.first_name)&& Objects.equals(first_name, person.last_name)&& Objects.equals(type, person.type);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(last_name, first_name,type, id);
+//    }
 
 
 
