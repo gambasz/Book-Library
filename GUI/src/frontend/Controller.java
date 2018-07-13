@@ -1,6 +1,7 @@
 package frontend;
 
 import com.mbox.DBManager;
+import com.sun.javafx.image.IntPixelGetter;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -17,12 +18,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import org.omg.CORBA.INTERNAL;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -191,26 +192,102 @@ public class Controller {
 
     public void search() {
 
-        // get the info in all the comboboxes
-        //check if they are empty.
-
-        String commonid = "";
-        String professorname = "";
-        String coursename = "";
-        String resource = "";
-
-        if (!crnSearchTF.getText().isEmpty()) {
-            commonid = crnSearchTF.getText();
-        }
-        if (!profSearchTF.getText().isEmpty()) {
-            professorname = profSearchTF.getText();
-        }
-        if (!courseSearchTF.getText().isEmpty()) {
-            coursename = courseSearchTF.getText();
-        }
-        if (!resourceSearchTF.getText().isEmpty()) {
-            resource = resourceSearchTF.getText();
-        }
+//        // get the info in all the comboboxes
+//        //check if they are empty.
+//
+//        String commonid = "";
+//        String professorname = "";
+//        String coursename = "";
+//        String resource = "";
+//        boolean commonid_full = false;
+//        boolean professorname_full = false;
+//        boolean coursename_full = false;
+//        boolean resource_full = false;
+//
+//
+//        if (!crnSearchTF.getText().isEmpty()) {
+//            commonid = crnSearchTF.getText();
+//            commonid_full = true;
+//        }
+//        if (!profSearchTF.getText().isEmpty()) {
+//            professorname = profSearchTF.getText();
+//            professorname_full = true;
+//        }
+//        if (!courseSearchTF.getText().isEmpty()) {
+//            coursename = courseSearchTF.getText();
+//            coursename_full = true;
+//        }
+//        if (!resourceSearchTF.getText().isEmpty()) {
+//            resource = resourceSearchTF.getText();
+//            resource_full = true;
+//        }
+//
+//        //if none are true - do nothing
+//        if(!commonid_full && !professorname_full && !coursename_full && !resource_full){
+//
+//            //nothing has been selected, do nothing
+//        }else if(commonid_full){
+//
+//            Course c  = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
+//
+//        }else if(professorname_full && coursename_full && resource_full){
+//
+//            // largest possible combination
+//
+//            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
+//            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
+//            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(resource);
+//
+//            ArrayList<Integer> all_ids = new ArrayList<>();
+//
+//            for(int i = 0; i < ids_from_professorname.size(); i++){
+//
+//                all_ids.add(ids_from_professorname.get(i));
+//            }
+//
+//            for(int i = 0; i < ids_from_coursename.size(); i++){
+//
+//                all_ids.add(ids_from_coursename.get(i));
+//            }
+//
+//            for(int i = 0; i < ids_from_resources.size(); i++){
+//
+//                all_ids.add(ids_from_resources.get(i));
+//            }
+//
+//            int[] all_class_ids = new int[all_ids.size()];
+//
+//            for(int i = 0; i < all_ids.size(); i++){
+//
+//                all_class_ids[i] = all_ids.get(i);
+//            }
+//
+//            Arrays.sort(all_class_ids);
+//
+//            Set<Integer> classids = new HashSet<Integer>();
+//            for(int i = 0; i < all_class_ids.length; i++){
+//
+//                classids.add(all_class_ids[i]);
+//            }
+//
+//
+//
+//        }else if(professorname_full && coursename_full){
+//
+//        }else if(professorname_full && resource_full){
+//
+//        }else if(coursename_full && resource_full){
+//
+//        }else if(professorname_full){
+//
+//        }else if(coursename_full){
+//
+//        }else if(resource_full){
+//
+//        }else{
+//
+//            System.out.println("IDK whats going on m8");
+//        }
 
 
     }

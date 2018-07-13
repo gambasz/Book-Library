@@ -3241,6 +3241,67 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
+    public static ArrayList<Integer> find_classids_by_resource_name(String name){
+
+        ArrayList<Integer> resourceids = new ArrayList<>();
+
+        try{
+
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+
+            while(rs.next()) {
+
+                resourceids.add(rs.getInt("ID"));
+            }
+
+            return resourceids;
+
+        }catch(SQLException e) { System.out.println("Something went wrong with find_resources_by_name()"); }
+
+        return resourceids;
+    }
+
+    public static ArrayList<Integer> find_classids_by_course_name(String name){
+
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> classids = new ArrayList<>();
+        ArrayList<Integer> tmp;
+
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE TITLE LIKE '%"+name+"%' OR CNUMBER LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                courseids.add(rs.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < courseids.size(); i++){
+
+                tmp = find_classids_by_courseid(courseids.get(i));
+                for(int j = 0; j < tmp.size(); j++){
+
+                    classids.add(tmp.get(j));
+                }
+
+            }
+
+            return classids;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_classes_by_course_name(String name)");
+        }
+
+        return classids;
+
+
+    }
+
     public static ArrayList<Integer> find_classids_by_courseid(int id){
 
         ArrayList<Integer> classids = new ArrayList<>();
@@ -3623,6 +3684,55 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
 
         return publisher;
+
+    }
+
+    public static void muhcode(){
+
+        //        ArrayList<Integer> asdf = DBManager.find_classids_by_course_name("140");
+//
+//        int[] varname = new int[asdf.size()];
+//
+//        for(int i = 0; i < asdf.size(); i++){
+//
+//            varname[i] = asdf.get(i);
+//        }
+//
+//        Arrays.sort(varname);
+//
+//        for(int i = 0; i < asdf.size(); i++){
+//
+//            System.out.println(asdf.get(i));
+//        }
+//
+//        System.out.println("===========");
+//
+//        for(int i = 0; i < varname.length; i++){
+//
+//            System.out.println(varname[i]);
+//        }
+//
+//        int[] asdf = {1,2,3,3,4};
+//        Set<Integer> asd = new HashSet<>();
+//
+//        for(int i = 0; i < asdf.length; i++){
+//
+//            asd.add(asdf[i]);
+//        }
+//
+//        for(int i = 0; i < asdf.length; i++){
+//
+//            System.out.println(asdf[i]);
+//        }
+//
+//        System.out.println("=============");
+//
+//        asd.toArray(asdf);
+//
+//        for(int i = 0; i < asdf.length; i++){
+//
+//            System.out.println(asdf[i]);
+//        }
 
     }
 }
