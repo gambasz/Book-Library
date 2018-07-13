@@ -3181,6 +3181,19 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
+    public static ArrayList<frontend.data.Course> return_everything_by_commonid(ArrayList<Integer> idlist){
+
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+            for(int i : idlist){
+
+                courses.add(find_class_by_commonid(idlist.get(i)));
+            }
+
+            return courses;
+
+    }
+
     public static ArrayList<frontend.data.Course> find_classes_by_course_name(String name){
 
         ArrayList<frontend.data.Course> courses = new ArrayList<>();
@@ -3309,6 +3322,47 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
+    public static ArrayList<Integer> find_classids_by_professor_name(String name){
+
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> personids = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+            ResultSet rs2;
+
+            ResultSet rs = st.executeQuery("SELECT * FROM PERSON WHERE FIRSTNAME LIKE '%"+name+"%' OR LASTNAME LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                personids.add(rs.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < personids.size(); i++){
+
+                rs2 = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+
+                while(rs2.next()){
+
+                    courseids.add(rs2.getInt("COMMONID"));
+                }
+
+            }
+
+            return courseids;
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_course_by_professor_name(String name)");
+        }
+
+        return courseids;
+    }
+
     public static frontend.data.Course find_class_by_commonid(int id){
 
         frontend.data.Person person = find_person_by_commonid(id);
@@ -3355,6 +3409,34 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
 
         return course;
+    }
+
+    public static ArrayList<frontend.data.Resource> find_resources_by_name(String name) {
+
+        ArrayList<frontend.data.Resource> resource = new ArrayList<>();
+        ArrayList<Integer> resourceids = new ArrayList<>();
+        frontend.data.Resource tmpresource;
+
+        try{
+
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+
+            while(rs.next()) {
+
+                resourceids.add(rs.getInt("ID"));
+            }
+
+            for(int i : resourceids){
+
+                resource.add(find_resource_by_id(i));
+            }
+
+            return resource;
+
+        }catch(SQLException e) { System.out.println("Something went wrong with find_resources_by_name()"); }
+
+        return resource;
     }
 
     public static ArrayList<frontend.data.Resource> find_resources_by_commonid(int id){
