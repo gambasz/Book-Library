@@ -2830,8 +2830,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static void updateSemester(frontend.data.Course c) {
 
-        int semesterID = getSemesterIDByName(c.getSEMESTER(),c.getYEAR()+"");
+        int semesterID = getSemesterIDByName(c.getSEMESTER(),String.valueOf(c.getYEAR()));
         int commonID = c.getCommonID();
+        System.out.println("Semester ID now " + semesterID);
 
         try {
 
@@ -2907,6 +2908,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
     public static int find_person_by_name(frontend.data.Person p) {
+        p.setFirstName(p.getFirstName().substring(0,1).toUpperCase()+p.getFirstName().substring(1).toLowerCase());
+        p.setLastName(p.getLastName().substring(0,1).toUpperCase()+p.getLastName().substring(1).toLowerCase());
+        System.out.println("Find this person " + p.getFirstName());
 
         int id = -1;
 

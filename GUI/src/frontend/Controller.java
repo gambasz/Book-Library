@@ -293,8 +293,10 @@ public class Controller {
             // I don't check type rn. Need to check later with fk.. enum :))
 
             if (professorChanged) {
-                tempCour.getProfessor().setFirstName(profInfoFName.getText());
-                tempCour.getProfessor().setLastName(profInfoLName.getText());
+                String firstName = profInfoFName.getText().substring(0,1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
+                String lastName = profInfoLName.getText().substring(0,1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
+                tempCour.getProfessor().setFirstName(firstName);
+                tempCour.getProfessor().setLastName(lastName);
                 tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
                 int id = DBManager.insertPersonQuery(selectedPerson);
                 tempCour.getProfessor().setID(id);
@@ -313,7 +315,9 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
-            courseList.add(tempCour);
+            if(tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+                courseList.add(tempCour);
+            }
 
             updateCourseTable();
         } else {
@@ -561,7 +565,9 @@ public class Controller {
 
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
-            courseList.add(selectedCourse);
+            if(selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+                courseList.add(selectedCourse);
+            }
             updateCourseTable();
 
 
