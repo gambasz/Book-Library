@@ -1,7 +1,6 @@
 package frontend;
 
 import com.mbox.DBManager;
-import com.sun.javafx.image.IntPixelGetter;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -18,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.omg.CORBA.INTERNAL;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -223,14 +221,14 @@ public class Controller {
         }
 
         //if none are true - do nothing
-        if(!commonid_full && !professorname_full && !coursename_full && !resource_full){
+        if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
 
             //nothing has been selected, do nothing
-        }else if(commonid_full){
+        } else if (commonid_full) {
 
-            Course c  = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
+            Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
 
-        }else if(professorname_full && coursename_full && resource_full){
+        } else if (professorname_full && coursename_full && resource_full) {
 
             // largest possible combination
 
@@ -240,24 +238,24 @@ public class Controller {
 
             ArrayList<Integer> all_ids = new ArrayList<>();
 
-            for(int i = 0; i < ids_from_professorname.size(); i++){
+            for (int i = 0; i < ids_from_professorname.size(); i++) {
 
                 all_ids.add(ids_from_professorname.get(i));
             }
 
-            for(int i = 0; i < ids_from_coursename.size(); i++){
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
                 all_ids.add(ids_from_coursename.get(i));
             }
 
-            for(int i = 0; i < ids_from_resources.size(); i++){
+            for (int i = 0; i < ids_from_resources.size(); i++) {
 
                 all_ids.add(ids_from_resources.get(i));
             }
 
             int[] all_class_ids = new int[all_ids.size()];
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 all_class_ids[i] = all_ids.get(i);
             }
@@ -266,7 +264,7 @@ public class Controller {
 
             all_ids.clear();
 
-            for(int i = 0; i < all_class_ids.length; i++){
+            for (int i = 0; i < all_class_ids.length; i++) {
 
                 all_ids.add(all_class_ids[i]);
             }
@@ -281,7 +279,7 @@ public class Controller {
             Course tmpc;
             ArrayList<Course> courses = new ArrayList<>();
 
-            for(int i = 0; i < all_ids.size(); i++) {
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
                 courses.add(tmpc);
@@ -289,26 +287,26 @@ public class Controller {
 
             // display courses array in the table
 
-        }else if(professorname_full && coursename_full){
+        } else if (professorname_full && coursename_full) {
 
             ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
             ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
 
             ArrayList<Integer> all_ids = new ArrayList<>();
 
-            for(int i = 0; i < ids_from_professorname.size(); i++){
+            for (int i = 0; i < ids_from_professorname.size(); i++) {
 
                 all_ids.add(ids_from_professorname.get(i));
             }
 
-            for(int i = 0; i < ids_from_coursename.size(); i++){
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
                 all_ids.add(ids_from_coursename.get(i));
             }
 
             int[] all_class_ids = new int[all_ids.size()];
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 all_class_ids[i] = all_ids.get(i);
             }
@@ -317,7 +315,7 @@ public class Controller {
 
             all_ids.clear();
 
-            for(int i = 0; i < all_class_ids.length; i++){
+            for (int i = 0; i < all_class_ids.length; i++) {
 
                 all_ids.add(all_class_ids[i]);
             }
@@ -332,7 +330,7 @@ public class Controller {
             Course tmpc;
             ArrayList<Course> courses = new ArrayList<>();
 
-            for(int i = 0; i < all_ids.size(); i++) {
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
                 courses.add(tmpc);
@@ -341,27 +339,26 @@ public class Controller {
             // display courses array in the table
 
 
-
-        }else if(professorname_full && resource_full){
+        } else if (professorname_full && resource_full) {
 
             ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
             ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(coursename);
 
             ArrayList<Integer> all_ids = new ArrayList<>();
 
-            for(int i = 0; i < ids_from_professorname.size(); i++){
+            for (int i = 0; i < ids_from_professorname.size(); i++) {
 
                 all_ids.add(ids_from_professorname.get(i));
             }
 
-            for(int i = 0; i < ids_from_resources.size(); i++){
+            for (int i = 0; i < ids_from_resources.size(); i++) {
 
                 all_ids.add(ids_from_resources.get(i));
             }
 
             int[] all_class_ids = new int[all_ids.size()];
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 all_class_ids[i] = all_ids.get(i);
             }
@@ -370,7 +367,7 @@ public class Controller {
 
             all_ids.clear();
 
-            for(int i = 0; i < all_class_ids.length; i++){
+            for (int i = 0; i < all_class_ids.length; i++) {
 
                 all_ids.add(all_class_ids[i]);
             }
@@ -385,7 +382,7 @@ public class Controller {
             Course tmpc;
             ArrayList<Course> courses = new ArrayList<>();
 
-            for(int i = 0; i < all_ids.size(); i++) {
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
                 courses.add(tmpc);
@@ -393,26 +390,26 @@ public class Controller {
 
             // display courses array in the table
 
-        }else if(coursename_full && resource_full){
+        } else if (coursename_full && resource_full) {
 
             ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_professor_name(professorname);
             ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(coursename);
 
             ArrayList<Integer> all_ids = new ArrayList<>();
 
-            for(int i = 0; i < ids_from_coursename.size(); i++){
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
                 all_ids.add(ids_from_coursename.get(i));
             }
 
-            for(int i = 0; i < ids_from_resources.size(); i++){
+            for (int i = 0; i < ids_from_resources.size(); i++) {
 
                 all_ids.add(ids_from_resources.get(i));
             }
 
             int[] all_class_ids = new int[all_ids.size()];
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 all_class_ids[i] = all_ids.get(i);
             }
@@ -421,7 +418,7 @@ public class Controller {
 
             all_ids.clear();
 
-            for(int i = 0; i < all_class_ids.length; i++){
+            for (int i = 0; i < all_class_ids.length; i++) {
 
                 all_ids.add(all_class_ids[i]);
             }
@@ -436,7 +433,7 @@ public class Controller {
             Course tmpc;
             ArrayList<Course> courses = new ArrayList<>();
 
-            for(int i = 0; i < all_ids.size(); i++) {
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
                 courses.add(tmpc);
@@ -445,43 +442,43 @@ public class Controller {
             // display courses array in the table
 
 
-        }else if(professorname_full){
+        } else if (professorname_full) {
 
             ArrayList<Integer> classids = DBManager.find_classids_by_professor_name(professorname);
             ArrayList<Course> c = new ArrayList<>();
 
-            for(int i = 0; i < classids.size(); i++){
+            for (int i = 0; i < classids.size(); i++) {
 
                 c.add(DBManager.find_class_by_commonid(classids.get(i)));
             }
 
             // display courses array in table
 
-        }else if(coursename_full){
+        } else if (coursename_full) {
 
             ArrayList<Integer> classids = DBManager.find_classids_by_course_name(coursename);
             ArrayList<Course> c = new ArrayList<>();
 
-            for (int i = 0; i < classids.size(); i++){
+            for (int i = 0; i < classids.size(); i++) {
 
                 c.add(DBManager.find_class_by_commonid(classids.get(i)));
             }
 
             // display courses array in table
 
-        }else if(resource_full){
+        } else if (resource_full) {
 
             ArrayList<Integer> classids = DBManager.find_classids_by_resource_name(coursename);
             ArrayList<Course> c = new ArrayList<>();
 
-            for (int i = 0; i < classids.size(); i++){
+            for (int i = 0; i < classids.size(); i++) {
 
                 c.add(DBManager.find_class_by_commonid(classids.get(i)));
             }
 
             // display courses array in table
 
-        }else{
+        } else {
 
             System.out.println("IDK whats going on m8");
         }
@@ -495,7 +492,7 @@ public class Controller {
         if (!isPersonResourcesView) {
             selectedCourse = tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1);
             if (selectedCourse != null) {
-                setChildVisiblity(true, updateBtn, deleteBtn);
+                setChildVisibility(true, updateBtn, deleteBtn);
                 courseInfoDescrip.setText("" + selectedCourse.getDescription());
                 profInfoFName.setText(selectedCourse.getProfessor().getFirstName());
                 profInfoLName.setText(selectedCourse.getProfessor().getLastName());
@@ -531,7 +528,7 @@ public class Controller {
      */
     public void resetSelect() {
         tableTV.getSelectionModel().clearSelection();
-        setChildVisiblity(false, updateBtn, deleteBtn);
+        setChildVisibility(false, updateBtn, deleteBtn);
     }
 
     public void add() {
@@ -567,8 +564,8 @@ public class Controller {
             // I don't check type rn. Need to check later with fk.. enum :))
 
             if (professorChanged) {
-                String firstName = profInfoFName.getText().substring(0,1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
-                String lastName = profInfoLName.getText().substring(0,1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
+                String firstName = profInfoFName.getText().substring(0, 1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
+                String lastName = profInfoLName.getText().substring(0, 1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
                 tempCour.getProfessor().setFirstName(firstName);
                 tempCour.getProfessor().setLastName(lastName);
                 tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
@@ -589,7 +586,7 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
-            if(tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+            if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
                 courseList.add(tempCour);
             }
 
@@ -839,7 +836,7 @@ public class Controller {
 
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
-            if(selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+            if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
                 courseList.add(selectedCourse);
             }
             updateCourseTable();
@@ -1192,9 +1189,9 @@ public class Controller {
             selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
-            setChildVisiblity(true, update, delete);
+            setChildVisibility(true, update, delete);
         } else {
-            setChildVisiblity(false, update, delete);
+            setChildVisibility(false, update, delete);
         }
     }
 
@@ -1310,7 +1307,7 @@ public class Controller {
         Button deleteBtn = new Button("Delete");
 
 
-        setChildVisiblity(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
+        setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
         addProfessor.setOnMouseClicked(e -> {
             addNewProfessor(profInfoFNameTf.getText(), profInfoLNameTf.getText(), profInfoTypeCB.getSelectionModel().getSelectedItem());
             currentProfessors.getItems().clear();
@@ -1327,11 +1324,11 @@ public class Controller {
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
                 profInfoTypeCB.setValue(currentProfessors.getSelectionModel().getSelectedItem().getType());
 
-                setChildVisiblity(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
+                setChildVisibility(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
 
 
             } else {
-                setChildVisiblity(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
+                setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
 
 
             }
@@ -1390,7 +1387,7 @@ public class Controller {
 
     }
 
-    private void setChildVisiblity(Boolean state, Node... args) {
+    private void setChildVisibility(Boolean state, Node... args) {
         for (Node arg : args) {
             arg.setVisible(state);
             arg.setManaged(state);
@@ -1586,6 +1583,7 @@ public class Controller {
         ArrayList<Course> tempCourses = new ArrayList<>();
         templateList = DBManager.convertArrayCCBasic(DBManager.getCourseFromTable());
         VBox mainAddPane = new VBox(2);
+        VBox dataInfoPane = new VBox(2);
 
         Dialog dlg = new Dialog();
 
@@ -1593,17 +1591,29 @@ public class Controller {
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         ComboBox<Course> courseTemplates = new ComboBox<Course>();
-        setCourseTemplatesCellValue(courseTemplates);
-        courseTemplates.getItems().addAll(templateList);
+
+
         Label currentCBoxLbl = new Label("Course Templates : ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
         Button addBtn = new Button("Add");
+        Label tile = new Label("Tile:    ");
+        Label description = new Label("Description: ");
+        Label department = new Label("Department: ");
+        TextField tileTf = new TextField();
+        TextField descriptionTf = new TextField();
+        TextField departmentTf = new TextField();
+
+        setCourseTemplatesCellValue(courseTemplates);
+        courseTemplates.getItems().addAll(templateList);
+        descriptionTf.setMinWidth(150);
+
         addBtn.setOnMouseClicked(e -> {
-            Course tempCourseCreated = addCourseTemplate();
+            Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), departmentTf.getText(), descriptionTf.getText());
+            addNewCourseTemplate(tempNewCourseTemplate);
             courseTemplates.getItems().clear();
             courseTemplates.getItems().addAll(templateList);
-            courseTemplates.getSelectionModel().select(tempCourseCreated);
+            courseTemplates.getSelectionModel().select(tempNewCourseTemplate);
 
         });
         deleteBtn.setOnAction(e -> {
@@ -1613,10 +1623,23 @@ public class Controller {
                 }
         );
         courseTemplates.setOnAction(e -> {
-            courseTemplates.getSelectionModel().getSelectedItem();
         });
+
+        dataInfoPane.getChildren().addAll(
+                new HBox(25, tile, tileTf),
+                new HBox(25, description, descriptionTf),
+                new HBox(25, department, departmentTf)
+        );
+        for (Node node : dataInfoPane.getChildren()) {
+            HBox child = (HBox) node;
+            child.setAlignment(Pos.CENTER);
+        }
+        dataInfoPane.setMinWidth(300);
+        dataInfoPane.setSpacing(20);
+        dataInfoPane.setAlignment(Pos.CENTER);
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates),
+                dataInfoPane,
                 deleteBtn,
                 addBtn
         );
@@ -1659,48 +1682,48 @@ public class Controller {
 
 
     }
-
-    private Course addCourseTemplate() {
-        Dialog dlg = new Dialog();
-        VBox mainPane = new VBox();
-        dlg.setTitle("Add New Course Template");
-
-        Label tile = new Label("Tile:    ");
-        Label description = new Label("Description: ");
-        Label department = new Label("Department: ");
-        TextField tileTf = new TextField();
-        TextField descriptionTf = new TextField();
-        TextField departmentTf = new TextField();
-
-        ButtonType addBtn = new ButtonType("Create new Course Template", ButtonBar.ButtonData.OK_DONE);
-
-        mainPane.getChildren().addAll(
-                new HBox(25, tile, tileTf),
-                new HBox(25, description, descriptionTf),
-                new HBox(25, department, departmentTf)
-        );
-        for (Node node : mainPane.getChildren()) {
-            HBox child = (HBox) node;
-            child.setAlignment(Pos.CENTER);
-        }
-        mainPane.setSpacing(20);
-        mainPane.setAlignment(Pos.CENTER);
-        dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().setMinWidth(600);
-        dlg.getDialogPane().setMinHeight(300);
-        dlg.getDialogPane().getButtonTypes().addAll(addBtn, ButtonType.CANCEL);
-        dlg.setResultConverter(dialogButton -> {
-            if (dialogButton == addBtn) {
-                Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), descriptionTf.getText(), departmentTf.getText());
-                addNewCourseTemplate(tempNewCourseTemplate);
-                return tempNewCourseTemplate;
-            }
-            return null;
-        });
-        dlg.showAndWait();
-        return (Course) dlg.resultProperty().getValue();
-//        Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), descriptionTf.getText(), departmentTf.getText());
-    }
+// NOTE :: DELETE THIS CODE AFTER 4 commits
+//    private Course addCourseTemplate() {
+//        Dialog dlg = new Dialog();
+//        VBox mainPane = new VBox();
+//        dlg.setTitle("Add New Course Template");
+//
+//        Label tile = new Label("Tile:    ");
+//        Label description = new Label("Description: ");
+//        Label department = new Label("Department: ");
+//        TextField tileTf = new TextField();
+//        TextField descriptionTf = new TextField();
+//        TextField departmentTf = new TextField();
+//
+//        ButtonType addBtn = new ButtonType("Create new Course Template", ButtonBar.ButtonData.OK_DONE);
+//
+//        mainPane.getChildren().addAll(
+//                new HBox(25, tile, tileTf),
+//                new HBox(25, description, descriptionTf),
+//                new HBox(25, department, departmentTf)
+//        );
+//        for (Node node : mainPane.getChildren()) {
+//            HBox child = (HBox) node;
+//            child.setAlignment(Pos.CENTER);
+//        }
+//        mainPane.setSpacing(20);
+//        mainPane.setAlignment(Pos.CENTER);
+//        dlg.getDialogPane().setContent(mainPane);
+//        dlg.getDialogPane().setMinWidth(600);
+//        dlg.getDialogPane().setMinHeight(300);
+//        dlg.getDialogPane().getButtonTypes().addAll(addBtn, ButtonType.CANCEL);
+//        dlg.setResultConverter(dialogButton -> {
+//            if (dialogButton == addBtn) {
+//                Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), descriptionTf.getText(), departmentTf.getText());
+//                addNewCourseTemplate(tempNewCourseTemplate);
+//                return tempNewCourseTemplate;
+//            }
+//            return null;
+//        });
+//        dlg.showAndWait();
+//        return (Course) dlg.resultProperty().getValue();
+////        Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), descriptionTf.getText(), departmentTf.getText());
+//    }
 
     private void addNewCourseTemplate(Course tempNewCourseTemplate) {
         templateList.add(tempNewCourseTemplate);
