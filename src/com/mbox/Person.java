@@ -173,9 +173,9 @@ public class Person {
         PersonType enumTmp;
 
         switch (this.type){
-            case "Program Coordinator" : enumTmp = PersonType.ProgramCoordinator; break;
-            case "Course Coordinator" : enumTmp = PersonType.CourseCoordinator; break;
-            case "Course Instructor" : enumTmp = PersonType.CourseInstructor; break;
+            case "ProgramCoordinator" : enumTmp = PersonType.ProgramCoordinator; break;
+            case "CourseCoordinator" : enumTmp = PersonType.CourseCoordinator; break;
+            case "CourseInstructor" : enumTmp = PersonType.CourseInstructor; break;
             default: enumTmp = PersonType.CourseInstructor;
 
         }
