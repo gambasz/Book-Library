@@ -192,102 +192,299 @@ public class Controller {
 
     public void search() {
 
-//        // get the info in all the comboboxes
-//        //check if they are empty.
-//
-//        String commonid = "";
-//        String professorname = "";
-//        String coursename = "";
-//        String resource = "";
-//        boolean commonid_full = false;
-//        boolean professorname_full = false;
-//        boolean coursename_full = false;
-//        boolean resource_full = false;
-//
-//
-//        if (!crnSearchTF.getText().isEmpty()) {
-//            commonid = crnSearchTF.getText();
-//            commonid_full = true;
-//        }
-//        if (!profSearchTF.getText().isEmpty()) {
-//            professorname = profSearchTF.getText();
-//            professorname_full = true;
-//        }
-//        if (!courseSearchTF.getText().isEmpty()) {
-//            coursename = courseSearchTF.getText();
-//            coursename_full = true;
-//        }
-//        if (!resourceSearchTF.getText().isEmpty()) {
-//            resource = resourceSearchTF.getText();
-//            resource_full = true;
-//        }
-//
-//        //if none are true - do nothing
-//        if(!commonid_full && !professorname_full && !coursename_full && !resource_full){
-//
-//            //nothing has been selected, do nothing
-//        }else if(commonid_full){
-//
-//            Course c  = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
-//
-//        }else if(professorname_full && coursename_full && resource_full){
-//
-//            // largest possible combination
-//
-//            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
-//            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
-//            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(resource);
-//
-//            ArrayList<Integer> all_ids = new ArrayList<>();
-//
-//            for(int i = 0; i < ids_from_professorname.size(); i++){
-//
-//                all_ids.add(ids_from_professorname.get(i));
-//            }
-//
-//            for(int i = 0; i < ids_from_coursename.size(); i++){
-//
-//                all_ids.add(ids_from_coursename.get(i));
-//            }
-//
-//            for(int i = 0; i < ids_from_resources.size(); i++){
-//
-//                all_ids.add(ids_from_resources.get(i));
-//            }
-//
-//            int[] all_class_ids = new int[all_ids.size()];
-//
-//            for(int i = 0; i < all_ids.size(); i++){
-//
-//                all_class_ids[i] = all_ids.get(i);
-//            }
-//
-//            Arrays.sort(all_class_ids);
-//
-//            Set<Integer> classids = new HashSet<Integer>();
-//            for(int i = 0; i < all_class_ids.length; i++){
-//
-//                classids.add(all_class_ids[i]);
-//            }
-//
-//
-//
-//        }else if(professorname_full && coursename_full){
-//
-//        }else if(professorname_full && resource_full){
-//
-//        }else if(coursename_full && resource_full){
-//
-//        }else if(professorname_full){
-//
-//        }else if(coursename_full){
-//
-//        }else if(resource_full){
-//
-//        }else{
-//
-//            System.out.println("IDK whats going on m8");
-//        }
+        // get the info in all the comboboxes
+        //check if they are empty.
+
+        String commonid = "";
+        String professorname = "";
+        String coursename = "";
+        String resource = "";
+        boolean commonid_full = false;
+        boolean professorname_full = false;
+        boolean coursename_full = false;
+        boolean resource_full = false;
+
+
+        if (!crnSearchTF.getText().isEmpty()) {
+            commonid = crnSearchTF.getText();
+            commonid_full = true;
+        }
+        if (!profSearchTF.getText().isEmpty()) {
+            professorname = profSearchTF.getText();
+            professorname_full = true;
+        }
+        if (!courseSearchTF.getText().isEmpty()) {
+            coursename = courseSearchTF.getText();
+            coursename_full = true;
+        }
+        if (!resourceSearchTF.getText().isEmpty()) {
+            resource = resourceSearchTF.getText();
+            resource_full = true;
+        }
+
+        //if none are true - do nothing
+        if(!commonid_full && !professorname_full && !coursename_full && !resource_full){
+
+            //nothing has been selected, do nothing
+        }else if(commonid_full){
+
+            Course c  = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
+
+        }else if(professorname_full && coursename_full && resource_full){
+
+            // largest possible combination
+
+            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
+            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
+            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(resource);
+
+            ArrayList<Integer> all_ids = new ArrayList<>();
+
+            for(int i = 0; i < ids_from_professorname.size(); i++){
+
+                all_ids.add(ids_from_professorname.get(i));
+            }
+
+            for(int i = 0; i < ids_from_coursename.size(); i++){
+
+                all_ids.add(ids_from_coursename.get(i));
+            }
+
+            for(int i = 0; i < ids_from_resources.size(); i++){
+
+                all_ids.add(ids_from_resources.get(i));
+            }
+
+            int[] all_class_ids = new int[all_ids.size()];
+
+            for(int i = 0; i < all_ids.size(); i++){
+
+                all_class_ids[i] = all_ids.get(i);
+            }
+
+            Arrays.sort(all_class_ids);
+
+            all_ids.clear();
+
+            for(int i = 0; i < all_class_ids.length; i++){
+
+                all_ids.add(all_class_ids[i]);
+            }
+
+            Set<Integer> hs = new HashSet<>();
+
+
+            hs.addAll(all_ids);
+            all_ids.clear();
+            all_ids.addAll(hs);
+
+            Course tmpc;
+            ArrayList<Course> courses = new ArrayList<>();
+
+            for(int i = 0; i < all_ids.size(); i++) {
+
+                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
+                courses.add(tmpc);
+            }
+
+            // display courses array in the table
+
+        }else if(professorname_full && coursename_full){
+
+            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
+            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
+
+            ArrayList<Integer> all_ids = new ArrayList<>();
+
+            for(int i = 0; i < ids_from_professorname.size(); i++){
+
+                all_ids.add(ids_from_professorname.get(i));
+            }
+
+            for(int i = 0; i < ids_from_coursename.size(); i++){
+
+                all_ids.add(ids_from_coursename.get(i));
+            }
+
+            int[] all_class_ids = new int[all_ids.size()];
+
+            for(int i = 0; i < all_ids.size(); i++){
+
+                all_class_ids[i] = all_ids.get(i);
+            }
+
+            Arrays.sort(all_class_ids);
+
+            all_ids.clear();
+
+            for(int i = 0; i < all_class_ids.length; i++){
+
+                all_ids.add(all_class_ids[i]);
+            }
+
+            Set<Integer> hs = new HashSet<>();
+
+
+            hs.addAll(all_ids);
+            all_ids.clear();
+            all_ids.addAll(hs);
+
+            Course tmpc;
+            ArrayList<Course> courses = new ArrayList<>();
+
+            for(int i = 0; i < all_ids.size(); i++) {
+
+                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
+                courses.add(tmpc);
+            }
+
+            // display courses array in the table
+
+
+
+        }else if(professorname_full && resource_full){
+
+            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
+            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(coursename);
+
+            ArrayList<Integer> all_ids = new ArrayList<>();
+
+            for(int i = 0; i < ids_from_professorname.size(); i++){
+
+                all_ids.add(ids_from_professorname.get(i));
+            }
+
+            for(int i = 0; i < ids_from_resources.size(); i++){
+
+                all_ids.add(ids_from_resources.get(i));
+            }
+
+            int[] all_class_ids = new int[all_ids.size()];
+
+            for(int i = 0; i < all_ids.size(); i++){
+
+                all_class_ids[i] = all_ids.get(i);
+            }
+
+            Arrays.sort(all_class_ids);
+
+            all_ids.clear();
+
+            for(int i = 0; i < all_class_ids.length; i++){
+
+                all_ids.add(all_class_ids[i]);
+            }
+
+            Set<Integer> hs = new HashSet<>();
+
+
+            hs.addAll(all_ids);
+            all_ids.clear();
+            all_ids.addAll(hs);
+
+            Course tmpc;
+            ArrayList<Course> courses = new ArrayList<>();
+
+            for(int i = 0; i < all_ids.size(); i++) {
+
+                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
+                courses.add(tmpc);
+            }
+
+            // display courses array in the table
+
+        }else if(coursename_full && resource_full){
+
+            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_professor_name(professorname);
+            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(coursename);
+
+            ArrayList<Integer> all_ids = new ArrayList<>();
+
+            for(int i = 0; i < ids_from_coursename.size(); i++){
+
+                all_ids.add(ids_from_coursename.get(i));
+            }
+
+            for(int i = 0; i < ids_from_resources.size(); i++){
+
+                all_ids.add(ids_from_resources.get(i));
+            }
+
+            int[] all_class_ids = new int[all_ids.size()];
+
+            for(int i = 0; i < all_ids.size(); i++){
+
+                all_class_ids[i] = all_ids.get(i);
+            }
+
+            Arrays.sort(all_class_ids);
+
+            all_ids.clear();
+
+            for(int i = 0; i < all_class_ids.length; i++){
+
+                all_ids.add(all_class_ids[i]);
+            }
+
+            Set<Integer> hs = new HashSet<>();
+
+
+            hs.addAll(all_ids);
+            all_ids.clear();
+            all_ids.addAll(hs);
+
+            Course tmpc;
+            ArrayList<Course> courses = new ArrayList<>();
+
+            for(int i = 0; i < all_ids.size(); i++) {
+
+                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
+                courses.add(tmpc);
+            }
+
+            // display courses array in the table
+
+
+        }else if(professorname_full){
+
+            ArrayList<Integer> classids = DBManager.find_classids_by_professor_name(professorname);
+            ArrayList<Course> c = new ArrayList<>();
+
+            for(int i = 0; i < classids.size(); i++){
+
+                c.add(DBManager.find_class_by_commonid(classids.get(i)));
+            }
+
+            // display courses array in table
+
+        }else if(coursename_full){
+
+            ArrayList<Integer> classids = DBManager.find_classids_by_course_name(coursename);
+            ArrayList<Course> c = new ArrayList<>();
+
+            for (int i = 0; i < classids.size(); i++){
+
+                c.add(DBManager.find_class_by_commonid(classids.get(i)));
+            }
+
+            // display courses array in table
+
+        }else if(resource_full){
+
+            ArrayList<Integer> classids = DBManager.find_classids_by_resource_name(coursename);
+            ArrayList<Course> c = new ArrayList<>();
+
+            for (int i = 0; i < classids.size(); i++){
+
+                c.add(DBManager.find_class_by_commonid(classids.get(i)));
+            }
+
+            // display courses array in table
+
+        }else{
+
+            System.out.println("IDK whats going on m8");
+        }
 
 
     }
