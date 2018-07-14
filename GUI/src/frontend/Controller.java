@@ -589,9 +589,18 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
-            if(tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                courseList.add(tempCour);
+
+            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+                if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+                    courseList.add(tempCour);
+                }
             }
+            else{
+                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+                    courseList.add(tempCour);
+                }
+            }
+
 
             updateCourseTable();
         } else {
@@ -781,8 +790,7 @@ public class Controller {
     }
 
     public void update() {
-//        int semesterID = DBManager.getSemesterIDByName(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-//                yearComBoxEdit.getSelectionModel().getSelectedItem().toString());
+
         if (selectedCourse != null) {
             courseList.remove(selectedCourse);
             DBManager.deleteRelationCourseResources(selectedCourse);
@@ -839,8 +847,15 @@ public class Controller {
 
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
-            if(selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                courseList.add(selectedCourse);
+            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+                if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+                    courseList.add(selectedCourse);
+                }
+            }
+            else{
+                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+                    courseList.add(selectedCourse);
+                }
             }
             updateCourseTable();
 

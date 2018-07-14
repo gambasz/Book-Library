@@ -1962,17 +1962,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         ArrayList<frontend.data.Resource> r = c.getResource();
 
 
-        int[] resourceidlist = new int[r.size()];
-
-        for (int i = 0; i < c.getResource().size(); i++) {
-
-            resourceidlist[i] = r.get(i).getID();
-        }
 
 
-        for (int j = 0; j < resourceidlist.length; j++) {
+
+        for (int j = 0; j < c.getResource().size(); j++) {
             String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, resourceidlist[j], commonID);
+                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, c.getResource().get(j).getID(), commonID);
             executeNoReturnQuery(tempQuerry);
 
 //            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
@@ -1987,11 +1982,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         }
         try {
-            for (int k = 0; k < resourceidlist.length; k++) {
-
-                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
-                        "PUBLISHERID = '%d'", r.get(k).getID(), r.get(k).getPublisher().getID()));
+            for (int k = 0; k < r.size(); k++) {
+                System.out.println("RID, PUBD: " + r.get(k).getID() +" "+r.get(k).getPublisher().getID() );
                 int resourceID = 0;
+                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
+                        "PUBLISHERID = '%d'", r.get(k).getID(),r.get(k).getPublisher().getID()));
                 while (rs.next()) {
                     resourceID = rs.getInt(2);
                 }
@@ -1999,7 +1994,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 if (resourceID == 0) {
                     executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                                     " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            resourceidlist[k]));
+                            r.get(k).getID()));
                     }
             }
         } catch (Exception e) {
