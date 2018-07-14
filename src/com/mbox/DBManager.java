@@ -7,10 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DBManager {
     public static Statement st;
@@ -1557,6 +1554,7 @@ public class DBManager {
                     resource1.getID() +" ORDER BY PUBLISHERID DESC");
 
             if (rs2.next()) {
+
                 //there will be a list of all reousrces ID that is owned by Person
                 publisherID = rs2.getInt("PUBLISHERID");
 
@@ -1587,7 +1585,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     Statement stTemp;
     frontend.data.Resource tempResource;
     ArrayList<frontend.data.Resource> listResources = new ArrayList<frontend.data.Resource>();
-//    Map<Integer, frontend.data.Resource> tempCach = new HashMap<Integer, frontend.data.Resource>();
 
     try {
         stTemp = conn.createStatement();
@@ -1615,8 +1612,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                             rss.getInt("CURRENT_AMOUNT"));
 
                     listResources.add(tempResource);
-                    setPublisherForResource2(listResources.get(i));
+                    setPublisherForResource2(tempResource);
                     tempCach.put(resourceID, tempResource);
+
 
                     i++;
                 }
@@ -1790,25 +1788,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static ArrayList<frontend.data.Course> returnEverything2(int semesterid) {
         Semester semester = getSemesterNameByID(semesterid);
-        int lastCourseID = 0;
         Map<Integer, ArrayList<Integer>> courseIDs = getCourseIdsBySemesterID2(semesterid);
         ArrayList<frontend.data.Course> courses = new ArrayList<>();
 
         courses = relationalReadByCourseID2(courseIDs, semester);
-
-
-//        ArrayList<frontend.data.Course> courses = new ArrayList<>();
-
-//        for (int i = 0; i < courseIDs.size(); i++) {
-//            if (lastCourseID == courseIDs.get(i)) {
-//                continue;
-//            }
-//            ArrayList<Course> tmpCourse = DBManager.relationalReadByCourseID(courseIDs.get(i));
-//            lastCourseID = courseIDs.get(i);
-//
-//            for (int j = 0; j < tmpCourse.size(); j++) {
-//
-//                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.year, semester.season));
 
 
         return courses;
