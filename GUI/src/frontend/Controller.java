@@ -1623,6 +1623,12 @@ public class Controller {
                 }
         );
         courseTemplates.setOnAction(e -> {
+            Course tempSelectedCourse = courseTemplates.getSelectionModel().getSelectedItem();
+            if (tempSelectedCourse != null) {
+                tileTf.setText(tempSelectedCourse.getTitle());
+                departmentTf.setText(tempSelectedCourse.getDepartment());
+                descriptionTf.setText(tempSelectedCourse.getDescription());
+            }
         });
 
         dataInfoPane.getChildren().addAll(
