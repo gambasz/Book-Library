@@ -1063,8 +1063,8 @@ public class Controller {
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         selectedResource = resourceTable.getSelectionModel().getSelectedItem();
-        String new_title = titleTF.getText();
-        String new_author = authorTF.getText();
+        String new_title = DBManager.capitalizeString(titleTF.getText());
+        String new_author = DBManager.capitalizeString(authorTF.getText());
         int new_total = Integer.parseInt(totalAmTF.getText());
         int new_current = Integer.parseInt(currentAmTF.getText());
         String new_descrip = descriptionTF.getText();
@@ -1113,8 +1113,8 @@ public class Controller {
 
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                titleTF.getText(),
-                authorTF.getText(),
+                DBManager.capitalizeString(titleTF.getText()),
+                DBManager.capitalizeString(authorTF.getText()),
                 descriptionTF.getText(),
                 false,
                 Integer.parseInt(totalAmTF.getText()),

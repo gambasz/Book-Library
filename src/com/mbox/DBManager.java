@@ -1891,10 +1891,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             for (int l = 0; l < resourceidlist.length; l++) {
+                if(!availablePublisher(r.get(l).getPublisher())) {
 
-                executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
-                        resourceidlist[l]));
+                    executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                            resourceidlist[l]));
+                }
 
 
             }
@@ -3712,6 +3714,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 //            System.out.println(asdf[i]);
 //        }
 
+    }
+    public static String capitalizeString(String s){
+        String result = "";
+        String[] tempString = s.split("\\s");
+        for(String a : tempString){
+            result = result + a.substring(0,1).toUpperCase() + a.substring(1) + " ";
+        }
+        return result;
     }
 }
 
