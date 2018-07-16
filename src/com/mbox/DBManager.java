@@ -3437,6 +3437,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 course.setTitle(rs2.getString("TITLE") + rs2.getString("CNUMBER"));
                 course.setDescription(rs2.getString("DESCRIPTION"));
                 course.setDepartment(rs2.getString("DEPARTMENT"));
+                course.setSEMESTER("FALL");
+                course.setYEAR(2018);
             }
 
             course.setResource(resources);
