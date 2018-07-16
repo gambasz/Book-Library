@@ -66,6 +66,19 @@ public class Request_Json {
     public static ArrayList<Book> call_me(String query) throws Exception {
         Gson gson = new Gson();
 
+        File index = new File("output");
+
+        if (!index.exists()) {
+            index.mkdir();
+        }
+        else {
+            String[]entries = index.list();
+            for(String s: entries){
+                File currentFile = new File(index.getPath(),s);
+                currentFile.delete();
+            }
+        }
+
         ArrayList<Book> returnedList = new ArrayList<Book>();
 
         JSONObject myResponse = new JSONObject(requestQuery(query).toString());
@@ -124,7 +137,10 @@ public class Request_Json {
         Image image = null;
         count2++;
 
+
+
         try {
+            if(jsonObject.getJSONObject("volumeInfo").has("imageLinks"))
             if(jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").has("smallThumbnail")) {
 
                 try {
@@ -142,7 +158,8 @@ public class Request_Json {
                     out.close();
                     in.close();
                     byte[] response = out.toByteArray();
-                    FileOutputStream fos = new FileOutputStream(String.format("borrowed_image%d.jpg",count2));
+                    FileOutputStream fos = new FileOutputStream(String.format("output/Book %s %d.jpg",
+                            jsonObject.getJSONObject("volumeInfo").get("title").toString(), count2));
                     fos.write(response);
                     fos.close();
                 } catch (IOException e) {
