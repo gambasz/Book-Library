@@ -1,6 +1,7 @@
 package frontend;
 
 import com.mbox.BookAPI.Book;
+import com.mbox.Publisher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class booksSearchViewController {
 
@@ -30,9 +33,28 @@ public class booksSearchViewController {
             search(searchTextF.getText());
         });
         setTableOFBooksCellProperty();
+        addFakeBook();
     }
 
+    private void addFakeBook() {
+        final String programeIconImg = "/frontend/media/icon.png";
+        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
+        Publisher tempPublisher = new Publisher();
+        tempPublisher.setTitle("Person");
 
+        Date tempDate = Calendar.getInstance().getTime();
+        ArrayList<String> tempAuthors = new ArrayList<>();
+        tempAuthors.add("Rajashow");
+        tempAuthors.add("MAMALEE");
+        tempAuthors.add("DEVIL OF THE WEST");
+        Book temp = new Book("Green Eggs and Ham", tempAuthors, null, "BOB", 5);
+        temp.setDatePublished(tempDate);
+        temp.setPublisherInstance(tempPublisher);
+        temp.setIcon(icon);
+
+        tableOfBooks.getItems().add(temp);
+
+    }
 
     private void setTableOFBooksCellProperty() {
         tableOfBooks.setCellFactory(param -> new ListCell<Book>() {
