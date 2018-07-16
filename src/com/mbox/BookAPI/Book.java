@@ -4,6 +4,7 @@ import com.mbox.Publisher;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class Book {
     private ArrayList<String> authors = new ArrayList<String>();
     private int id;
     private ImageView icon_de_la_book;
-
+    private Date datePublished;
     private Map<String, String> isbn = new HashMap<String, String>();
     private Publisher publisherInstance;
 
@@ -37,6 +38,14 @@ public class Book {
     public ImageView getIcon() {
         return icon_de_la_book;
 
+    }
+
+    public Date getDatePublished() {
+        return datePublished;
+    }
+
+    public void setDatePublished(Date datePublished) {
+        this.datePublished = datePublished;
     }
 
     public Map<String, String> getIsbn() {
