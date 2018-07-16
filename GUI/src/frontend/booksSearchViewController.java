@@ -2,9 +2,12 @@ package frontend;
 
 import com.mbox.BookAPI.Book;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class booksSearchViewController {
@@ -26,6 +29,7 @@ public class booksSearchViewController {
         });
         setTableOFBooksCellProperty();
     }
+
 
 
     private void setTableOFBooksCellProperty() {
@@ -58,5 +62,45 @@ public class booksSearchViewController {
 //        call the api using this query
     }
 
+    class BookViewListCellController {
+        @FXML
+        GridPane bookSCell;
+        @FXML
+        private ImageView cellIcon;
+        @FXML
+        private Label titleLbl;
+        @FXML
+        private Label publisherLbl;
+        @FXML
+        private Label isbn13Lbl;
+        @FXML
+        private Label isbn10Lbl;
+        @FXML
+        private Label dateLbl;
+        @FXML
+        private Label authorsLBL;
+        private boolean valueSet;
 
+        BookViewListCellController() {
+            valueSet = false;
+            try {
+                FXMLLoader parent = new FXMLLoader((getClass().getResource("/frontend/booksSearchTableCell.fxml")));
+                parent.setController(this);
+                bookSCell = parent.load();
+            } catch (IOException ex) {
+                System.err.print(ex.getMessage() + "hello");
+            }
+        }
+
+        public void setCellInfo(Book book) {
+
+        }
+
+        public GridPane getCell() {
+            if (valueSet) {
+                return bookSCell;
+            }
+            return null;
+        }
+    }
 }
