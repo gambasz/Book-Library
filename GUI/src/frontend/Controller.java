@@ -190,6 +190,12 @@ public class Controller {
 
     public void search() {
 
+        // Searching professor individually: works
+        // Searching course individually: works
+        // Seraching resource individually: does not work
+        // Any combination: does not work
+        // Common ID:
+
         // get the info in all the comboboxes
         //check if they are empty.
 
@@ -227,6 +233,10 @@ public class Controller {
         } else if (commonid_full) {
 
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
+
+            courseList.clear();
+            courseList.add(c);
+            updateCourseTable();
 
         } else if (professorname_full && coursename_full && resource_full) {
 
@@ -287,6 +297,12 @@ public class Controller {
 
             // display courses array in the table
 
+            courseList.clear();
+
+            courseList.addAll(courses);
+
+            updateCourseTable();
+
         } else if (professorname_full && coursename_full) {
 
             ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
@@ -338,6 +354,11 @@ public class Controller {
 
             // display courses array in the table
 
+            courseList.clear();
+
+            courseList.addAll(courses);
+
+            updateCourseTable();
 
         } else if (professorname_full && resource_full) {
 
@@ -390,6 +411,12 @@ public class Controller {
 
             // display courses array in the table
 
+            courseList.clear();
+
+            courseList.addAll(courses);
+
+            updateCourseTable();
+
         } else if (coursename_full && resource_full) {
 
             ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_professor_name(professorname);
@@ -441,6 +468,12 @@ public class Controller {
 
             // display courses array in the table
 
+            courseList.clear();
+
+            courseList.addAll(courses);
+
+            updateCourseTable();
+
 
         } else if (professorname_full) {
 
@@ -454,6 +487,12 @@ public class Controller {
 
             // display courses array in table
 
+            courseList.clear();
+
+            courseList.addAll(c);
+
+            updateCourseTable();
+
         } else if (coursename_full) {
 
             ArrayList<Integer> classids = DBManager.find_classids_by_course_name(coursename);
@@ -466,10 +505,30 @@ public class Controller {
 
             // display courses array in table
 
+            courseList.clear();
+
+            courseList.addAll(c);
+
+            updateCourseTable();
+
         } else if (resource_full) {
 
-            ArrayList<Integer> classids = DBManager.find_classids_by_resource_name(coursename);
+            ArrayList<Integer> classids = new ArrayList<>();
             ArrayList<Course> c = new ArrayList<>();
+
+            classids = DBManager.find_classids_by_resource_name(resource);
+
+            System.out.println("============");
+            System.out.println("Classids size: ");
+            System.out.println(classids.size());
+
+            for(int i = 0; i < classids.size(); i++){
+
+                System.out.println("========================");
+                System.out.println(classids.get(i));
+                DBManager.print_semester_by_commonid(classids.get(i));
+                System.out.println("========================");
+            }
 
             for (int i = 0; i < classids.size(); i++) {
 
@@ -477,6 +536,12 @@ public class Controller {
             }
 
             // display courses array in table
+
+            courseList.clear();
+
+            courseList.addAll(c);
+
+            updateCourseTable();
 
         } else {
 
