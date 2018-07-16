@@ -87,4 +87,11 @@ public class Book {
     public void setPublisherInstance(Publisher publisherInstance) {
         this.publisherInstance = publisherInstance;
     }
+
+    @Override
+    public  String toString(){
+        return String.format("Title: %s with ID: %d", this.title, this.id);
+    }
+
+
 }
