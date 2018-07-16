@@ -3224,22 +3224,38 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     public static ArrayList<Integer> find_classids_by_resource_name(String name){
 
         ArrayList<Integer> resourceids = new ArrayList<>();
+        ArrayList<Integer> classids = new ArrayList<>();
 
         try{
 
             Statement statement = conn.createStatement();
+            Statement statement2 = conn.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+
 
             while(rs.next()) {
 
                 resourceids.add(rs.getInt("ID"));
             }
 
-            return resourceids;
+            ResultSet rs2;
 
-        }catch(SQLException e) { System.out.println("Something went wrong with find_resources_by_name()"); }
+            for(int i = 0; i < resourceids.size(); i++){
 
-        return resourceids;
+                rs2 = statement2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID = %d", resourceids.get(i)));
+
+                while(rs2.next()){
+
+                    classids.add(rs2.getInt("COMMONID"));
+                }
+            }
+
+
+            return classids;
+
+        }catch(SQLException e) { System.out.println("Something went wrong with find_classids_by_resource_name()"); }
+
+        return classids;
     }
 
     public static ArrayList<Integer> find_classids_by_course_name(String name){
@@ -3667,6 +3683,24 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         return publisher;
 
+    }
+
+    public static void print_semester_by_commonid(int id){
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                System.out.println("|" + rs.getInt("SEMESTERID") + "|");
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("asd");
+        }
     }
 
     public static void muhcode(){

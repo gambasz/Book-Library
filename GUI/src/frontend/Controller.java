@@ -516,13 +516,18 @@ public class Controller {
             ArrayList<Integer> classids = new ArrayList<>();
             ArrayList<Course> c = new ArrayList<>();
 
-            classids = DBManager.find_classids_by_resource_name(coursename);
+            classids = DBManager.find_classids_by_resource_name(resource);
 
+            System.out.println("============");
+            System.out.println("Classids size: ");
             System.out.println(classids.size());
 
             for(int i = 0; i < classids.size(); i++){
 
+                System.out.println("========================");
                 System.out.println(classids.get(i));
+                DBManager.print_semester_by_commonid(classids.get(i));
+                System.out.println("========================");
             }
 
             for (int i = 0; i < classids.size(); i++) {
