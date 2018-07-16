@@ -7,10 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DBManager {
     public static Statement st;
@@ -1557,6 +1554,7 @@ public class DBManager {
                     resource1.getID() +" ORDER BY PUBLISHERID DESC");
 
             if (rs2.next()) {
+
                 //there will be a list of all reousrces ID that is owned by Person
                 publisherID = rs2.getInt("PUBLISHERID");
 
@@ -1587,7 +1585,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     Statement stTemp;
     frontend.data.Resource tempResource;
     ArrayList<frontend.data.Resource> listResources = new ArrayList<frontend.data.Resource>();
-//    Map<Integer, frontend.data.Resource> tempCach = new HashMap<Integer, frontend.data.Resource>();
 
     try {
         stTemp = conn.createStatement();
@@ -1615,8 +1612,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                             rss.getInt("CURRENT_AMOUNT"));
 
                     listResources.add(tempResource);
-                    setPublisherForResource2(listResources.get(i));
+                    setPublisherForResource2(tempResource);
                     tempCach.put(resourceID, tempResource);
+
 
                     i++;
                 }
@@ -1790,25 +1788,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static ArrayList<frontend.data.Course> returnEverything2(int semesterid) {
         Semester semester = getSemesterNameByID(semesterid);
-        int lastCourseID = 0;
         Map<Integer, ArrayList<Integer>> courseIDs = getCourseIdsBySemesterID2(semesterid);
         ArrayList<frontend.data.Course> courses = new ArrayList<>();
 
         courses = relationalReadByCourseID2(courseIDs, semester);
-
-
-//        ArrayList<frontend.data.Course> courses = new ArrayList<>();
-
-//        for (int i = 0; i < courseIDs.size(); i++) {
-//            if (lastCourseID == courseIDs.get(i)) {
-//                continue;
-//            }
-//            ArrayList<Course> tmpCourse = DBManager.relationalReadByCourseID(courseIDs.get(i));
-//            lastCourseID = courseIDs.get(i);
-//
-//            for (int j = 0; j < tmpCourse.size(); j++) {
-//
-//                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.year, semester.season));
 
 
         return courses;
@@ -1908,10 +1891,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             for (int l = 0; l < resourceidlist.length; l++) {
+                if(!availablePublisher(r.get(l).getPublisher())) {
 
-                executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
-                        resourceidlist[l]));
+                    executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                            resourceidlist[l]));
+                }
 
 
             }
@@ -1962,17 +1947,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         ArrayList<frontend.data.Resource> r = c.getResource();
 
 
-        int[] resourceidlist = new int[r.size()];
-
-        for (int i = 0; i < c.getResource().size(); i++) {
-
-            resourceidlist[i] = r.get(i).getID();
-        }
 
 
-        for (int j = 0; j < resourceidlist.length; j++) {
+
+        for (int j = 0; j < c.getResource().size(); j++) {
             String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, resourceidlist[j], commonID);
+                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, c.getResource().get(j).getID(), commonID);
             executeNoReturnQuery(tempQuerry);
 
 //            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
@@ -1987,11 +1967,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         }
         try {
-            for (int k = 0; k < resourceidlist.length; k++) {
-
-                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
-                        "PUBLISHERID = '%d'", r.get(k).getID(), r.get(k).getPublisher().getID()));
+            for (int k = 0; k < r.size(); k++) {
+                System.out.println("RID, PUBD: " + r.get(k).getID() +" "+r.get(k).getPublisher().getID() );
                 int resourceID = 0;
+                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
+                        "PUBLISHERID = '%d'", r.get(k).getID(),r.get(k).getPublisher().getID()));
                 while (rs.next()) {
                     resourceID = rs.getInt(2);
                 }
@@ -1999,7 +1979,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 if (resourceID == 0) {
                     executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                                     " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            resourceidlist[k]));
+                            r.get(k).getID()));
                     }
             }
         } catch (Exception e) {
@@ -3734,6 +3714,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 //            System.out.println(asdf[i]);
 //        }
 
+    }
+    public static String capitalizeString(String s){
+        String result = "";
+        String[] tempString = s.split("\\s");
+        for(String a : tempString){
+            result = result + a.substring(0,1).toUpperCase() + a.substring(1) + " ";
+        }
+        return result;
     }
 }
 

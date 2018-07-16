@@ -586,10 +586,24 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
-            if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                courseList.add(tempCour);
-            }
 
+
+            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+                if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+                    courseList.add(tempCour);
+                }
+            }
+            else{
+                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+                    courseList.add(tempCour);
+                }
+
+
+
+            }
+// Now is the one between HEAD and ==== your code?  yes. ok good, then delete <<<HEAD and ==== and >>>
+            // now run the program, there is other HEAD
+            // where?
             updateCourseTable();
         } else {
             System.out.println("Not selected");
@@ -778,8 +792,7 @@ public class Controller {
     }
 
     public void update() {
-//        int semesterID = DBManager.getSemesterIDByName(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-//                yearComBoxEdit.getSelectionModel().getSelectedItem().toString());
+
         if (selectedCourse != null) {
             courseList.remove(selectedCourse);
             DBManager.deleteRelationCourseResources(selectedCourse);
@@ -836,8 +849,18 @@ public class Controller {
 
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
-            if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                courseList.add(selectedCourse);
+
+            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+                if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
+                    courseList.add(selectedCourse);
+                }
+            }
+            else{
+                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+                    courseList.add(selectedCourse);
+                }
+
+
             }
             updateCourseTable();
 
@@ -1040,8 +1063,8 @@ public class Controller {
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         selectedResource = resourceTable.getSelectionModel().getSelectedItem();
-        String new_title = titleTF.getText();
-        String new_author = authorTF.getText();
+        String new_title = DBManager.capitalizeString(titleTF.getText());
+        String new_author = DBManager.capitalizeString(authorTF.getText());
         int new_total = Integer.parseInt(totalAmTF.getText());
         int new_current = Integer.parseInt(currentAmTF.getText());
         String new_descrip = descriptionTF.getText();
@@ -1090,8 +1113,8 @@ public class Controller {
 
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                titleTF.getText(),
-                authorTF.getText(),
+                DBManager.capitalizeString(titleTF.getText()),
+                DBManager.capitalizeString(authorTF.getText()),
                 descriptionTF.getText(),
                 false,
                 Integer.parseInt(totalAmTF.getText()),
