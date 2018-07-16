@@ -58,7 +58,18 @@ public class Resource {
         this.currentAmount = currentAmount;
         this.publisher = publisher;
     }
-
+    public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount) {
+        this.ISBN = ISBN;
+        this.TYPE = TYPE;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.totalAmount = totalAmount;
+        this.ID = ID;
+        this.currentAmount = currentAmount;
+        this.publisher = publisher;
+    }
     public Resource( int ID, String ISBN, String TYPE, String title, String author, String description, int totalAmount, int currentAmount) {
         this.ISBN = ISBN;
         this.TYPE = TYPE;
