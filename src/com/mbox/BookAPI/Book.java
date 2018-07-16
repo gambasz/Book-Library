@@ -1,19 +1,20 @@
 package com.mbox.BookAPI;
 
 import com.mbox.Publisher;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Book  {
+public class Book {
 
-    private String  title,description;
+    private String title, description;
     private ArrayList<String> authors = new ArrayList<String>();
-    private int  id;
+    private int id;
+    private ImageView icon_de_la_book;
 
-
-    private Map<String, String> isbn = new HashMap<String, String> ();
+    private Map<String, String> isbn = new HashMap<String, String>();
     private Publisher publisherInstance;
 
     public Book(String title, ArrayList<String> authors, Map<String, String> isbn, String description, int id) {
@@ -22,6 +23,20 @@ public class Book  {
         this.authors = authors;
         this.description = description;
         this.id = id;
+
+    }
+    public  Book(){
+
+
+    }    public void setIcon(ImageView icon) {
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        this.icon_de_la_book = icon;
+    }
+
+    public ImageView getIcon() {
+        return icon_de_la_book;
+
     }
 
     public Map<String, String> getIsbn() {
