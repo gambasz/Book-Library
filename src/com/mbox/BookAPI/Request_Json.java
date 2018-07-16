@@ -1,6 +1,6 @@
 package com.mbox.BookAPI;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.awt.*;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,11 +11,17 @@ import com.google.gson.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.imageio.ImageIO;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class Request_Json {
+    static int count2 =0;
+
+
     public static void main(String[] args) {
         try {
 
@@ -70,10 +76,11 @@ public class Request_Json {
         returnedList.add(jsonToBook(allItems.getJSONObject(i)));
         returnedList.get(i).setId(i+1);
 
+        getSmallImage(allItems.getJSONObject(i));
+
         }
         return returnedList;
     }
-
 
 
 
@@ -113,7 +120,41 @@ public class Request_Json {
         return returnedBook;
 
     }
+    public static void getSmallImage(JSONObject jsonObject){
+        Image image = null;
+        count2++;
 
+        try {
+            if(jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").has("smallThumbnail")) {
+
+                try {
+                    URL url = new URL(jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").get("smallThumbnail").toString());
+//                    image = ImageIO.read(url);
+
+                    InputStream in = new BufferedInputStream(url.openStream());
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    byte[] buf = new byte[1024];
+                    int n = 0;
+                    while (-1!=(n=in.read(buf)))
+                    {
+                        out.write(buf, 0, n);
+                    }
+                    out.close();
+                    in.close();
+                    byte[] response = out.toByteArray();
+                    FileOutputStream fos = new FileOutputStream(String.format("borrowed_image%d.jpg",count2));
+                    fos.write(response);
+                    fos.close();
+                } catch (IOException e) {
+                }
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static Map<String, String> getIsbn(JSONObject item) throws JSONException {
         Gson gson = new Gson();
