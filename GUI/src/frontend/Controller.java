@@ -1820,6 +1820,8 @@ public class Controller {
 //    }
 
     private void addNewCourseTemplate(Course tempNewCourseTemplate) {
+
+        tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
         templateList.add(tempNewCourseTemplate);
     }
 
