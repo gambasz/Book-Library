@@ -614,7 +614,9 @@ public class Controller {
                     semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                     courseInfoTitle.getText(),
                     courseInfoDepart.getText(),
-                    selectedPerson, courseInfoDescrip.getText(), tempRes);
+                    selectedPerson,
+                    courseInfoDescrip.getText(),
+                    tempRes);
 
             //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
 
@@ -792,7 +794,7 @@ public class Controller {
                 int length = c.getValue().getResource().size();
                 for (int i = 0; i < length; i++) {
                     String tTitle = res.get(i).getTitle();
-                    temp.append(tTitle.substring(0, Math.min(tTitle.length(), (78 / (length % 10)))));
+                    temp.append(tTitle, 0, Math.min(tTitle.length(), (78 / (length % 10))));
                     temp.append(" , ");
                 }
                 return new SimpleStringProperty(temp.toString());
@@ -1461,7 +1463,7 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                selectedPerson = ((Person) (currentProfessors.getSelectionModel().getSelectedItem()));
+                selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
                 profInfoFName.setText(selectedPerson.getFirstName());
                 profInfoLName.setText(selectedPerson.getLastName());
                 profInfoType.setValue(selectedPerson.getType());
