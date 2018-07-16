@@ -287,6 +287,12 @@ public class Controller {
 
             // display courses array in the table
 
+            courseList.clear();
+
+            courseList.addAll(courses);
+
+            updateCourseTable();
+
         } else if (professorname_full && coursename_full) {
 
             ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
