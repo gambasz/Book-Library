@@ -605,7 +605,7 @@ public class Controller {
 
         if (selectedCourse != null) {
             selectedPerson = new Person(selectedPerson);
-            ArrayList<Resource> tempRes = new ArrayList<Resource>(resourceTable.getItems());
+            ArrayList<Resource> tempRes = selectedCourse.getResource();
 
             Course tempCour = new Course(
                     selectedCourse.getID(),
@@ -666,9 +666,7 @@ public class Controller {
 
 
             }
-// Now is the one between HEAD and ==== your code?  yes. ok good, then delete <<<HEAD and ==== and >>>
-            // now run the program, there is other HEAD
-            // where?
+
             updateCourseTable();
         } else {
             System.out.println("Not selected");

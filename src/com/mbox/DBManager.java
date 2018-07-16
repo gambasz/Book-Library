@@ -1563,7 +1563,7 @@ public class DBManager {
 
                         publisherInstance = new frontend.data.Publisher(rss.getInt("ID"),
                                 rss.getString("TITLE"),
-                                rss.getString("CONTACT_INFO"), rss.getString("DESCRIPTION"));
+                                 rss.getString("DESCRIPTION"), rss.getString("CONTACT_INFO"));
                         i++;
                     }
                     resource1.setPublisher(publisherInstance);
@@ -1889,6 +1889,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                         " (COURSEID, RESOURCEID) VALUES ('%d', '%d')", id, resourceidlist[j]));
             }
 
+            for(int k=0; k<resourceidlist.length;k++){
+                System.out.println(r.get(k).getPublisher().getContacts() +" testing  " + r.get(k).getPublisher().getDescription());
+
+            }
 
             for (int l = 0; l < resourceidlist.length; l++) {
                 if(!availablePublisher(r.get(l).getPublisher())) {
@@ -2060,6 +2064,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             if (pubID == 0) {
                 //Errorrrrrrrrrr
                 Publisher tempPub = new Publisher(0, title, info, descrip);
+                System.out.println(tempPub.getContactInformation() + "    " + tempPub.getDescription());
 
                 String tempQr = insertPublisherQuery(tempPub);
                 System.out.println(tempQr);
