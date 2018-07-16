@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class booksSearchViewController {
@@ -64,21 +66,27 @@ public class booksSearchViewController {
 
     class BookViewListCellController {
         @FXML
-        GridPane bookSCell;
-        @FXML
         private ImageView cellIcon;
+
         @FXML
         private Label titleLbl;
+
         @FXML
         private Label publisherLbl;
+
         @FXML
         private Label isbn13Lbl;
+
         @FXML
         private Label isbn10Lbl;
+
         @FXML
         private Label dateLbl;
+
         @FXML
         private Label authorsLBL;
+        @FXML
+        GridPane bookSCell;
         private boolean valueSet;
 
         BookViewListCellController() {
@@ -93,7 +101,21 @@ public class booksSearchViewController {
         }
 
         public void setCellInfo(Book book) {
+            try {
+                cellIcon = book.getIcon();
+                titleLbl.setText(book.getTitle());
+                publisherLbl.setText(book.getPublisherInstance().getTitle());
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                dateLbl.setText(df.format(book.getDatePublished().getTime()));
+                authorsLBL.setText(book.getAuthors().toString());
+                isbn10Lbl.setText(book.getIsbn().get("ISBN 10"));
+                isbn13Lbl.setText(book.getIsbn().get("ISBN 13"));
 
+
+            } catch (Exception ex) {
+                System.out.println("" + ex.getMessage());
+            }
+            valueSet = true;
         }
 
         public GridPane getCell() {
