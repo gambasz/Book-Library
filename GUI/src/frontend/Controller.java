@@ -1135,6 +1135,8 @@ public class Controller {
             dlg.getDialogPane().setMinWidth(650);
             dlg.getDialogPane().setContent(root);
             dlg.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
+            Button finishBtn = (Button) dlg.getDialogPane().lookupButton(ButtonType.FINISH);
+            finishBtn.setDefaultButton(false);
             dlg.setResizable(true);
             dlg.showAndWait();
         } catch (Exception ex) {
@@ -1195,7 +1197,6 @@ public class Controller {
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
-
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                 DBManager.capitalizeString(titleTF.getText()),

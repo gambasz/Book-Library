@@ -1,16 +1,20 @@
 package frontend.data;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Resource {
     private String TYPE, title, author, description, ISBN;
     private boolean mcUnique;
-    private int totalAmount, ID, currentAmount, commonID=0;
+    private int totalAmount, ID, currentAmount, commonID = 0;
     private Publisher publisher;
+    private Map<String, String> ids;
 
     public Resource(String TYPE, int ID) {
         this.TYPE = TYPE;
         this.ID = ID;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String TYPE, int ID, String title, Publisher publisher, String author, String description, boolean mcUnique) {
@@ -21,6 +25,7 @@ public class Resource {
         this.author = author;
         this.description = description;
         this.mcUnique = mcUnique;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String TYPE, int ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
@@ -32,6 +37,7 @@ public class Resource {
         this.mcUnique = mcUnique;
         this.totalAmount = ammount;
         this.publisher = publisher;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
@@ -44,6 +50,7 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.publisher = publisher;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
@@ -58,6 +65,7 @@ public class Resource {
         this.currentAmount = currentAmount;
         this.publisher = publisher;
     }
+
     public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount) {
         this.ISBN = ISBN;
         this.TYPE = TYPE;
@@ -69,8 +77,11 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.publisher = publisher;
+        this.ids = new HashMap<String, String>();
+
     }
-    public Resource( int ID, String ISBN, String TYPE, String title, String author, String description, int totalAmount, int currentAmount) {
+
+    public Resource(int ID, String ISBN, String TYPE, String title, String author, String description, int totalAmount, int currentAmount) {
         this.ISBN = ISBN;
         this.TYPE = TYPE;
         this.title = title;
@@ -80,6 +91,7 @@ public class Resource {
         this.totalAmount = totalAmount;
         this.ID = ID;
         this.currentAmount = currentAmount;
+        this.ids = new HashMap<String, String>();
     }
 
     public String getISBN() {

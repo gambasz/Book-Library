@@ -6,17 +6,15 @@ import com.mbox.Publisher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class booksSearchViewController {
 
@@ -27,33 +25,44 @@ public class booksSearchViewController {
     private Button searchBtn;
     @FXML
     ListView<Book> tableOfBooks;
-    private ArrayList<Book> bookslist;
+    @FXML
+    GridPane scene;
+    boolean debugging = false;
+    final String programeIconImg = "/frontend/media/icon.png";
+    Image icon = new Image(this.getClass().getResource(programeIconImg).toString());
 
     @FXML
     void initialize() {
-        bookslist = new ArrayList();
+
+        setTableOFBooksCellProperty();
+        addFakeBook();
+        setSearch();
+    }
+
+    private void setSearch() {
         searchBtn.setOnMouseClicked(e -> {
             search(searchTextF.getText());
         });
-        setTableOFBooksCellProperty();
-        addFakeBook();
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                search(searchTextF.getText());
+            }
+        });
+
     }
 
     private void addFakeBook() {
-        final String programeIconImg = "/frontend/media/icon.png";
-        ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         Publisher tempPublisher = new Publisher();
         tempPublisher.setTitle("Person");
 
-        Date tempDate = Calendar.getInstance().getTime();
         ArrayList<String> tempAuthors = new ArrayList<>();
         tempAuthors.add("Rajashow");
         tempAuthors.add("MAMALEE");
         tempAuthors.add("DEVIL OF THE WEST");
         Book temp = new Book("Green Eggs and Ham", tempAuthors, null, "BOB", 5);
-        temp.setDatePublished(tempDate);
+        temp.setDatePublished("March 20199");
         temp.setPublisherInstance(tempPublisher);
-        temp.setIcon(icon.getImage());
+        temp.setIcon(icon);
         tableOfBooks.getItems().add(temp);
 
     }
@@ -86,12 +95,15 @@ public class booksSearchViewController {
 
     private void search(String searchQuery) {
 //        call the api using this query
-        try {
-            bookslist = BookAPI.search(searchQuery);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            try {
+                tableOfBooks.getItems().clear();
+                tableOfBooks.getItems().addAll(BookAPI.search(searchQuery));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -133,19 +145,49 @@ public class booksSearchViewController {
 
         public void setCellInfo(Book book) {
             try {
-                cellIcon.setImage(book.getIcon());
-                titleLbl.setText(book.getTitle());
-                publisherLbl.setText(book.getPublisherInstance().getTitle());
-                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-                dateLbl.setText(df.format(book.getDatePublished().getTime()));
-                authorsLBL.setText(book.getAuthors().toString());
-                isbn10Lbl.setText(book.getIsbn().get("ISBN 10"));
-                isbn13Lbl.setText(book.getIsbn().get("ISBN 13"));
-
-
-            } catch (Exception ex) {
-                System.out.println("" + ex.getMessage());
+                cellIcon.setImage(getValueOrDefault(book.getIcon(), icon));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- cellIcon");
             }
+            try {
+                titleLbl.setText(getValueOrDefault(book.getTitle(), titleLbl.getText()));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- titleLbl");
+            }
+            try {
+                publisherLbl.setText(getValueOrDefault(book.getPublisherInstance().getTitle(), publisherLbl.getText()));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- publisherLbl");
+            }
+            try {
+                dateLbl.setText(getValueOrDefault(book.getDatePublished(), dateLbl.getText()));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- dateLbl");
+            }
+            try {
+                authorsLBL.setText(getValueOrDefault(book.getAuthors().toString(), authorsLBL.getText()));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- authorsLBL");
+            }
+            try {
+                isbn10Lbl.setText(getValueOrDefault(book.getIsbn().get("ISBN_10"), isbn10Lbl.getText()));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- isbn10Lbl");
+            }
+            try {
+                isbn13Lbl.setText(getValueOrDefault(book.getIsbn().get("ISBN_13"), isbn13Lbl.getText()));
+            } catch (Exception e) {
+                if (debugging)
+                    System.out.println(e.getMessage() + " error -- isbn13Lbl");
+            }
+
+
             valueSet = true;
         }
 
@@ -155,5 +197,9 @@ public class booksSearchViewController {
             }
             return null;
         }
+    }
+
+    private static <T> T getValueOrDefault(T value, T defaultValue) {
+        return value == null ? defaultValue : value;
     }
 }

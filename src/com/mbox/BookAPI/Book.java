@@ -14,7 +14,7 @@ public class Book {
     private ArrayList<String> authors = new ArrayList<String>();
     private int id;
     private Image icon_de_la_book;
-    private Date datePublished;
+    private String datePublished;
     private Map<String, String> isbn = new HashMap<String, String>();
     private Publisher publisherInstance;
 
@@ -40,11 +40,11 @@ public class Book {
         this.icon_de_la_book = icon;
     }
 
-    public Date getDatePublished() {
+    public String getDatePublished() {
         return datePublished;
     }
 
-    public void setDatePublished(Date datePublished) {
+    public void setDatePublished(String datePublished) {
         this.datePublished = datePublished;
     }
 
