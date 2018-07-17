@@ -96,7 +96,7 @@ public class Request_Json {
 
     public static Book jsonToBook(JSONObject jsonObject) throws JSONException {
         Gson gson = new Gson();
-        String tempPubTitle = "", publishedDate = "", tempDesc = "", tempTitle = "";
+        String tempPubTitle = "*Not Found*", publishedDate = "", tempDesc = "", tempTitle = "";
         Map<String, String> tempISBN = new HashMap<String, String>();
         List<String> tempAuthors = new ArrayList<String>();
 
@@ -113,21 +113,23 @@ public class Request_Json {
 
 //            Publisher
         try {
-            if (jsonObject.has("publisher"))
-                tempPubTitle = jsonObject.getJSONObject("publisher").toString();
+            if (jsonObject.getJSONObject("volumeInfo").has("publisher"))
+                tempPubTitle = jsonObject.getJSONObject("volumeInfo").get("publisher").toString();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (jsonObject.has("publisher"))
-            publishedDate = jsonObject.getJSONObject("publishedDate").toString();
+        if (jsonObject.getJSONObject("volumeInfo").has("publishedDate"))
+            publishedDate = jsonObject.getJSONObject("volumeInfo").get("publishedDate").toString();
         if (jsonObject.has("description"))
             tempDesc = jsonObject.getJSONObject("description").toString();
 
         Book returnedBook = new Book(tempTitle, (ArrayList<String>) tempAuthors, tempISBN, tempDesc, 0);
         Publisher tempPublisher = new Publisher();
         tempPublisher.setTitle(tempPubTitle);
-            returnedBook.setPublisherInstance(tempPublisher);
+        returnedBook.setPublisherInstance(tempPublisher);
+        returnedBook.setDatePublished(publishedDate);
+
         return returnedBook;
 
     }
