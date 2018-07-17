@@ -2017,6 +2017,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     resources.get(i).setID(resourceID);
                     continue;
                 }
+                if(resources.get(i).getDescription().isEmpty()){
+                    resources.get(i).setDescription(" ");
+                }
                 Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
                         resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
                         resources.get(i).getDescription());

@@ -1296,6 +1296,7 @@ public class Controller {
                 return;
             }
         }
+        idTF.setText("0");
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                 DBManager.capitalizeString(titleTF.getText()),
