@@ -605,7 +605,8 @@ public class Controller {
     public void add() {
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
-                resourceTable.getItems() == null) {
+                resourceTable.getItems().isEmpty() ||
+                yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return;
         }
@@ -769,6 +770,7 @@ public class Controller {
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
                             System.out.println("Deselect, isSelected is false");
+                            selectedPublisher = null;
                             event.consume();
                             updateRowSelected();
                         }
@@ -1036,6 +1038,10 @@ public class Controller {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 //TODO: Assign the publisher button
+                if(nameTF.getText().trim().isEmpty()){
+                    showError("Missing Error","Publisher Error", "Make sure you entered publisher's name");
+                    return null;
+                }
                 selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
 
 

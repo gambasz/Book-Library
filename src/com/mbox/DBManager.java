@@ -2009,7 +2009,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 type = resources.get(i).getTYPE();
                 author = resources.get(i).getAuthor();
 
-                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'", title, type, author);
+                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s'", title, author);
                 ResultSet rs = st.executeQuery(query);
 
                 if (rs.next()) {
@@ -2025,8 +2025,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 System.out.println(tempQr);
                 st.executeQuery(tempQr);
 
-                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
-                        tempRes.getTitle(), tempRes.getType(), tempRes.getAuthor()));
+                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s'",
+                        tempRes.getTitle(),  tempRes.getAuthor()));
                 while (rs.next()) {
                     resourceID = rs.getInt(1);
                     resources.get(i).setID(resourceID);
@@ -2053,7 +2053,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             info = p.getContacts();
             descrip = p.getDescription();
 
-            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' AND CONTACT_INFO ='%s' AND DESCRIPTION ='%s'", title, info, descrip);
+            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' ", title);
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
@@ -2062,8 +2062,17 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             if (pubID == 0) {
                 //Errorrrrrrrrrr
+                if(info.isEmpty()){
+                    info = " ";
+                }
+                if(descrip.isEmpty()){
+                    descrip = " ";
+                }
+                System.out.println("info is " + info + "descrip is " + descrip);
                 Publisher tempPub = new Publisher(0, title, info, descrip);
                 System.out.println(tempPub.getContactInformation() + "    " + tempPub.getDescription());
+
+
 
                 String tempQr = insertPublisherQuery(tempPub);
                 System.out.println(tempQr);
