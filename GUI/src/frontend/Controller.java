@@ -603,6 +603,12 @@ public class Controller {
     }
 
     public void add() {
+        if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
+                profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
+                resourceTable.getItems() == null) {
+            showError("Error", "Missing info", "You need to fulfill all sections");
+            return;
+        }
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
@@ -618,12 +624,7 @@ public class Controller {
             boolean professorChanged = false, courseChanged = false, resourceChanged = false;
             Course tempCour = new Course();
             if (selectedCourse == null) {
-                if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
-                        profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
-                        resourceTable.getItems() == null) {
-                    showError("Error", "Missing info", "You need to fulfill all sections");
-                    return;
-                }
+
                 selectedPerson = new Person();
                 tempCour.setID(0);
                 selectedCourse = tempCour;
@@ -863,6 +864,12 @@ public class Controller {
     }
 
     public void update() {
+        if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
+                profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
+                resourceTable.getItems() == null) {
+            showError("Error", "Missing info", "You need to fulfill all sections");
+            return;
+        }
         if(selectedCourse == null){
             showError("Select Error","Update Error", "Make sure to choose a course to update");
         }
@@ -948,7 +955,7 @@ public class Controller {
 
             updateCourseTable();
 
-        } 
+        }
     }
 
     /**
