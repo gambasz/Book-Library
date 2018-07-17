@@ -28,9 +28,6 @@ public class Book {
     }
     public  Book(){
 
-
-    }
-
     public Image getIcon() {
         return icon_de_la_book;
 

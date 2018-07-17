@@ -1,14 +1,17 @@
 package frontend;
 
 import com.mbox.BookAPI.Book;
+import com.mbox.BookAPI.BookAPI;
 import com.mbox.Publisher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import org.json.JSONException;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +86,13 @@ public class booksSearchViewController {
 
     private void search(String searchQuery) {
 //        call the api using this query
+        try {
+            bookslist = BookAPI.search(searchQuery);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     class BookViewListCellController {
