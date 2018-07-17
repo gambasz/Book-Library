@@ -18,16 +18,7 @@ import java.util.*;
 public class Request_Json {
     static int count2 = 0;
 
-
-    public static void main(String[] args) {
-        try {
-
-            Request_Json.call_me("C++");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
 
     public static JSONObject requestQuery(String query) throws Exception {
         Gson gson = new Gson();
