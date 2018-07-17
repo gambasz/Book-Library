@@ -169,7 +169,9 @@ public class booksSearchViewController {
                     System.out.println(e.getMessage() + " error -- dateLbl");
             }
             try {
-                authorsLBL.setText(getValueOrDefault(book.getAuthors().toString(), authorsLBL.getText()));
+                String authors = book.getAuthors().isEmpty() ? null : book.getAuthors().toString();
+
+                authorsLBL.setText(getValueOrDefault(authors, authorsLBL.getText()));
             } catch (Exception e) {
                 if (debugging)
                     System.out.println(e.getMessage() + " error -- authorsLBL");
