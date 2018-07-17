@@ -30,7 +30,7 @@ public class booksSearchViewController {
     @FXML
     GridPane scene;
     boolean debugging = false;
-    final String programeIconImg = "/frontend/media/icon.png";
+    final String programeIconImg = "/frontend/media/no_cover_thumb.png";
     Image icon = new Image(this.getClass().getResource(programeIconImg).toString());
 
     @FXML
