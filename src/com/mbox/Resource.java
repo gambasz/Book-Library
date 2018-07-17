@@ -57,12 +57,13 @@ public class Resource {
     }
 
     public frontend.data.Resource initResourceGUI() {
-        if (publisherInstance ==null){
-            publisherInstance = new Publisher("Default Title", "Default Contact_Info", "Default Description");
-        }
+
 
         frontend.data.Resource tmp = new frontend.data.Resource(this.isbn, this.type, this.title, this.author,
-                this.description, true, this.total_amount, this.id, this.current_amount, this.publisherInstance.initPublisherGUI());
+                this.description, true, this.total_amount, this.id, this.current_amount);
+        if (publisherInstance !=null){
+            tmp.setPublisher(this.publisherInstance.initPublisherGUI());
+        }
         return tmp;
     }
 

@@ -1,17 +1,22 @@
 package frontend;
 
+import com.mbox.BookAPI.Book;
+import com.mbox.BookAPI.BookAPI;
 import com.mbox.DBManager;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -523,7 +528,7 @@ public class Controller {
             System.out.println("Classids size: ");
             System.out.println(classids.size());
 
-            for(int i = 0; i < classids.size(); i++){
+            for (int i = 0; i < classids.size(); i++) {
 
                 System.out.println("========================");
                 System.out.println(classids.get(i));
@@ -626,7 +631,9 @@ public class Controller {
                     semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                     courseInfoTitle.getText(),
                     courseInfoDepart.getText(),
-                    selectedPerson, courseInfoDescrip.getText(), tempRes);
+                    selectedPerson,
+                    courseInfoDescrip.getText(),
+                    tempRes);
 
             professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
                     tempCour.getProfessor().getLastName() != profInfoLName.getText();
@@ -662,16 +669,14 @@ public class Controller {
             tempCour = DBManager.relationalInsertByID2(tempCour);
 
 
-            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
                 if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
                     courseList.add(tempCour);
                 }
-            }
-            else{
-                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+            } else {
+                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
                     courseList.add(tempCour);
                 }
-
 
 
             }
@@ -721,8 +726,6 @@ public class Controller {
                         resList.add(r);
 
                 }
-                //System.out.println("If this is the error, desription:" + pulledDatabase.get(k).getDescription() + pulledDatabase.get(k).getDepartment());
-                //
 
             }
 
@@ -734,7 +737,6 @@ public class Controller {
                 if (!pubList.contains(tempR.getPublisher()))
                     pubList.add(tempR.getPublisher());
             }
-            //====================== END CODE BACKEND
 
 
             updateCourseTable();
@@ -797,7 +799,7 @@ public class Controller {
                 int length = c.getValue().getResource().size();
                 for (int i = 0; i < length; i++) {
                     String tTitle = res.get(i).getTitle();
-                    temp.append(tTitle.substring(0, Math.min(tTitle.length(), (78 / (length % 10)))));
+                    temp.append(tTitle, 0, Math.min(tTitle.length(), (78 / (length % 10))));
                     temp.append(" , ");
                 }
                 return new SimpleStringProperty(temp.toString());
@@ -918,13 +920,12 @@ public class Controller {
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
 
-            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
                 if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
                     courseList.add(selectedCourse);
                 }
-            }
-            else{
-                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+            } else {
+                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
                     courseList.add(selectedCourse);
                 }
 
@@ -1031,7 +1032,7 @@ public class Controller {
         });
     }
 
-    private VBox resourceDetailedView() {
+    private VBox resourceEditPane() {
         VBox resourceEditPane = new VBox();
         Label title = new Label("Title: ");
         Label author = new Label(("Author: "));
@@ -1059,6 +1060,7 @@ public class Controller {
         Button update = new Button();
         addGraphicToButtons(new ImageView(updateIconImg), update);
         Button autoFillBtn = new Button("Auto Fill ");
+        Button searchBtn = new Button("Search");
 
         autoFillBtn.setOnAction(e -> {
             selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
@@ -1091,6 +1093,9 @@ public class Controller {
             onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
+        searchBtn.setOnMouseClicked(e -> {
+            openResourceSearchWindow(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+        });
         //TODO Test this line
         try {
             Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
@@ -1103,10 +1108,10 @@ public class Controller {
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox hiddenSpacer = new HBox(new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator());
+        HBox hiddenSpacer = new HBox(new Separator(), new Separator(), new Separator(), new Separator());
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB, hiddenSpacer, autoFillBtn),
+                new HBox(type, typeCB, hiddenSpacer, searchBtn, new Separator(), autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -1126,6 +1131,63 @@ public class Controller {
         resourceEditPane.setSpacing(20);
 
         return resourceEditPane;
+    }
+
+    private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB, Button addNAssignNewResource, Button update, Button delete) {
+        try {
+            Dialog dlg = new Dialog();
+            Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
+            dlg.getDialogPane().setMinWidth(650);
+            dlg.getDialogPane().setContent(root);
+            ButtonType add = new ButtonType("Add");
+            dlg.getDialogPane().getButtonTypes().addAll(add);
+            Button finishBtn = (Button) dlg.getDialogPane().lookupButton(add);
+            finishBtn.setDefaultButton(false);
+            dlg.setResizable(true);
+            dlg.setResultConverter(dialogButton -> {
+                if (dialogButton == add) {
+                    Resource searchedResource = null;
+                    Object[] temp = dlg.getDialogPane().getChildren().toArray();
+                    for (Object childI : temp) {
+                        if (childI instanceof GridPane) {
+                            for (Object childJ : ((GridPane) childI).getChildren()) {
+                                if (childJ instanceof ListView) {
+                                    Book tempBook = (Book) ((ListView) childJ).getSelectionModel().getSelectedItem();
+                                    if (tempBook != null) {
+                                        searchedResource = BookAPI.getResourceObject(tempBook);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    onResourceTableSelect(searchedResource, titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+                    return null;
+                }
+                return null;
+            });
+            dlg.showAndWait();
+        } catch (Exception ex) {
+            showError(
+                    "Could not open the view",
+                    "Unable to open the Search view",
+                    "Please give the code and message to your Interns:" + ex.getMessage() + "--" + ex.getCause().getMessage());
+        }
+    }
+
+    private static List<Object> flatten(Object object) {
+        List<Object> l = new ArrayList<Object>();
+        if (object.getClass().isArray()) {
+            for (int i = 0; i < Array.getLength(object); i++) {
+                l.addAll(flatten(Array.get(object, i)));
+            }
+        } else if (object instanceof List) {
+            for (Object element : (List<?>) object) {
+                l.addAll(flatten(element));
+            }
+        } else {
+            l.add(object);
+        }
+        return l;
     }
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
@@ -1178,7 +1240,6 @@ public class Controller {
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
-
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                 DBManager.capitalizeString(titleTF.getText()),
@@ -1299,7 +1360,7 @@ public class Controller {
                 VBox mainPane = new VBox();
                 Dialog dlg = new Dialog();
                 TitledPane resourceTitlePane = new TitledPane();
-                VBox resourceEditPane = resourceDetailedView();
+                VBox resourceEditPane = resourceEditPane();
                 ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
                 icon.setFitHeight(75);
                 icon.setFitWidth(75);
@@ -1466,7 +1527,7 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                selectedPerson = ((Person) (currentProfessors.getSelectionModel().getSelectedItem()));
+                selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
                 profInfoFName.setText(selectedPerson.getFirstName());
                 profInfoLName.setText(selectedPerson.getLastName());
                 profInfoType.setValue(selectedPerson.getType());
@@ -1610,7 +1671,7 @@ public class Controller {
         VBox mainPane = new VBox();
         Dialog dlg = new Dialog();
         TitledPane resourceTitlePane = new TitledPane();
-        VBox resourceEditPane = resourceDetailedView();
+        VBox resourceEditPane = resourceEditPane();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);
@@ -1823,6 +1884,8 @@ public class Controller {
 //    }
 
     private void addNewCourseTemplate(Course tempNewCourseTemplate) {
+
+        tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
         templateList.add(tempNewCourseTemplate);
     }
 

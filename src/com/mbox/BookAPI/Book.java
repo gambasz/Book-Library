@@ -1,19 +1,21 @@
 package com.mbox.BookAPI;
 
-import com.mbox.Publisher;
+import frontend.data.Publisher;
+import frontend.data.Resource;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Book  {
+public class Book {
 
-    private String  title,description;
+    private String title, description;
     private ArrayList<String> authors = new ArrayList<String>();
-    private int  id;
-
-
-    private Map<String, String> isbn = new HashMap<String, String> ();
+    private int id;
+    private Image icon_de_la_book;
+    private String datePublished;
+    private Map<String, String> isbn = new HashMap<String, String>();
     private Publisher publisherInstance;
 
     public Book(String title, ArrayList<String> authors, Map<String, String> isbn, String description, int id) {
@@ -22,6 +24,28 @@ public class Book  {
         this.authors = authors;
         this.description = description;
         this.id = id;
+
+    }
+
+    public Book() {
+    }
+
+    public Image getIcon() {
+        return icon_de_la_book;
+
+    }
+
+    public void setIcon(Image icon) {
+
+        this.icon_de_la_book = icon;
+    }
+
+    public String getDatePublished() {
+        return datePublished;
+    }
+
+    public void setDatePublished(String datePublished) {
+        this.datePublished = datePublished;
     }
 
     public Map<String, String> getIsbn() {
@@ -73,8 +97,10 @@ public class Book  {
         this.publisherInstance = publisherInstance;
     }
 
+
+
     @Override
-    public  String toString(){
+    public String toString() {
         return String.format("Title: %s with ID: %d", this.title, this.id);
     }
 

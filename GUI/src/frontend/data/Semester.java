@@ -1,7 +1,7 @@
 package frontend.data;
 
 public enum Semester {
-    FALL("FALL"), SUMMER("SUMMER"), SPRING("SPRING"), WINTER("WINTER");
+    FALL("FALL"), SUMMER_1("SUMMER 1"), SUMMER_2("SUMMER 2"), SPRING("SPRING"), WINTER("WINTER");
 
     Semester(String semester) {
         this.semester = semester.toUpperCase();
@@ -15,6 +15,6 @@ public enum Semester {
 
     @Override
     public String toString() {
-        return semester;
+        return semester.replace(' ', '_');
     }
 }
