@@ -603,44 +603,6 @@ public class Controller {
     }
 
     public void add() {
-
-        boolean professorChanged = false, courseChanged = false, resourceChanged = false;
-        Course tempCour = new Course();
-        if (selectedCourse == null) {
-            if(courseInfoDepart.getText().trim().isEmpty()  || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
-                profInfoFName.getText().trim().isEmpty()|| profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
-                resourceTable.getItems().isEmpty() || yearComBoxEdit.getSelectionModel().getSelectedItem() == null ||
-                    semesterComBoxEdit.getSelectionModel().getSelectedItem() ==  null){
-                showError("Error","Missing info","You need to fulfill all sections");
-                return;
-            }
-            selectedPerson = new Person();
-            tempCour.setID(0);
-            selectedCourse = tempCour;
-            ArrayList<Resource> resArr = new ArrayList<>(resourceTable.getItems());
-            selectedCourse.setResource(resArr);
-            }
-
-        if(selectedCourse!=null) {
-            selectedPerson = new Person(selectedPerson);
-            ArrayList<Resource> tempRes = selectedCourse.getResource();
-
-            tempCour = new Course(
-                    selectedCourse.getID(),
-                    selectedCourse.getID(),
-                    Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
-                    semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-                    courseInfoTitle.getText(),
-                    courseInfoDepart.getText(),
-                    selectedPerson,
-                    courseInfoDescrip.getText(),
-                    tempRes);
-
-            professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
-                    tempCour.getProfessor().getLastName() != profInfoLName.getText();
-            courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
-                    tempCour.getDepartment() != courseInfoDescrip.getText();
-
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
@@ -649,7 +611,6 @@ public class Controller {
             showError("Course title format is Wrong",
                     "Check the course title format and make sure it's following the correct format.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
-
         }
 
         else {
