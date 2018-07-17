@@ -1858,11 +1858,11 @@ public class Controller {
             if (dialogButton == fill) {
 
                 selectedCourseTemplate = courseTemplates.getSelectionModel().getSelectedItem();
-
-                courseInfoDescrip.setText(selectedCourseTemplate.getDescription());
-                courseInfoTitle.setText(selectedCourseTemplate.getTitle());
-                courseInfoDepart.setText(selectedCourseTemplate.getDepartment());
-
+                if(selectedCourseTemplate!=null) {
+                    courseInfoDescrip.setText(selectedCourseTemplate.getDescription());
+                    courseInfoTitle.setText(selectedCourseTemplate.getTitle());
+                    courseInfoDepart.setText(selectedCourseTemplate.getDepartment());
+                }
                 //TODO:// uncomment when resources added
 //                ArrayList<Resource> tempRes = selectedCourseTemplate.getResource();
 //                resourceTable.getItems().clear();
@@ -1937,7 +1937,17 @@ public class Controller {
         templateList.remove(selectedCourseTemplate);
         courseList.remove(selectedCourseTemplate);
         selectedCourseTemplate = null;
-        selectedCourse = null;
+//        semesterComBoxEdit.get
+        if(yearComBox.getSelectionModel().isEmpty() || semesterComBoxEdit.getSelectionModel().isEmpty())
+            courseList = DBManager.returnEverything2(defaultSemester);
+        else {
+            String year = yearComBoxEdit.getSelectionModel().getSelectedItem().toString();
+            String semester = semesterComBoxEdit.getSelectionModel().getSelectedItem().toString();
+            int semesterid = DBManager.getSemesterIDByName(semester, year);
+            courseList = DBManager.returnEverything2(semesterid);
+        }
+
+
         updateCourseTable();
 
     }
