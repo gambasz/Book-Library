@@ -21,7 +21,7 @@
         <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <ImageView fx:id="cellIcon" fitHeight="100.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowSpan="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+        <ImageView fx:id="cellIcon" fitHeight="100.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowSpan="4" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
             <GridPane.margin>
                 <Insets />
             </GridPane.margin>

@@ -3,6 +3,7 @@ package frontend;
 import com.mbox.BookAPI.Book;
 import com.mbox.BookAPI.BookAPI;
 import com.mbox.Publisher;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -85,10 +87,20 @@ public class booksSearchViewController {
                             controller.setCellInfo(item);
                             GridPane cell = controller.getCell();
                             setGraphic(cell);
-
+                            this.runAnimation();
 
                         }
                     }
+
+                    public void runAnimation() {
+
+                        FadeTransition ft = new FadeTransition(Duration.millis(3000), this);
+                        ft.setFromValue(0.0);
+                        ft.setToValue(1.0);
+                        ft.play();
+
+                    }
+
                 }
         );
     }
