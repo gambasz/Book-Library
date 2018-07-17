@@ -143,24 +143,7 @@ public class Request_Json {
 
                     try {
                         URL url = new URL(jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").get("smallThumbnail").toString());
-
-                        InputStream in = new BufferedInputStream(url.openStream());
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        byte[] buf = new byte[1024];
-                        int n = 0;
-                        while (-1 != (n = in.read(buf))) {
-                            out.write(buf, 0, n);
-                        }
-                        out.close();
-                        in.close();
-                        byte[] response = out.toByteArray();
-                        FileOutputStream fos = new FileOutputStream(String.format("output/Book %s %d.jpg",
-                                jsonObject.getJSONObject("volumeInfo").get("title").toString(), count2));
-                        fos.write(response);
-                        fos.close();
-
-                        tempImage = new Image(new FileInputStream(String.format("output/Book %s %d.jpg",
-                                jsonObject.getJSONObject("volumeInfo").get("title").toString(), count2)));
+                        tempImage = new Image(url.toString());
 
                     } catch (IOException e) {
                     }
