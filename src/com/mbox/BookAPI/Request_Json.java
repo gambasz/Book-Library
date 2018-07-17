@@ -2,6 +2,7 @@ package com.mbox.BookAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mbox.Publisher;
 import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,9 +82,13 @@ public class Request_Json {
         for (int i = 0; i < allItems.length(); i++) {
 
             returnedList.add(jsonToBook(allItems.getJSONObject(i)));
-            returnedList.get(i).setId(i + 1);
             Image tempImage = getSmallImage(allItems.getJSONObject(i));
+
             returnedList.get(i).setIcon(tempImage);
+            returnedList.get(i).getPublisherInstance().setID(i);
+            returnedList.get(i).setId(i + 1);
+
+
         }
         return returnedList;
     }
@@ -119,7 +124,9 @@ public class Request_Json {
             tempDesc = jsonObject.getJSONObject("description").toString();
 
         Book returnedBook = new Book(tempTitle, (ArrayList<String>) tempAuthors, tempISBN, tempDesc, 0);
-
+        Publisher tempPublisher = new Publisher();
+        tempPublisher.setTitle(tempPubTitle);
+            returnedBook.setPublisherInstance(tempPublisher);
         return returnedBook;
 
     }
