@@ -1569,10 +1569,11 @@ public class Controller {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
                 selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
-                profInfoFName.setText(selectedPerson.getFirstName());
-                profInfoLName.setText(selectedPerson.getLastName());
-                profInfoType.setValue(selectedPerson.getType());
-
+                if (selectedPerson!= null) {
+                    profInfoFName.setText(selectedPerson.getFirstName());
+                    profInfoLName.setText(selectedPerson.getLastName());
+                    profInfoType.setValue(selectedPerson.getType());
+                }
 
             }
             return null;
@@ -1768,6 +1769,8 @@ public class Controller {
     private void deleteProfessor(Person selectedPerson) {
         DBManager.deletePerson(selectedPerson);
         profList.remove(selectedPerson);
+        selectedPerson = null;
+        refreshTable();
 
     }
 
@@ -1932,20 +1935,12 @@ public class Controller {
 
     private void deleteCourseTemplate(Course selectedCourseTemplate) {
 
-        System.out.println(selectedCourseTemplate.toString());
         DBManager.delete_course(selectedCourseTemplate);
         templateList.remove(selectedCourseTemplate);
         courseList.remove(selectedCourseTemplate);
         selectedCourseTemplate = null;
 //        semesterComBoxEdit.get
-        if(yearComBox.getSelectionModel().isEmpty() || semesterComBoxEdit.getSelectionModel().isEmpty())
-            courseList = DBManager.returnEverything2(defaultSemester);
-        else {
-            String year = yearComBoxEdit.getSelectionModel().getSelectedItem().toString();
-            String semester = semesterComBoxEdit.getSelectionModel().getSelectedItem().toString();
-            int semesterid = DBManager.getSemesterIDByName(semester, year);
-            courseList = DBManager.returnEverything2(semesterid);
-        }
+        refreshTable();
 
 
         updateCourseTable();
@@ -2083,6 +2078,18 @@ public class Controller {
     }
 
     public void importData() {
+    }
+
+    public void refreshTable(){
+
+        if(yearComBox.getSelectionModel().isEmpty() || semesterComBoxEdit.getSelectionModel().isEmpty())
+            courseList = DBManager.returnEverything2(defaultSemester);
+        else {
+            String year = yearComBoxEdit.getSelectionModel().getSelectedItem().toString();
+            String semester = semesterComBoxEdit.getSelectionModel().getSelectedItem().toString();
+            int semesterid = DBManager.getSemesterIDByName(semester, year);
+            courseList = DBManager.returnEverything2(semesterid);
+        }
     }
 
     public void oldsearch() {
