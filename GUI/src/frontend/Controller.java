@@ -603,6 +603,12 @@ public class Controller {
     }
 
     public void add() {
+        if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
+                profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
+                resourceTable.getItems() == null) {
+            showError("Error", "Missing info", "You need to fulfill all sections");
+            return;
+        }
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
@@ -623,12 +629,7 @@ public class Controller {
             boolean professorChanged = false, courseChanged = false, resourceChanged = false;
             Course tempCour = new Course();
             if (selectedCourse == null) {
-                if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
-                        profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
-                        resourceTable.getItems() == null) {
-                    showError("Error", "Missing info", "You need to fulfill all sections");
-                    return;
-                }
+
                 selectedPerson = new Person();
                 tempCour.setID(0);
                 selectedCourse = tempCour;
@@ -850,6 +851,11 @@ public class Controller {
     //thjanks :)) hard to see
 
     public void delete() {
+
+        if(selectedCourse == null){
+            showError("Select Error","Delete Error", "Make sure you choose a course to delete");
+            return;
+        }
         System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
         if (selectedCourse != null) {
             System.out.println("CommonID: " + selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
@@ -859,15 +865,19 @@ public class Controller {
             courseList.remove(selectedCourse);
             selectedCourse = null;
             updateCourseTable();
-
-
-        } else {
-            showError("Selection error", "No course selected",
-                    "Please select a course to add, update or delete");
         }
     }
 
     public void update() {
+        if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
+                profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
+                resourceTable.getItems() == null) {
+            showError("Error", "Missing info", "You need to fulfill all sections");
+            return;
+        }
+        if(selectedCourse == null){
+            showError("Select Error","Update Error", "Make sure to choose a course to update");
+        }
 
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
@@ -957,9 +967,6 @@ public class Controller {
 
             updateCourseTable();
 
-        } else {
-            showError("Selection error", "No course selected",
-                    "Please select a course to add, update or delete");
         }
     }
 
