@@ -1228,6 +1228,11 @@ public class Controller {
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
+        if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
+                currentAmTF.getText().trim().isEmpty()){
+            showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
+            return;
+        }
         selectedResource = resourceTable.getSelectionModel().getSelectedItem();
         String new_title = DBManager.capitalizeString(titleTF.getText());
         String new_author = DBManager.capitalizeString(authorTF.getText());
@@ -1280,6 +1285,11 @@ public class Controller {
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+        if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
+                currentAmTF.getText().trim().isEmpty()){
+            showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
+            return;
+        }
         if(selectedCourse == null){
             if(selectedPublisher == null){
                 showError("Missing Error","Publisher missing","Please make sure you added publisher for resource");
