@@ -1,6 +1,7 @@
 package frontend;
 
 import com.mbox.BookAPI.Book;
+import com.mbox.BookAPI.BookAPI;
 import com.mbox.DBManager;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -1134,12 +1135,13 @@ public class Controller {
             Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
             dlg.getDialogPane().setMinWidth(650);
             dlg.getDialogPane().setContent(root);
-            dlg.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
-            Button finishBtn = (Button) dlg.getDialogPane().lookupButton(ButtonType.FINISH);
+            ButtonType add = new ButtonType("Add");
+            dlg.getDialogPane().getButtonTypes().addAll(add);
+            Button finishBtn = (Button) dlg.getDialogPane().lookupButton(add);
             finishBtn.setDefaultButton(false);
             dlg.setResizable(true);
             dlg.setResultConverter(dialogButton -> {
-                if (dialogButton == ButtonType.FINISH) {
+                if (dialogButton == add) {
                     Resource searchedResource = null;
                     Object[] temp = dlg.getDialogPane().getChildren().toArray();
                     for (Object childI : temp) {
@@ -1147,12 +1149,13 @@ public class Controller {
                             for (Object childJ : ((GridPane) childI).getChildren()) {
                                 if (childJ instanceof ListView) {
                                     Book tempBook = (Book) ((ListView) childJ).getSelectionModel().getSelectedItem();
-
+                                    if (tempBook != null) {
+                                        searchedResource = BookAPI.getResourceObject(tempBook);
+                                    }
                                 }
                             }
                         }
                     }
-
                     onResourceTableSelect(searchedResource, titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
                     return null;
                 }
