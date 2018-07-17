@@ -1,21 +1,17 @@
 package com.mbox.BookAPI;
-import java.awt.*;
-import java.io.*;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.*;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
 
 
 public class Request_Json {
@@ -88,9 +84,8 @@ public class Request_Json {
 
         returnedList.add(jsonToBook(allItems.getJSONObject(i)));
         returnedList.get(i).setId(i+1);
-
-        getSmallImage(allItems.getJSONObject(i));
-
+        ImageView tempImageview = getSmallImage(allItems.getJSONObject(i));
+            returnedList.get(i).setIcon(tempImageview);
         }
         return returnedList;
     }
@@ -133,19 +128,18 @@ public class Request_Json {
         return returnedBook;
 
     }
-    public static void getSmallImage(JSONObject jsonObject){
-        Image image = null;
+    public static ImageView getSmallImage(JSONObject jsonObject){
+        ImageView tempIcon = new ImageView();
+        javafx.scene.image.Image tempImage = null;
         count2++;
 
-
-
         try {
+
             if(jsonObject.getJSONObject("volumeInfo").has("imageLinks"))
             if(jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").has("smallThumbnail")) {
 
                 try {
                     URL url = new URL(jsonObject.getJSONObject("volumeInfo").getJSONObject("imageLinks").get("smallThumbnail").toString());
-//                    image = ImageIO.read(url);
 
                     InputStream in = new BufferedInputStream(url.openStream());
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -162,15 +156,20 @@ public class Request_Json {
                             jsonObject.getJSONObject("volumeInfo").get("title").toString(), count2));
                     fos.write(response);
                     fos.close();
+
+                    tempImage = new Image(new FileInputStream(String.format("output/Book %s %d.jpg",
+                            jsonObject.getJSONObject("volumeInfo").get("title").toString(), count2)));
+                    tempIcon.setImage(tempImage);
+
                 } catch (IOException e) {
                 }
-
+        return tempIcon;
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 
     public static Map<String, String> getIsbn(JSONObject item) throws JSONException {

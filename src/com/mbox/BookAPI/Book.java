@@ -30,8 +30,7 @@ public class Book {
 
 
     }    public void setIcon(ImageView icon) {
-        icon.setFitHeight(75);
-        icon.setFitWidth(75);
+
         this.icon_de_la_book = icon;
     }
 
