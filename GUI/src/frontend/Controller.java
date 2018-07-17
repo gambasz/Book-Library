@@ -612,6 +612,11 @@ public class Controller {
                     "Check the course title format and make sure it's following the correct format.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
+        else if (!com.mbox.controller.isInteger(cSplit[1])) {
+            showError("Course title format is Wrong",
+                    "Check the course title format and make sure it's following the correct format.",
+                    "Correct format examples --> CMSC 100, MATH 181 ");
+        }
 
         else {
 
@@ -873,6 +878,13 @@ public class Controller {
                     "Check the course title format and make sure it's following the correct format.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
+
+        else if (!com.mbox.controller.isInteger(cSplit[1])) {
+            showError("Course title format is Wrong",
+                    "Check the course title format and make sure it's following the correct format.",
+                    "Correct format examples --> CMSC 100, MATH 181 ");
+        }
+
         else
         if (selectedCourse != null) {
             courseList.remove(selectedCourse);
