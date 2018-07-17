@@ -6,8 +6,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -522,7 +524,7 @@ public class Controller {
             System.out.println("Classids size: ");
             System.out.println(classids.size());
 
-            for(int i = 0; i < classids.size(); i++){
+            for (int i = 0; i < classids.size(); i++) {
 
                 System.out.println("========================");
                 System.out.println(classids.get(i));
@@ -655,16 +657,14 @@ public class Controller {
             tempCour = DBManager.relationalInsertByID2(tempCour);
 
 
-            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
                 if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
                     courseList.add(tempCour);
                 }
-            }
-            else{
-                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+            } else {
+                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
                     courseList.add(tempCour);
                 }
-
 
 
             }
@@ -912,13 +912,12 @@ public class Controller {
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
 
-            if(yearComBox.getSelectionModel().getSelectedItem() == null) {
+            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
                 if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
                     courseList.add(selectedCourse);
                 }
-            }
-            else{
-                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())){
+            } else {
+                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
                     courseList.add(selectedCourse);
                 }
 
@@ -1025,7 +1024,7 @@ public class Controller {
         });
     }
 
-    private VBox resourceDetailedView() {
+    private VBox resourceEditPane() {
         VBox resourceEditPane = new VBox();
         Label title = new Label("Title: ");
         Label author = new Label(("Author: "));
@@ -1053,6 +1052,7 @@ public class Controller {
         Button update = new Button();
         addGraphicToButtons(new ImageView(updateIconImg), update);
         Button autoFillBtn = new Button("Auto Fill ");
+        Button searchBtn = new Button("Search");
 
         autoFillBtn.setOnAction(e -> {
             selectResourceTemplates(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
@@ -1085,6 +1085,9 @@ public class Controller {
             onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
 
         });
+        searchBtn.setOnMouseClicked(e -> {
+            openResourceSearchWindow();
+        });
         //TODO Test this line
         try {
             Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
@@ -1097,10 +1100,10 @@ public class Controller {
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox hiddenSpacer = new HBox(new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator(), new Separator());
+        HBox hiddenSpacer = new HBox(new Separator(), new Separator(), new Separator(), new Separator());
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
-                new HBox(type, typeCB, hiddenSpacer, autoFillBtn),
+                new HBox(type, typeCB, hiddenSpacer, searchBtn, new Separator(), autoFillBtn),
                 new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(id, idTF),
@@ -1120,6 +1123,23 @@ public class Controller {
         resourceEditPane.setSpacing(20);
 
         return resourceEditPane;
+    }
+
+    private void openResourceSearchWindow() {
+        try {
+            Dialog dlg = new Dialog();
+            Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
+            dlg.getDialogPane().setMinWidth(650);
+            dlg.getDialogPane().setContent(root);
+            dlg.getDialogPane().getButtonTypes().addAll(ButtonType.FINISH);
+            dlg.setResizable(true);
+            dlg.showAndWait();
+        } catch (Exception ex) {
+            showError(
+                    "Could not open the view",
+                    "Unable to open the Search view",
+                    "Please give the code and message to your Interns:" + ex.getMessage() + "--" + ex.getCause().getMessage());
+        }
     }
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
@@ -1293,7 +1313,7 @@ public class Controller {
                 VBox mainPane = new VBox();
                 Dialog dlg = new Dialog();
                 TitledPane resourceTitlePane = new TitledPane();
-                VBox resourceEditPane = resourceDetailedView();
+                VBox resourceEditPane = resourceEditPane();
                 ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
                 icon.setFitHeight(75);
                 icon.setFitWidth(75);
@@ -1604,7 +1624,7 @@ public class Controller {
         VBox mainPane = new VBox();
         Dialog dlg = new Dialog();
         TitledPane resourceTitlePane = new TitledPane();
-        VBox resourceEditPane = resourceDetailedView();
+        VBox resourceEditPane = resourceEditPane();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(75);
         icon.setFitWidth(75);

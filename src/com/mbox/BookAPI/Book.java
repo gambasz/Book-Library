@@ -1,7 +1,7 @@
 package com.mbox.BookAPI;
 
 import com.mbox.Publisher;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +13,7 @@ public class Book {
     private String title, description;
     private ArrayList<String> authors = new ArrayList<String>();
     private int id;
-    private ImageView icon_de_la_book;
+    private Image icon_de_la_book;
     private Date datePublished;
     private Map<String, String> isbn = new HashMap<String, String>();
     private Publisher publisherInstance;
@@ -26,17 +26,18 @@ public class Book {
         this.id = id;
 
     }
-    public  Book(){
 
-
-    }    public void setIcon(ImageView icon) {
-
-        this.icon_de_la_book = icon;
+    public Book() {
     }
 
-    public ImageView getIcon() {
+    public Image getIcon() {
         return icon_de_la_book;
 
+    }
+
+    public void setIcon(Image icon) {
+
+        this.icon_de_la_book = icon;
     }
 
     public Date getDatePublished() {
@@ -97,7 +98,7 @@ public class Book {
     }
 
     @Override
-    public  String toString(){
+    public String toString() {
         return String.format("Title: %s with ID: %d", this.title, this.id);
     }
 

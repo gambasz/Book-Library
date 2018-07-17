@@ -53,18 +53,17 @@ public class booksSearchViewController {
         Book temp = new Book("Green Eggs and Ham", tempAuthors, null, "BOB", 5);
         temp.setDatePublished(tempDate);
         temp.setPublisherInstance(tempPublisher);
-        temp.setIcon(icon);
-
+        temp.setIcon(icon.getImage());
         tableOfBooks.getItems().add(temp);
 
     }
 
     private void setTableOFBooksCellProperty() {
         tableOfBooks.setCellFactory(param -> new ListCell<Book>() {
-            {
-                prefWidthProperty().bind(tableOfBooks.widthProperty());
-                setMaxWidth(Control.USE_PREF_SIZE);
-            }
+                    {
+                        prefWidthProperty().bind(tableOfBooks.widthProperty());
+                        setMaxWidth(Double.MAX_VALUE);
+                    }
 
                     @Override
                     public void updateItem(Book item, boolean empty) {
@@ -134,7 +133,7 @@ public class booksSearchViewController {
 
         public void setCellInfo(Book book) {
             try {
-                cellIcon = book.getIcon();
+                cellIcon.setImage(book.getIcon());
                 titleLbl.setText(book.getTitle());
                 publisherLbl.setText(book.getPublisherInstance().getTitle());
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
