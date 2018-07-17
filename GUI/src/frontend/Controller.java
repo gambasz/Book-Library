@@ -605,7 +605,6 @@ public class Controller {
     public void add() {
 
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
-        System.out.println(tempCourseTitle);
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
         if (cSplit.length !=2){
@@ -872,6 +871,16 @@ public class Controller {
 
     public void update() {
 
+        String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
+        String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
+
+        if (cSplit.length !=2){
+
+            showError("Course title format is Wrong",
+                    "Check the course title format and make sure it's following the correct format.",
+                    "Correct format examples --> CMSC 100, MATH 181 ");
+        }
+        else
         if (selectedCourse != null) {
             courseList.remove(selectedCourse);
             DBManager.deleteRelationCourseResources(selectedCourse);
@@ -940,8 +949,8 @@ public class Controller {
 
 
             }
-            updateCourseTable();
 
+            updateCourseTable();
 
         } else {
             showError("Selection error", "No course selected",
