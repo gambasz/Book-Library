@@ -26,7 +26,9 @@ public class Book {
         this.id = id;
 
     }
-    public  Book(){
+
+    public Book() {
+    }
 
     public Image getIcon() {
         return icon_de_la_book;
@@ -96,7 +98,7 @@ public class Book {
     }
 
     @Override
-    public  String toString(){
+    public String toString() {
         return String.format("Title: %s with ID: %d", this.title, this.id);
     }
 

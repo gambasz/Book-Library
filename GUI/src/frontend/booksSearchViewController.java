@@ -60,10 +60,10 @@ public class booksSearchViewController {
 
     private void setTableOFBooksCellProperty() {
         tableOfBooks.setCellFactory(param -> new ListCell<Book>() {
-            {
-                prefWidthProperty().bind(tableOfBooks.widthProperty());
-                setMaxWidth(Double.MAX_VALUE);
-            }
+                    {
+                        prefWidthProperty().bind(tableOfBooks.widthProperty());
+                        setMaxWidth(Double.MAX_VALUE);
+                    }
 
                     @Override
                     public void updateItem(Book item, boolean empty) {
