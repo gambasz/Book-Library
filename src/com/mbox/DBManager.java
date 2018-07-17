@@ -1843,7 +1843,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         //getting all the data
         int id = c.getID();
-        int crn = c.getCRN();
         String year = String.valueOf(c.getYEAR());
         String semester = c.getSEMESTER();
         String title = c.getTitle();

@@ -21,6 +21,7 @@ import javafx.util.StringConverter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -597,36 +598,44 @@ public class Controller {
     }
 
     public void add() {
-//        selectedPerson.setFirstName(profInfoFName.getText());
-//        selectedPerson.setLastName(profInfoLName.getText());
-//        selectedPerson.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-//        int semesterID = DBManager.getSemesterIDByName(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-//                yearComBoxEdit.getSelectionModel().getSelectedItem().toString());
 
-        if (selectedCourse != null) {
+        boolean professorChanged = false, courseChanged = false, resourceChanged = false;
+        Course tempCour = new Course();
+        if (selectedCourse == null) {
+            if(courseInfoDepart.getText().trim().isEmpty()  || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
+                profInfoFName.getText().trim().isEmpty()|| profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
+                resourceTable.getItems() == null){
+                showError("Error","Missing info","You need to fulfill all sections");
+                return;
+            }
+            selectedPerson = new Person();
+            tempCour.setID(0);
+            selectedCourse = tempCour;
+            ArrayList<Resource> resArr = new ArrayList<>(resourceTable.getItems());
+            selectedCourse.setResource(resArr);
+            }
+
+        if(selectedCourse!=null) {
             selectedPerson = new Person(selectedPerson);
             ArrayList<Resource> tempRes = selectedCourse.getResource();
 
-            Course tempCour = new Course(
+            tempCour = new Course(
                     selectedCourse.getID(),
-                    tableTV.getSelectionModel().getSelectedItems().get(tableTV.getSelectionModel().getSelectedItems().size() - 1).getID(),
+                    selectedCourse.getID(),
                     Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                     semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                     courseInfoTitle.getText(),
                     courseInfoDepart.getText(),
                     selectedPerson, courseInfoDescrip.getText(), tempRes);
 
-            //System.out.println("PrfoessorID before changing" + tempCour.getProfessor().getID());
-
-            // I create a new object and then check if the information in the boxes are different form
-            // the Selected Course Object, then if there is a difference, I will add a new course/person/...
-            boolean courseChanged = false, professorChanged = false, resourceChanged = false;
-
             professorChanged = tempCour.getProfessor().getFirstName() != profInfoFName.getText() ||
                     tempCour.getProfessor().getLastName() != profInfoLName.getText();
             courseChanged = tempCour.getTitle() != courseInfoTitle.getText() || tempCour.getDescription() != courseInfoDepart.getText() ||
                     tempCour.getDepartment() != courseInfoDescrip.getText();
-            // I don't check type rn. Need to check later with fk.. enum :))
+        }
+
+
+
 
             if (professorChanged) {
                 String firstName = profInfoFName.getText().substring(0, 1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
@@ -668,12 +677,8 @@ public class Controller {
             }
 
             updateCourseTable();
-        } else {
-            System.out.println("Not selected");
-            showError("Selection error", "No course selected",
-                    "Please select a course to add, update or delete");
         }
-    }
+
 
     public void filterTableBasedOnSemesterNYear() {
 
