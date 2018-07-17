@@ -609,7 +609,8 @@ public class Controller {
         if (selectedCourse == null) {
             if(courseInfoDepart.getText().trim().isEmpty()  || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty()|| profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
-                resourceTable.getItems() == null){
+                resourceTable.getItems().isEmpty() || yearComBoxEdit.getSelectionModel().getSelectedItem() == null ||
+                    semesterComBoxEdit.getSelectionModel().getSelectedItem() ==  null){
                 showError("Error","Missing info","You need to fulfill all sections");
                 return;
             }
@@ -848,12 +849,6 @@ public class Controller {
             selectedCourse = null;
             updateCourseTable();
 
-            //wtfffff :)) they can have the same hashcode even if they are not equal..
-            // yeah! thats our problem! We have one CMS203 with CommonID 222 and other one with CommonID 99 and ohter professor
-            // but both have the same hashchode!
-            //can we override by the method remove by searching for commonID ? :))
-            // in that case we need to be restrict about commonID
-            // maybe but its hard.. I still don't know how to fix @@
 
         } else {
             showError("Selection error", "No course selected",
@@ -1230,9 +1225,13 @@ public class Controller {
             resInfoList.getItems().remove(r.getTitle());
             //TODO: THIS is Khanh'change, remember to cut and add when pull
             if (!isPersonResourcesView)
-                selectedCourse.getResource().remove(r);
+                if(selectedCourse != null) {
+                    selectedCourse.getResource().remove(r);
+                }
             else {
-                selectedPerson.getResources().remove(r);
+                if(selectedCourse != null) {
+                    selectedPerson.getResources().remove(r);
+                }
             }
         }
         updateCourseTable();
@@ -1240,6 +1239,12 @@ public class Controller {
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+        if(selectedCourse == null){
+            if(selectedPublisher == null){
+                showError("Missing Error","Publisher missing","Please make sure you added publisher for resource");
+                return;
+            }
+        }
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
                 DBManager.capitalizeString(titleTF.getText()),
@@ -1355,7 +1360,6 @@ public class Controller {
         isPersonResourcesView = false;
         //TODO: migrate Publi sher add and modify window
 
-        if (selectedCourse != null) {
             try {
                 VBox mainPane = new VBox();
                 Dialog dlg = new Dialog();
@@ -1367,9 +1371,10 @@ public class Controller {
 
 
                 ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
-
-                resourceTable.getItems().clear();
-                resourceTable.getItems().addAll(selectedCourse.getResource());
+                if(selectedCourse != null) {
+                    resourceTable.getItems().clear();
+                    resourceTable.getItems().addAll(selectedCourse.getResource());
+                }
 
                 updateRowSelected();
 
@@ -1395,15 +1400,19 @@ public class Controller {
                 dlg.show();
                 dlg.setResultConverter(dialogButton -> {
                     if (dialogButton == assign) {
-                        //TODO: this is where the assign button locates
-                        selectedCourse.getResource().clear();
-                        selectedCourse.getResource().addAll(resourceTable.getItems());
 
-                        resInfoList.getItems().clear();
-                        for (Resource r : selectedCourse.getResource())
-                            resInfoList.getItems().add(r.getTitle());
+                            //TODO: this is where the assign button locates
+                        if(selectedCourse != null) {
+                            selectedCourse.getResource().clear();
+                            selectedCourse.getResource().addAll(resourceTable.getItems());
+                        }
 
-                        return null;
+                            resInfoList.getItems().clear();
+                            for (Resource r : resourceTable.getItems())
+                                resInfoList.getItems().add(r.getTitle());
+
+                            return null;
+
                     }
                     return null;
                 });
@@ -1411,10 +1420,7 @@ public class Controller {
                 showError("test", "test", ex.getMessage());
             }
 
-        } else {
-            showError("Selection error", "No course selected",
-                    "Please select a course to add, update or delete");
-        }
+
     }
 
     /**
