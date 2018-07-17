@@ -103,6 +103,7 @@ public class Request_Json {
 
         tempTitle = jsonObject.getJSONObject("volumeInfo").get("title").toString();
         try {
+            if(jsonObject.getJSONObject("volumeInfo").has("authors"))
             tempAuthors = jsonArrayToStringArray(jsonObject.getJSONObject("volumeInfo").
                     getJSONArray("authors"));
         } catch (JSONException e) {
@@ -178,8 +179,8 @@ public class Request_Json {
         String tempType = "", tempISBN = "";
         Map<String, String> isbnMap = new HashMap<String, String>();
         int counter = 0;
-        JSONArray tempArr = item.getJSONObject("volumeInfo").getJSONArray("industryIdentifiers");
-        if (tempArr != null) {
+        if(item.getJSONObject("volumeInfo").has("industryIdentifiers")){
+            JSONArray tempArr = item.getJSONObject("volumeInfo").getJSONArray("industryIdentifiers");
             Type listType = new TypeToken<List<HashMap<String, String>>>() {
             }.getType();
             List<HashMap<String, String>> isbns =
