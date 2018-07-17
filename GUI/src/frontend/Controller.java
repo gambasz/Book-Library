@@ -718,8 +718,6 @@ public class Controller {
                         resList.add(r);
 
                 }
-                //System.out.println("If this is the error, desription:" + pulledDatabase.get(k).getDescription() + pulledDatabase.get(k).getDepartment());
-                //
 
             }
 
@@ -731,7 +729,6 @@ public class Controller {
                 if (!pubList.contains(tempR.getPublisher()))
                     pubList.add(tempR.getPublisher());
             }
-            //====================== END CODE BACKEND
 
 
             updateCourseTable();
