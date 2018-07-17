@@ -17,6 +17,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public class booksSearchViewController {
 
@@ -169,7 +171,8 @@ public class booksSearchViewController {
                     System.out.println(e.getMessage() + " error -- titleLbl");
             }
             try {
-                publisherLbl.setText(getValueOrDefault(book.getPublisherInstance().getTitle(), publisherLbl.getText()));
+                String publisherTitle = !book.getPublisherInstance().getTitle().isEmpty()?book.getPublisherInstance().getTitle(): null;
+                publisherLbl.setText(getValueOrDefault(publisherTitle, publisherLbl.getText()));
             } catch (Exception e) {
                 if (debugging)
                     System.out.println(e.getMessage() + " error -- publisherLbl");
@@ -200,7 +203,6 @@ public class booksSearchViewController {
                 if (debugging)
                     System.out.println(e.getMessage() + " error -- isbn13Lbl");
             }
-
 
             valueSet = true;
         }

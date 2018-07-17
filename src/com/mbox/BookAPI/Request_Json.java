@@ -96,7 +96,7 @@ public class Request_Json {
 
     public static Book jsonToBook(JSONObject jsonObject) throws JSONException {
         Gson gson = new Gson();
-        String tempPubTitle = "*Not Found*", publishedDate = "", tempDesc = "", tempTitle = "";
+        String tempPubTitle = "", publishedDate = "", tempDesc = "", tempTitle = "";
         Map<String, String> tempISBN = new HashMap<String, String>();
         List<String> tempAuthors = new ArrayList<String>();
 
