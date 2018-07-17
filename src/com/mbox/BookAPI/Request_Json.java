@@ -2,7 +2,7 @@ package com.mbox.BookAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mbox.Publisher;
+import frontend.data.Publisher;
 import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,16 +18,7 @@ import java.util.*;
 public class Request_Json {
     static int count2 = 0;
 
-
-    public static void main(String[] args) {
-        try {
-
-            Request_Json.call_me("C++");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
 
     public static JSONObject requestQuery(String query) throws Exception {
         Gson gson = new Gson();
@@ -126,7 +117,7 @@ public class Request_Json {
 
         Book returnedBook = new Book(tempTitle, (ArrayList<String>) tempAuthors, tempISBN, tempDesc, 0);
         Publisher tempPublisher = new Publisher();
-        tempPublisher.setTitle(tempPubTitle);
+        tempPublisher.setName(tempPubTitle);
         returnedBook.setPublisherInstance(tempPublisher);
         returnedBook.setDatePublished(publishedDate);
 
