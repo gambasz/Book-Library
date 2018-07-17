@@ -1290,12 +1290,12 @@ public class Controller {
             showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
             return;
         }
-        if(selectedCourse == null){
-            if(selectedPublisher == null){
+
+            if(selectedPublisher == null || selectedPublisher.getName().isEmpty()){
                 showError("Missing Error","Publisher missing","Please make sure you added publisher for resource");
                 return;
             }
-        }
+
         idTF.setText("0");
         Publisher tempPub = selectedPublisher;
         Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
