@@ -1288,47 +1288,56 @@ public class Controller {
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
                 currentAmTF.getText().trim().isEmpty()){
             showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
-            return;
+
         }
 
-            if(selectedPublisher == null || selectedPublisher.getName().isEmpty()){
+            else if(selectedPublisher == null || selectedPublisher.getName().isEmpty()){
                 showError("Missing Error","Publisher missing","Please make sure you added publisher for resource");
-                return;
             }
 
-        idTF.setText("0");
-        Publisher tempPub = selectedPublisher;
-        Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
-                DBManager.capitalizeString(titleTF.getText()),
-                DBManager.capitalizeString(authorTF.getText()),
-                descriptionTF.getText(),
-                false,
-                Integer.parseInt(totalAmTF.getText()),
-                Integer.parseInt(idTF.getText()),
-                Integer.parseInt(currentAmTF.getText()),
-                selectedPublisher
-        );
-        if (!isPersonResourcesView) {
-            resList.add(temp);
-            resourceTable.getItems().add(temp);
-            selectedPublisher = tempPub;
-            DBManager.setIDinResourceFromArrayList(resList);
-            System.out.println("This is add button");
-            //add(+) button is fine
-        } else {
-            for (Resource resource : selectedPerson.getResources()) {
-                System.out.println("ResourceID After *BEFORE* to list: " + resource.getID());
+            else if (!com.mbox.controller.isInteger(totalAmTF.getText()) ||
+                    !com.mbox.controller.isInteger(currentAmTF.getText())) {
+                showError("Course title format is Wrong",
+                        "Check the course title format and make sure it's following the correct format.",
+                        "Correct format examples --> CMSC 100, MATH 181 ");
             }
-            System.out.println("add button person section");
-            resourceTable.getItems().add(temp);
-            selectedPublisher = tempPub;
-            selectedPerson.getResources().add(temp);
-            //DBManager.insertPersonResources(selectedPerson);
-            for (Resource resource : selectedPerson.getResources()) {
-                System.out.println("ResourceID After adding to list: " + resource.getID());
-            }
-        }
 
+
+            else {
+
+                idTF.setText("0");
+                Publisher tempPub = selectedPublisher;
+                Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+                        DBManager.capitalizeString(titleTF.getText()),
+                        DBManager.capitalizeString(authorTF.getText()),
+                        descriptionTF.getText(),
+                        false,
+                        Integer.parseInt(totalAmTF.getText()),
+                        Integer.parseInt(idTF.getText()),
+                        Integer.parseInt(currentAmTF.getText()),
+                        selectedPublisher
+                );
+                if (!isPersonResourcesView) {
+                    resList.add(temp);
+                    resourceTable.getItems().add(temp);
+                    selectedPublisher = tempPub;
+                    DBManager.setIDinResourceFromArrayList(resList);
+                    System.out.println("This is add button");
+                    //add(+) button is fine
+                } else {
+                    for (Resource resource : selectedPerson.getResources()) {
+                        System.out.println("ResourceID After *BEFORE* to list: " + resource.getID());
+                    }
+                    System.out.println("add button person section");
+                    resourceTable.getItems().add(temp);
+                    selectedPublisher = tempPub;
+                    selectedPerson.getResources().add(temp);
+                    //DBManager.insertPersonResources(selectedPerson);
+                    for (Resource resource : selectedPerson.getResources()) {
+                        System.out.println("ResourceID After adding to list: " + resource.getID());
+                    }
+                }
+            }
 
     }
 
