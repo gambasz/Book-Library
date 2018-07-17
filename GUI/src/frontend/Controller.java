@@ -845,6 +845,11 @@ public class Controller {
     //thjanks :)) hard to see
 
     public void delete() {
+
+        if(selectedCourse == null){
+            showError("Select Error","Delete Error", "Make sure you choose a course to delete");
+            return;
+        }
         System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
         if (selectedCourse != null) {
             System.out.println("CommonID: " + selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
@@ -854,15 +859,13 @@ public class Controller {
             courseList.remove(selectedCourse);
             selectedCourse = null;
             updateCourseTable();
-
-
-        } else {
-            showError("Selection error", "No course selected",
-                    "Please select a course to add, update or delete");
         }
     }
 
     public void update() {
+        if(selectedCourse == null){
+            showError("Select Error","Update Error", "Make sure to choose a course to update");
+        }
 
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
@@ -945,10 +948,7 @@ public class Controller {
 
             updateCourseTable();
 
-        } else {
-            showError("Selection error", "No course selected",
-                    "Please select a course to add, update or delete");
-        }
+        } 
     }
 
     /**
