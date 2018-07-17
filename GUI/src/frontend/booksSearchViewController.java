@@ -2,7 +2,7 @@ package frontend;
 
 import com.mbox.BookAPI.Book;
 import com.mbox.BookAPI.BookAPI;
-import com.mbox.Publisher;
+import frontend.data.Publisher;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -55,7 +55,7 @@ public class booksSearchViewController {
 
     private void addFakeBook() {
         Publisher tempPublisher = new Publisher();
-        tempPublisher.setTitle("Person");
+        tempPublisher.setName("Person");
 
         ArrayList<String> tempAuthors = new ArrayList<>();
         tempAuthors.add("Rajashow");
@@ -169,7 +169,7 @@ public class booksSearchViewController {
                     System.out.println(e.getMessage() + " error -- titleLbl");
             }
             try {
-                publisherLbl.setText(getValueOrDefault(book.getPublisherInstance().getTitle(), publisherLbl.getText()));
+                publisherLbl.setText(getValueOrDefault(book.getPublisherInstance().getName(), publisherLbl.getText()));
             } catch (Exception e) {
                 if (debugging)
                     System.out.println(e.getMessage() + " error -- publisherLbl");

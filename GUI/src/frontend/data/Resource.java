@@ -28,6 +28,16 @@ public class Resource {
         this.ids = new HashMap<String, String>();
     }
 
+    public Resource(String type, int id, String title, Publisher publisherInstance, String description){
+
+        this.TYPE = type;
+        this.ID = id;
+        this.title = title;
+        this.publisher = publisherInstance;
+        this.description = description;
+
+    }
+
     public Resource(String TYPE, int ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
         this.TYPE = TYPE;
         this.ID = ID;

@@ -1,6 +1,7 @@
 package com.mbox.BookAPI;
 
-import com.mbox.Publisher;
+import frontend.data.Publisher;
+import frontend.data.Resource;
 import javafx.scene.image.Image;
 
 import java.util.ArrayList;
@@ -94,6 +95,20 @@ public class Book {
 
     public void setPublisherInstance(Publisher publisherInstance) {
         this.publisherInstance = publisherInstance;
+    }
+
+    public Resource getResourceObject(){
+        Resource tempResource = new Resource("Book", id, title, publisherInstance, description);
+        if(!authors.isEmpty())
+            tempResource.setAuthor(authors.get(0));
+            //Passing the first author of the book
+        if(!isbn.get("ISBN_13").isEmpty())
+            tempResource.setISBN(isbn.get("ISBN_13"));
+        else if (!isbn.get("ISBN_10").isEmpty())
+            tempResource.setISBN(isbn.get("ISBN_13"));
+
+
+        return tempResource;
     }
 
     @Override

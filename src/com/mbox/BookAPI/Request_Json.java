@@ -2,7 +2,7 @@ package com.mbox.BookAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mbox.Publisher;
+import frontend.data.Publisher;
 import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,7 +126,7 @@ public class Request_Json {
 
         Book returnedBook = new Book(tempTitle, (ArrayList<String>) tempAuthors, tempISBN, tempDesc, 0);
         Publisher tempPublisher = new Publisher();
-        tempPublisher.setTitle(tempPubTitle);
+        tempPublisher.setName(tempPubTitle);
         returnedBook.setPublisherInstance(tempPublisher);
         returnedBook.setDatePublished(publishedDate);
 
