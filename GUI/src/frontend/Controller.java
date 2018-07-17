@@ -1,5 +1,6 @@
 package frontend;
 
+import com.mbox.BookAPI.Book;
 import com.mbox.DBManager;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,6 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -23,6 +25,7 @@ import javafx.util.StringConverter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1086,7 +1089,7 @@ public class Controller {
 
         });
         searchBtn.setOnMouseClicked(e -> {
-            openResourceSearchWindow();
+            openResourceSearchWindow(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
         });
         //TODO Test this line
         try {
@@ -1125,7 +1128,7 @@ public class Controller {
         return resourceEditPane;
     }
 
-    private void openResourceSearchWindow() {
+    private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB, Button addNAssignNewResource, Button update, Button delete) {
         try {
             Dialog dlg = new Dialog();
             Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
@@ -1135,6 +1138,26 @@ public class Controller {
             Button finishBtn = (Button) dlg.getDialogPane().lookupButton(ButtonType.FINISH);
             finishBtn.setDefaultButton(false);
             dlg.setResizable(true);
+            dlg.setResultConverter(dialogButton -> {
+                if (dialogButton == ButtonType.FINISH) {
+                    Resource searchedResource = null;
+                    Object[] temp = dlg.getDialogPane().getChildren().toArray();
+                    for (Object childI : temp) {
+                        if (childI instanceof GridPane) {
+                            for (Object childJ : ((GridPane) childI).getChildren()) {
+                                if (childJ instanceof ListView) {
+                                    Book tempBook = (Book) ((ListView) childJ).getSelectionModel().getSelectedItem();
+
+                                }
+                            }
+                        }
+                    }
+
+                    onResourceTableSelect(searchedResource, titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+                    return null;
+                }
+                return null;
+            });
             dlg.showAndWait();
         } catch (Exception ex) {
             showError(
@@ -1142,6 +1165,22 @@ public class Controller {
                     "Unable to open the Search view",
                     "Please give the code and message to your Interns:" + ex.getMessage() + "--" + ex.getCause().getMessage());
         }
+    }
+
+    private static List<Object> flatten(Object object) {
+        List<Object> l = new ArrayList<Object>();
+        if (object.getClass().isArray()) {
+            for (int i = 0; i < Array.getLength(object); i++) {
+                l.addAll(flatten(Array.get(object, i)));
+            }
+        } else if (object instanceof List) {
+            for (Object element : (List<?>) object) {
+                l.addAll(flatten(element));
+            }
+        } else {
+            l.add(object);
+        }
+        return l;
     }
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
