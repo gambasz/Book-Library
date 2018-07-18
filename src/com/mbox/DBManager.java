@@ -1610,7 +1610,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                             rss.getString("TITLE"), rss.getString("AUTHOR"),
                             rss.getString("DESCRIPTION"), rss.getInt("TOTAL_AMOUNT"),
                             rss.getInt("CURRENT_AMOUNT"));
-
+                    tempResource.setISBN13(rss.getString("ISBN13"));
                     listResources.add(tempResource);
                     setPublisherForResource2(tempResource);
                     tempCach.put(resourceID, tempResource);
@@ -2277,6 +2277,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 Resource p = new Resource(rs.getInt(1), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5),
                         Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7)), rs.getString(8));
+                if(rs.getString("ISBN13")!=null)
+                    p.setIsbn13(rs.getString("ISBN13"));
                 arr.add(p);
             }
             return arr;
@@ -2712,6 +2714,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     public static ArrayList<frontend.data.Resource> getResourceList() {
         ArrayList<frontend.data.Resource> resList = new ArrayList<>();
         ArrayList<Resource> tempList = getResourceFromTable();
+
         for (int i = 0; i < tempList.size(); i++) {
 
             resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
