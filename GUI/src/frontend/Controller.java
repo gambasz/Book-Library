@@ -1287,19 +1287,21 @@ public class Controller {
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
                 currentAmTF.getText().trim().isEmpty() || typeCB.getSelectionModel().getSelectedItem() == null){
-            showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
+            showError("Missing Error","Resource Error",
+                    "Make sure you entered title, author, total and current amount");
 
         }
 
             else if(selectedPublisher == null || selectedPublisher.getName().isEmpty()){
-                showError("Missing Error","Publisher missing","Please make sure you added publisher for resource");
+                showError("Missing Error","Publisher missing",
+                        "Please make sure you added publisher for resource");
             }
 
             else if (!com.mbox.controller.isInteger(totalAmTF.getText()) ||
                     !com.mbox.controller.isInteger(currentAmTF.getText())) {
-                showError("Course title format is Wrong",
-                        "Check the course title format and make sure it's following the correct format.",
-                        "Correct format examples --> CMSC 100, MATH 181 ");
+                showError("Total and Current format is Wrong",
+                        "Check the Total and CurrentAMount format and make sure it's following the correct format (integer).",
+                        "Correct format examples --> 100, 90");
             }
 
 
