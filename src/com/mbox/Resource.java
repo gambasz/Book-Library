@@ -1,11 +1,9 @@
 package com.mbox;
 
-import java.sql.*;
-import java.util.ArrayList;
 
 public class Resource {
 
-    private String type, title, author, isbn, description;
+    private String type, title, author, isbn10, description, isbn13;
     private int total_amount, current_amount, id, commonID = 0;
     private Publisher publisherInstance;
 
@@ -15,11 +13,13 @@ public class Resource {
         type = "";
         title = "";
         author = "";
-        isbn = "";
+        isbn10 = "";
         total_amount = 0;
         current_amount = 0;
         description = "";
         publisherInstance = new Publisher("Title", "Contact Information", "Description");
+        isbn13 = "";
+
 
     }
 
@@ -35,7 +35,7 @@ public class Resource {
         this.type = type;
         this.title = title;
         this.author = author;
-        this.isbn = isbn;
+        this.isbn10 = isbn;
         this.total_amount = total;
         this.current_amount = current;
         this.description = desc;
@@ -50,7 +50,7 @@ public class Resource {
         this.type = type;
         this.title = title;
         this.author = author;
-        this.isbn = isbn;
+        this.isbn10 = isbn;
         this.total_amount = total;
         this.current_amount = current;
         this.description = desc;
@@ -59,12 +59,17 @@ public class Resource {
     }
 
     public frontend.data.Resource initResourceGUI() {
-        if (publisherInstance ==null){
-            publisherInstance = new Publisher("Default Title", "Default Contact_Info", "Default Description");
-        }
 
-        frontend.data.Resource tmp = new frontend.data.Resource(this.isbn, this.type, this.title, this.author,
-                this.description, true, this.total_amount, this.id, this.current_amount, this.publisherInstance.initPublisherGUI());
+
+        frontend.data.Resource tmp = new frontend.data.Resource(this.isbn10, this.type, this.title, this.author,
+                this.description, true, this.total_amount, this.id, this.current_amount);
+
+        if (publisherInstance !=null){
+            tmp.setPublisher(this.publisherInstance.initPublisherGUI());
+        }
+        if(isbn13!= null && isbn13!="" && !isbn13.isEmpty()){
+            System.out.println("ISBN13: "+ isbn13 +" Resource Title: " + this.title);
+            tmp.setISBN13(isbn13);}
         return tmp;
     }
 
@@ -99,7 +104,7 @@ public class Resource {
 
     public void setISBN(String is){
 
-        this.isbn = is;
+        this.isbn10 = is;
 
     }
 
@@ -147,7 +152,7 @@ public class Resource {
 
     public String getISBN(){
 
-        return this.isbn;
+        return this.isbn10;
     }
 
     public int getTotalAmount(){
@@ -175,28 +180,12 @@ public class Resource {
         return commonID;
     }
 
-
-    //-------adding to db method------
-
-    public String addtoDB(){
-
-        String query = String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
-                this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description);
-        return query;
+    public String getIsbn13() {
+        return isbn13;
     }
-    public String update (String type, String title, String author, String isbn, int total_amount, int current_amount, String description){
 
-        this.type = type;
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.total_amount = total_amount;
-        this.current_amount = current_amount;
-        this.description = description;
-
-        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', TOTAL_AMOUNT = '%s', CURRENT_AMOUNT = '%s', DESCRIPTION = '%s'  WHERE ID = %s",
-                this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description, this.id);
-
+    public void setIsbn13(String isbn13) {
+        this.isbn13 = isbn13;
     }
 
     @Override
@@ -206,47 +195,11 @@ public class Resource {
         +"Type: " + this.type + " "
         + "Title: " + this.title + " "
         + "Author: " + this.author + " "
-        + "ISBN: " + this.isbn + " "
+        + "ISBN: " + this.isbn10 + " "
         + "Total Amount: " + String.valueOf(this.total_amount) + " "
         + "Current Amount: " + String.valueOf(this.current_amount) + " "
         + "Description: " + this.description;
     }
 
-    public void addToDB(){
 
-        try {
-
-            insertToDB();
-
-            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM RESOURCES");
-
-
-            while(rs.next()){
-                this.id = rs.getInt(1);
-                this.type = rs.getString(2);
-                this.title = rs.getString(3);
-                this.author = rs.getString(4);
-                this.isbn = rs.getString(5);
-                this.total_amount = rs.getInt(6);
-                this.current_amount = rs.getInt(7);
-                this.description = rs.getString(8);
-            }
-        }catch (Exception e){
-
-        }
-    }
-
-    private void insertToDB(){
-
-        String quer = String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %s, %s, '%s')"
-                , this.type, this.title, this.author, this.isbn, this.total_amount, this.current_amount, this.description);
-
-        try{
-            DBManager.st.executeQuery(quer);
-        }catch(Exception e){
-
-        }
-
-
-    }
 }

@@ -1,16 +1,20 @@
 package frontend.data;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Resource {
-    private String TYPE, title, author, description, ISBN;
+    private String TYPE, title, author, description, ISBN, ISBN13;
     private boolean mcUnique;
-    private int totalAmount, ID, currentAmount, commonID=0;
+    private int totalAmount, ID, currentAmount, commonID = 0;
     private Publisher publisher;
+    private Map<String, String> ids;
 
     public Resource(String TYPE, int ID) {
         this.TYPE = TYPE;
         this.ID = ID;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String TYPE, int ID, String title, Publisher publisher, String author, String description, boolean mcUnique) {
@@ -21,6 +25,17 @@ public class Resource {
         this.author = author;
         this.description = description;
         this.mcUnique = mcUnique;
+        this.ids = new HashMap<String, String>();
+    }
+
+    public Resource(String type, int id, String title, Publisher publisherInstance, String description){
+
+        this.TYPE = type;
+        this.ID = id;
+        this.title = title;
+        this.publisher = publisherInstance;
+        this.description = description;
+
     }
 
     public Resource(String TYPE, int ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
@@ -32,6 +47,7 @@ public class Resource {
         this.mcUnique = mcUnique;
         this.totalAmount = ammount;
         this.publisher = publisher;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
@@ -44,6 +60,7 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.publisher = publisher;
+        this.ids = new HashMap<String, String>();
     }
 
     public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
@@ -57,6 +74,34 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.publisher = publisher;
+    }
+
+    public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount) {
+        this.ISBN = ISBN;
+        this.TYPE = TYPE;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.totalAmount = totalAmount;
+        this.ID = ID;
+        this.currentAmount = currentAmount;
+        this.publisher = publisher;
+        this.ids = new HashMap<String, String>();
+
+    }
+
+    public Resource(int ID, String ISBN, String TYPE, String title, String author, String description, int totalAmount, int currentAmount) {
+        this.ISBN = ISBN;
+        this.TYPE = TYPE;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.mcUnique = mcUnique;
+        this.totalAmount = totalAmount;
+        this.ID = ID;
+        this.currentAmount = currentAmount;
+        this.ids = new HashMap<String, String>();
     }
 
     public String getISBN() {
@@ -139,19 +184,26 @@ public class Resource {
         this.mcUnique = mcUnique;
     }
 
+    public String getISBN13() {
+        return ISBN13;
+    }
+
+    public void setISBN13(String ISBN13) {
+        this.ISBN13 = ISBN13;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resource resource = (Resource) o;
-        return Objects.equals(TYPE, resource.TYPE) &&
-                Objects.equals(ID, resource.ID);
+        return Objects.equals(ID, resource.ID);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(TYPE, ID);
+        return Objects.hash(ID);
     }
 
     @Override

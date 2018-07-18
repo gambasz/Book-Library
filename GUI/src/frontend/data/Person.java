@@ -10,6 +10,13 @@ public class Person {
     private Enum type;
     private ArrayList<Resource> resources;
 
+    public Person() {
+        this.ID = 0;
+        this.lastName = "Default last name";
+        this.firstName = "Default first name";
+        this.type = PersonType.CourseInstructor;
+    }
+
     public Person(String lastName, String firstName, int ID, Enum type, ArrayList<Resource> resources) {
         this.lastName = lastName;
         this.firstName = firstName;
@@ -82,19 +89,19 @@ public class Person {
         this.type = PersonType.valueOf(type);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(ID, person.ID)&& Objects.equals(lastName, person.lastName)&& Objects.equals(firstName, person.firstName)&& Objects.equals(type, person.type);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(lastName, firstName,type, ID);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Person person = (Person) o;
+//        return Objects.equals(ID, person.ID)&& Objects.equals(lastName, person.lastName)&& Objects.equals(firstName, person.firstName)&& Objects.equals(type, person.type);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(lastName, firstName,type, ID);
+//    }
 
     @Override
     public String toString() {

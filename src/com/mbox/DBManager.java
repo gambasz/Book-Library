@@ -7,8 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class DBManager {
     public static Statement st;
@@ -138,21 +137,20 @@ public class DBManager {
     }
 
 
-    public static String[] getSemesterNameByID(int id) {
+    public static Semester getSemesterNameByID(int id) {
 
         try {
             Statement st = conn.createStatement();
             String query = String.format("SELECT * FROM SEMESTER WHERE ID='%s'", id);
             ResultSet rs = st.executeQuery(query);
-            String semester[] = new String[2];
-            semester[0] = "FALL";
-            semester[1] = "2018";
+            Semester semester = new Semester();
 
-            while (rs.next()) {
-                semester[0] = rs.getString(2);
-                semester[1] = rs.getString(3);
+            if (rs.next()) {
+                semester.year = rs.getInt("YEAR");
+                semester.season = rs.getString("SEASON");
+
             }
-
+            semester.setId(id);
             return semester;
 
         } catch (SQLException e) {
@@ -1536,6 +1534,275 @@ public class DBManager {
     }
 
 
+
+
+//======================================================================================================================
+//                                 Efficient new methods, reading db
+// =====================================================================================================================
+
+    public static frontend.data.Resource setPublisherForResource2(frontend.data.Resource resource1) {
+        ResultSet rss, rs2;
+        int publisherID = 0, i = 0;
+
+        frontend.data.Publisher publisherInstance = new frontend.data.Publisher();
+
+        try {
+            Statement stpublisher1 = conn.createStatement();
+            Statement stpublisher2 = conn.createStatement();
+
+            rs2 = stpublisher1.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +
+                    resource1.getID() +" ORDER BY PUBLISHERID DESC");
+
+            if (rs2.next()) {
+
+                //there will be a list of all reousrces ID that is owned by Person
+                publisherID = rs2.getInt("PUBLISHERID");
+
+                    rss = stpublisher2.executeQuery(getPublisherInTableQuery(publisherID));
+                    if (rss.next()) {
+
+                        publisherInstance = new frontend.data.Publisher(rss.getInt("ID"),
+                                rss.getString("TITLE"),
+                                 rss.getString("DESCRIPTION"), rss.getString("CONTACT_INFO"));
+                        i++;
+                    }
+                    resource1.setPublisher(publisherInstance);
+
+
+            }
+            return resource1;
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+        return resource1;
+
+    }
+
+public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseID, int commonID, Map<Integer, frontend.data.Resource> tempCach ) {
+
+    ResultSet rs, rss;
+    int resourceID = 0, i = 0;
+    Statement stTemp;
+    frontend.data.Resource tempResource;
+    ArrayList<frontend.data.Resource> listResources = new ArrayList<frontend.data.Resource>();
+
+    try {
+        stTemp = conn.createStatement();
+
+        rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d AND COMMONID = %d",
+                courseID, commonID));
+        //here all have a result set of all resources for courdeID
+
+        while (rs.next()) {
+            resourceID = rs.getInt("RESOURCEID");
+
+            if(tempCach.containsKey(resourceID))
+                listResources.add(tempCach.get(resourceID));
+
+            else {
+
+                rss = stTemp.executeQuery(getResourceInTableQuery(resourceID));
+
+                if (rss.next()) {
+                    // ID, Type, Title, Author, ISBN, total, current, desc
+                    tempResource = new frontend.data.Resource(rss.getInt("ID"),
+                            rss.getString("ISBN"), rss.getString("TYPE"),
+                            rss.getString("TITLE"), rss.getString("AUTHOR"),
+                            rss.getString("DESCRIPTION"), rss.getInt("TOTAL_AMOUNT"),
+                            rss.getInt("CURRENT_AMOUNT"));
+                    tempResource.setISBN13(rss.getString("ISBN13"));
+                    listResources.add(tempResource);
+                    setPublisherForResource2(tempResource);
+                    tempCach.put(resourceID, tempResource);
+
+
+                    i++;
+                }
+            }
+        }
+
+        return listResources;
+    } catch (SQLException err) {
+        System.out.println(err);
+        err.printStackTrace();
+    }
+    // Adding the list of the resources to the person object
+    return null;
+
+}
+
+    public static ArrayList<frontend.data.Course> relationalReadByCourseID2(Map<Integer, ArrayList<Integer>> courseIds, Semester semester ) {
+        long startTime = System.nanoTime();
+
+        ArrayList<frontend.data.Course> courseList = new ArrayList<>();
+
+        Map<Integer, frontend.data.Person> cachedPersons = new HashMap<Integer, frontend.data.Person>();
+            Map<Integer, frontend.data.Resource> cachedResources = new HashMap<Integer, frontend.data.Resource>();
+
+        //Map<Integer, Course> cachedCourses = new HashMap<Integer, Course>();  Think about caching course later on
+
+
+        int personID = 0, i, cID = 0, courseID =0;
+        ResultSet rs, rsTmp, rsTemp;
+        Statement stTemp, stTemp2;
+
+        String cTitle = "", cDescription = "", cDepartment = "";
+
+        frontend.data.Person personTmp = new frontend.data.Person();
+        ArrayList<frontend.data.Resource> courseResources = new ArrayList<frontend.data.Resource>();
+
+        try {
+             stTemp = conn.createStatement();
+             stTemp2 = conn.createStatement();
+
+            //=======================Getting information to create the course====================================
+            i = 0;
+            for (Map.Entry<Integer, ArrayList<Integer>> entry : courseIds.entrySet()){
+                // Technically there should be only one entry, since there is only one key
+                // Big O (1)
+                courseID = entry.getKey();
+
+            rs = st.executeQuery(getCourseInTableQuery(courseID));
+
+            if (rs.next()) {
+                cID = rs.getInt("ID");
+                cTitle = rs.getString("TITLE") + " " + rs.getString("CNUMBER");
+                cDescription = rs.getString("DESCRIPTION");
+                cDepartment = rs.getString("DEPARTMENT");
+                System.out.println("\ncourseID " + courseID);
+            }
+
+            else return courseList;
+
+            //=======================Finding and creating Person teaching the course=============================
+
+
+                for (Integer tempCommonID: entry.getValue()) {
+                    // Big O (commonIDs.Size)
+
+                    rsTmp = stTemp2.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = " +
+                            tempCommonID);
+                    if(rsTmp.next()){
+                        courseList.add(new frontend.data.Course(cID, tempCommonID, semester.year, semester.season,
+                                cTitle, cDepartment, personTmp, cDescription, courseResources));
+                        courseList.get(i).setCommonID(tempCommonID);
+
+                        personID = rsTmp.getInt("PERSONID");
+
+                        if(cachedPersons.containsKey(personID))
+
+                            courseList.get(i).setProfessor(cachedPersons.get(personID));
+
+                        else {
+                            rsTemp = stTemp.executeQuery(getPersonInTableQuery(personID));
+                            if (rsTemp.next()) {
+
+                                PersonType enumTmp;
+                                switch (rsTemp.getString("TYPE")){
+                                    case "ProgramCoordinator" : enumTmp = PersonType.ProgramCoordinator; break;
+                                    case "CourseCoordinator" : enumTmp = PersonType.CourseCoordinator; break;
+                                    case "CourseInstructor" : enumTmp = PersonType.CourseInstructor; break;
+                                    default: enumTmp = PersonType.CourseInstructor;
+                                }
+
+                                personTmp = new frontend.data.Person( rsTemp.getString("LASTNAME"),
+                                        rsTemp.getString("FIRSTNAME"), personID,
+                                        enumTmp.toString());
+
+                                    cachedPersons.put(personID, personTmp);
+
+                                courseList.get(i).setProfessor(personTmp);
+                            }
+                            else{
+                                personTmp = new frontend.data.Person("NOT FOUND",
+                                        "NOT FOUND", personID,"CourseInstructor");
+                                courseList.get(i).setProfessor(personTmp);
+                            }
+
+                        }
+                        //=======================Finding and creating course resources=============================
+
+
+                        courseResources = findResourcesCourse2(courseID, tempCommonID, cachedResources);
+                        courseList.get(i).setResource(courseResources);
+                        i++;
+
+                    }
+
+                }
+
+            }
+
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.println("It took this time to run Read Relational: " + duration / 1000000 + "ms For " +
+                    courseList.size() + " courses.\n");
+            return courseList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static Map<Integer, ArrayList<Integer>> getCourseIdsBySemesterID2(int id) {
+
+        int i = 0, before =0;
+        Map<Integer, ArrayList<Integer>> courseIDs = new HashMap<Integer, ArrayList<Integer>>();
+        String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d ORDER BY COURSEID ASC",
+                id);
+        ArrayList<Integer> commonIDs = new ArrayList<Integer>();
+
+
+        try {
+
+            Statement st = DBManager.conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                if (before == rs.getInt("COURSEID")) {
+                    commonIDs.add(rs.getInt("ID"));
+
+                }
+                else{
+                    before = rs.getInt("COURSEID");
+                    commonIDs = new ArrayList<Integer>();
+                    commonIDs.add(rs.getInt("ID"));
+                    courseIDs.put(rs.getInt("COURSEID"), commonIDs);
+                }
+            }
+
+            return courseIDs;
+
+
+        } catch (SQLException e) {
+
+            System.out.println("Something went wrong");
+
+        }
+
+        return courseIDs;
+    }
+
+
+    public static ArrayList<frontend.data.Course> returnEverything2(int semesterid) {
+        Semester semester = getSemesterNameByID(semesterid);
+        Map<Integer, ArrayList<Integer>> courseIDs = getCourseIdsBySemesterID2(semesterid);
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+        courses = relationalReadByCourseID2(courseIDs, semester);
+
+
+        return courses;
+    }
+
+
+//======================================================================================================================
+//                                       End of Efficient new methods, reading db
+// =====================================================================================================================
+
+
     //==================================================================================================================
     //==================================================================================================================
 
@@ -1576,7 +1843,6 @@ public class DBManager {
 
         //getting all the data
         int id = c.getID();
-        int crn = c.getCRN();
         String year = String.valueOf(c.getYEAR());
         String semester = c.getSEMESTER();
         String title = c.getTitle();
@@ -1622,12 +1888,18 @@ public class DBManager {
                         " (COURSEID, RESOURCEID) VALUES ('%d', '%d')", id, resourceidlist[j]));
             }
 
+            for(int k=0; k<resourceidlist.length;k++){
+                System.out.println(r.get(k).getPublisher().getContacts() +" testing  " + r.get(k).getPublisher().getDescription());
+
+            }
 
             for (int l = 0; l < resourceidlist.length; l++) {
+                if(!availablePublisher(r.get(l).getPublisher())) {
 
-                executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
-                        resourceidlist[l]));
+                    executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                            resourceidlist[l]));
+                }
 
 
             }
@@ -1678,17 +1950,12 @@ public class DBManager {
         ArrayList<frontend.data.Resource> r = c.getResource();
 
 
-        int[] resourceidlist = new int[r.size()];
-
-        for (int i = 0; i < c.getResource().size(); i++) {
-
-            resourceidlist[i] = r.get(i).getID();
-        }
 
 
-        for (int j = 0; j < resourceidlist.length; j++) {
+
+        for (int j = 0; j < c.getResource().size(); j++) {
             String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, resourceidlist[j], commonID);
+                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, c.getResource().get(j).getID(), commonID);
             executeNoReturnQuery(tempQuerry);
 
 //            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
@@ -1703,11 +1970,11 @@ public class DBManager {
 
         }
         try {
-            for (int k = 0; k < resourceidlist.length; k++) {
-
-                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
-                        "PUBLISHERID = '%d'", r.get(k).getID(), r.get(k).getPublisher().getID()));
+            for (int k = 0; k < r.size(); k++) {
+                System.out.println("RID, PUBD: " + r.get(k).getID() +" "+r.get(k).getPublisher().getID() );
                 int resourceID = 0;
+                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
+                        "PUBLISHERID = '%d'", r.get(k).getID(),r.get(k).getPublisher().getID()));
                 while (rs.next()) {
                     resourceID = rs.getInt(2);
                 }
@@ -1715,7 +1982,7 @@ public class DBManager {
                 if (resourceID == 0) {
                     executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
                                     " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            resourceidlist[k]));
+                            r.get(k).getID()));
                     }
             }
         } catch (Exception e) {
@@ -1742,13 +2009,16 @@ public class DBManager {
                 type = resources.get(i).getTYPE();
                 author = resources.get(i).getAuthor();
 
-                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'", title, type, author);
+                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s'", title, author);
                 ResultSet rs = st.executeQuery(query);
 
                 if (rs.next()) {
                     resourceID = rs.getInt(1);
                     resources.get(i).setID(resourceID);
                     continue;
+                }
+                if(resources.get(i).getDescription().isEmpty()){
+                    resources.get(i).setDescription(" ");
                 }
                 Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
                         resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
@@ -1758,8 +2028,8 @@ public class DBManager {
                 System.out.println(tempQr);
                 st.executeQuery(tempQr);
 
-                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND TYPE ='%s' AND AUTHOR ='%s'",
-                        tempRes.getTitle(), tempRes.getType(), tempRes.getAuthor()));
+                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s'",
+                        tempRes.getTitle(),  tempRes.getAuthor()));
                 while (rs.next()) {
                     resourceID = rs.getInt(1);
                     resources.get(i).setID(resourceID);
@@ -1786,7 +2056,7 @@ public class DBManager {
             info = p.getContacts();
             descrip = p.getDescription();
 
-            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' AND CONTACT_INFO ='%s' AND DESCRIPTION ='%s'", title, info, descrip);
+            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' ", title);
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
@@ -1795,7 +2065,17 @@ public class DBManager {
 
             if (pubID == 0) {
                 //Errorrrrrrrrrr
+                if(info.isEmpty()){
+                    info = " ";
+                }
+                if(descrip.isEmpty()){
+                    descrip = " ";
+                }
+                System.out.println("info is " + info + "descrip is " + descrip);
                 Publisher tempPub = new Publisher(0, title, info, descrip);
+                System.out.println(tempPub.getContactInformation() + "    " + tempPub.getDescription());
+
+
 
                 String tempQr = insertPublisherQuery(tempPub);
                 System.out.println(tempQr);
@@ -1886,8 +2166,7 @@ public class DBManager {
 
 
     public static ArrayList<frontend.data.Course> returnEverything(int semesterid) {
-        String[] semester = getSemesterNameByID(semesterid);
-        semester[0] = semester[0].toUpperCase();
+        Semester semester = getSemesterNameByID(semesterid);
         int lastCourseID = 0;
 
         ArrayList<Integer> courseIDs = getCourseIdsBySemesterID(semesterid);
@@ -1903,7 +2182,7 @@ public class DBManager {
 
             for (int j = 0; j < tmpCourse.size(); j++) {
 
-                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester[0], semester[1]));
+                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.year, semester.season));
 
 
             }
@@ -1998,6 +2277,8 @@ public class DBManager {
                 Resource p = new Resource(rs.getInt(1), rs.getString(2), rs.getString(3),
                         rs.getString(4), rs.getString(5),
                         Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7)), rs.getString(8));
+                if(rs.getString("ISBN13")!=null)
+                    p.setIsbn13(rs.getString("ISBN13"));
                 arr.add(p);
             }
             return arr;
@@ -2239,58 +2520,17 @@ public class DBManager {
     public static void delete_relation_course(frontend.data.Course c) {
 
         try {
-
+            int commonID = c.getCommonID();
             Statement st = conn.createStatement();
 
-            int id_relation_semester_course = 0;
-            int id_relation_course_person = 0;
-            int id_relation_course_resource = 0;
-            int counter = 0;
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d"
-                    , c.getID()));
 
-            while (rs.next()) {
-
-                counter++;
-                id_relation_semester_course = rs.getInt(3);
-            }
-
-            if (counter > 1) {
-
-                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
-
-                while (rs.next()) {
-
-                    id_relation_course_person = rs.getInt(3);
-                }
-
-                rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d", c.getID()));
-
-                while (rs.next()) {
-
-                    id_relation_course_resource = rs.getInt(3);
-                }
-
-                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d AND ID = " +
-                        "%d", c.getID(), id_relation_semester_course));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d AND ID = " +
-                        "%d", c.getID(), id_relation_course_person));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d AND ID = " +
-                        "%d", c.getID(), id_relation_course_resource));
-
-            } else if (counter == 1) {
-
-                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
-                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
-                        c.getID()));
-
-            } else {
-
-                System.out.println("There is nada.");
-
-            }
+                st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = " +
+                        "%d", commonID));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE  COMMONID = " +
+                        "%d", commonID));
+                st.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = " +
+                        "%d", commonID));
 
 
         } catch (SQLException e) {
@@ -2474,6 +2714,7 @@ public class DBManager {
     public static ArrayList<frontend.data.Resource> getResourceList() {
         ArrayList<frontend.data.Resource> resList = new ArrayList<>();
         ArrayList<Resource> tempList = getResourceFromTable();
+
         for (int i = 0; i < tempList.size(); i++) {
 
             resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
@@ -2586,6 +2827,27 @@ public class DBManager {
 
         }
 
+    public static void updateSemester(frontend.data.Course c) {
+
+        int semesterID = getSemesterIDByName(c.getSEMESTER(),String.valueOf(c.getYEAR()));
+        int commonID = c.getCommonID();
+        System.out.println("Semester ID now " + semesterID);
+
+        try {
+
+            Statement st = conn.createStatement();
+
+
+            st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET SEMESTERID = %d WHERE ID = %d",
+                    semesterID,commonID));
+
+        } catch (SQLException e) {
+
+            System.out.println("Something went wrong when trying to update course and person table");
+        }
+
+    }
+
 
 
     public static int find_courseid_by_title(frontend.data.Course c) {
@@ -2645,6 +2907,9 @@ public class DBManager {
     }
 
     public static int find_person_by_name(frontend.data.Person p) {
+        p.setFirstName(p.getFirstName().substring(0,1).toUpperCase()+p.getFirstName().substring(1).toLowerCase());
+        p.setLastName(p.getLastName().substring(0,1).toUpperCase()+p.getLastName().substring(1).toLowerCase());
+        System.out.println("Find this person " + p.getFirstName());
 
         int id = -1;
 
@@ -2915,15 +3180,341 @@ public class DBManager {
 
     }
 
+    public static ArrayList<frontend.data.Course> return_everything_by_commonid(ArrayList<Integer> idlist){
+
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+            for(int i : idlist){
+
+                courses.add(find_class_by_commonid(idlist.get(i)));
+            }
+
+            return courses;
+
+    }
+
+    public static ArrayList<frontend.data.Course> find_classes_by_course_name(String name){
+
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> classids = new ArrayList<>();
+        ArrayList<Integer> tmp;
 
 
-    public static ArrayList<frontend.data.Course> getClassByCommonID(int id){
+        try{
 
-        ArrayList<frontend.data.Course> c_array = new ArrayList<>();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE TITLE LIKE '%"+name+"%' OR CNUMBER LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                courseids.add(rs.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < courseids.size(); i++){
+
+                tmp = find_classids_by_courseid(courseids.get(i));
+                for(int j = 0; j < tmp.size(); j++){
+
+                    classids.add(tmp.get(j));
+                }
+
+            }
 
 
 
-        return c_array;
+            for(int i = 0; i < classids.size(); i++){
+
+                courses.add(find_class_by_commonid(classids.get(i)));
+            }
+
+            return courses;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_classes_by_course_name(String name)");
+        }
+
+        return courses;
+
+    }
+
+    public static ArrayList<Integer> find_classids_by_resource_name(String name){
+
+        ArrayList<Integer> resourceids = new ArrayList<>();
+        ArrayList<Integer> classids = new ArrayList<>();
+
+        try{
+
+            Statement statement = conn.createStatement();
+            Statement statement2 = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+
+
+            while(rs.next()) {
+
+                resourceids.add(rs.getInt("ID"));
+            }
+
+            ResultSet rs2;
+
+            for(int i = 0; i < resourceids.size(); i++){
+
+                rs2 = statement2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID = %d", resourceids.get(i)));
+
+                while(rs2.next()){
+
+                    classids.add(rs2.getInt("COMMONID"));
+                }
+            }
+
+
+            return classids;
+
+        }catch(SQLException e) { System.out.println("Something went wrong with find_classids_by_resource_name()"); }
+
+        return classids;
+    }
+
+    public static ArrayList<Integer> find_classids_by_course_name(String name){
+
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> classids = new ArrayList<>();
+        ArrayList<Integer> tmp;
+
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE TITLE LIKE '%"+name+"%' OR CNUMBER LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                courseids.add(rs.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < courseids.size(); i++){
+
+                tmp = find_classids_by_courseid(courseids.get(i));
+                for(int j = 0; j < tmp.size(); j++){
+
+                    classids.add(tmp.get(j));
+                }
+
+            }
+
+            return classids;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_classes_by_course_name(String name)");
+        }
+
+        return classids;
+
+
+    }
+
+    public static ArrayList<Integer> find_classids_by_courseid(int id){
+
+        ArrayList<Integer> classids = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", id));
+
+            while(rs.next()){
+
+                classids.add(rs.getInt("ID"));
+            }
+
+            return classids;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_classid_by_courseid(int id)");
+        }
+
+        return classids;
+    }
+
+    public static ArrayList<frontend.data.Course> find_classes_by_professor_name(String name){
+
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> personids = new ArrayList<>();
+        ArrayList<frontend.data.Course> courses = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+            Statement st3 = conn.createStatement();
+            ResultSet rs3;
+
+            ResultSet rs = st.executeQuery("SELECT * FROM PERSON WHERE FIRSTNAME LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                personids.add(rs.getInt("ID"));
+            }
+
+            ResultSet rs2 = st.executeQuery("SELECT * FROM PERSON WHERE LASTNAME LIKE '%"+name+"%'");
+
+            while(rs2.next()){
+
+                personids.add(rs2.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < personids.size(); i++){
+
+                 rs3 = st3.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+
+                while(rs3.next()){
+
+                    courseids.add(rs3.getInt("COMMONID"));
+                }
+
+            }
+
+            for(int i = 0; i < courseids.size(); i++){
+
+                courses.add(find_class_by_commonid(courseids.get(i)));
+            }
+
+            return courses;
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_course_by_professor_name(String name)");
+        }
+
+        return courses;
+
+
+    }
+
+    public static ArrayList<Integer> find_classids_by_professor_name(String name){
+
+        ArrayList<Integer> courseids = new ArrayList<>();
+        ArrayList<Integer> personids = new ArrayList<>();
+
+        try{
+
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+            ResultSet rs2;
+
+            ResultSet rs = st.executeQuery("SELECT * FROM PERSON WHERE FIRSTNAME LIKE '%"+name+"%' OR LASTNAME LIKE '%"+name+"%'");
+
+            while(rs.next()){
+
+                personids.add(rs.getInt("ID"));
+            }
+
+
+            for(int i = 0; i < personids.size(); i++){
+
+                rs2 = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+
+                while(rs2.next()){
+
+                    courseids.add(rs2.getInt("COMMONID"));
+                }
+
+            }
+
+            return courseids;
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_course_by_professor_name(String name)");
+        }
+
+        return courseids;
+    }
+
+    public static frontend.data.Course find_class_by_commonid(int id){
+
+        frontend.data.Person person = find_person_by_commonid(id);
+        frontend.data.Course course = new frontend.data.Course();
+        ArrayList<frontend.data.Resource> resources = find_resources_by_commonid(id);
+
+
+        int courseid = -1;
+
+        try{
+
+            Statement st = conn.createStatement();
+            Statement st2 = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
+                    id));
+
+            while (rs.next()) {
+
+                courseid = rs.getInt("COURSEID");
+
+            }
+
+
+            ResultSet rs2 = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", courseid));
+            course.setCommonID(id);
+
+            while(rs2.next()){
+
+                course.setID(rs2.getInt("ID"));
+                course.setTitle(rs2.getString("TITLE") + rs2.getString("CNUMBER"));
+                course.setDescription(rs2.getString("DESCRIPTION"));
+                course.setDepartment(rs2.getString("DEPARTMENT"));
+                course.setSEMESTER("FALL");
+                course.setYEAR(2018);
+            }
+
+            course.setResource(resources);
+            course.setProfessor(person);
+
+            return course;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_class_by_commonid()");
+        }
+
+        return course;
+    }
+
+    public static ArrayList<frontend.data.Resource> find_resources_by_name(String name) {
+
+        ArrayList<frontend.data.Resource> resource = new ArrayList<>();
+        ArrayList<Integer> resourceids = new ArrayList<>();
+        frontend.data.Resource tmpresource;
+
+        try{
+
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+
+            while(rs.next()) {
+
+                resourceids.add(rs.getInt("ID"));
+            }
+
+            for(int i : resourceids){
+
+                resource.add(find_resource_by_id(i));
+            }
+
+            return resource;
+
+        }catch(SQLException e) { System.out.println("Something went wrong with find_resources_by_name()"); }
+
+        return resource;
     }
 
     public static ArrayList<frontend.data.Resource> find_resources_by_commonid(int id){
@@ -2961,6 +3552,62 @@ public class DBManager {
 
         return reslist;
 
+    }
+
+    public static frontend.data.Person find_person_by_commonid(int id){
+
+        frontend.data.Person person = new frontend.data.Person("","",frontend.data.PersonType.valueOf("CourseInstructor").toString());
+
+        int idtmp = -1;
+
+        try{
+
+            Statement st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = %d", id));
+
+            while(rs.next()){
+
+                idtmp = rs.getInt("PERSONID");
+            }
+
+            person = find_person_by_id(idtmp);
+
+            return person;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_person_by_commonid(int id)");
+        }
+
+        return person;
+    }
+
+    public static frontend.data.Person find_person_by_id(int id){
+
+        frontend.data.Person person = new frontend.data.Person("","",frontend.data.PersonType.valueOf("CourseInstructor").toString());
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                person.setID(id);
+                person.setType(rs.getString("TYPE"));
+                person.setFirstName(rs.getString("FIRSTNAME"));
+                person.setLastName(rs.getString("LASTNAME"));
+            }
+
+            return person;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_resources_by_commonid(int id)");
+        }
+
+        return person;
     }
 
     public static frontend.data.Resource find_resource_by_id(int id){
@@ -3055,6 +3702,81 @@ public class DBManager {
 
         return publisher;
 
+    }
+
+    public static void print_semester_by_commonid(int id){
+
+        try{
+
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                System.out.println("|" + rs.getInt("SEMESTERID") + "|");
+            }
+
+        }catch(SQLException e){
+
+            System.out.println("asd");
+        }
+    }
+
+    public static void muhcode(){
+
+        //        ArrayList<Integer> asdf = DBManager.find_classids_by_course_name("140");
+//
+//        int[] varname = new int[asdf.size()];
+//
+//        for(int i = 0; i < asdf.size(); i++){
+//
+//            varname[i] = asdf.get(i);
+//        }
+//
+//        Arrays.sort(varname);
+//
+//        for(int i = 0; i < asdf.size(); i++){
+//
+//            System.out.println(asdf.get(i));
+//        }
+//
+//        System.out.println("===========");
+//
+//        for(int i = 0; i < varname.length; i++){
+//
+//            System.out.println(varname[i]);
+//        }
+//
+//        int[] asdf = {1,2,3,3,4};
+//        Set<Integer> asd = new HashSet<>();
+//
+//        for(int i = 0; i < asdf.length; i++){
+//
+//            asd.add(asdf[i]);
+//        }
+//
+//        for(int i = 0; i < asdf.length; i++){
+//
+//            System.out.println(asdf[i]);
+//        }
+//
+//        System.out.println("=============");
+//
+//        asd.toArray(asdf);
+//
+//        for(int i = 0; i < asdf.length; i++){
+//
+//            System.out.println(asdf[i]);
+//        }
+
+    }
+    public static String capitalizeString(String s){
+        String result = "";
+        String[] tempString = s.split("\\s");
+        for(String a : tempString){
+            result = result + a.substring(0,1).toUpperCase() + a.substring(1) + " ";
+        }
+        return result;
     }
 }
 

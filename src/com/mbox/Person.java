@@ -1,8 +1,8 @@
 package com.mbox;
 import frontend.data.PersonType;
-
-import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
+
 
 public class Person {
 
@@ -156,52 +156,6 @@ public class Person {
 
     }
 
-    // -----DB INSERT METHODS------------------
-
-    public void addToDB(){
-
-        try {
-
-            insertToDB();
-
-            ResultSet rs = DBManager.st.executeQuery("SELECT MAX(ID) FROM PERSON");
-
-
-            while(rs.next()){
-                this.id = rs.getInt(1);
-                this.type = rs.getString(2);
-                this.first_name = rs.getString(3);
-                this.last_name = rs.getString(4);
-            }
-        }catch (Exception e){
-
-        }
-    }
-
-    private void insertToDB(){
-
-        String quer = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')", this.first_name, this.last_name, this.type);
-
-        try{
-            DBManager.st.executeQuery(quer);
-        }catch(Exception e){
-
-        }
-
-
-    }
-
-
-    //-------DB METHODS UPDATE by ID--
-    public String update(int identifier, String first, String last, String type) {
-
-        this.id = identifier;
-        this.first_name = first;
-        this.last_name = last;
-        this.type = type;
-        return String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID = %s", first, last, type, this.id);
-    }
-
 
     private ArrayList<frontend.data.Resource> initResourceListGUI(ArrayList<Resource> tempList){
         ArrayList<frontend.data.Resource> returnedList = new ArrayList<frontend.data.Resource>();
@@ -219,9 +173,9 @@ public class Person {
         PersonType enumTmp;
 
         switch (this.type){
-            case "Program Coordinator" : enumTmp = PersonType.ProgramCoordinator; break;
-            case "Course Coordinator" : enumTmp = PersonType.CourseCoordinator; break;
-            case "Course Instructor" : enumTmp = PersonType.CourseInstructor; break;
+            case "ProgramCoordinator" : enumTmp = PersonType.ProgramCoordinator; break;
+            case "CourseCoordinator" : enumTmp = PersonType.CourseCoordinator; break;
+            case "CourseInstructor" : enumTmp = PersonType.CourseInstructor; break;
             default: enumTmp = PersonType.CourseInstructor;
 
         }
@@ -229,6 +183,20 @@ public class Person {
         p.setResources(initResourceListGUI(this.resourceList));
         return p;
     }
+
+//        @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Person person = (Person) o;
+//        return Objects.equals(id, person.id)&& Objects.equals(last_name, person.first_name)&& Objects.equals(first_name, person.last_name)&& Objects.equals(type, person.type);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(last_name, first_name,type, id);
+//    }
 
 
 
