@@ -217,7 +217,14 @@ public class Controller {
 
         if (!crnSearchTF.getText().isEmpty()) {
             commonid = crnSearchTF.getText();
-            commonid_full = true;
+
+            if (!com.mbox.controller.isInteger(commonid)) {
+                showError("CommonID format is Wrong",
+                        "Check the CommonID format and make sure it's a number.",
+                        "Correct format examples --> 180, 98 ");
+            }
+            else
+                commonid_full = true;
         }
         if (!profSearchTF.getText().isEmpty()) {
             professorname = profSearchTF.getText();
@@ -225,7 +232,25 @@ public class Controller {
         }
         if (!courseSearchTF.getText().isEmpty()) {
             coursename = courseSearchTF.getText();
-            coursename_full = true;
+            String tempCourseTitle = coursename.replaceAll("\\s", "");
+            String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
+
+            if (cSplit.length !=2){
+
+                showError("Course title format is Wrong",
+                        "Check the course title format in the search box " +
+                                "and make sure it's following the correct format.",
+                        "Correct format examples --> CMSC 100, MATH 181 ");
+            }
+
+            else if (!com.mbox.controller.isInteger(cSplit[1])) {
+                showError("Course title format is Wrong",
+                        "Check the course title format in the search box" +
+                                " and make sure it's following the correct format.",
+                        "Correct format examples --> CMSC 100, MATH 181 ");
+            }
+            else
+                coursename_full = true;
         }
         if (!resourceSearchTF.getText().isEmpty()) {
             resource = resourceSearchTF.getText();
@@ -237,7 +262,6 @@ public class Controller {
 
             //nothing has been selected, do nothing
         } else if (commonid_full) {
-
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
 
             courseList.clear();
@@ -603,22 +627,23 @@ public class Controller {
     }
 
     public void add() {
+        String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
+        String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
+
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
                 resourceTable.getItems().isEmpty() ||
                 yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
-            return;
         }
-        String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
-        String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
-        if (cSplit.length !=2){
+        else if (cSplit.length !=2){
 
             showError("Course title format is Wrong",
                     "Check the course title format and make sure it's following the correct format.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
+
         else if (!com.mbox.controller.isInteger(cSplit[1])) {
             showError("Course title format is Wrong",
                     "Check the course title format and make sure it's following the correct format.",
@@ -1953,8 +1978,25 @@ public class Controller {
 
     private void addNewCourseTemplate(Course tempNewCourseTemplate) {
 
-        tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
-        templateList.add(tempNewCourseTemplate);
+        String tempCourseTitle = tempNewCourseTemplate.getTitle().replaceAll("\\s", "");
+        String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
+
+        if (cSplit.length !=2){
+
+            showError("Course title format is Wrong",
+                    "Check the course title format and make sure it's following the correct format.",
+                    "Correct format examples --> CMSC 100, MATH 181 ");
+        }
+
+        else if (!com.mbox.controller.isInteger(cSplit[1])) {
+            showError("Course title format is Wrong",
+                    "Check the course title format and make sure it's following the correct format.",
+                    "Correct format examples --> CMSC 100, MATH 181 ");
+        }
+        else {
+            tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
+            templateList.add(tempNewCourseTemplate);
+        }
     }
 
     private void deleteCourseTemplate(Course selectedCourseTemplate) {
