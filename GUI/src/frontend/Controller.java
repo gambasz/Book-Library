@@ -742,11 +742,7 @@ public class Controller {
                 }
 
             }
-
-
-            //Here I initialize pubList with method getPublisherFromTable()
-            pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
-            ///////////////////////////////////////////////////////////////
+            
             for (Resource tempR : resList) {
                 if (!pubList.contains(tempR.getPublisher()))
                     pubList.add(tempR.getPublisher());
@@ -985,6 +981,8 @@ public class Controller {
 
     private void selectPublisher(Button publisherBtn) {
         Dialog dlg = new Dialog();
+        pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
+
         dlg.setTitle("Select Resource");
         dlg.setHeaderText("Select Resource");
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
