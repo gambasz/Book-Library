@@ -1284,7 +1284,7 @@ public class Controller {
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
-                currentAmTF.getText().trim().isEmpty()){
+                currentAmTF.getText().trim().isEmpty() || typeCB.getSelectionModel().getSelectedItem() == null){
             showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
 
         }
