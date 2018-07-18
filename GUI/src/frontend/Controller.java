@@ -1093,14 +1093,14 @@ public class Controller {
 
     private VBox resourceEditPane() {
         VBox resourceEditPane = new VBox();
-        Label title = new Label("Title: ");
-        Label author = new Label(("Author: "));
+        Label title = new Label("Title:* ");
+        Label author = new Label(("Author:* "));
         Label id = new Label("ID: ");
-        Label totalAmount = new Label(("Total Amount: "));
-        Label currentAmount = new Label(("Current Amount: "));
+        Label totalAmount = new Label(("Total Amount:* "));
+        Label currentAmount = new Label(("Current Amount:* "));
         Label description = new Label("Description: ");
-        Label type = new Label("Type: ");
-        Label publisher = new Label("Publisher: ");
+        Label type = new Label("Type:* ");
+        Label publisher = new Label("Publisher:* ");
 
         TextField titleTF = new TextField();
         TextField authorTF = new TextField();
@@ -1256,7 +1256,9 @@ public class Controller {
             showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
             return;
         }
+        ArrayList<Resource> tempResArr = new ArrayList<Resource>(resourceTable.getItems());
         selectedResource = resourceTable.getSelectionModel().getSelectedItem();
+        tempResArr.remove(selectedResource);
         String new_title = DBManager.capitalizeString(titleTF.getText());
         String new_author = DBManager.capitalizeString(authorTF.getText());
         int new_total = Integer.parseInt(totalAmTF.getText());
@@ -1272,6 +1274,7 @@ public class Controller {
             System.out.println("Everything is the same, no change, so do nothing");
             DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
             selectedResource.setPublisher(selectedPublisher);
+            tempResArr.add(selectedResource);
 
         } else {
             com.mbox.Resource tempRes = new com.mbox.Resource(selectedResource.getID(), new_type, new_title, new_author, "123", new_total, new_current, new_descrip);
@@ -1279,8 +1282,11 @@ public class Controller {
             System.out.println("Updated resource with ID: " + selectedResource.getID());
             DBManager.updatePublisherForResource(tempRes.initResourceGUI(), selectedPublisher);
             selectedResource.setPublisher(selectedPublisher);
+            tempResArr.add(selectedResource);
         }
         System.out.println("Publisher  now is " + selectedPublisher);
+        resourceTable.getItems().clear();
+        resourceTable.getItems().addAll(tempResArr);
         //check if this resource and publisher already had relation or not, delete the old one and add the new one
         // what if there is no publisher yet? the publisherID should be 0
     }
@@ -1533,9 +1539,9 @@ public class Controller {
         currentProfessors.getItems().addAll(profList);
 
         Label currentCBoxLbl = new Label("Current Professor : ");
-        Label profInfoFNameLbl = new Label("First Name");
-        Label profInfoLNameLbl = new Label("Lase Name");
-        Label profInfoTypeLbl = new Label("Type");
+        Label profInfoFNameLbl = new Label("First Name:* ");
+        Label profInfoLNameLbl = new Label("Lase Name:* ");
+        Label profInfoTypeLbl = new Label("Type:* ");
 
         TextField profInfoFNameTf = new TextField();
         TextField profInfoLNameTf = new TextField();
@@ -1844,9 +1850,9 @@ public class Controller {
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
         Button addBtn = new Button("Add");
-        Label tile = new Label("Tile:    ");
-        Label description = new Label("Description: ");
-        Label department = new Label("Department: ");
+        Label tile = new Label("Tile:*    ");
+        Label description = new Label("Description:* ");
+        Label department = new Label("Department:* ");
         TextField tileTf = new TextField();
         TextField descriptionTf = new TextField();
         TextField departmentTf = new TextField();
