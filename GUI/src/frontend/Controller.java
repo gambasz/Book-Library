@@ -23,7 +23,6 @@ import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-import javax.xml.soap.Text;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

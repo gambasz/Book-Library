@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Resource {
-    private String TYPE, title, author, description, ISBN, ISBN13;
+    private String TYPE, title, author, description, ISBN, ISBN13, edition;
     private boolean mcUnique;
     private int totalAmount, ID, currentAmount, commonID = 0;
     private Publisher publisher;
@@ -190,6 +190,14 @@ public class Resource {
 
     public void setISBN13(String ISBN13) {
         this.ISBN13 = ISBN13;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
     }
 
     @Override
