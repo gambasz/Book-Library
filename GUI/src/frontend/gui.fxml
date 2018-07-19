@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import frontend.data.LimitedTextField?>
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.Controller">
    <children>
       <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
@@ -35,7 +36,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
                               <Label text="Title *" />
-                              <TextField fx:id="courseInfoTitle" />
+                              <LimitedTextField fx:id="courseInfoTitle" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -44,7 +45,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="62.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Department *" />
-                              <TextField fx:id="courseInfoDepart" />
+                              <LimitedTextField fx:id="courseInfoDepart" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -53,7 +54,7 @@
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="15.0">
                            <children>
                               <Label text="Description *" />
-                              <TextField fx:id="courseInfoDescrip" />
+                              <LimitedTextField fx:id="courseInfoDescrip" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -83,7 +84,7 @@
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="96.0" text="First Name:*" />
-                                    <TextField fx:id="profInfoFName" />
+                                    <LimitedTextField fx:id="profInfoFName" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />
@@ -92,7 +93,7 @@
                               <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="100.0" text="Last Name:*" />
-                                    <TextField fx:id="profInfoLName" />
+                                    <LimitedTextField fx:id="profInfoLName" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />
@@ -195,7 +196,7 @@
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="CommonID" textAlignment="CENTER" />
-                                    <TextField fx:id="crnSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="crnSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -204,7 +205,7 @@
                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" />
-                                    <TextField fx:id="profSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="profSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -213,7 +214,7 @@
                               <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" />
-                                    <TextField fx:id="courseSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="courseSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -222,7 +223,7 @@
                               <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" />
-                                    <TextField fx:id="departSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="departSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -231,7 +232,7 @@
                               <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" />
-                                    <TextField fx:id="resourceSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="resourceSearchTF" alignment="CENTER" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />

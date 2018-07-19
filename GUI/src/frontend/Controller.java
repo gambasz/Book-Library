@@ -44,8 +44,13 @@ public class Controller {
     private final String deleteIconImg = "/frontend/media/delete.png";
     private final String searchIconImg = "/frontend/media/search.png";
     private final String programeIconImg = "/frontend/media/icon.png";
+
     @FXML
-    TextField courseInfoDescrip, courseInfoTitle, courseInfoDepart, crnSearchTF, profSearchTF, courseSearchTF, departSearchTF, resourceSearchTF, profInfoFName, profInfoLName;
+    LimitedTextField courseInfoDepart = new LimitedTextField(), courseInfoTitle = new LimitedTextField(),
+            courseInfoDescrip = new LimitedTextField(), profInfoFName = new LimitedTextField(),
+            profInfoLName = new LimitedTextField(), crnSearchTF = new LimitedTextField(),
+            profSearchTF = new LimitedTextField(), courseSearchTF= new LimitedTextField(),
+            departSearchTF= new LimitedTextField(), resourceSearchTF= new LimitedTextField();
     @FXML
     ListView<String> resInfoList;
     @FXML
@@ -83,7 +88,7 @@ public class Controller {
      * - marking all the filter checkboxes to true
      */
     public void test() {
-        System.out.print("The program started running now!");
+        System.out.println("The program started running now!");
     }
 
     protected static void showError(String title, String headerMessage, String errorMessage) {
@@ -116,9 +121,21 @@ public class Controller {
         if (debugging) {
             test();
         }
+        courseInfoTitle.setMaxLength(8);
+        courseInfoDepart.setMaxLength(20);
+        courseInfoDescrip.setMaxLength(32);
+        profInfoFName.setMaxLength(15);
+        profInfoLName.setMaxLength(15);
+
+        courseSearchTF.setMaxLength(8);
+        departSearchTF.setMaxLength(20);
+        profSearchTF.setMaxLength(25);
+        crnSearchTF.setMaxLength(8);
+        resourceSearchTF.setMaxLength(32);
 
         // Department textbox in the serach is disabled. As default always computer sciece
         departSearchTF.setDisable(true);
+
 
     }
 
@@ -192,7 +209,8 @@ public class Controller {
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
         profInfoType.getItems().addAll(PersonType.values());
-    }
+
+        }
 
     public void search() {
 
