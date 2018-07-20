@@ -3,7 +3,7 @@ package com.mbox;
 
 public class Resource {
 
-    private String type, title, author, isbn10, description, isbn13;
+    private String type, title, author, isbn10, description, isbn13, edition;
     private int total_amount, current_amount, id, commonID = 0;
     private Publisher publisherInstance;
 
@@ -70,6 +70,7 @@ public class Resource {
         if(isbn13!= null && isbn13!="" && !isbn13.isEmpty()){
             System.out.println("ISBN13: "+ isbn13 +" Resource Title: " + this.title);
             tmp.setISBN13(isbn13);}
+            tmp.setEdition(this.edition);
         return tmp;
     }
 
@@ -127,10 +128,16 @@ public class Resource {
 
         this.publisherInstance = inst;
     }
+    public void setEdition(String e){
+        this.edition = e;
+    }
 
     public int getID(){
 
         return this.id;
+    }
+    public String getEdition(){
+        return this.edition;
     }
 
     public String getType(){

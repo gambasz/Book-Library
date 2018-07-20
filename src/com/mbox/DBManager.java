@@ -600,10 +600,10 @@ public class DBManager {
     public static String insertResourceQuery(Resource resource) {
 //TODO: Khanh is here. IF in description, someone writes in it's a.... It will mistakenly understand that 'it's a test'(which three ' )
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
-                        "DESCRIPTION, ISBN13) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s','%s')",
+                        "DESCRIPTION, ISBN13, EDITION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s','%s','%s')",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
                 resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(),
-                resource.getIsbn13());
+                resource.getIsbn13(),resource.getEdition());
 
     }
 
@@ -786,9 +786,11 @@ public class DBManager {
     public static String updateResourceQuery(Resource resource) {
 
         return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', " +
-                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s', ISBN13 = '%s' WHERE ID = '%d'",
+                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s', ISBN13 = '%s'," +
+                        "EDITION = '%s' WHERE ID = '%d'",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
                 resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getIsbn13(),
+                resource.getEdition(),
                 resource.getID());
 
     }
@@ -2016,7 +2018,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 type = resources.get(i).getTYPE();
                 author = resources.get(i).getAuthor();
 
-                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s'", title, author);
+
+                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
+                        "EDITION = '%s'", title, author,resources.get(i).getEdition());
                 ResultSet rs = st.executeQuery(query);
 
                 if (rs.next()) {
@@ -2031,6 +2035,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                         resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
                         resources.get(i).getDescription());
                 tempRes.setIsbn13(resources.get(i).getISBN13());
+                tempRes.setEdition(resources.get(i).getEdition());
 
                 String tempQr = insertResourceQuery(tempRes);
                 System.out.println(tempQr);
@@ -3786,6 +3791,23 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
         return result;
     }
+
+    public static boolean isISBN(String s){
+        String regex ="\\d+";
+        if(s.matches(regex) && s.length() == 10){
+            return true;
+        }
+        else {return false;}
+    }
+
+    public static boolean isISBN13(String s){
+        String regex ="\\d+";
+        if(s.matches(regex) && s.length() == 13){
+            return true;
+        }
+        else {return false;}
+    }
+
 }
 
 

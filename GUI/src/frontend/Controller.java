@@ -1323,47 +1323,54 @@ public class Controller {
                 isbn13TF.getText().trim().isEmpty()){
             showError("Could not insert the Resource","Unable to insert the Resource",
                     "Please make sure you filled out all the required fields");
-            return;
+
+        } else if(!DBManager.isISBN(isbn10TF.getText()) || !DBManager.isISBN13(isbn13TF.getText())){
+            showError("ISBN error","Wrong ISBN format","ISBN must have 10 digits " +
+                    "and ISBN13 must have 13 digits");
+        }else {
+
+            ArrayList<Resource> tempResArr = new ArrayList<Resource>(resourceTable.getItems());
+            selectedResource = resourceTable.getSelectionModel().getSelectedItem();
+            tempResArr.remove(selectedResource);
+            String new_title = DBManager.capitalizeString(titleTF.getText());
+            String isbn = isbn10TF.getText();
+            String isbn13 = isbn13TF.getText();
+            String new_author = DBManager.capitalizeString(authorTF.getText());
+            int new_total = Integer.parseInt(totalAmTF.getText());
+            int new_current = Integer.parseInt(currentAmTF.getText());
+            String new_descrip = descriptionTF.getText();
+            String new_type = typeCB.getSelectionModel().getSelectedItem().toString();
+            String new_edition = editionCB.getSelectionModel().getSelectedItem().toString();
+            Publisher new_publisher = selectedPublisher;
+
+
+            if (selectedResource.getTYPE() == new_type && selectedResource.getTitle() == new_title
+                    && selectedResource.getAuthor() == new_author && selectedResource.getCurrentAmount() == new_current
+                    && selectedResource.getISBN() == isbn && selectedResource.getISBN13() == isbn13
+                    && selectedResource.getTotalAmount() == new_total && selectedResource.getDescription() == new_descrip
+                    && selectedResource.getEdition() == new_edition) {
+                System.out.println("Everything is the same, no change, so do nothing");
+                DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
+                selectedResource.setPublisher(selectedPublisher);
+                tempResArr.add(selectedResource);
+
+            } else {
+                com.mbox.Resource tempRes = new com.mbox.Resource(selectedResource.getID(), new_type, new_title, new_author, isbn, new_total, new_current, new_descrip);
+                tempRes.setIsbn13(isbn13);
+                tempRes.setEdition(new_edition);
+                selectedResource = tempRes.initResourceGUI();
+                DBManager.executeNoReturnQuery(DBManager.updateResourceQuery(tempRes));
+                System.out.println("Updated resource with ID: " + selectedResource.getID());
+                DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
+                selectedResource.setPublisher(selectedPublisher);
+                tempResArr.add(selectedResource);
+            }
+            System.out.println("Publisher  now is " + selectedPublisher);
+            resourceTable.getItems().clear();
+            resourceTable.getItems().addAll(tempResArr);
+            //check if this resource and publisher already had relation or not, delete the old one and add the new one
+            // what if there is no publisher yet? the publisherID should be 0
         }
-        ArrayList<Resource> tempResArr = new ArrayList<Resource>(resourceTable.getItems());
-        selectedResource = resourceTable.getSelectionModel().getSelectedItem();
-        tempResArr.remove(selectedResource);
-        String new_title = DBManager.capitalizeString(titleTF.getText());
-        String isbn = isbn10TF.getText();
-        String isbn13 = isbn13TF.getText();
-        String new_author = DBManager.capitalizeString(authorTF.getText());
-        int new_total = Integer.parseInt(totalAmTF.getText());
-        int new_current = Integer.parseInt(currentAmTF.getText());
-        String new_descrip = descriptionTF.getText();
-        String new_type = typeCB.getSelectionModel().getSelectedItem().toString();
-        String new_edition = editionCB.getSelectionModel().getSelectedItem().toString();
-        Publisher new_publisher = selectedPublisher;
-
-
-        if (selectedResource.getTYPE() == new_type && selectedResource.getTitle() == new_title
-                && selectedResource.getAuthor() == new_author && selectedResource.getCurrentAmount() == new_current
-                && selectedResource.getISBN() == isbn && selectedResource.getISBN13() == isbn13
-                && selectedResource.getTotalAmount() == new_total && selectedResource.getDescription() == new_descrip) {
-            System.out.println("Everything is the same, no change, so do nothing");
-            DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
-            selectedResource.setPublisher(selectedPublisher);
-            tempResArr.add(selectedResource);
-
-        } else {
-            com.mbox.Resource tempRes = new com.mbox.Resource(selectedResource.getID(), new_type, new_title, new_author, isbn, new_total, new_current, new_descrip);
-            tempRes.setIsbn13(isbn13);
-            selectedResource = tempRes.initResourceGUI();
-            DBManager.executeNoReturnQuery(DBManager.updateResourceQuery(tempRes));
-            System.out.println("Updated resource with ID: " + selectedResource.getID());
-            DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
-            selectedResource.setPublisher(selectedPublisher);
-            tempResArr.add(selectedResource);
-        }
-        System.out.println("Publisher  now is " + selectedPublisher);
-        resourceTable.getItems().clear();
-        resourceTable.getItems().addAll(tempResArr);
-        //check if this resource and publisher already had relation or not, delete the old one and add the new one
-        // what if there is no publisher yet? the publisherID should be 0
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
@@ -1401,6 +1408,7 @@ public class Controller {
                 typeCB.getSelectionModel().getSelectedItem() == null ||
                 editionCB.getSelectionModel().getSelectedItem() == null ||
                 isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty();
+        Boolean isbnFormat = !DBManager.isISBN(isbn10.getText()) || !DBManager.isISBN13(isbn13.getText());
 
 
         if(requiredBoxes){
@@ -1420,6 +1428,10 @@ public class Controller {
                         "Total and Current format must be an integer",
                         "Correct format examples --> 100, 90");
             }
+
+            else if(isbnFormat){
+            showError("ISBN error","Wrong ISBN format","ISBN must have 10 digits, ISBN13 must have 13 digits");
+        }
 
 
             else {
