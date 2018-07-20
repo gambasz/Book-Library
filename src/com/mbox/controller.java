@@ -25,4 +25,11 @@ public class controller {
 
         return Arrays.asList(tempArray);
     }
+
+    public static List<String> getAllTypes(){
+        String temp = "Book;Online Service;Website;";
+        String[] tempArray = temp.split(";");
+
+        return Arrays.asList(tempArray);
+    }
 }

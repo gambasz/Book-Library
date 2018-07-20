@@ -3,6 +3,7 @@ package frontend;
 import com.mbox.BookAPI.Book;
 import com.mbox.BookAPI.BookAPI;
 import com.mbox.DBManager;
+import com.mbox.controller;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -1132,6 +1133,7 @@ public class Controller {
         Label currentAmount = new Label(("Current Amount:* "));
         Label description = new Label("Description: ");
         Label type = new Label("Type:* ");
+        Label edition = new Label("Edition:* ");
         Label publisher = new Label("Publisher:* ");
         LimitedTextField titleTF = new LimitedTextField(), authorTF = new LimitedTextField(),
                 idTF = new LimitedTextField(), totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
@@ -1148,10 +1150,12 @@ public class Controller {
         isbn13TF.setMaxLength(13);
         descriptionTF.setMaxLength(45);
 
-        Button publisherBtn = new Button("Click me to add a new Publisher");
+        Button publisherBtn = new Button("Click here to add a new Publisher");
         ComboBox<String> typeCB = new ComboBox();
+        ComboBox<String> editionCB = new ComboBox();
 
-        typeCB.getItems().add("Books");
+        typeCB.getItems().addAll(controller.getAllTypes());
+        editionCB.getItems().addAll(controller.getAllEdition());
         Button addNAssignNewResource = new Button("Add and Assign");
         addGraphicToButtons(new ImageView(addIconImg), addNAssignNewResource);
         Button delete = new Button();
@@ -1162,20 +1166,24 @@ public class Controller {
         Button searchBtn = new Button("Search");
 
         autoFillBtn.setOnAction(e -> {
-            selectResourceTemplates(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            selectResourceTemplates(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+                    publisherBtn, typeCB,editionCB, addNAssignNewResource, update, delete);
 
         });
 
         addNAssignNewResource.setOnAction(e -> {
-            addAndAssignNewResource(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB);
+            addAndAssignNewResource(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+                    typeCB, editionCB);
         });
 
         delete.setOnAction(e -> {
-            deleteResource(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, delete, update);
+            deleteResource(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+                    publisherBtn, typeCB, editionCB, addNAssignNewResource, delete, update);
         });
 
         update.setOnAction(e -> {
-            updateResource(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB);
+            updateResource(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB,
+                    editionCB);
         });
 
         HBox buttons = new HBox(addNAssignNewResource, update, delete);
@@ -1189,17 +1197,21 @@ public class Controller {
         });
 
         resourceTable.setOnMouseClicked(e -> {
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF,isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF,
+                    isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
+                    addNAssignNewResource, update, delete);
 
         });
         searchBtn.setOnMouseClicked(e -> {
-            openResourceSearchWindow(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+            openResourceSearchWindow(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+                    publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
         });
         //TODO Test this line
         try {
             Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
             onResourceTableSelect(tempRes, titleTF, authorTF, idTF, isbn10TF,
-                    isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+                    isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB,editionCB,
+                    addNAssignNewResource, update, delete);
 
         } catch (Exception ex) {
             if (debugging) {
@@ -1216,7 +1228,8 @@ public class Controller {
                 new HBox(author, authorTF),
                 new HBox(ISBN10,isbn10TF),
                 new HBox(ISBN13,isbn13TF),
-                new HBox(id, idTF),
+                new HBox(edition, editionCB),
+//                new HBox(id, idTF),
                 new HBox(publisher, publisherBtn),
                 new HBox(totalAmount, totalAmTF),
                 new HBox(currentAmount, currentAmTF),
@@ -1236,7 +1249,10 @@ public class Controller {
     }
 
     private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
-                                          TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB, Button addNAssignNewResource, Button update, Button delete) {
+                                          TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
+                                          TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
+                                          ComboBox editionCB, Button addNAssignNewResource, Button update,
+                                          Button delete) {
         try {
             Dialog dlg = new Dialog();
             Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
@@ -1263,7 +1279,8 @@ public class Controller {
                             }
                         }
                     }
-                    onResourceTableSelect(searchedResource, titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+                    onResourceTableSelect(searchedResource, titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF,
+                            currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
                     return null;
                 }
                 return null;
@@ -1294,7 +1311,9 @@ public class Controller {
     }
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
-                                TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+                                TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
+                                ComboBox typeCB, ComboBox editionCB) {
+
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
                 currentAmTF.getText().trim().isEmpty() || isbn10TF.getText().trim().isEmpty() ||
@@ -1314,6 +1333,7 @@ public class Controller {
         int new_current = Integer.parseInt(currentAmTF.getText());
         String new_descrip = descriptionTF.getText();
         String new_type = typeCB.getSelectionModel().getSelectedItem().toString();
+        String new_edition = editionCB.getSelectionModel().getSelectedItem().toString();
         Publisher new_publisher = selectedPublisher;
 
 
@@ -1344,7 +1364,8 @@ public class Controller {
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
-                                TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button delete, Button update) {
+                                TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
+                                Button publisherBtn, ComboBox typeCB,ComboBox editionCB,  Button addNAssignNewResource, Button delete, Button update) {
         ArrayList<Resource> temp = new ArrayList<>();
         temp.addAll(resourceTable.getSelectionModel().getSelectedItems());
         for (Resource r : temp) {
@@ -1364,15 +1385,22 @@ public class Controller {
         }
         updateCourseTable();
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF,
-                isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+                isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
+                addNAssignNewResource, update, delete);
     }
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF,
                                          TextField isbn10, TextField isbn13,TextField totalAmTF, TextField currentAmTF,
-                                         TextField descriptionTF, ComboBox typeCB) {
-        if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
-                currentAmTF.getText().trim().isEmpty() || typeCB.getSelectionModel().getSelectedItem() == null ||
-                isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty()){
+                                         TextField descriptionTF, ComboBox typeCB, ComboBox editionCB) {
+
+        Boolean requiredBoxes = titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() ||
+                totalAmTF.getText().trim().isEmpty() || currentAmTF.getText().trim().isEmpty() ||
+                typeCB.getSelectionModel().getSelectedItem() == null ||
+                editionCB.getSelectionModel().getSelectedItem() == null ||
+                isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty();
+
+
+        if(requiredBoxes){
             showError("Input Error","Make sure you filled out all the required fields Resource Error",
                     "Make sure you entered title, author, total and current amount");
 
@@ -1407,6 +1435,7 @@ public class Controller {
                 );
                 temp.setISBN13(isbn13.getText());
                 temp.setISBN(isbn10.getText());
+                temp.setEdition(editionCB.getSelectionModel().getSelectedItem().toString());
                 if (!isPersonResourcesView) {
                     resList.add(temp);
                     resourceTable.getItems().add(temp);
@@ -1432,7 +1461,10 @@ public class Controller {
     }
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF,TextField isbn10TF,
-                                         TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+                                         TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
+                                         TextField descriptionTF, Button publisherBtn, ComboBox typeCB,
+                                         ComboBox editionCB, Button addNAssignNewResource, Button update, Button delete)
+    {
         VBox mainAddPane = new VBox(2);
         Dialog dlg = new Dialog();
 
@@ -1471,7 +1503,9 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                onResourceTableSelect(resources.getSelectionModel().getSelectedItem(), titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
+                onResourceTableSelect(resources.getSelectionModel().getSelectedItem(), titleTF, authorTF, idTF,
+                        isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
+                        addNAssignNewResource, update, delete);
             }
             return null;
         });
@@ -1485,7 +1519,9 @@ public class Controller {
     }
 
     private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
-                                       TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, Button publisherBtn, ComboBox typeCB, Button addNAssignNewResource, Button update, Button delete) {
+                                       TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
+                                       TextField descriptionTF, Button publisherBtn, ComboBox typeCB, ComboBox editionCB,
+                                       Button addNAssignNewResource, Button update, Button delete) {
 
         if (tempRes != null) {
 
@@ -1502,10 +1538,18 @@ public class Controller {
                 isbn13TF.setText("");
             }
             idTF.setText(String.valueOf(tempRes.getID()));
-            typeCB.getItems().addAll(tempRes.getTYPE());
+            if(!typeCB.getItems().contains(tempRes.getTYPE()))
+                typeCB.getItems().addAll(tempRes.getTYPE());
+
             typeCB.getSelectionModel().select(tempRes.getTYPE());
+            if(tempRes.getEdition()!= null && tempRes.getEdition()!="")
+                if(!typeCB.getItems().contains(tempRes.getEdition()))
+                    editionCB.getItems().addAll(tempRes.getEdition());
+                editionCB.getSelectionModel().select(tempRes.getEdition());
+
+
             descriptionTF.setText(tempRes.getDescription());
-            publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click me.");
+            publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
             selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
@@ -1869,8 +1913,8 @@ public class Controller {
         mainPane.setAlignment(Pos.CENTER);
 
 
-        dlg.setTitle("Assigning Resource");
-        dlg.setHeaderText("Assigning Resource for " + selectedItem.getFirstName() + " " + selectedPerson.getLastName());
+        dlg.setTitle("Assign Resource to Professor");
+        dlg.setHeaderText("Assign Resources for " + selectedItem.getFirstName() + " " + selectedPerson.getLastName());
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
