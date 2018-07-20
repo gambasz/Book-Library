@@ -623,9 +623,7 @@ public class Controller {
                 resInfoList.getItems().clear();
                 resourceTable.getSelectionModel().select(null);
                 for (int i = 0; i < tempRes.size(); i++) {
-                    if (i < 3) {
-                        resInfoList.getItems().add(tempRes.get(i).getTitle());
-                    }
+                    resInfoList.getItems().add(tempRes.get(i).getTitle());
                     resourceTable.getItems().add(tempRes.get(i));
                 }
 
@@ -863,7 +861,7 @@ public class Controller {
                     temp.append(tTitle, 0, Math.min(tTitle.length(), (78 / (length % 10))));
                     temp.append(" , ");
                 }
-                return new SimpleStringProperty(temp.toString());
+                return new SimpleStringProperty(controller.resourcesFormat(res, 2));
             }
         });
         timeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
