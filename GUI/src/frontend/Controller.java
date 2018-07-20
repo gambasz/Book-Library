@@ -24,7 +24,6 @@ import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-import javax.xml.soap.Text;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -46,6 +45,8 @@ public class Controller {
     private final String deleteIconImg = "/frontend/media/delete.png";
     private final String searchIconImg = "/frontend/media/search.png";
     private final String programeIconImg = "/frontend/media/icon.png";
+    private final String questionIconImg = "/frontend/media/question.png";
+
 
     @FXML
     LimitedTextField courseInfoDepart = new LimitedTextField(), courseInfoTitle = new LimitedTextField(),
@@ -80,6 +81,7 @@ public class Controller {
     private int defaultSemester = 5;
     private boolean isPersonResourcesView = false;
 
+
     /**
      * This is initializes the start state.
      * The initial state includes:
@@ -93,6 +95,7 @@ public class Controller {
         System.out.println("The program started running now!");
     }
 
+
     protected static void showError(String title, String headerMessage, String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -102,9 +105,6 @@ public class Controller {
         alert.showAndWait();
     }
 
-    public void guido() {
-        System.out.println("Hey");
-    }
 
     @FXML
     public void initialize() {
@@ -143,12 +143,13 @@ public class Controller {
 
     private void addButtonGraphics() {
         ImageView searchImg = new ImageView(searchIconImg);
-        addGraphicToButtons(searchImg, searchBtn);
         ImageView addImg = new ImageView(addIconImg);
-        addGraphicToButtons(addImg, addBtn);
         ImageView deleteImg = new ImageView(deleteIconImg);
-        addGraphicToButtons(deleteImg, deleteBtn);
         ImageView updateImg = new ImageView(updateIconImg);
+
+        addGraphicToButtons(searchImg, searchBtn);
+        addGraphicToButtons(addImg, addBtn);
+        addGraphicToButtons(deleteImg, deleteBtn);
         addGraphicToButtons(updateImg, updateBtn);
     }
 
@@ -622,9 +623,7 @@ public class Controller {
                 resInfoList.getItems().clear();
                 resourceTable.getSelectionModel().select(null);
                 for (int i = 0; i < tempRes.size(); i++) {
-                    if (i < 3) {
-                        resInfoList.getItems().add(tempRes.get(i).getTitle());
-                    }
+                    resInfoList.getItems().add(tempRes.get(i).getTitle());
                     resourceTable.getItems().add(tempRes.get(i));
                 }
 
@@ -862,7 +861,7 @@ public class Controller {
                     temp.append(tTitle, 0, Math.min(tTitle.length(), (78 / (length % 10))));
                     temp.append(" , ");
                 }
-                return new SimpleStringProperty(temp.toString());
+                return new SimpleStringProperty(controller.resourcesFormat(res, 2));
             }
         });
         timeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
@@ -1580,7 +1579,7 @@ public class Controller {
      */
     public void openResourceView() {
         isPersonResourcesView = false;
-        //TODO: migrate Publi sher add and modify window
+        //TODO: migrate Publisher add and modify window
 
             try {
                 VBox mainPane = new VBox();
@@ -1610,7 +1609,7 @@ public class Controller {
 
 
                 dlg.setTitle("Assigning Resource");
-                dlg.setHeaderText("Assigning Resource");
+                dlg.setHeaderText("Assign Resources for Course");
 
                 dlg.setGraphic(icon);
                 dlg.getDialogPane().setMinWidth(400);
@@ -1639,7 +1638,7 @@ public class Controller {
                     return null;
                 });
             } catch (Exception ex) {
-                showError("Resource View", "Unable to open resource view  ", ex.getMessage());
+                showError("Resource View", "Unable to open the resource view  ", ex.getMessage());
             }
 
 
@@ -1730,12 +1729,16 @@ public class Controller {
             currentProfessors.getSelectionModel().getSelectedItem().setResources(tempRes);
             showPersonsResources(currentProfessors.getSelectionModel().getSelectedItem());
         });
+        addGraphicToButtons(new ImageView(addIconImg), addProfessor);
+        addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
+        addGraphicToButtons(new ImageView(questionIconImg), NAME_ME_SOMETHING_ELSE);
+
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, currentProfessors),
                 new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(deleteBtn, addProfessor, NAME_ME_SOMETHING_ELSE, PersonResources)
+                new HBox( addProfessor,deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources)
 
         );
         for (Object tempElem : mainAddPane.getChildren()) {
@@ -2031,16 +2034,23 @@ public class Controller {
         dataInfoPane.setMinWidth(300);
         dataInfoPane.setSpacing(20);
         dataInfoPane.setAlignment(Pos.CENTER);
+
+        addGraphicToButtons(new ImageView(addIconImg), addBtn);
+        addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
+
+        HBox buttons = new HBox(addBtn,deleteBtn);
+        buttons.setSpacing(15);
+        buttons.setAlignment(Pos.CENTER);
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates),
                 dataInfoPane,
-                deleteBtn,
-                addBtn
+                buttons
         );
+
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
-        dlg.setTitle("Assigning Course");
-        dlg.setHeaderText("Assigning Course");
+        dlg.setTitle("Assigning a Course");
+        dlg.setHeaderText("Assigning a Course");
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);

@@ -1,5 +1,7 @@
 package com.mbox;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,10 +43,34 @@ public class controller {
             for(int i=0; i<difference; i++){
                 modify+=" ";
             }
-            System.out.println("Main length: "+main.length() + "\tmodify len: " + modify.length());
 
         }
 
         return modify;
     }
+
+    @NotNull
+    public static String resourcesFormat(ArrayList<frontend.data.Resource> allResources, int max){
+
+        StringBuilder resFormated = new StringBuilder();
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        int counter=0;
+        for (frontend.data.Resource tempResource : allResources){
+            if(counter<max){
+                if(!ids.contains(tempResource.getID())){
+                    resFormated.append(tempResource.toString()+"\n");
+                    ids.add(tempResource.getID());
+                }
+            }
+            else{
+//                resFormated.deleteCharAt(resFormated.length()-1);
+                break;
+            }
+            counter++;
+        }
+        resFormated.append("\n");
+
+        return resFormated.toString();
+    }
+
 }
