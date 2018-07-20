@@ -1543,7 +1543,7 @@ public class Controller {
 
             typeCB.getSelectionModel().select(tempRes.getTYPE());
             if(tempRes.getEdition()!= null && tempRes.getEdition()!="")
-                if(!typeCB.getItems().contains(tempRes.getEdition()))
+                if(!editionCB.getItems().contains(tempRes.getEdition()))
                     editionCB.getItems().addAll(tempRes.getEdition());
                 editionCB.getSelectionModel().select(tempRes.getEdition());
 
