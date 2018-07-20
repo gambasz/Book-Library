@@ -600,9 +600,10 @@ public class DBManager {
     public static String insertResourceQuery(Resource resource) {
 //TODO: Khanh is here. IF in description, someone writes in it's a.... It will mistakenly understand that 'it's a test'(which three ' )
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
-                        "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
+                        "DESCRIPTION, ISBN13) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s','%s')",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(),
+                resource.getIsbn13());
 
     }
 
@@ -785,9 +786,10 @@ public class DBManager {
     public static String updateResourceQuery(Resource resource) {
 
         return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', " +
-                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s' WHERE ID = '%d'",
+                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s', ISBN13 = '%s' WHERE ID = '%d'",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getID());
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getIsbn13(),
+                resource.getID());
 
     }
 
@@ -2038,6 +2040,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
                         resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
                         resources.get(i).getDescription());
+                tempRes.setIsbn13(resources.get(i).getISBN13());
 
                 String tempQr = insertResourceQuery(tempRes);
                 System.out.println(tempQr);

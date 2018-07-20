@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import javax.xml.soap.Text;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -1149,7 +1150,7 @@ public class Controller {
         });
 
         addNAssignNewResource.setOnAction(e -> {
-            addAndAssignNewResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
+            addAndAssignNewResource(titleTF, authorTF, idTF, isbn10TF,isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
 
         delete.setOnAction(e -> {
@@ -1157,7 +1158,7 @@ public class Controller {
         });
 
         update.setOnAction(e -> {
-            updateResource(titleTF, authorTF, idTF, totalAmTF, currentAmTF, descriptionTF, typeCB);
+            updateResource(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB);
         });
 
         HBox buttons = new HBox(addNAssignNewResource, update, delete);
@@ -1275,10 +1276,12 @@ public class Controller {
         return l;
     }
 
-    private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+    private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
+                                TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
-                currentAmTF.getText().trim().isEmpty()){
+                currentAmTF.getText().trim().isEmpty() || isbn10TF.getText().trim().isEmpty() ||
+                isbn13TF.getText().trim().isEmpty()){
             showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
             return;
         }
@@ -1286,6 +1289,8 @@ public class Controller {
         selectedResource = resourceTable.getSelectionModel().getSelectedItem();
         tempResArr.remove(selectedResource);
         String new_title = DBManager.capitalizeString(titleTF.getText());
+        String isbn = isbn10TF.getText();
+        String isbn13 = isbn13TF.getText();
         String new_author = DBManager.capitalizeString(authorTF.getText());
         int new_total = Integer.parseInt(totalAmTF.getText());
         int new_current = Integer.parseInt(currentAmTF.getText());
@@ -1296,6 +1301,7 @@ public class Controller {
 
         if (selectedResource.getTYPE() == new_type && selectedResource.getTitle() == new_title
                 && selectedResource.getAuthor() == new_author && selectedResource.getCurrentAmount() == new_current
+                && selectedResource.getISBN() == isbn && selectedResource.getISBN13() == isbn13
                 && selectedResource.getTotalAmount() == new_total && selectedResource.getDescription() == new_descrip) {
             System.out.println("Everything is the same, no change, so do nothing");
             DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
@@ -1303,10 +1309,12 @@ public class Controller {
             tempResArr.add(selectedResource);
 
         } else {
-            com.mbox.Resource tempRes = new com.mbox.Resource(selectedResource.getID(), new_type, new_title, new_author, "123", new_total, new_current, new_descrip);
+            com.mbox.Resource tempRes = new com.mbox.Resource(selectedResource.getID(), new_type, new_title, new_author, isbn, new_total, new_current, new_descrip);
+            tempRes.setIsbn13(isbn13);
+            selectedResource = tempRes.initResourceGUI();
             DBManager.executeNoReturnQuery(DBManager.updateResourceQuery(tempRes));
             System.out.println("Updated resource with ID: " + selectedResource.getID());
-            DBManager.updatePublisherForResource(tempRes.initResourceGUI(), selectedPublisher);
+            DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
             selectedResource.setPublisher(selectedPublisher);
             tempResArr.add(selectedResource);
         }
@@ -1341,9 +1349,12 @@ public class Controller {
                 isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, addNAssignNewResource, update, delete);
     }
 
-    private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF, ComboBox typeCB) {
+    private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF,
+                                         TextField isbn10, TextField isbn13,TextField totalAmTF, TextField currentAmTF,
+                                         TextField descriptionTF, ComboBox typeCB) {
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
-                currentAmTF.getText().trim().isEmpty() || typeCB.getSelectionModel().getSelectedItem() == null){
+                currentAmTF.getText().trim().isEmpty() || typeCB.getSelectionModel().getSelectedItem() == null ||
+                isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty()){
             showError("Missing Error","Resource Error",
                     "Make sure you entered title, author, total and current amount");
 
@@ -1376,6 +1387,8 @@ public class Controller {
                         Integer.parseInt(currentAmTF.getText()),
                         selectedPublisher
                 );
+                temp.setISBN13(isbn13.getText());
+                temp.setISBN(isbn10.getText());
                 if (!isPersonResourcesView) {
                     resList.add(temp);
                     resourceTable.getItems().add(temp);
