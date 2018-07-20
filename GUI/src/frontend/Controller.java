@@ -68,7 +68,7 @@ public class Controller {
     CheckBox profCB, courseCB, departCB, resCB;
     boolean debugging = true;
     private TableView<Resource> resourceTable;
-    private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol;
+    private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol, editionCol;
     private ArrayList<Course> courseList, templateList;
     private ArrayList<Person> profList;
     private ArrayList<Resource> resList;
@@ -187,11 +187,14 @@ public class Controller {
         nameCol = new TableColumn<>("Title");
         authorCol = new TableColumn<>("Author");
         idcCol = new TableColumn<>("ID");
-        resourceTable.getColumns().addAll(idcCol, nameCol, authorCol, publisherCol);
+        editionCol = new TableColumn<>("Edition");
+
+        resourceTable.getColumns().addAll( nameCol, authorCol,editionCol, publisherCol);
         idcCol.setPrefWidth(100);
-        nameCol.setPrefWidth(200);
-        authorCol.setPrefWidth(100);
-        publisherCol.setPrefWidth(100);
+        editionCol.setPrefWidth(70);
+        nameCol.setPrefWidth(170);
+        authorCol.setPrefWidth(110);
+        publisherCol.setPrefWidth(150);
         resourceTable.setPrefWidth(500);
 
     }
@@ -887,6 +890,8 @@ public class Controller {
                 new PropertyValueFactory<Resource, String>("title"));
         idcCol.setCellValueFactory(new
                 PropertyValueFactory<Resource, String>("ID"));
+        editionCol.setCellValueFactory(new
+                PropertyValueFactory<Resource, String>("Edition"));
         authorCol.setCellValueFactory(new
                 PropertyValueFactory<Resource, String>("author"));
     }
