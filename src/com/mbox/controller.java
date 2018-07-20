@@ -41,7 +41,6 @@ public class controller {
             for(int i=0; i<difference; i++){
                 modify+=" ";
             }
-            System.out.println("Main length: "+main.length() + "\tmodify len: " + modify.length());
 
         }
 
