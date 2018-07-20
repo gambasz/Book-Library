@@ -53,11 +53,14 @@ public class controller {
     public static String resourcesFormat(ArrayList<frontend.data.Resource> allResources, int max){
 
         StringBuilder resFormated = new StringBuilder();
+        ArrayList<Integer> ids = new ArrayList<Integer>();
         int counter=0;
         for (frontend.data.Resource tempResource : allResources){
             if(counter<max){
-                resFormated.append(tempResource.toString()+"\n");
-
+                if(!ids.contains(tempResource.getID())){
+                    resFormated.append(tempResource.toString()+"\n");
+                    ids.add(tempResource.getID());
+                }
             }
             else{
 //                resFormated.deleteCharAt(resFormated.length()-1);
