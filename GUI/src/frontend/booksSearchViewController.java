@@ -2,6 +2,7 @@ package frontend;
 
 import com.mbox.BookAPI.Book;
 import com.mbox.BookAPI.BookAPI;
+import frontend.data.LimitedTextField;
 import frontend.data.Publisher;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
@@ -23,7 +24,7 @@ import java.util.Set;
 public class booksSearchViewController {
 
     @FXML
-    private TextField searchTextF;
+    private LimitedTextField searchTextF;
 
     @FXML
     private Button searchBtn;
@@ -39,8 +40,9 @@ public class booksSearchViewController {
     void initialize() {
 
         setTableOFBooksCellProperty();
-        addFakeBook();
+//        addFakeBook();
         setSearch();
+        searchTextF.setMaxLength(60);
     }
 
     private void setSearch() {

@@ -238,8 +238,8 @@ public class Controller {
             commonid = crnSearchTF.getText();
 
             if (!com.mbox.controller.isInteger(commonid)) {
-                showError("CommonID format is Wrong",
-                        "Check the CommonID format and make sure it's a number.",
+                showError("Unable to search",
+                        "Unable to search because the commonID you entered is not valid.",
                         "Correct format examples --> 180, 98 ");
             }
             else
@@ -256,16 +256,16 @@ public class Controller {
 
             if (cSplit.length !=2){
 
-                showError("Course title format is Wrong",
-                        "Check the course title format in the search box " +
-                                "and make sure it's following the correct format.",
+                showError("Inout Error",
+                        "Unable to search because the course title format in the search box " +
+                                "is not valid.",
                         "Correct format examples --> CMSC 100, MATH 181 ");
             }
 
             else if (!com.mbox.controller.isInteger(cSplit[1])) {
-                showError("Course title format is Wrong",
-                        "Check the course title format in the search box" +
-                                " and make sure it's following the correct format.",
+                showError("Input Error",
+                        "Unable to search because the course title format in the search box " +
+                                "is not valid.",
                         "Correct format examples --> CMSC 100, MATH 181 ");
             }
             else
@@ -658,14 +658,16 @@ public class Controller {
 
         else if (cSplit.length !=2){
 
-            showError("Course title format is Wrong",
-                    "Check the course title format and make sure it's following the correct format.",
+            showError("Inout Error",
+                    "Unable to insert because the course you title entered " +
+                            "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
 
         else if (!com.mbox.controller.isInteger(cSplit[1])) {
-            showError("Course title format is Wrong",
-                    "Check the course title format and make sure it's following the correct format.",
+            showError("Inout Error",
+                    "Unable to insert because the course you title entered " +
+                            "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
 
@@ -773,7 +775,8 @@ public class Controller {
             ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemester);
 
             if (pulledDatabase == null) {
-                showError("Connection Error", "Server did not return any  data", "The returnEverything did not return any course");
+                showError("Connection Error", "The database did not return any  data",
+                        "Check your connection,and database settings in DBinformation.txt file");
                 pulledDatabase = new ArrayList<>();
             }
 
@@ -797,8 +800,9 @@ public class Controller {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Connection Error", "Server did not return any  data",
-                    "Check you connection and try again :-)");
+            showError("Connection Error", "The database did not return any  data",
+                    "Check your internet connection, and database settings provided" +
+                            " in DBinformation.txt file");
 
         }
     }
@@ -895,7 +899,7 @@ public class Controller {
     public void delete() {
 
         if(selectedCourse == null){
-            showError("Select Error","Delete Error", "Make sure you choose a course to delete");
+            showError("Error","Nothing is selected", "Choose a course to delete");
             return;
         }
         System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
@@ -914,11 +918,12 @@ public class Controller {
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
                 resourceTable.getItems() == null) {
-            showError("Error", "Missing info", "You need to fulfill all sections");
+            showError("Error", "Missing required boxes",
+                    "Please make sure that you fill out all the required sections.");
             return;
         }
         if(selectedCourse == null){
-            showError("Select Error","Update Error", "Make sure to choose a course to update");
+            showError("Error","Nothing is selected", "Choose a course to Update");
         }
 
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
@@ -926,14 +931,16 @@ public class Controller {
 
         if (cSplit.length !=2){
 
-            showError("Course title format is Wrong",
-                    "Check the course title format and make sure it's following the correct format.",
+            showError("Inout Error",
+                    "Unable to insert because the course you title entered " +
+                            "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
 
         else if (!com.mbox.controller.isInteger(cSplit[1])) {
-            showError("Course title format is Wrong",
-                    "Check the course title format and make sure it's following the correct format.",
+            showError("Inout Error",
+                    "Unable to insert because the course you title entered " +
+                            "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
 
@@ -1096,7 +1103,8 @@ public class Controller {
             if (dialogButton == assign) {
                 //TODO: Assign the publisher button
                 if(nameTF.getText().trim().isEmpty()){
-                    showError("Missing Error","Publisher Error", "Make sure you entered publisher's name");
+                    showError("Input Error","Make sure you filled out the required fields",
+                            "Make sure you entered publisher's name correctly");
                     return null;
                 }
                 selectedPublisher = new Publisher(nameTF.getText(), contactsTF.getText(), descriptionTF.getText());
@@ -1291,7 +1299,8 @@ public class Controller {
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
                 currentAmTF.getText().trim().isEmpty() || isbn10TF.getText().trim().isEmpty() ||
                 isbn13TF.getText().trim().isEmpty()){
-            showError("Missing Error","Resource Error", "Make sure you entered title, author, total and current amount");
+            showError("Could not insert the Resource","Unable to insert the Resource",
+                    "Please make sure you filled out all the required fields");
             return;
         }
         ArrayList<Resource> tempResArr = new ArrayList<Resource>(resourceTable.getItems());
@@ -1364,20 +1373,20 @@ public class Controller {
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
                 currentAmTF.getText().trim().isEmpty() || typeCB.getSelectionModel().getSelectedItem() == null ||
                 isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty()){
-            showError("Missing Error","Resource Error",
+            showError("Input Error","Make sure you filled out all the required fields Resource Error",
                     "Make sure you entered title, author, total and current amount");
 
         }
 
             else if(selectedPublisher == null || selectedPublisher.getName().isEmpty()){
-                showError("Missing Error","Publisher missing",
-                        "Please make sure you added publisher for resource");
+                showError("Input Error","No publisher has been assigned!",
+                        "Please make sure you assigned a publisher for resource");
             }
 
             else if (!com.mbox.controller.isInteger(totalAmTF.getText()) ||
                     !com.mbox.controller.isInteger(currentAmTF.getText())) {
-                showError("Total and Current format is Wrong",
-                        "Check the Total and CurrentAMount format and make sure it's following the correct format (integer).",
+                showError("Input Error",
+                        "Total and Current format must be an integer",
                         "Correct format examples --> 100, 90");
             }
 
@@ -1571,7 +1580,7 @@ public class Controller {
                     return null;
                 });
             } catch (Exception ex) {
-                showError("test", "test", ex.getMessage());
+                showError("Resource View", "Unable to open resource view  ", ex.getMessage());
             }
 
 
@@ -2057,14 +2066,16 @@ public class Controller {
 
         if (cSplit.length !=2){
 
-            showError("Course title format is Wrong",
-                    "Check the course title format and make sure it's following the correct format.",
+            showError("Inout Error",
+                    "Unable to insert because the course you title entered " +
+                            "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
 
         else if (!com.mbox.controller.isInteger(cSplit[1])) {
-            showError("Course title format is Wrong",
-                    "Check the course title format and make sure it's following the correct format.",
+            showError("Inout Error",
+                    "Unable to insert because the course you title entered " +
+                            "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         }
         else {
