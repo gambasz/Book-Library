@@ -1554,9 +1554,7 @@ public class DBManager {
 
             rs2 = stpublisher1.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = %s ORDER BY PUBLISHERID DESC",
                     resource1.getID() ));
-//            rs2 = stpublisher1.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE " +
-//                            "RESOURCEID = %s AND EDITION = %s ORDER BY PUBLISHERID DESC",
-//                    resource1.getID(), resource1.getEdition() ));
+
             if (rs2.next()) {
 
                 //there will be a list of all reousrces ID that is owned by Person
@@ -1582,12 +1580,10 @@ public class DBManager {
 
     }
 
-public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseID, int commonID, Map<String, frontend.data.Resource> tempCach ) {
+public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseID, int commonID, Map<Integer, frontend.data.Resource> tempCach ) {
 
     ResultSet rs, rss;
     int resourceID = 0, i = 0;
-     String edition="";
-    StringBuilder idPairEdition = new StringBuilder();
     Statement stTemp;
     frontend.data.Resource tempResource;
     ArrayList<frontend.data.Resource> listResources = new ArrayList<frontend.data.Resource>();
@@ -1601,13 +1597,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         while (rs.next()) {
             resourceID = rs.getInt("RESOURCEID");
-            edition = rs.getString("EDITION");
-            System.out.println("Before: "+ idPairEdition.toString());
-            if (idPairEdition.toString() !="")
-                idPairEdition.delete(0,idPairEdition.length());
-            System.out.println("After: "+ idPairEdition.toString());
-            idPairEdition.append(resourceID + "," + edition);
-
             if(tempCach.containsKey(resourceID))
                 listResources.add(tempCach.get(resourceID));
 
@@ -1624,11 +1613,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                             rss.getInt("CURRENT_AMOUNT"));
 
                     tempResource.setISBN13(rss.getString("ISBN13"));
-                    tempResource.setEdition(edition);
+                    if ( rss.getString("EDITION")!="")
+                        tempResource.setEdition(rss.getString("EDITION"));
 
                     listResources.add(tempResource);
                     setPublisherForResource2(tempResource);
-                    tempCach.put(idPairEdition.toString(), tempResource);
+                    tempCach.put(resourceID, tempResource);
 
                     i++;
                 }
@@ -1654,7 +1644,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         ArrayList<frontend.data.Course> courseList = new ArrayList<>();
 
         Map<Integer, frontend.data.Person> cachedPersons = new HashMap<Integer, frontend.data.Person>();
-            Map<String, frontend.data.Resource> cachedResources = new HashMap<String, frontend.data.Resource>();
+            Map<Integer, frontend.data.Resource> cachedResources = new HashMap<Integer, frontend.data.Resource>();
 
         //Map<Integer, Course> cachedCourses = new HashMap<Integer, Course>();  Think about caching course later on
 

@@ -1039,9 +1039,12 @@ public class Controller {
         Label description = new Label("Description: ");
 
         ComboBox publishersCB = new ComboBox();
-        TextField nameTF = new TextField();
-        TextField contactsTF = new TextField();
-        TextField descriptionTF = new TextField();
+        LimitedTextField nameTF = new LimitedTextField(), contactsTF = new LimitedTextField(),
+                descriptionTF = new LimitedTextField();
+
+        nameTF.setMaxLength(15);
+        contactsTF.setMaxLength(30);
+        descriptionTF.setMaxLength(30);
 
         publishersCB.getItems().addAll(pubList);
         icon.setFitHeight(75);
@@ -1122,15 +1125,21 @@ public class Controller {
         Label description = new Label("Description: ");
         Label type = new Label("Type:* ");
         Label publisher = new Label("Publisher:* ");
+        LimitedTextField titleTF = new LimitedTextField(), authorTF = new LimitedTextField(),
+                idTF = new LimitedTextField(), totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
+                isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
+                descriptionTF = new LimitedTextField();
 
-        TextField titleTF = new TextField();
-        TextField authorTF = new TextField();
-        TextField idTF = new TextField();
-        TextField totalAmTF = new TextField();
-        TextField isbn10TF = new TextField();
-        TextField isbn13TF = new TextField();
-        TextField currentAmTF = new TextField();
-        TextField descriptionTF = new TextField();
+
+        titleTF.setMaxLength(25);
+        authorTF.setMaxLength(10);
+        idTF.setMaxLength(8);
+        totalAmTF.setMaxLength(5);
+        currentAmTF.setMaxLength(5);
+        isbn10TF.setMaxLength(10);
+        isbn13TF.setMaxLength(13);
+        descriptionTF.setMaxLength(45);
+
         Button publisherBtn = new Button("Click me to add a new Publisher");
         ComboBox<String> typeCB = new ComboBox();
 
@@ -1596,8 +1605,9 @@ public class Controller {
         Label profInfoLNameLbl = new Label("Lase Name:* ");
         Label profInfoTypeLbl = new Label("Type:* ");
 
-        TextField profInfoFNameTf = new TextField();
-        TextField profInfoLNameTf = new TextField();
+        LimitedTextField profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
+        profInfoFNameTf.setMaxLength(15);
+        profInfoLNameTf.setMaxLength(15);
         ComboBox profInfoTypeCB = new ComboBox<>();
 
         profInfoTypeCB.setItems(profInfoType.getItems());
@@ -1906,9 +1916,12 @@ public class Controller {
         Label tile = new Label("Tile:*    ");
         Label description = new Label("Description:* ");
         Label department = new Label("Department:* ");
-        TextField tileTf = new TextField();
-        TextField descriptionTf = new TextField();
-        TextField departmentTf = new TextField();
+        LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),
+                departmentTf = new LimitedTextField();
+
+        tileTf.setMaxLength(8);
+        descriptionTf.setMaxLength(30);
+        departmentTf.setMaxLength(30);
 
         setCourseTemplatesCellValue(courseTemplates);
         courseTemplates.getItems().addAll(templateList);
