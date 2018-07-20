@@ -54,12 +54,15 @@ public class controller {
 
         StringBuilder resFormated = new StringBuilder();
         ArrayList<Integer> ids = new ArrayList<Integer>();
+//        ArrayList<String> editions = new ArrayList<String>();
+
         int counter=0;
         for (frontend.data.Resource tempResource : allResources){
             if(counter<max){
-                if(!ids.contains(tempResource.getID())){
+                if(!ids.contains(tempResource.getID()) ){
                     resFormated.append(tempResource.toString()+"\n");
                     ids.add(tempResource.getID());
+//                    editions.add(tempResource.getEdition());
                 }
             }
             else{

@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -1688,7 +1689,7 @@ public class Controller {
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button PersonResources = new Button("View Person's Resources");
         Button addProfessor = new Button("Add");
-        Button NAME_ME_SOMETHING_ELSE = new Button("?");
+        Button NAME_ME_SOMETHING_ELSE = new Button("Info");
 
         Button deleteBtn = new Button("Delete");
 
@@ -1789,11 +1790,16 @@ public class Controller {
     private void resourcePersonDiffView(Person selectedItem) {
         Dialog dlg = new Dialog();
         HBox mainPane = new HBox();
-        String title = selectedItem.getLastName()
+        String title =  selectedItem.getFirstName().concat(" ").concat(selectedItem.getLastName())
                 .concat(", ")
-                .concat(selectedItem.getFirstName())
                 .concat(selectedItem.getType());
-        dlg.setTitle(title + "?");
+        dlg.setTitle(title );
+        dlg.setHeaderText("Here are all the resources needed for "+selectedItem.getFirstName()+" "+selectedItem.getLastName());
+        ImageView icon = new ImageView(programeIconImg);
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+
         ArrayList<Resource> diffResArr = new ArrayList<>();
 
         //TODO :: add naming consistency ---- Rajashow
