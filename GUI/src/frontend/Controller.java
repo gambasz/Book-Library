@@ -1035,15 +1035,15 @@ public class Controller {
         Dialog dlg = new Dialog();
         pubList = DBManager.convertArrayPubPub(DBManager.getPublisherFromTable());
 
-        dlg.setTitle("Select Resource");
-        dlg.setHeaderText("Select Resource");
+        dlg.setTitle("Publisher");
+        dlg.setHeaderText("Select Publisher");
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         VBox mainPane = new VBox();
         ButtonType assign = new ButtonType("Create & Assign", ButtonBar.ButtonData.OK_DONE);
 
         Label listOfPublisher = new Label("List of Current Publisher: ");
-        Label name = new Label("Name: ");
-        Label contact = new Label("Contacts: ");
+        Label name = new Label(controller.stringAdjustment("Description: ","Name: ")+" ");
+        Label contact = new Label(controller.stringAdjustment("Description: ","Contacts: ")+" ");
         Label description = new Label("Description: ");
 
         ComboBox publishersCB = new ComboBox();
@@ -1123,17 +1123,20 @@ public class Controller {
     }
 
     private VBox resourceEditPane() {
+
+        Label edition = new Label("Edition:*  ");
         VBox resourceEditPane = new VBox();
-        Label title = new Label("Title:* ");
-        Label author = new Label(("Author:* "));
-        Label ISBN10 = new Label("ISBN10: ");
-        Label ISBN13 = new Label("ISBN13: ");
+        Label title = new Label(controller.stringAdjustment("Edition:* ", "Title:*  ")+"   ");
+        Label author = new Label((controller.stringAdjustment("Edition:* ","Author:* ")));
+        Label ISBN10 = new Label(controller.stringAdjustment("Edition:* ","ISBN10: "));
+        Label ISBN13 = new Label(controller.stringAdjustment("Edition:* ","ISBN13: "));
         Label id = new Label("ID: ");
-        Label totalAmount = new Label(("Total Amount:* "));
+        Label totalAmount = new Label((controller.stringAdjustment("Current Amount:* ","Total Amount:* ")
+                +"  "));
         Label currentAmount = new Label(("Current Amount:* "));
-        Label description = new Label("Description: ");
-        Label type = new Label("Type:* ");
-        Label edition = new Label("Edition:* ");
+        Label description = new Label(controller.stringAdjustment("Current Amount:* ","Description: ")
+                +"     ");
+        Label type = new Label("Type:*     ");
         Label publisher = new Label("Publisher:* ");
         LimitedTextField titleTF = new LimitedTextField(), authorTF = new LimitedTextField(),
                 idTF = new LimitedTextField(), totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
@@ -1653,10 +1656,11 @@ public class Controller {
         ComboBox<Person> currentProfessors = new ComboBox();
         currentProfessors.getItems().addAll(profList);
 
-        Label currentCBoxLbl = new Label("Current Professor : ");
+        Label currentCBoxLbl = new Label("                      "+"Choose a Professor: ");
         Label profInfoFNameLbl = new Label("First Name:* ");
-        Label profInfoLNameLbl = new Label("Lase Name:* ");
-        Label profInfoTypeLbl = new Label("Type:* ");
+        Label profInfoLNameLbl = new Label("Last Name:* ");
+        Label profInfoTypeLbl = new Label(controller.stringAdjustment("First Name:*  "," Type:* ")+
+                "    ");
 
         LimitedTextField profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
         profInfoFNameTf.setMaxLength(15);
@@ -1729,8 +1733,8 @@ public class Controller {
         }
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
-        dlg.setTitle("Assigning Professor");
-        dlg.setHeaderText("Assigning Professor");
+        dlg.setTitle("Professor");
+        dlg.setHeaderText("Assigning a Professor");
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);
@@ -1962,11 +1966,11 @@ public class Controller {
         ComboBox<Course> courseTemplates = new ComboBox<Course>();
 
 
-        Label currentCBoxLbl = new Label("Course Templates : ");
+        Label currentCBoxLbl = new Label("Course Templates:   ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
         Button addBtn = new Button("Add");
-        Label tile = new Label("Tile:*    ");
+        Label tile = new Label(controller.stringAdjustment("Description:*","Title:* ")+"      ");
         Label description = new Label("Description:* ");
         Label department = new Label("Department:* ");
         LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),

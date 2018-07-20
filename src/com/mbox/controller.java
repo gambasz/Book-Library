@@ -32,4 +32,19 @@ public class controller {
 
         return Arrays.asList(tempArray);
     }
+
+    public static String stringAdjustment(String main, String modify){
+
+        int difference = main.length() - modify.length();
+
+        if(difference>=0){
+            for(int i=0; i<difference; i++){
+                modify+=" ";
+            }
+            System.out.println("Main length: "+main.length() + "\tmodify len: " + modify.length());
+
+        }
+
+        return modify;
+    }
 }
