@@ -751,18 +751,11 @@ public class Controller {
 
     public void filterTableBasedOnSemesterNYear() {
 
-        //has an exception when combobox is empty (program keeps running, needs to be fixed);
+            refreshTable();
+            updateCourseTable();
 
-        String semester = semesterComBox.getValue().toString();
-        String year = yearComBox.getValue().toString();
-
-
-        int id = DBManager.getSemesterIDByName(semester, year);
-
-        courseList = DBManager.returnEverything2(id);
-
-        updateCourseTable();
-    }
+        }
+    
 
     /**
      * populates the table with initial values
@@ -773,7 +766,7 @@ public class Controller {
             setTablesSelectionProperty(tableTV);
             setTablesSelectionProperty(resourceTable);
             //todo: when hash tables are done remove the *contains codes*
-            //======================BEGIN CODE BACKEND
+
             DBManager.openConnection();
 
             ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemester);
@@ -2314,11 +2307,12 @@ public class Controller {
 
     public void refreshTable(){
 
-        if(yearComBox.getSelectionModel().isEmpty() || semesterComBoxEdit.getSelectionModel().isEmpty())
+        if(semesterComBox.getValue()==null||yearComBox.getValue()==null)
             courseList = DBManager.returnEverything2(defaultSemester);
         else {
-            String year = yearComBoxEdit.getSelectionModel().getSelectedItem().toString();
-            String semester = semesterComBoxEdit.getSelectionModel().getSelectedItem().toString();
+            System.out.println("Else madm");
+            String year = yearComBox.getValue().toString();
+            String semester = semesterComBox.getValue().toString();
             int semesterid = DBManager.getSemesterIDByName(semester, year);
             courseList = DBManager.returnEverything2(semesterid);
         }
