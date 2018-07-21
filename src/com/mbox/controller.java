@@ -49,6 +49,16 @@ public class controller {
         return modify;
     }
 
+    public static String multipyStr(String string, int times){
+        String returned="";
+        for(int i=0; i<times; i++){
+            returned+=string;
+        }
+        return returned;
+    }
+
+
+
     @NotNull
     public static String resourcesFormat(ArrayList<frontend.data.Resource> allResources, int max){
 
@@ -60,18 +70,19 @@ public class controller {
         for (frontend.data.Resource tempResource : allResources){
             if(counter<max){
                 if(!ids.contains(tempResource.getID()) ){
-                    resFormated.append(tempResource.toString()+"\n");
+                    resFormated.append(tempResource.toString()+"\n"+
+                            multipyStr("-",tempResource.toString().length()) + "\n");
                     ids.add(tempResource.getID());
 //                    editions.add(tempResource.getEdition());
                 }
             }
             else{
-//                resFormated.deleteCharAt(resFormated.length()-1);
+                resFormated.deleteCharAt(resFormated.length()-1);
                 break;
             }
             counter++;
         }
-        resFormated.append("\n");
+//        resFormated.append("\n");
 
         return resFormated.toString();
     }
