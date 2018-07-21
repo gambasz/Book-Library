@@ -148,6 +148,9 @@ public class DBManager {
             if (rs.next()) {
                 semester.year = rs.getInt("YEAR");
                 semester.season = rs.getString("SEASON");
+                semester.season.toUpperCase();
+                if(semester.season == "SUMMER 1" || semester.season == "SUMMER 2")
+                    semester.season.replace(' ','_');
 
             }
             semester.setId(id);
@@ -1642,6 +1645,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static ArrayList<frontend.data.Course> relationalReadByCourseID2(Map<Integer, ArrayList<Integer>> courseIds, Semester semester ) {
         long startTime = System.nanoTime();
+       String tempSemester = semester.getSeason();
+       tempSemester = tempSemester.toUpperCase();
+       tempSemester = tempSemester.replace(' ', '_');
+       semester.setSeason(tempSemester);
 
         ArrayList<frontend.data.Course> courseList = new ArrayList<>();
 
@@ -1692,7 +1699,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     rsTmp = stTemp2.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = " +
                             tempCommonID);
                     if(rsTmp.next()){
-                        courseList.add(new frontend.data.Course(cID, tempCommonID, semester.year, semester.season,
+                        System.out.println("semester: " + semester.getSeason());
+                        courseList.add(new frontend.data.Course(cID, tempCommonID, semester.getYear(), semester.getSeason(),
                                 cTitle, cDepartment, personTmp, cDescription, courseResources));
                         courseList.get(i).setCommonID(tempCommonID);
 
@@ -1858,7 +1866,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         String dept = c.getDepartment();
         String desc = c.getDescription();
         int personid = c.getProfessor().getID(), commonID=0;
+
+        semester = semester.toLowerCase();
+        semester = semester.substring(0,1).toUpperCase() + semester.substring(1);
+        semester = semester.replace('_',' ');
+
         int semesterid = getSemesterIDByName(semester, year);
+
+        System.out.println("Semester: "+semester + " ID foudn: " + semesterid);
 
         System.out.println(personid);
         System.out.println(semesterid);

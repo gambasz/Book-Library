@@ -2348,10 +2348,14 @@ public class Controller {
         if(semesterComBox.getValue()==null||yearComBox.getValue()==null)
             courseList = DBManager.returnEverything2(defaultSemester);
         else {
-            System.out.println("Else madm");
+
             String year = yearComBox.getValue().toString();
             String semester = semesterComBox.getValue().toString();
+            semester = semester.toLowerCase();
+            semester = semester.substring(0,1).toUpperCase() + semester.substring(1);
+            semester = semester.replace('_',' ');
             int semesterid = DBManager.getSemesterIDByName(semester, year);
+            System.out.println(String.format("Semester: %s  id found: %d",semester,semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
     }
