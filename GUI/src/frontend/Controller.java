@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -29,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -126,12 +128,12 @@ public class Controller {
         if (debugging) {
             test();
         }
-        courseInfoTitle.setMaxLength(8);
+//        courseInfoTitle.setMaxLength(8);
+        setTextFieldLength(courseInfoTitle,10);
         courseInfoDepart.setMaxLength(20);
         courseInfoDescrip.setMaxLength(32);
         profInfoFName.setMaxLength(15);
         profInfoLName.setMaxLength(15);
-
         courseSearchTF.setMaxLength(8);
         departSearchTF.setMaxLength(20);
         profSearchTF.setMaxLength(25);
@@ -141,6 +143,22 @@ public class Controller {
         // Department textbox in the serach is disabled. As default always computer sciece
         departSearchTF.setDisable(true);
 
+
+    }
+    private  void setTextFieldLength(TextField textField,final int MAX_LENGHT){
+        UnaryOperator<TextFormatter.Change> rejectChange = c -> {
+            if (c.isContentChange()) {
+                if (c.getControlNewText().length() > MAX_LENGHT) {
+                    final ContextMenu menu = new ContextMenu();
+                    menu.getItems().add(new MenuItem("This field takes\n"+MAX_LENGHT+" characters only."));
+                    menu.show(c.getControl(), Side.BOTTOM, 0, 0);
+                    return null;
+                }
+            }
+            // valid change: accept the change by returning it
+            return c;
+        };
+        textField.setTextFormatter(new TextFormatter(rejectChange));
 
     }
 
@@ -748,7 +766,6 @@ public class Controller {
 
 
     public void filterTableBasedOnSemesterNYear() {
-        //Todo : add semester filter
         updateCourseTable();
         Integer year = yearComBox.getSelectionModel().getSelectedItem();
         if (year != null) {
@@ -759,8 +776,8 @@ public class Controller {
             tableTV.getItems().removeIf(course -> !course.getSEMESTER().equals(semester.toString()));
 
         }
-//        updateCourseTable();
-//        refreshTable();
+        //Todo : remove code if not needed
+        refreshTable();
 
     }
 
