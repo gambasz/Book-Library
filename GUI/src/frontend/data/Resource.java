@@ -219,11 +219,14 @@ public class Resource {
         StringBuilder resFormated = new StringBuilder();
 
         resFormated.append(String.format("Title: %s, ",this.getTitle()));
-        resFormated.append(String.format("ISBN10: %s, ",this.getISBN()));
+//        resFormated.append(String.format("ISBN10: %s, ",this.getISBN()));
+        resFormated.append(String.format("Edition: %s, ",this.getEdition()));
+
         if(this.getPublisher()!=null && this.getPublisher().getName()!="")
             resFormated.append(String.format("Publisher: %s ",this.getPublisher().getName()));
         else
             resFormated.append(String.format("Publisher: Not Assigned"));
+//        resFormated.append(String.format("Edition: %s, ",this.getEdition()));
 
         return resFormated.toString();
     }

@@ -15,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -751,18 +750,11 @@ public class Controller {
 
     public void filterTableBasedOnSemesterNYear() {
 
-        //has an exception when combobox is empty (program keeps running, needs to be fixed);
+            refreshTable();
+            updateCourseTable();
 
-        String semester = semesterComBox.getValue().toString();
-        String year = yearComBox.getValue().toString();
+        }
 
-
-        int id = DBManager.getSemesterIDByName(semester, year);
-
-        courseList = DBManager.returnEverything2(id);
-
-        updateCourseTable();
-    }
 
     /**
      * populates the table with initial values
@@ -773,7 +765,7 @@ public class Controller {
             setTablesSelectionProperty(tableTV);
             setTablesSelectionProperty(resourceTable);
             //todo: when hash tables are done remove the *contains codes*
-            //======================BEGIN CODE BACKEND
+
             DBManager.openConnection();
 
             ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemester);
@@ -1051,13 +1043,18 @@ public class Controller {
         Label contact = new Label(controller.stringAdjustment("Description: ","Contacts: ")+" ");
         Label description = new Label("Description: ");
 
-        ComboBox publishersCB = new ComboBox();
+        ComboBox<Publisher> publishersCB = new ComboBox();
         LimitedTextField nameTF = new LimitedTextField(), contactsTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
         nameTF.setMaxLength(15);
         contactsTF.setMaxLength(30);
         descriptionTF.setMaxLength(30);
+
+        Button deleteBtn = new Button("Delete");
+        ImageView deletImgg = new ImageView(deleteIconImg);
+        addGraphicToButtons(deletImgg, deleteBtn);
+
 
         publishersCB.getItems().addAll(pubList);
         icon.setFitHeight(75);
@@ -1088,11 +1085,14 @@ public class Controller {
             }
         }
 
+        HBox deleteHB = new HBox(deleteBtn);
+        deleteHB.setAlignment(Pos.CENTER);
         mainPane.getChildren().addAll(
                 new HBox(listOfPublisher, publishersCB),
                 new HBox(name, nameTF),
                 new HBox(contact, contactsTF),
-                new HBox(description, descriptionTF)
+                new HBox(description, descriptionTF),
+                deleteHB
         );
 
         mainPane.setAlignment(Pos.CENTER);
@@ -1105,6 +1105,16 @@ public class Controller {
         dlg.setOnCloseRequest(e -> {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
+
+        deleteBtn.setOnAction(e -> {
+            deletePublisher(publishersCB.getSelectionModel().getSelectedItem());
+            publishersCB.getItems().clear();
+            publishersCB.getItems().addAll(DBManager.convertArrayPubPub(DBManager.getPublisherFromTable()));
+
+
+            //Then refresh the combo boxes
+        });
+
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 //TODO: Assign the publisher button
@@ -1125,6 +1135,11 @@ public class Controller {
             }
             return null;
         });
+    }
+
+    private void deletePublisher(Publisher publisher){
+        System.out.println("Publisher should be deleted, write the method");
+
     }
 
     private VBox resourceEditPane() {
@@ -1504,6 +1519,8 @@ public class Controller {
         Label currentCBoxLbl = new Label("Resources : ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
+        ImageView deletImgg = new ImageView(deleteIconImg);
+        addGraphicToButtons(deletImgg, deleteBtn);
 
         deleteBtn.setOnAction(e -> {
             deleteResource(resources.getSelectionModel().getSelectedItem());
@@ -1517,8 +1534,8 @@ public class Controller {
         );
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
-        dlg.setTitle("Assigning Course");
-        dlg.setHeaderText("Assigning Course");
+        dlg.setTitle("Assigning Resource");
+        dlg.setHeaderText("Assigning Resource");
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);
@@ -2320,11 +2337,12 @@ public class Controller {
 
     public void refreshTable(){
 
-        if(yearComBox.getSelectionModel().isEmpty() || semesterComBoxEdit.getSelectionModel().isEmpty())
+        if(semesterComBox.getValue()==null||yearComBox.getValue()==null)
             courseList = DBManager.returnEverything2(defaultSemester);
         else {
-            String year = yearComBoxEdit.getSelectionModel().getSelectedItem().toString();
-            String semester = semesterComBoxEdit.getSelectionModel().getSelectedItem().toString();
+            System.out.println("Else madm");
+            String year = yearComBox.getValue().toString();
+            String semester = semesterComBox.getValue().toString();
             int semesterid = DBManager.getSemesterIDByName(semester, year);
             courseList = DBManager.returnEverything2(semesterid);
         }
