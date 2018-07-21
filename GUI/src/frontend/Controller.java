@@ -46,6 +46,7 @@ public class Controller {
     private final String searchIconImg = "/frontend/media/search.png";
     private final String programeIconImg = "/frontend/media/icon.png";
     private final String questionIconImg = "/frontend/media/question.png";
+    private final String filterIconImg = "/frontend/media/filter.png";
 
 
     @FXML
@@ -146,11 +147,18 @@ public class Controller {
         ImageView addImg = new ImageView(addIconImg);
         ImageView deleteImg = new ImageView(deleteIconImg);
         ImageView updateImg = new ImageView(updateIconImg);
+        ImageView filterImg = new ImageView(filterIconImg);
+        filterImg.setFitHeight(15);
+        filterImg.setFitWidth(15);
+        filterBtn.setText("");
+
 
         addGraphicToButtons(searchImg, searchBtn);
         addGraphicToButtons(addImg, addBtn);
         addGraphicToButtons(deleteImg, deleteBtn);
         addGraphicToButtons(updateImg, updateBtn);
+        filterBtn.setGraphic(filterImg);
+
     }
 
     private void addGraphicToButtons(ImageView img, Button button) {
