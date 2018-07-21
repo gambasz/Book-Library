@@ -754,7 +754,11 @@ public class Controller {
         if (year != null) {
             tableTV.getItems().removeIf(course -> course.getYEAR() != year.intValue());
         }
+        Object semester = semesterComBox.getSelectionModel().getSelectedItem();
+        if (semester != null) {
+            tableTV.getItems().removeIf(course -> !course.getSEMESTER().equals(semester.toString()));
 
+        }
 //        updateCourseTable();
 //        refreshTable();
 
