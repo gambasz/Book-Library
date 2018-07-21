@@ -752,13 +752,11 @@ public class Controller {
 
 
     public void filterTableBasedOnSemesterNYear() {
-        System.out.println("filering");
+        //Todo : add semester filter
         updateCourseTable();
         Integer year = yearComBox.getSelectionModel().getSelectedItem();
         if (year != null) {
-            System.out.println(year);
             tableTV.getItems().removeIf(course -> course.getYEAR() != year.intValue());
-            System.out.println(tableTV.getItems());
         }
         //        updateCourseTable();
 //        refreshTable();
