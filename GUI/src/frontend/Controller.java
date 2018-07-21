@@ -150,16 +150,12 @@ public class Controller {
         ImageView deleteImg = new ImageView(deleteIconImg);
         ImageView updateImg = new ImageView(updateIconImg);
         ImageView filterImg = new ImageView(filterIconImg);
-        filterImg.setFitHeight(15);
-        filterImg.setFitWidth(15);
-        filterBtn.setText("");
-
 
         addGraphicToButtons(searchImg, searchBtn);
         addGraphicToButtons(addImg, addBtn);
         addGraphicToButtons(deleteImg, deleteBtn);
         addGraphicToButtons(updateImg, updateBtn);
-        filterBtn.setGraphic(filterImg);
+        addGraphicToButtons(filterImg, filterBtn);
 
     }
 
@@ -758,7 +754,8 @@ public class Controller {
         if (year != null) {
             tableTV.getItems().removeIf(course -> course.getYEAR() != year.intValue());
         }
-        //        updateCourseTable();
+
+//        updateCourseTable();
 //        refreshTable();
 
     }
