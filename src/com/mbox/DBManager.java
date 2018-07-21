@@ -2282,7 +2282,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         ArrayList<Resource> arr = new ArrayList<>();
         try {
 
-
             String query = String.format("SELECT * FROM RESOURCES ORDER BY TITLE ASC");
             ResultSet rs = DB.st.executeQuery(query);
 

@@ -70,19 +70,19 @@ public class controller {
         for (frontend.data.Resource tempResource : allResources){
             if(counter<max){
                 if(!ids.contains(tempResource.getID()) ){
-                    resFormated.append(tempResource.toString()+"\n"+
-                            multipyStr("-",tempResource.toString().length()) + "\n");
+                    resFormated.append(tempResource.toString()+"\n");
                     ids.add(tempResource.getID());
-//                    editions.add(tempResource.getEdition());
+                    if(counter<max-1)
+                        resFormated.append(multipyStr("-",tempResource.toString().length()) + "\n");
                 }
             }
             else{
-                resFormated.deleteCharAt(resFormated.length()-1);
+//                resFormated.deleteCharAt(resFormated.length()-1);
                 break;
             }
             counter++;
         }
-//        resFormated.append("\n");
+        resFormated.append("\n");
 
         return resFormated.toString();
     }

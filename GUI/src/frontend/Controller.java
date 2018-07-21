@@ -755,7 +755,7 @@ public class Controller {
             updateCourseTable();
 
         }
-    
+
 
     /**
      * populates the table with initial values
@@ -1504,8 +1504,8 @@ public class Controller {
         );
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
-        dlg.setTitle("Assigning Course");
-        dlg.setHeaderText("Assigning Course");
+        dlg.setTitle("Assigning Resource");
+        dlg.setHeaderText("Assigning Resource");
 
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);

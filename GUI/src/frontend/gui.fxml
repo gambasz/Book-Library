@@ -114,7 +114,7 @@
                   <Separator prefWidth="200.0" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label fx:id="resInfoLbl1" style="-fx-font-weight: bold;" text="Resources:*" underline="true">
+                        <Label fx:id="resInfoLbl1" lineSpacing="3.0" style="-fx-font-weight: bold;" text="Resources:*hell" underline="true">
                            <effect>
                               <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
                            </effect></Label>
@@ -292,7 +292,7 @@
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Professor" />
                         <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Course" />
                         <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />
-                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="540.0" text="Course Resources" />
+                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="490.0" text="Course Resources" />
                     </columns>
                      <VBox.margin>
                         <Insets />
