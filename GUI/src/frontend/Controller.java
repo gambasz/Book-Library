@@ -64,7 +64,9 @@ public class Controller {
     @FXML
     TableColumn<Course, String> resourceCol, profCol, courseCol, departCol, timeCol;
     @FXML
-    ComboBox semesterComBox, semesterComBoxEdit, yearComBox, yearComBoxEdit, profInfoType;
+    ComboBox<Integer> yearComBox, yearComBoxEdit;
+    @FXML
+    ComboBox semesterComBox, semesterComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
     boolean debugging = true;
@@ -750,9 +752,16 @@ public class Controller {
 
 
     public void filterTableBasedOnSemesterNYear() {
-
-        refreshTable();
+        System.out.println("filering");
         updateCourseTable();
+        Integer year = yearComBox.getSelectionModel().getSelectedItem();
+        if (year != null) {
+            System.out.println(year);
+            tableTV.getItems().removeIf(course -> course.getYEAR() != year.intValue());
+            System.out.println(tableTV.getItems());
+        }
+        //        updateCourseTable();
+//        refreshTable();
 
     }
 
