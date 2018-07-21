@@ -1321,17 +1321,19 @@ public class Controller {
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
                                 ComboBox typeCB, ComboBox editionCB) {
-
+        boolean isbnFormat = !DBManager.isISBN(isbn10TF.getText()) || !DBManager.isISBN13(isbn13TF.getText());
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         if(titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
-                currentAmTF.getText().trim().isEmpty() || isbn10TF.getText().trim().isEmpty() ||
-                isbn13TF.getText().trim().isEmpty()){
+                currentAmTF.getText().trim().isEmpty()){
             showError("Could not insert the Resource","Unable to insert the Resource",
                     "Please make sure you filled out all the required fields");
 
-        } else if(!DBManager.isISBN(isbn10TF.getText()) || !DBManager.isISBN13(isbn13TF.getText())){
-            showError("ISBN error","Wrong ISBN format","ISBN must have 10 digits " +
-                    "and ISBN13 must have 13 digits");
+        }
+        else if( typeCB.getSelectionModel().getSelectedItem().toString().equals("Book") && (isbn10TF.getText().trim().isEmpty() || isbn13TF.getText().trim().isEmpty())){
+            showError("ISBN error","Missing ISBN", "Please add ISBN");
+        }
+        else if(isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")){
+            showError("ISBN error","Wrong ISBN format","ISBN must have 10 digits, ISBN13 must have 13 digits");
         }else {
 
             ArrayList<Resource> tempResArr = new ArrayList<Resource>(resourceTable.getItems());
@@ -1411,8 +1413,8 @@ public class Controller {
         Boolean requiredBoxes = titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() ||
                 totalAmTF.getText().trim().isEmpty() || currentAmTF.getText().trim().isEmpty() ||
                 typeCB.getSelectionModel().getSelectedItem() == null ||
-                editionCB.getSelectionModel().getSelectedItem() == null ||
-                isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty();
+                editionCB.getSelectionModel().getSelectedItem() == null
+                ;
         Boolean isbnFormat = !DBManager.isISBN(isbn10.getText()) || !DBManager.isISBN13(isbn13.getText());
 
 
@@ -1434,7 +1436,11 @@ public class Controller {
                         "Correct format examples --> 100, 90");
             }
 
-            else if(isbnFormat){
+
+        else if( typeCB.getSelectionModel().getSelectedItem().toString().equals("") && (isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty())){
+            showError("ISBN error","Missing ISBN", "Please add ISBN");
+        }
+        else if(isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")){
             showError("ISBN error","Wrong ISBN format","ISBN must have 10 digits, ISBN13 must have 13 digits");
         }
 
