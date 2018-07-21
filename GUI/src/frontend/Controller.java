@@ -113,6 +113,13 @@ public class Controller {
 
     @FXML
     public void initialize() {
+        showError("Message for Mamale only",
+                "This is a message for Mamale only; no errors are there so ignore this",
+                "hey, I saw the text validation, and i loved the use of the replace method from textinputcontrol but I had some question about it.\n" +
+                        "all of the text boxes are still using your new class.\n"+
+                        "I add my own validation to the course name on the add/update pane. give it a shot and let me know what you think about it. \n" +
+                        "I also noticed a bug on validation but I will talk to about it later."
+                        );
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
@@ -146,17 +153,16 @@ public class Controller {
 
     }
     private  void setTextFieldLength(TextField textField,final int MAX_LENGHT){
-        UnaryOperator<TextFormatter.Change> rejectChange = c -> {
-            if (c.isContentChange()) {
-                if (c.getControlNewText().length() > MAX_LENGHT) {
+        UnaryOperator<TextFormatter.Change> rejectChange = change -> {
+            if (change.isContentChange()) {
+                if (change.getControlNewText().length() > MAX_LENGHT) {
                     final ContextMenu menu = new ContextMenu();
                     menu.getItems().add(new MenuItem("This field takes\n"+MAX_LENGHT+" characters only."));
-                    menu.show(c.getControl(), Side.BOTTOM, 0, 0);
+                    menu.show(change.getControl(), Side.BOTTOM, 0, 0);
                     return null;
                 }
             }
-            // valid change: accept the change by returning it
-            return c;
+            return change;
         };
         textField.setTextFormatter(new TextFormatter(rejectChange));
 
