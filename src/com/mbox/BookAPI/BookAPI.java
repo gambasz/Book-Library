@@ -39,12 +39,12 @@ public class BookAPI {
         if (!authors.isEmpty())
             tempResource.setAuthor(authors.get(0));
         //Passing the first author of the book
-        if (isbn != null)
+        if (isbn != null) {
+            if (!isbn.get("ISBN_10").isEmpty())
+                tempResource.setISBN(isbn.get("ISBN_10"));
             if (!isbn.get("ISBN_13").isEmpty())
-                tempResource.setISBN(isbn.get("ISBN_13"));
-            else if (!isbn.get("ISBN_10").isEmpty())
-                tempResource.setISBN(isbn.get("ISBN_13"));
-
+                tempResource.setISBN13(isbn.get("ISBN_13"));
+        }
 
         return tempResource;
     }

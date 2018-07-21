@@ -18,8 +18,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+
 
 public class booksSearchViewController {
 
