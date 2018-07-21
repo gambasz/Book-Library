@@ -2291,6 +2291,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                         Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7)), rs.getString(8));
                 if(rs.getString("ISBN13")!=null)
                     p.setIsbn13(rs.getString("ISBN13"));
+                if(rs.getString("EDITION")!=null)
+                    p.setEdition(rs.getString("EDITION"));
                 arr.add(p);
             }
             return arr;

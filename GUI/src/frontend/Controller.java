@@ -15,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -1044,13 +1043,18 @@ public class Controller {
         Label contact = new Label(controller.stringAdjustment("Description: ","Contacts: ")+" ");
         Label description = new Label("Description: ");
 
-        ComboBox publishersCB = new ComboBox();
+        ComboBox<Publisher> publishersCB = new ComboBox();
         LimitedTextField nameTF = new LimitedTextField(), contactsTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
         nameTF.setMaxLength(15);
         contactsTF.setMaxLength(30);
         descriptionTF.setMaxLength(30);
+
+        Button deleteBtn = new Button("Delete");
+        ImageView deletImgg = new ImageView(deleteIconImg);
+        addGraphicToButtons(deletImgg, deleteBtn);
+
 
         publishersCB.getItems().addAll(pubList);
         icon.setFitHeight(75);
@@ -1081,11 +1085,14 @@ public class Controller {
             }
         }
 
+        HBox deleteHB = new HBox(deleteBtn);
+        deleteHB.setAlignment(Pos.CENTER);
         mainPane.getChildren().addAll(
                 new HBox(listOfPublisher, publishersCB),
                 new HBox(name, nameTF),
                 new HBox(contact, contactsTF),
-                new HBox(description, descriptionTF)
+                new HBox(description, descriptionTF),
+                deleteHB
         );
 
         mainPane.setAlignment(Pos.CENTER);
@@ -1098,6 +1105,16 @@ public class Controller {
         dlg.setOnCloseRequest(e -> {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
+
+        deleteBtn.setOnAction(e -> {
+            deletePublisher(publishersCB.getSelectionModel().getSelectedItem());
+            publishersCB.getItems().clear();
+            publishersCB.getItems().addAll(DBManager.convertArrayPubPub(DBManager.getPublisherFromTable()));
+
+
+            //Then refresh the combo boxes
+        });
+
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 //TODO: Assign the publisher button
@@ -1118,6 +1135,11 @@ public class Controller {
             }
             return null;
         });
+    }
+
+    private void deletePublisher(Publisher publisher){
+        System.out.println("Publisher should be deleted, write the method");
+
     }
 
     private VBox resourceEditPane() {
@@ -1491,6 +1513,8 @@ public class Controller {
         Label currentCBoxLbl = new Label("Resources : ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
+        ImageView deletImgg = new ImageView(deleteIconImg);
+        addGraphicToButtons(deletImgg, deleteBtn);
 
         deleteBtn.setOnAction(e -> {
             deleteResource(resources.getSelectionModel().getSelectedItem());
