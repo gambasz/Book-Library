@@ -157,7 +157,9 @@ public class Controller {
             if (change.isContentChange()) {
                 if (change.getControlNewText().length() > MAX_LENGHT) {
                     final ContextMenu menu = new ContextMenu();
-                    menu.getItems().add(new MenuItem("This field takes\n"+MAX_LENGHT+" characters only."));
+                    MenuItem message =new MenuItem("This field takes\n"+MAX_LENGHT+" characters only.");
+                    message.setStyle("-fx-text-fill: red");
+                    menu.getItems().add(message);
                     menu.show(change.getControl(), Side.BOTTOM, 0, 0);
                     return null;
                 }
