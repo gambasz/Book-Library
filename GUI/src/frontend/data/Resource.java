@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Resource {
-    private String TYPE, title, author, description, ISBN, ISBN13;
+    private String TYPE, title, author, description, ISBN, ISBN13, edition;
     private boolean mcUnique;
     private int totalAmount, ID, currentAmount, commonID = 0;
     private Publisher publisher;
@@ -192,6 +192,14 @@ public class Resource {
         this.ISBN13 = ISBN13;
     }
 
+    public String getEdition() {
+        return edition;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -208,8 +216,19 @@ public class Resource {
 
     @Override
     public String toString() {
-        return TYPE.concat(" : ").concat(title).concat(" by ").concat(author);
+        StringBuilder resFormated = new StringBuilder();
 
+        resFormated.append(String.format("Title: %s, ",this.getTitle()));
+//        resFormated.append(String.format("ISBN10: %s, ",this.getISBN()));
+        resFormated.append(String.format("Edition: %s, ",this.getEdition()));
+
+        if(this.getPublisher()!=null && this.getPublisher().getName()!="")
+            resFormated.append(String.format("Publisher: %s ",this.getPublisher().getName()));
+        else
+            resFormated.append(String.format("Publisher: Not Assigned"));
+//        resFormated.append(String.format("Edition: %s, ",this.getEdition()));
+
+        return resFormated.toString();
     }
 }
 

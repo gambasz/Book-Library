@@ -148,6 +148,9 @@ public class DBManager {
             if (rs.next()) {
                 semester.year = rs.getInt("YEAR");
                 semester.season = rs.getString("SEASON");
+                semester.season.toUpperCase();
+                if(semester.season == "SUMMER 1" || semester.season == "SUMMER 2")
+                    semester.season.replace(' ','_');
 
             }
             semester.setId(id);
@@ -600,9 +603,10 @@ public class DBManager {
     public static String insertResourceQuery(Resource resource) {
 //TODO: Khanh is here. IF in description, someone writes in it's a.... It will mistakenly understand that 'it's a test'(which three ' )
         return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
-                        "DESCRIPTION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s')",
+                        "DESCRIPTION, ISBN13, EDITION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s','%s','%s')",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription());
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(),
+                resource.getIsbn13(),resource.getEdition());
 
     }
 
@@ -785,9 +789,12 @@ public class DBManager {
     public static String updateResourceQuery(Resource resource) {
 
         return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', " +
-                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s' WHERE ID = '%d'",
+                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s', ISBN13 = '%s'," +
+                        "EDITION = '%s' WHERE ID = '%d'",
                 resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getID());
+                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getIsbn13(),
+                resource.getEdition(),
+                resource.getID());
 
     }
 
@@ -1550,8 +1557,8 @@ public class DBManager {
             Statement stpublisher1 = conn.createStatement();
             Statement stpublisher2 = conn.createStatement();
 
-            rs2 = stpublisher1.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +
-                    resource1.getID() +" ORDER BY PUBLISHERID DESC");
+            rs2 = stpublisher1.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = %s ORDER BY PUBLISHERID DESC",
+                    resource1.getID() ));
 
             if (rs2.next()) {
 
@@ -1595,7 +1602,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         while (rs.next()) {
             resourceID = rs.getInt("RESOURCEID");
-
             if(tempCach.containsKey(resourceID))
                 listResources.add(tempCach.get(resourceID));
 
@@ -1610,15 +1616,21 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                             rss.getString("TITLE"), rss.getString("AUTHOR"),
                             rss.getString("DESCRIPTION"), rss.getInt("TOTAL_AMOUNT"),
                             rss.getInt("CURRENT_AMOUNT"));
+
                     tempResource.setISBN13(rss.getString("ISBN13"));
+                    if ( rss.getString("EDITION")!="")
+                        tempResource.setEdition(rss.getString("EDITION"));
+
                     listResources.add(tempResource);
                     setPublisherForResource2(tempResource);
                     tempCach.put(resourceID, tempResource);
 
-
                     i++;
                 }
             }
+
+
+
         }
 
         return listResources;
@@ -1633,6 +1645,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static ArrayList<frontend.data.Course> relationalReadByCourseID2(Map<Integer, ArrayList<Integer>> courseIds, Semester semester ) {
         long startTime = System.nanoTime();
+       String tempSemester = semester.getSeason();
+       tempSemester = tempSemester.toUpperCase();
+       tempSemester = tempSemester.replace(' ', '_');
+       semester.setSeason(tempSemester);
 
         ArrayList<frontend.data.Course> courseList = new ArrayList<>();
 
@@ -1683,7 +1699,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     rsTmp = stTemp2.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = " +
                             tempCommonID);
                     if(rsTmp.next()){
-                        courseList.add(new frontend.data.Course(cID, tempCommonID, semester.year, semester.season,
+                        System.out.println("semester: " + semester.getSeason());
+                        courseList.add(new frontend.data.Course(cID, tempCommonID, semester.getYear(), semester.getSeason(),
                                 cTitle, cDepartment, personTmp, cDescription, courseResources));
                         courseList.get(i).setCommonID(tempCommonID);
 
@@ -1849,7 +1866,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         String dept = c.getDepartment();
         String desc = c.getDescription();
         int personid = c.getProfessor().getID(), commonID=0;
+
+        semester = semester.toLowerCase();
+        semester = semester.substring(0,1).toUpperCase() + semester.substring(1);
+        semester = semester.replace('_',' ');
+
         int semesterid = getSemesterIDByName(semester, year);
+
+        System.out.println("Semester: "+semester + " ID foudn: " + semesterid);
 
         System.out.println(personid);
         System.out.println(semesterid);
@@ -2009,7 +2033,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 type = resources.get(i).getTYPE();
                 author = resources.get(i).getAuthor();
 
-                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s'", title, author);
+
+                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
+                        "EDITION = '%s'", title, author,resources.get(i).getEdition());
                 ResultSet rs = st.executeQuery(query);
 
                 if (rs.next()) {
@@ -2023,6 +2049,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
                         resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
                         resources.get(i).getDescription());
+                tempRes.setIsbn13(resources.get(i).getISBN13());
+                tempRes.setEdition(resources.get(i).getEdition());
 
                 String tempQr = insertResourceQuery(tempRes);
                 System.out.println(tempQr);
@@ -2269,7 +2297,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         ArrayList<Resource> arr = new ArrayList<>();
         try {
 
-
             String query = String.format("SELECT * FROM RESOURCES ORDER BY TITLE ASC");
             ResultSet rs = DB.st.executeQuery(query);
 
@@ -2279,6 +2306,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                         Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7)), rs.getString(8));
                 if(rs.getString("ISBN13")!=null)
                     p.setIsbn13(rs.getString("ISBN13"));
+                if(rs.getString("EDITION")!=null)
+                    p.setEdition(rs.getString("EDITION"));
                 arr.add(p);
             }
             return arr;
@@ -3778,6 +3807,23 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
         return result;
     }
+
+    public static boolean isISBN(String s){
+        String regex ="\\d+";
+        if(s.matches(regex) && s.length() == 10){
+            return true;
+        }
+        else {return false;}
+    }
+
+    public static boolean isISBN13(String s){
+        String regex ="\\d+";
+        if(s.matches(regex) && s.length() == 13){
+            return true;
+        }
+        else {return false;}
+    }
+
 }
 
 
