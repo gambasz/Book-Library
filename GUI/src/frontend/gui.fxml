@@ -186,7 +186,7 @@
                </padding>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox onMousePressed="#resetSelect" prefHeight="600.0" prefWidth="800.0">
+            <VBox onMousePressed="#resetSelect" prefHeight="600.0" prefWidth="892.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="125.0" prefWidth="100.0">
                      <children>
