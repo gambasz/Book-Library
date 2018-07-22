@@ -136,7 +136,6 @@ public class Controller {
         setTextFieldSMaxLength();
 
 
-
     }
 
     private void setTextFieldSMaxLength() {
@@ -241,6 +240,8 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
+        semesterComBox.getItems().add(null);
+        yearComBox.getItems().add(null);
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
@@ -315,9 +316,9 @@ public class Controller {
                         "Correct format examples --> CMSC 100, MATH 181 ");
             } else
                 coursename_full = true;
-                coursename = cSplit[1];
+            coursename = cSplit[1];
 
-                ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
+            ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
         }
         if (!resourceSearchTF.getText().isEmpty()) {
             resource = resourceSearchTF.getText();
@@ -339,9 +340,9 @@ public class Controller {
 
         } else if (professorname_full && coursename_full && resource_full) {
 
-            for(int i = 0; i < ids_from_coursename.size(); i++){
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                if(ids_from_professorname.contains(ids_from_coursename.get(i)) && ids_from_resources.contains(ids_from_coursename.get(i))){
+                if (ids_from_professorname.contains(ids_from_coursename.get(i)) && ids_from_resources.contains(ids_from_coursename.get(i))) {
 
                     hashset.add(ids_from_coursename.get(i));
 
@@ -353,16 +354,16 @@ public class Controller {
 
             hashset.clear();
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
             }
 
         } else if (professorname_full && coursename_full) {
 
-            for(int i = 0; i < ids_from_coursename.size(); i++){
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                if(ids_from_professorname.contains(ids_from_coursename.get(i))){
+                if (ids_from_professorname.contains(ids_from_coursename.get(i))) {
 
                     hashset.add(ids_from_coursename.get(i));
 
@@ -374,7 +375,7 @@ public class Controller {
 
             hashset.clear();
 
-            for(int i = 0; i <  all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
 
@@ -382,9 +383,9 @@ public class Controller {
 
         } else if (professorname_full && resource_full) {
 
-            for(int i = 0; i < ids_from_resources.size(); i++){
+            for (int i = 0; i < ids_from_resources.size(); i++) {
 
-                if(ids_from_professorname.contains(ids_from_resources.get(i))){
+                if (ids_from_professorname.contains(ids_from_resources.get(i))) {
 
                     hashset.add(ids_from_resources.get(i));
 
@@ -394,7 +395,7 @@ public class Controller {
 
             all_ids.addAll(hashset);
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
 
@@ -405,9 +406,9 @@ public class Controller {
 
         } else if (coursename_full && resource_full) {
 
-            for(int i = 0; i < ids_from_coursename.size(); i++){
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                if(ids_from_resources.contains(ids_from_coursename.get(i))){
+                if (ids_from_resources.contains(ids_from_coursename.get(i))) {
 
                     hashset.add(ids_from_coursename.get(i));
 
@@ -417,7 +418,7 @@ public class Controller {
 
             all_ids.addAll(hashset);
 
-            for(int i = 0; i < all_ids.size(); i++){
+            for (int i = 0; i < all_ids.size(); i++) {
 
                 tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
 
@@ -1448,8 +1449,6 @@ public class Controller {
      */
     public void openResourceView() {
         isPersonResourcesView = false;
-        //TODO: migrate Publisher add and modify window
-
         try {
             VBox mainPane = new VBox();
             Dialog dlg = new Dialog();
@@ -1472,7 +1471,6 @@ public class Controller {
             resourceTitlePane.setContent(resourceEditPane);
             resourceTitlePane.setText("Resource Details and Management");
             resourceTitlePane.setAlignment(Pos.CENTER);
-
             mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
             mainPane.setAlignment(Pos.CENTER);
 
@@ -1488,6 +1486,8 @@ public class Controller {
             dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
 
             dlg.show();
+            resourceTitlePane.setExpanded(false);
+
             dlg.setResultConverter(dialogButton -> {
                 if (dialogButton == assign) {
 
@@ -1818,6 +1818,8 @@ public class Controller {
 
 
         dlg.show();
+        resourceTitlePane.setExpanded(false);
+
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 DBManager.insertPersonResources(selectedPerson);
