@@ -50,9 +50,10 @@ public class Controller {
     private final String questionIconImg = "/frontend/media/question.png";
     private final String filterIconImg = "/frontend/media/filter.png";
 
-
     @FXML
-    LimitedTextField courseInfoDepart = new LimitedTextField(), courseInfoTitle = new LimitedTextField(),
+    TextField courseInfoTitle;
+    @FXML
+    LimitedTextField courseInfoDepart = new LimitedTextField(),
             courseInfoDescrip = new LimitedTextField(), profInfoFName = new LimitedTextField(),
             profInfoLName = new LimitedTextField(), crnSearchTF = new LimitedTextField(),
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
@@ -113,13 +114,6 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        showError("Message for Mamale only",
-                "This is a message for Mamale only; no errors are there so ignore this",
-                "hey, I saw the text validation, and i loved the use of the replace method from textinputcontrol but I had some question about it.\n" +
-                        "all of the text boxes are still using your new class.\n"+
-                        "I add my own validation to the course name on the add/update pane. give it a shot and let me know what you think about it. \n" +
-                        "I also noticed a bug on validation but I will talk to about it later."
-                        );
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
@@ -134,9 +128,19 @@ public class Controller {
         resetSelect();
         if (debugging) {
             test();
+            // Department textbox in the search is disabled. As default always computer science
+            departSearchTF.setDisable(true);
+            departSearchTF.setText("Computer Science");
         }
-//        courseInfoTitle.setMaxLength(8);
-        setTextFieldLength(courseInfoTitle,10);
+        setTextFieldSMaxLength();
+
+
+
+    }
+
+    private void setTextFieldSMaxLength() {
+        //        courseInfoTitle.setMaxLength(8);
+        setTextFieldLength(courseInfoTitle, 10);
         courseInfoDepart.setMaxLength(20);
         courseInfoDescrip.setMaxLength(32);
         profInfoFName.setMaxLength(15);
@@ -146,20 +150,17 @@ public class Controller {
         profSearchTF.setMaxLength(25);
         crnSearchTF.setMaxLength(8);
         resourceSearchTF.setMaxLength(32);
-
-        // Department textbox in the serach is disabled. As default always computer sciece
-        departSearchTF.setDisable(true);
-
-
     }
-    private  void setTextFieldLength(TextField textField,final int MAX_LENGHT){
+
+    private void setTextFieldLength(TextField textField, final int MAX_LENGHT) {
         UnaryOperator<TextFormatter.Change> rejectChange = change -> {
             if (change.isContentChange()) {
                 if (change.getControlNewText().length() > MAX_LENGHT) {
                     final ContextMenu menu = new ContextMenu();
-                    MenuItem message =new MenuItem("This field takes\n"+MAX_LENGHT+" characters only.");
+                    MenuItem message = new MenuItem("This field takes\n" + MAX_LENGHT + " characters only.");
                     message.setStyle("-fx-text-fill: red");
                     menu.getItems().add(message);
+                    menu.setMinWidth(textField.getWidth());
                     menu.show(change.getControl(), Side.BOTTOM, 0, 0);
                     return null;
                 }
