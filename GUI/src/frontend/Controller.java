@@ -339,9 +339,15 @@ public class Controller {
 
         } else if (professorname_full && coursename_full && resource_full) {
 
-            hashset.addAll(ids_from_professorname);
-            hashset.addAll(ids_from_coursename);
-            hashset.addAll(ids_from_resources);
+            for(int i = 0; i < ids_from_coursename.size(); i++){
+
+                if(ids_from_professorname.contains(ids_from_coursename.get(i)) && ids_from_resources.contains(ids_from_coursename.get(i))){
+
+                    hashset.add(ids_from_coursename.get(i));
+
+                }
+
+            }
 
             all_ids.addAll(hashset);
 
@@ -354,9 +360,15 @@ public class Controller {
 
         } else if (professorname_full && coursename_full) {
 
+            for(int i = 0; i < ids_from_coursename.size(); i++){
 
-            hashset.addAll(ids_from_professorname);
-            hashset.addAll(ids_from_coursename);
+                if(ids_from_professorname.contains(ids_from_coursename.get(i))){
+
+                    hashset.add(ids_from_coursename.get(i));
+
+                }
+
+            }
 
             all_ids.addAll(hashset);
 
@@ -370,8 +382,15 @@ public class Controller {
 
         } else if (professorname_full && resource_full) {
 
-            hashset.addAll(ids_from_professorname);
-            hashset.addAll(ids_from_resources);
+            for(int i = 0; i < ids_from_resources.size(); i++){
+
+                if(ids_from_professorname.contains(ids_from_resources.get(i))){
+
+                    hashset.add(ids_from_resources.get(i));
+
+                }
+
+            }
 
             all_ids.addAll(hashset);
 
@@ -386,8 +405,15 @@ public class Controller {
 
         } else if (coursename_full && resource_full) {
 
-            hashset.addAll(ids_from_coursename);
-            hashset.addAll(ids_from_resources);
+            for(int i = 0; i < ids_from_coursename.size(); i++){
+
+                if(ids_from_resources.contains(ids_from_coursename.get(i))){
+
+                    hashset.add(ids_from_coursename.get(i));
+
+                }
+
+            }
 
             all_ids.addAll(hashset);
 
