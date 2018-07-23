@@ -1884,10 +1884,14 @@ public class Controller {
     }
 
     private void deleteProfessor(Person selectedPerson) {
-        DBManager.deletePerson(selectedPerson);
-        profList.remove(selectedPerson);
-        selectedPerson = null;
-        refreshTable();
+
+        System.out.println("SELECTED PERSON: " + selectedPerson.getFirstName());
+        System.out.println("SELECTED PERSON ID: " + selectedPerson.getID());
+
+//        DBManager.deletePerson(selectedPerson);
+//        profList.remove(selectedPerson);
+//        selectedPerson = null;
+//        refreshTable();
 
     }
 
