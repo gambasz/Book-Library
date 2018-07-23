@@ -877,8 +877,6 @@ public class Controller {
                 if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
                     courseList.add(selectedCourse);
                 }
-
-
             }
 
             updateCourseTable();
@@ -1488,6 +1486,9 @@ public class Controller {
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
             selectedPublisher = tempRes.getPublisher();
+            if (!DBManager.availablePublisher(selectedPublisher)) {
+                pubList.add(selectedPublisher);
+            }
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
             setChildVisibility(true, update, delete);
