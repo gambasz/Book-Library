@@ -4,6 +4,7 @@ import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class controller {
@@ -87,4 +88,104 @@ public class controller {
         return resFormated.toString();
     }
 
-}
+
+    @NotNull
+    public static String findDefaultSemester(){
+        String semester="";
+        semester = getSeason(Calendar.getInstance().MONTH);
+        semester = semester.toUpperCase();
+        return semester;
+    }
+        public static String getSeason(int monthNumber) {
+            String monthName = getMonthName(monthNumber);
+            switch (monthName) {
+                case "January":
+                    return "Winter";
+
+                case "February":
+                    return "Winter";
+
+                case "December":
+                    return ("Winter");
+
+                case "March":
+                    return ("Spring");
+
+                case "April":
+                    return ("Spring");
+
+                case "May":
+                    return ("Spring");
+
+                case "June":
+                    return ("Summer");
+
+                case "July":
+                    return ("Summer");
+
+                case "August":
+                    return ("Summer");
+
+                case "September":
+                    return ("Fall");
+
+                case "October":
+                    return ("Fall");
+
+                case "November":
+                    return ("Fall");
+
+                default:
+                    return ("Invalid argument");
+            }
+        }
+
+        public static String getMonthName(int monthNumber){
+
+
+            switch (monthNumber) {
+                case 0:
+                    return "January";
+
+                case 1:
+                    return "February";
+
+                case 2:
+                    return "March";
+
+                case 3:
+                    return "April";
+
+                case 4:
+                    return "May";
+
+                case 5:
+                    return "June";
+
+                case 6:
+                    return "July";
+
+                case 7:
+                    return "August";
+
+                case 8:
+                    return "September";
+
+
+                case 9:
+                    return "October";
+
+                case 10:
+                    return "November";
+
+                case 11:
+                    return "December";
+
+                default:
+                    return ("Invalid argument");
+            }
+
+
+        }
+    }
+
