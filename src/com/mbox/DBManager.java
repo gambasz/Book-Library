@@ -1995,19 +1995,21 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
         try {
             for (int k = 0; k < r.size(); k++) {
-                System.out.println("RID, PUBD: " + r.get(k).getID() +" "+r.get(k).getPublisher().getID() );
+
                 int resourceID = 0;
-                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
-                        "PUBLISHERID = '%d'", r.get(k).getID(),r.get(k).getPublisher().getID()));
-                while (rs.next()) {
-                    resourceID = rs.getInt(2);
-                }
-                System.out.println("resourceID now " + resourceID);
-                if (resourceID == 0) {
-                    executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            r.get(k).getID()));
+                if(r.get(k).getPublisher() != null) {
+                    ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
+                            "PUBLISHERID = '%d'", r.get(k).getID(), r.get(k).getPublisher().getID()));
+                    while (rs.next()) {
+                        resourceID = rs.getInt(2);
                     }
+                    System.out.println("resourceID now " + resourceID);
+                    if (resourceID == 0) {
+                        executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
+                                r.get(k).getID()));
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2705,28 +2707,32 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try {
 
             Statement st = conn.createStatement();
-            Statement ops = conn.createStatement();
+            Statement st2 = conn.createStatement();
+            Statement st3 = conn.createStatement();
             ResultSet kq;
 
-            int courseID = 0, i = 0;
+            ArrayList<Integer> commonids_to_be_deleted = new ArrayList<>();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d " +
-                    "ORDER BY COURSEID ASC", person.getID()));
+            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+                    person.getID()));
 
             while (rs.next()) {
-                courseID = rs.getInt(1);
-                kq = ops.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d ", courseID));
-                i = 0;
-                while (kq.next()) {
-                    if (i == 0) {
-                        executeNoReturnQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
-                                kq.getInt(3)));
-                        System.out.println();
-                        i++;
-                    }
-                }
+                commonids_to_be_deleted.add(rs.getInt("COMMONID"));
+            }
+
+            for(int i = 0; i < commonids_to_be_deleted.size(); i++){
+
+                st2.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
+                        commonids_to_be_deleted.get(i)));
+            }
+
+            for(int i = 0; i < commonids_to_be_deleted.size(); i++){
+
+                st3.executeQuery(String.format("DELETE FORM RELATION_COURSE_RESOURCES WHERE COMMONID = %d",
+                        commonids_to_be_deleted.get(i)));
 
             }
+
 
             executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
                     person.getID()));
@@ -2734,8 +2740,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     person.getID()));
             executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", person.getID()));
 
-        } catch (SQLException err) {
-            System.out.println(err);
+        } catch (SQLException e) {
+            System.out.println("Something went wrong @ deletePerson() @ DBManager.java");
         }
     }
 
