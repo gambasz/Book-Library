@@ -1507,9 +1507,6 @@ public class Controller {
                 resourceTable.getItems().addAll(selectedCourse.getResource());
             }
 
-            updateRowSelected();
-
-
             resourceTitlePane.setContent(resourceEditPane);
             resourceTitlePane.setText("Resource Details and Management");
             resourceTitlePane.setAlignment(Pos.CENTER);
