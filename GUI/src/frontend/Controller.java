@@ -333,6 +333,7 @@ public class Controller {
         if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
 
             //nothing has been selected, do nothing
+            tmp_courses = DBManager.returnEverything2(55);
         } else if (commonid_full) {
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
             all_ids.add(c.getCommonID());
@@ -497,6 +498,12 @@ public class Controller {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
+        for(Course c : tableTV.getItems()){
+            if(c.getCommonID() == selectedCourse.getCommonID()){
+                tableTV.getSelectionModel().select(c);
+                break;
+            }
+        }
     }
 
     /**
@@ -613,7 +620,8 @@ public class Controller {
 
         }
         //Todo : remove code if not needed
-        refreshTable();
+//        refreshTable();
+//        updateCourseTable();
 
     }
 
