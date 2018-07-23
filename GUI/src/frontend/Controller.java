@@ -499,7 +499,7 @@ public class Controller {
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
 
-        if (selectedCourse != null)
+        if (selectedCourse != null && courseList!=null)
             for (Course c : tableTV.getItems()) {
                 if (c.getCommonID() == selectedCourse.getCommonID()) {
                     tableTV.getSelectionModel().select(c);
