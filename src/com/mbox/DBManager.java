@@ -3663,7 +3663,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             if (publisherid == -1){
 
                 //Assign empty publisher
-                System.out.println("Something went wrong");
+
             }else{
 
                 publisher = find_publisher_by_id(publisherid);
@@ -3714,8 +3714,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             if(publisher.getID() == -1){
-
-                System.out.println("Nothing was found.");
 
             }else{
 

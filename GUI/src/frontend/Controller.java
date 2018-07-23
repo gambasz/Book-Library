@@ -50,9 +50,10 @@ public class Controller {
     private final String questionIconImg = "/frontend/media/question.png";
     private final String filterIconImg = "/frontend/media/filter.png";
 
-
     @FXML
-    LimitedTextField courseInfoDepart = new LimitedTextField(), courseInfoTitle = new LimitedTextField(),
+    TextField courseInfoTitle;
+    @FXML
+    LimitedTextField courseInfoDepart = new LimitedTextField(),
             courseInfoDescrip = new LimitedTextField(), profInfoFName = new LimitedTextField(),
             profInfoLName = new LimitedTextField(), crnSearchTF = new LimitedTextField(),
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
@@ -113,13 +114,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        showError("Message for Mamale only",
-                "This is a message for Mamale only; no errors are there so ignore this",
-                "hey, I saw the text validation, and i loved the use of the replace method from textinputcontrol but I had some question about it.\n" +
-                        "all of the text boxes are still using your new class.\n"+
-                        "I add my own validation to the course name on the add/update pane. give it a shot and let me know what you think about it. \n" +
-                        "I also noticed a bug on validation but I will talk to about it later."
-                        );
+
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
@@ -134,9 +129,18 @@ public class Controller {
         resetSelect();
         if (debugging) {
             test();
+            // Department textbox in the search is disabled. As default always computer science
+            departSearchTF.setDisable(true);
+            departSearchTF.setText("Computer Science");
         }
-//        courseInfoTitle.setMaxLength(8);
-        setTextFieldLength(courseInfoTitle,10);
+        setTextFieldSMaxLength();
+
+
+    }
+
+    private void setTextFieldSMaxLength() {
+        //        courseInfoTitle.setMaxLength(8);
+        setTextFieldLength(courseInfoTitle, 10);
         courseInfoDepart.setMaxLength(20);
         courseInfoDescrip.setMaxLength(32);
         profInfoFName.setMaxLength(15);
@@ -146,20 +150,17 @@ public class Controller {
         profSearchTF.setMaxLength(25);
         crnSearchTF.setMaxLength(8);
         resourceSearchTF.setMaxLength(32);
-
-        // Department textbox in the serach is disabled. As default always computer sciece
-        departSearchTF.setDisable(true);
-
-
     }
-    private  void setTextFieldLength(TextField textField,final int MAX_LENGHT){
+
+    private void setTextFieldLength(TextField textField, final int MAX_LENGHT) {
         UnaryOperator<TextFormatter.Change> rejectChange = change -> {
             if (change.isContentChange()) {
                 if (change.getControlNewText().length() > MAX_LENGHT) {
                     final ContextMenu menu = new ContextMenu();
-                    MenuItem message =new MenuItem("This field takes\n"+MAX_LENGHT+" characters only.");
+                    MenuItem message = new MenuItem("This field takes\n" + MAX_LENGHT + " characters only.");
                     message.setStyle("-fx-text-fill: red");
                     menu.getItems().add(message);
+                    menu.setMinWidth(textField.getWidth());
                     menu.show(change.getControl(), Side.BOTTOM, 0, 0);
                     return null;
                 }
@@ -239,6 +240,8 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
+        semesterComBox.getItems().add(null);
+        yearComBox.getItems().add(null);
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
@@ -269,6 +272,13 @@ public class Controller {
         boolean professorname_full = false;
         boolean coursename_full = false;
         boolean resource_full = false;
+        ArrayList<Integer> ids_from_professorname = new ArrayList<>();
+        ArrayList<Integer> ids_from_coursename = new ArrayList<>();
+        ArrayList<Integer> ids_from_resources = new ArrayList<>();
+        ArrayList<Integer> all_ids = new ArrayList<>();
+        ArrayList<Course> tmp_courses = new ArrayList<>();
+
+        Set<Integer> hashset = new HashSet<>();
 
 
         if (!crnSearchTF.getText().isEmpty()) {
@@ -284,6 +294,9 @@ public class Controller {
         if (!profSearchTF.getText().isEmpty()) {
             professorname = profSearchTF.getText();
             professorname_full = true;
+
+            ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
+
         }
         if (!courseSearchTF.getText().isEmpty()) {
             coursename = courseSearchTF.getText();
@@ -303,11 +316,18 @@ public class Controller {
                         "Correct format examples --> CMSC 100, MATH 181 ");
             } else
                 coursename_full = true;
+            coursename = cSplit[1];
+
+            ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
         }
         if (!resourceSearchTF.getText().isEmpty()) {
             resource = resourceSearchTF.getText();
             resource_full = true;
+
+            ids_from_resources = DBManager.find_classids_by_resource_name(resource);
         }
+
+        //=================================================================================
 
         //if none are true - do nothing
         if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
@@ -315,320 +335,128 @@ public class Controller {
             //nothing has been selected, do nothing
         } else if (commonid_full) {
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
+            all_ids.add(c.getCommonID());
 
-            courseList.clear();
-            courseList.add(c);
-            updateCourseTable();
 
         } else if (professorname_full && coursename_full && resource_full) {
 
-            // largest possible combination
-
-            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
-            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
-            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(resource);
-
-            ArrayList<Integer> all_ids = new ArrayList<>();
-
-            for (int i = 0; i < ids_from_professorname.size(); i++) {
-
-                all_ids.add(ids_from_professorname.get(i));
-            }
-
             for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                all_ids.add(ids_from_coursename.get(i));
+                if (ids_from_professorname.contains(ids_from_coursename.get(i)) && ids_from_resources.contains(ids_from_coursename.get(i))) {
+
+                    hashset.add(ids_from_coursename.get(i));
+
+                }
+
             }
 
-            for (int i = 0; i < ids_from_resources.size(); i++) {
+            all_ids.addAll(hashset);
 
-                all_ids.add(ids_from_resources.get(i));
-            }
-
-            int[] all_class_ids = new int[all_ids.size()];
+            hashset.clear();
 
             for (int i = 0; i < all_ids.size(); i++) {
 
-                all_class_ids[i] = all_ids.get(i);
+                tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
             }
-
-            Arrays.sort(all_class_ids);
-
-            all_ids.clear();
-
-            for (int i = 0; i < all_class_ids.length; i++) {
-
-                all_ids.add(all_class_ids[i]);
-            }
-
-            Set<Integer> hs = new HashSet<>();
-
-
-            hs.addAll(all_ids);
-            all_ids.clear();
-            all_ids.addAll(hs);
-
-            Course tmpc;
-            ArrayList<Course> courses = new ArrayList<>();
-
-            for (int i = 0; i < all_ids.size(); i++) {
-
-                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
-                courses.add(tmpc);
-            }
-
-            // display courses array in the table
-
-            courseList.clear();
-
-            courseList.addAll(courses);
-
-            updateCourseTable();
 
         } else if (professorname_full && coursename_full) {
 
-            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
-            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
-
-            ArrayList<Integer> all_ids = new ArrayList<>();
-
-            for (int i = 0; i < ids_from_professorname.size(); i++) {
-
-                all_ids.add(ids_from_professorname.get(i));
-            }
-
             for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                all_ids.add(ids_from_coursename.get(i));
+                if (ids_from_professorname.contains(ids_from_coursename.get(i))) {
+
+                    hashset.add(ids_from_coursename.get(i));
+
+                }
+
             }
 
-            int[] all_class_ids = new int[all_ids.size()];
+            all_ids.addAll(hashset);
+
+            hashset.clear();
 
             for (int i = 0; i < all_ids.size(); i++) {
 
-                all_class_ids[i] = all_ids.get(i);
+                tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
+
             }
-
-            Arrays.sort(all_class_ids);
-
-            all_ids.clear();
-
-            for (int i = 0; i < all_class_ids.length; i++) {
-
-                all_ids.add(all_class_ids[i]);
-            }
-
-            Set<Integer> hs = new HashSet<>();
-
-
-            hs.addAll(all_ids);
-            all_ids.clear();
-            all_ids.addAll(hs);
-
-            Course tmpc;
-            ArrayList<Course> courses = new ArrayList<>();
-
-            for (int i = 0; i < all_ids.size(); i++) {
-
-                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
-                courses.add(tmpc);
-            }
-
-            // display courses array in the table
-
-            courseList.clear();
-
-            courseList.addAll(courses);
-
-            updateCourseTable();
 
         } else if (professorname_full && resource_full) {
 
-            ArrayList<Integer> ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
-            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(coursename);
-
-            ArrayList<Integer> all_ids = new ArrayList<>();
-
-            for (int i = 0; i < ids_from_professorname.size(); i++) {
-
-                all_ids.add(ids_from_professorname.get(i));
-            }
-
             for (int i = 0; i < ids_from_resources.size(); i++) {
 
-                all_ids.add(ids_from_resources.get(i));
+                if (ids_from_professorname.contains(ids_from_resources.get(i))) {
+
+                    hashset.add(ids_from_resources.get(i));
+
+                }
+
             }
 
-            int[] all_class_ids = new int[all_ids.size()];
+            all_ids.addAll(hashset);
 
             for (int i = 0; i < all_ids.size(); i++) {
 
-                all_class_ids[i] = all_ids.get(i);
+                tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
+
             }
 
-            Arrays.sort(all_class_ids);
-
+            hashset.clear();
             all_ids.clear();
-
-            for (int i = 0; i < all_class_ids.length; i++) {
-
-                all_ids.add(all_class_ids[i]);
-            }
-
-            Set<Integer> hs = new HashSet<>();
-
-
-            hs.addAll(all_ids);
-            all_ids.clear();
-            all_ids.addAll(hs);
-
-            Course tmpc;
-            ArrayList<Course> courses = new ArrayList<>();
-
-            for (int i = 0; i < all_ids.size(); i++) {
-
-                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
-                courses.add(tmpc);
-            }
-
-            // display courses array in the table
-
-            courseList.clear();
-
-            courseList.addAll(courses);
-
-            updateCourseTable();
 
         } else if (coursename_full && resource_full) {
 
-            ArrayList<Integer> ids_from_coursename = DBManager.find_classids_by_professor_name(professorname);
-            ArrayList<Integer> ids_from_resources = DBManager.find_classids_by_resource_name(coursename);
-
-            ArrayList<Integer> all_ids = new ArrayList<>();
-
             for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                all_ids.add(ids_from_coursename.get(i));
+                if (ids_from_resources.contains(ids_from_coursename.get(i))) {
+
+                    hashset.add(ids_from_coursename.get(i));
+
+                }
+
             }
 
-            for (int i = 0; i < ids_from_resources.size(); i++) {
-
-                all_ids.add(ids_from_resources.get(i));
-            }
-
-            int[] all_class_ids = new int[all_ids.size()];
+            all_ids.addAll(hashset);
 
             for (int i = 0; i < all_ids.size(); i++) {
 
-                all_class_ids[i] = all_ids.get(i);
+                tmp_courses.add(DBManager.find_class_by_commonid(all_ids.get(i)));
+
             }
 
-            Arrays.sort(all_class_ids);
-
+            hashset.clear();
             all_ids.clear();
-
-            for (int i = 0; i < all_class_ids.length; i++) {
-
-                all_ids.add(all_class_ids[i]);
-            }
-
-            Set<Integer> hs = new HashSet<>();
-
-
-            hs.addAll(all_ids);
-            all_ids.clear();
-            all_ids.addAll(hs);
-
-            Course tmpc;
-            ArrayList<Course> courses = new ArrayList<>();
-
-            for (int i = 0; i < all_ids.size(); i++) {
-
-                tmpc = DBManager.find_class_by_commonid(all_ids.get(i));
-                courses.add(tmpc);
-            }
-
-            // display courses array in the table
-
-            courseList.clear();
-
-            courseList.addAll(courses);
-
-            updateCourseTable();
-
 
         } else if (professorname_full) {
 
-            ArrayList<Integer> classids = DBManager.find_classids_by_professor_name(professorname);
-            ArrayList<Course> c = new ArrayList<>();
+            for (int i = 0; i < ids_from_professorname.size(); i++) {
 
-            for (int i = 0; i < classids.size(); i++) {
-
-                c.add(DBManager.find_class_by_commonid(classids.get(i)));
+                tmp_courses.add(DBManager.find_class_by_commonid(ids_from_professorname.get(i)));
             }
 
-            // display courses array in table
-
-            courseList.clear();
-
-            courseList.addAll(c);
-
-            updateCourseTable();
 
         } else if (coursename_full) {
 
-            ArrayList<Integer> classids = DBManager.find_classids_by_course_name(coursename);
-            ArrayList<Course> c = new ArrayList<>();
+            for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-            for (int i = 0; i < classids.size(); i++) {
-
-                c.add(DBManager.find_class_by_commonid(classids.get(i)));
+                tmp_courses.add(DBManager.find_class_by_commonid(ids_from_coursename.get(i)));
             }
-
-            // display courses array in table
-
-            courseList.clear();
-
-            courseList.addAll(c);
-
-            updateCourseTable();
 
         } else if (resource_full) {
 
-            ArrayList<Integer> classids = new ArrayList<>();
-            ArrayList<Course> c = new ArrayList<>();
+            for (int i = 0; i < ids_from_resources.size(); i++) {
 
-            classids = DBManager.find_classids_by_resource_name(resource);
-
-            System.out.println("============");
-            System.out.println("Classids size: ");
-            System.out.println(classids.size());
-
-            for (int i = 0; i < classids.size(); i++) {
-
-                System.out.println("========================");
-                System.out.println(classids.get(i));
-                DBManager.print_semester_by_commonid(classids.get(i));
-                System.out.println("========================");
+                tmp_courses.add(DBManager.find_class_by_commonid(ids_from_resources.get(i)));
             }
-
-            for (int i = 0; i < classids.size(); i++) {
-
-                c.add(DBManager.find_class_by_commonid(classids.get(i)));
-            }
-
-            // display courses array in table
-
-            courseList.clear();
-
-            courseList.addAll(c);
-
-            updateCourseTable();
 
         } else {
 
             System.out.println("IDK whats going on m8");
         }
+
+        courseList.clear();
+        courseList.addAll(tmp_courses);
+        updateCourseTable();
 
 
     }
@@ -1663,8 +1491,6 @@ public class Controller {
      */
     public void openResourceView() {
         isPersonResourcesView = false;
-        //TODO: migrate Publisher add and modify window
-
         try {
             VBox mainPane = new VBox();
             Dialog dlg = new Dialog();
@@ -1687,7 +1513,6 @@ public class Controller {
             resourceTitlePane.setContent(resourceEditPane);
             resourceTitlePane.setText("Resource Details and Management");
             resourceTitlePane.setAlignment(Pos.CENTER);
-
             mainPane.getChildren().addAll(new HBox(resourceTitlePane, resourceTable));
             mainPane.setAlignment(Pos.CENTER);
 
@@ -1703,6 +1528,8 @@ public class Controller {
             dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
 
             dlg.show();
+            resourceTitlePane.setExpanded(false);
+
             dlg.setResultConverter(dialogButton -> {
                 if (dialogButton == assign) {
 
@@ -2033,6 +1860,8 @@ public class Controller {
 
 
         dlg.show();
+        resourceTitlePane.setExpanded(false);
+
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
                 DBManager.insertPersonResources(selectedPerson);
