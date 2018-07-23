@@ -1244,7 +1244,11 @@ public class Controller {
 
         } else if (typeCB.getSelectionModel().getSelectedItem().toString().equals("Book") && (isbn10TF.getText().trim().isEmpty() || isbn13TF.getText().trim().isEmpty())) {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
-        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
+        } else if(selectedPublisher == null){
+            showError("Update Error","Missing publisher", "Please add publisher for resource");
+
+        }
+        else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
