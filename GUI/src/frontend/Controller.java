@@ -240,8 +240,8 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
-        semesterComBox.getItems().add(null);
-        yearComBox.getItems().add(null);
+//        semesterComBox.getItems().add(null);
+//        yearComBox.getItems().add(null);
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
@@ -625,7 +625,6 @@ public class Controller {
 //        }
         //Todo : remove code if not needed
         refreshTable();
-        updateCourseTable();
 
     }
 
@@ -794,7 +793,7 @@ public class Controller {
                     "Please make sure that you fill out all the required sections.");
             return;
         }
-        if (selectedCourse == null) {
+        else if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
         }
 
@@ -1886,10 +1885,14 @@ public class Controller {
     }
 
     private void deleteProfessor(Person selectedPerson) {
-        DBManager.deletePerson(selectedPerson);
-        profList.remove(selectedPerson);
-        selectedPerson = null;
-        refreshTable();
+
+        System.out.println("SELECTED PERSON: " + selectedPerson.getFirstName());
+        System.out.println("SELECTED PERSON ID: " + selectedPerson.getID());
+
+//        DBManager.deletePerson(selectedPerson);
+//        profList.remove(selectedPerson);
+//        selectedPerson = null;
+//        refreshTable();
 
     }
 

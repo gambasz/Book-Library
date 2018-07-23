@@ -296,16 +296,16 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <TableView fx:id="tableTV" editable="true">
+                  <TableView fx:id="tableTV" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="839.0">
                     <columns>
                         <TableColumn fx:id="timeCol" prefWidth="85.0" text="Semester" />
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Professor" />
                         <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Course" />
                         <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />
-                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="523.0" text="Course Resources" />
+                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="531.0" text="Course Resources" />
                     </columns>
                      <VBox.margin>
-                        <Insets />
+                        <Insets right="25.0" />
                      </VBox.margin>
                   </TableView>
                </children>
