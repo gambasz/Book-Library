@@ -2709,9 +2709,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             Statement st = conn.createStatement();
             Statement st2 = conn.createStatement();
             Statement st3 = conn.createStatement();
-            ResultSet kq;
+            Statement st4 = conn.createStatement();
+            Statement st5 = conn.createStatement();
+            Statement st6 = conn.createStatement();
 
             ArrayList<Integer> commonids_to_be_deleted = new ArrayList<>();
+
+            System.out.println("asdfasdfasdf: 1");
 
             ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
                     person.getID()));
@@ -2720,25 +2724,44 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 commonids_to_be_deleted.add(rs.getInt("COMMONID"));
             }
 
+            System.out.println("asdfasdfasdf: 2");
+
             for(int i = 0; i < commonids_to_be_deleted.size(); i++){
 
                 st2.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
                         commonids_to_be_deleted.get(i)));
+
+                System.out.println("Deleting from RELATION_SEMESTER_COURSE. COMMONID : " + commonids_to_be_deleted.get(i));
             }
+
+            System.out.println("asdfasdfasdf: 3");
 
             for(int i = 0; i < commonids_to_be_deleted.size(); i++){
 
                 st3.executeQuery(String.format("DELETE FORM RELATION_COURSE_RESOURCES WHERE COMMONID = %d",
                         commonids_to_be_deleted.get(i)));
 
+                System.out.println("Deleting from RELATION_COURSE_RESOURCES. COMMONID : " + commonids_to_be_deleted.get(i));
             }
 
+            System.out.println("asdfasdfasdf: 4");
 
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+
+            st4.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
                     person.getID()));
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d",
+
+            System.out.println("DELETED FROM RELATION_COURSE_PERSON: " + person.getID());
+
+            st5.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d",
                     person.getID()));
-            executeNoReturnQuery(String.format("DELETE FROM PERSON WHERE ID = %d", person.getID()));
+
+            System.out.println("DELETED FROM RELATION_PERSON_RESOURCES: " + person.getID());
+
+            st6.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", person.getID()));
+
+            System.out.println("DELETED FROM PERSON: " + person.getID());
+
+            System.out.println("asdfasdfasdf: 5");
 
         } catch (SQLException e) {
             System.out.println("Something went wrong @ deletePerson() @ DBManager.java");
