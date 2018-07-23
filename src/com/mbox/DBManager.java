@@ -3824,6 +3824,34 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         else {return false;}
     }
 
+    public static void deleteResourceInDB(frontend.data.Resource r){
+        try {
+            //delete in resource table
+            st.executeQuery("DELETE FROM RESOURCES WHERE ID = " + r.getID());
+            //delete course resource relation
+            st.executeQuery("DELETE FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID = " + r.getID());
+            //delete person resource relation
+            st.executeQuery("DELETE FROM RELATION_PERSON_RESOURCES WHERE RESOURCEID = " + r.getID());
+            //delete publisher resource relation
+            st.executeQuery("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = " +r.getID());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void deletePublisherInDB(frontend.data.Publisher p){
+        try{
+            //delete in publisher table
+            st.executeQuery("DELETE FROM PUBLISHERS WHERE ID = " +p.getID());
+            //delete publisher resource relation
+            st.executeQuery("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE PUBLISHERID = " +p.getID());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
 
 

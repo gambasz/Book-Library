@@ -200,6 +200,10 @@ public class Resource {
         this.edition = edition;
     }
 
+    public void removePublisher(){
+        this.publisher = null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
