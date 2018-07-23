@@ -498,12 +498,14 @@ public class Controller {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
+
         for(Course c : tableTV.getItems()){
             if(c.getCommonID() == selectedCourse.getCommonID()){
                 tableTV.getSelectionModel().select(c);
                 break;
             }
         }
+
     }
 
     /**
@@ -1291,6 +1293,7 @@ public class Controller {
             //check if this resource and publisher already had relation or not, delete the old one and add the new one
             // what if there is no publisher yet? the publisherID should be 0
         }
+        refreshTable();
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
@@ -2236,6 +2239,7 @@ public class Controller {
             System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
+        updateCourseTable();
     }
 
     public void oldsearch() {
