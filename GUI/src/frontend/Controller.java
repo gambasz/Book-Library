@@ -1037,6 +1037,7 @@ public class Controller {
             courseList = DBManager.returnEverything2(DBManager.getSemesterIDByName(selectedCourse.getSEMESTER(),
                     Integer.toString(selectedCourse.getYEAR())));
             updateCourseTable();
+            resourceTable.getItems().addAll(tableTV.getSelectionModel().getSelectedItem().getResource());
         }
 
     }
