@@ -20,7 +20,7 @@
    <children>
       <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
          <children>
-            <VBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+            <VBox alignment="CENTER"  prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -186,7 +186,7 @@
                </padding>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox onMousePressed="#resetSelect" prefHeight="600.0" prefWidth="892.0">
+            <VBox  prefHeight="600.0" prefWidth="892.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="125.0" prefWidth="100.0">
                      <children>
@@ -303,7 +303,7 @@
             </VBox>
          </children></HBox>
       <Separator prefWidth="200.0" />
-      <HBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="50.0" prefWidth="200.0">
+      <HBox alignment="CENTER"  prefHeight="50.0" prefWidth="200.0">
          <children>
             <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importData" text="Import">
                <HBox.margin>
