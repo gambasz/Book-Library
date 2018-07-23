@@ -613,19 +613,19 @@ public class Controller {
 
 
     public void filterTableBasedOnSemesterNYear() {
-        updateCourseTable();
-        Integer year = yearComBox.getSelectionModel().getSelectedItem();
-        if (year != null) {
-            tableTV.getItems().removeIf(course -> course.getYEAR() != year.intValue());
-        }
-        Object semester = semesterComBox.getSelectionModel().getSelectedItem();
-        if (semester != null) {
-            tableTV.getItems().removeIf(course -> !course.getSEMESTER().equals(semester.toString()));
-
-        }
-        //Todo : remove code if not needed
-//        refreshTable();
 //        updateCourseTable();
+//        Integer year = yearComBox.getSelectionModel().getSelectedItem();
+//        if (year != null) {
+//            tableTV.getItems().removeIf(course -> course.getYEAR() != year.intValue());
+//        }
+//        Object semester = semesterComBox.getSelectionModel().getSelectedItem();
+//        if (semester != null) {
+//            tableTV.getItems().removeIf(course -> !course.getSEMESTER().equals(semester.toString()));
+//
+//        }
+        //Todo : remove code if not needed
+        refreshTable();
+        updateCourseTable();
 
     }
 
