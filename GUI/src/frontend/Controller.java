@@ -731,7 +731,7 @@ public class Controller {
                     temp.append(tTitle, 0, Math.min(tTitle.length(), (78 / (length % 10))));
                     temp.append(" , ");
                 }
-                return new SimpleStringProperty(controller.resourcesFormat(res, 2));
+                return new SimpleStringProperty(controller.resourcesFormat(res, 5));
             }
         });
         timeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
@@ -1485,9 +1485,12 @@ public class Controller {
 
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
+
             selectedPublisher = tempRes.getPublisher();
-            if (!DBManager.availablePublisher(selectedPublisher)) {
-                pubList.add(selectedPublisher);
+            if(selectedPublisher != null && !selectedPublisher.getName().isEmpty()) {
+                if (!DBManager.availablePublisher(selectedPublisher)) {
+                    pubList.add(selectedPublisher);
+                }
             }
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
