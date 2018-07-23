@@ -85,6 +85,7 @@ public class Controller {
     private Publisher selectedPublisher;
     private Person selectedPerson;
     private int defaultSemester = 5;
+    private String defaultSemest = "";
     private boolean isPersonResourcesView = false;
 
 
@@ -791,7 +792,7 @@ public class Controller {
                 resourceTable.getItems() == null) {
             showError("Error", "Missing required boxes",
                     "Please make sure that you fill out all the required sections.");
-            return;
+
         }
         else if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
@@ -882,7 +883,7 @@ public class Controller {
 
         }
     }
-
+    
     /**
      * Handles the filter check boxes action
      */
