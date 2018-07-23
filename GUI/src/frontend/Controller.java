@@ -333,6 +333,7 @@ public class Controller {
         if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
 
             //nothing has been selected, do nothing
+            tmp_courses = DBManager.returnEverything2(55);
         } else if (commonid_full) {
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
             all_ids.add(c.getCommonID());
@@ -497,6 +498,16 @@ public class Controller {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
+
+        if (selectedCourse != null)
+            for (Course c : tableTV.getItems()) {
+                if (c.getCommonID() == selectedCourse.getCommonID()) {
+                    tableTV.getSelectionModel().select(c);
+                    break;
+                }
+            }
+
+
     }
 
     /**
@@ -613,7 +624,8 @@ public class Controller {
 
         }
         //Todo : remove code if not needed
-        refreshTable();
+//        refreshTable();
+//        updateCourseTable();
 
     }
 
@@ -964,11 +976,10 @@ public class Controller {
         });
 
         deleteBtn.setOnAction(e -> {
-            if(publishersCB.getSelectionModel().getSelectedItem() == null){
-                showError("Error","Missing publisher","Make sure you choose the publisher in the box");
-            }
-            else {
-                deletePublisher(publishersCB.getSelectionModel().getSelectedItem(),nameTF,contactsTF,descriptionTF,publishersCB);
+            if (publishersCB.getSelectionModel().getSelectedItem() == null) {
+                showError("Error", "Missing publisher", "Make sure you choose the publisher in the box");
+            } else {
+                deletePublisher(publishersCB.getSelectionModel().getSelectedItem(), nameTF, contactsTF, descriptionTF, publishersCB);
                 publishersCB.getItems().clear();
                 publishersCB.getItems().addAll(DBManager.convertArrayPubPub(DBManager.getPublisherFromTable()));
 
@@ -998,13 +1009,12 @@ public class Controller {
         });
     }
 
-    private void deletePublisher(Publisher publisher,LimitedTextField nameTF, LimitedTextField contacTF,
+    private void deletePublisher(Publisher publisher, LimitedTextField nameTF, LimitedTextField contacTF,
                                  LimitedTextField descripTF, ComboBox<Publisher> publisherComboBox) {
-        System.out.println("This is pubID" +publisher.getID());
-        if(publisher.getID() == 0){
-            showError("Error","Missing Publisher","Please choose publisher in the box");
-        }
-        else {
+        System.out.println("This is pubID" + publisher.getID());
+        if (publisher.getID() == 0) {
+            showError("Error", "Missing Publisher", "Please choose publisher in the box");
+        } else {
             System.out.println("Publisher should be deleted, write the method");
             DBManager.deletePublisherInDB(publisher);
 
@@ -1227,10 +1237,9 @@ public class Controller {
                                 ComboBox typeCB, ComboBox editionCB) {
         boolean isbnFormat = !DBManager.isISBN(isbn10TF.getText()) || !DBManager.isISBN13(isbn13TF.getText());
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
-        if(resourceTable.getSelectionModel().getSelectedItem() == null){
+        if (resourceTable.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing selected resource", "Make sure you choose a resource to update");
-        }
-        else if (titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
+        } else if (titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() || totalAmTF.getText().trim().isEmpty() ||
                 currentAmTF.getText().trim().isEmpty()) {
             showError("Could not insert the Resource", "Unable to insert the Resource",
                     "Please make sure you filled out all the required fields");
@@ -1283,6 +1292,7 @@ public class Controller {
             //check if this resource and publisher already had relation or not, delete the old one and add the new one
             // what if there is no publisher yet? the publisherID should be 0
         }
+        refreshTable();
     }
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
@@ -1435,10 +1445,10 @@ public class Controller {
         resList.remove(res);
         DBManager.deleteResourceInDB(res);
         resourceTable.getItems().remove(res);
-        for(Course c : courseList){
+        for (Course c : courseList) {
             c.getResource().remove(res);
         }
-        for(Person p : profList){
+        for (Person p : profList) {
             p.getResources().remove(res);
         }
         updateCourseTable();
@@ -1506,9 +1516,6 @@ public class Controller {
                 resourceTable.getItems().clear();
                 resourceTable.getItems().addAll(selectedCourse.getResource());
             }
-
-            updateRowSelected();
-
 
             resourceTitlePane.setContent(resourceEditPane);
             resourceTitlePane.setText("Resource Details and Management");
@@ -2231,6 +2238,7 @@ public class Controller {
             System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
+        updateCourseTable();
     }
 
     public void oldsearch() {

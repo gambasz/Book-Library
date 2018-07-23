@@ -1912,17 +1912,17 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                         " (COURSEID, RESOURCEID) VALUES ('%d', '%d')", id, resourceidlist[j]));
             }
 
-            for(int k=0; k<resourceidlist.length;k++){
-                System.out.println(r.get(k).getPublisher().getContacts() +" testing  " + r.get(k).getPublisher().getDescription());
 
-            }
+
 
             for (int l = 0; l < resourceidlist.length; l++) {
-                if(!availablePublisher(r.get(l).getPublisher())) {
+                if(r.get(l).getPublisher() != null) {
+                    if (!availablePublisher(r.get(l).getPublisher())) {
 
-                    executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
-                            resourceidlist[l]));
+                        executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(l).getPublisher().getID(),
+                                resourceidlist[l]));
+                    }
                 }
 
 
@@ -3851,7 +3851,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             e.printStackTrace();
         }
     }
-
 
 
 }
