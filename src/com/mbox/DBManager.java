@@ -1995,19 +1995,21 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
         try {
             for (int k = 0; k < r.size(); k++) {
-                System.out.println("RID, PUBD: " + r.get(k).getID() +" "+r.get(k).getPublisher().getID() );
+
                 int resourceID = 0;
-                ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
-                        "PUBLISHERID = '%d'", r.get(k).getID(),r.get(k).getPublisher().getID()));
-                while (rs.next()) {
-                    resourceID = rs.getInt(2);
-                }
-                System.out.println("resourceID now " + resourceID);
-                if (resourceID == 0) {
-                    executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                    " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                            r.get(k).getID()));
+                if(r.get(k).getPublisher() != null) {
+                    ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
+                            "PUBLISHERID = '%d'", r.get(k).getID(), r.get(k).getPublisher().getID()));
+                    while (rs.next()) {
+                        resourceID = rs.getInt(2);
                     }
+                    System.out.println("resourceID now " + resourceID);
+                    if (resourceID == 0) {
+                        executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+                                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
+                                r.get(k).getID()));
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

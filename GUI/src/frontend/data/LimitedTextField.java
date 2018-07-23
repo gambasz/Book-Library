@@ -12,7 +12,7 @@ public class LimitedTextField extends TextField {
 
     public LimitedTextField() {
         super();
-        this.maxLength = new SimpleIntegerProperty(-1);
+        this.maxLength = new SimpleIntegerProperty(0);
     }
 
     public IntegerProperty maxLengthProperty() {
