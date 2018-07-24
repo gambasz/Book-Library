@@ -40,15 +40,13 @@ import java.util.logging.Logger;
  *
  * @author Rajashow
  */
+@SuppressWarnings("ALL")
 public class Controller {
 
     private final String addIconImg = "/frontend/media/add.png";
     private final String updateIconImg = "/frontend/media/upload.png";
     private final String deleteIconImg = "/frontend/media/delete.png";
-    private final String searchIconImg = "/frontend/media/search.png";
     private final String programeIconImg = "/frontend/media/icon.png";
-    private final String questionIconImg = "/frontend/media/question.png";
-    private final String filterIconImg = "/frontend/media/filter.png";
 
     @FXML
     TextField courseInfoTitle;
@@ -72,7 +70,7 @@ public class Controller {
     ComboBox semesterComBox, semesterComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
-    boolean debugging = true;
+    private boolean debugging;
     private TableView<Resource> resourceTable;
     private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol, editionCol;
     private ArrayList<Course> courseList, templateList;
@@ -98,12 +96,12 @@ public class Controller {
      * - initializes the resource table
      * - marking all the filter checkboxes to true
      */
-    public void test() {
+    private void test() {
         System.out.println("The program started running now!");
     }
 
 
-    protected static void showError(String title, String headerMessage, String errorMessage) {
+    private static void showError(String title, String headerMessage, String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(headerMessage);
@@ -117,6 +115,7 @@ public class Controller {
     public void initialize() {
         DBManager.openConnection();
         defaultSemest = controller.findDefaultSemester();
+        debugging = true;
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
@@ -174,10 +173,12 @@ public class Controller {
     }
 
     private void addButtonGraphics() {
+        String searchIconImg = "/frontend/media/search.png";
         ImageView searchImg = new ImageView(searchIconImg);
         ImageView addImg = new ImageView(addIconImg);
         ImageView deleteImg = new ImageView(deleteIconImg);
         ImageView updateImg = new ImageView(updateIconImg);
+        String filterIconImg = "/frontend/media/filter.png";
         ImageView filterImg = new ImageView(filterIconImg);
 
         addGraphicToButtons(searchImg, searchBtn);
@@ -498,7 +499,7 @@ public class Controller {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
-        
+
         if (selectedCourse != null && courseList!=null)
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
 //            for (Course c : tableTV.getItems()) {
@@ -868,7 +869,7 @@ public class Controller {
         }
     }
 
-    
+
     /**
      * Handles the filter check boxes action
      */
@@ -936,16 +937,27 @@ public class Controller {
                 descriptionTF.setText(tempPub.getDescription());
             }
         }
-
-        HBox deleteHB = new HBox(deleteBtn);
-        deleteHB.setAlignment(Pos.CENTER);
-        mainPane.getChildren().addAll(
-                new HBox(listOfPublisher, publishersCB),
+        VBox dataInfoPane = new VBox(20);
+        dataInfoPane.getChildren().addAll(
                 new HBox(name, nameTF),
                 new HBox(contact, contactsTF),
-                new HBox(description, descriptionTF),
-                deleteHB
+                new HBox(description, descriptionTF)
         );
+        for (Node hboxs : dataInfoPane.getChildren()) {
+            ((HBox) hboxs).setAlignment(Pos.CENTER);
+            ((HBox) hboxs).setSpacing(20);
+        }
+        HBox deleteHB = new HBox(deleteBtn);
+        deleteHB.setAlignment(Pos.CENTER);
+        dataInfoPane.getChildren().add(deleteBtn);
+        dataInfoPane.setAlignment(Pos.CENTER);
+        TitledPane dataInfoPaneWrapper = new TitledPane("Publisher Information", dataInfoPane);
+
+        mainPane.getChildren().addAll(
+                new HBox(listOfPublisher, publishersCB),
+                dataInfoPaneWrapper
+        );
+
 
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setSpacing(20);
@@ -954,6 +966,7 @@ public class Controller {
 
 
         dlg.show();
+        dataInfoPaneWrapper.setExpanded(false);
         dlg.setOnCloseRequest(e -> {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
@@ -1561,10 +1574,9 @@ public class Controller {
      * Assign a new Professor to Course.
      * It creates a Person object and assign the person as the Professor for the course object
      */
-    public void selectProf() {
+    public void selectProfossor() {
         VBox mainAddPane = new VBox(2);
-
-        ArrayList<com.mbox.Person> allPersonTemp = com.mbox.DBManager.getPersonFromTable();
+        ArrayList<com.mbox.Person> allPersonTemp = DBManager.getPersonFromTable();
         profList.clear();
         for (int i = 0; i < allPersonTemp.size(); i++) {
             if (!profList.contains(allPersonTemp.get(i).initPersonGUI()))
@@ -1644,20 +1656,31 @@ public class Controller {
         });
         addGraphicToButtons(new ImageView(addIconImg), addProfessor);
         addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
+        String questionIconImg = "/frontend/media/question.png";
         addGraphicToButtons(new ImageView(questionIconImg), NAME_ME_SOMETHING_ELSE);
 
-        mainAddPane.getChildren().addAll(
-                new HBox(currentCBoxLbl, currentProfessors),
-                new HBox(profInfoFNameLbl, profInfoFNameTf),
+        VBox hiddenOptionSContent = new VBox(20);
+
+        hiddenOptionSContent.getChildren().addAll(new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(addProfessor, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources)
+                new HBox(addProfessor, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources));
+        for (Node hboxs : hiddenOptionSContent.getChildren()) {
+            ((HBox) hboxs).setAlignment(Pos.CENTER);
+            ((HBox) hboxs).setSpacing(20);
 
+        }
+        TitledPane hiddenOptions = new TitledPane("Professor Information", hiddenOptionSContent);
+
+
+        mainAddPane.getChildren().addAll(
+                new HBox(20, currentCBoxLbl, currentProfessors),
+                hiddenOptions
         );
         for (Object tempElem : mainAddPane.getChildren()) {
-
-            ((HBox) tempElem).setSpacing(20);
-            ((HBox) tempElem).setAlignment(Pos.CENTER);
+            if (tempElem instanceof HBox) {
+                ((HBox) tempElem).setAlignment(Pos.CENTER);
+            }
         }
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
@@ -1671,6 +1694,7 @@ public class Controller {
 
 
         dlg.show();
+        hiddenOptions.setExpanded(false);
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
                 selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
@@ -1965,9 +1989,10 @@ public class Controller {
         HBox buttons = new HBox(addBtn, deleteBtn);
         buttons.setSpacing(15);
         buttons.setAlignment(Pos.CENTER);
+        TitledPane dataInfoPaneWrapper = new TitledPane("Course Information", dataInfoPane);
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates),
-                dataInfoPane,
+                dataInfoPaneWrapper,
                 buttons
         );
 
@@ -1983,6 +2008,7 @@ public class Controller {
 
 
         dlg.show();
+        dataInfoPaneWrapper.setExpanded(false);
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
 
