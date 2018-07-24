@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
@@ -499,7 +500,7 @@ public class Controller {
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
 
-        if (selectedCourse != null && courseList!=null)
+        if (selectedCourse != null && courseList != null)
             for (Course c : tableTV.getItems()) {
                 if (c.getCommonID() == selectedCourse.getCommonID()) {
                     tableTV.getSelectionModel().select(c);
@@ -792,8 +793,7 @@ public class Controller {
             showError("Error", "Missing required boxes",
                     "Please make sure that you fill out all the required sections.");
             return;
-        }
-        else if (selectedCourse == null) {
+        } else if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
         }
 
@@ -1566,10 +1566,9 @@ public class Controller {
      * Assign a new Professor to Course.
      * It creates a Person object and assign the person as the Professor for the course object
      */
-    public void selectProf() {
+    public void selectProfossor() {
         VBox mainAddPane = new VBox(2);
-
-        ArrayList<com.mbox.Person> allPersonTemp = com.mbox.DBManager.getPersonFromTable();
+        ArrayList<com.mbox.Person> allPersonTemp = DBManager.getPersonFromTable();
         profList.clear();
         for (int i = 0; i < allPersonTemp.size(); i++) {
             if (!profList.contains(allPersonTemp.get(i).initPersonGUI()))
@@ -1651,18 +1650,28 @@ public class Controller {
         addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
         addGraphicToButtons(new ImageView(questionIconImg), NAME_ME_SOMETHING_ELSE);
 
-        mainAddPane.getChildren().addAll(
-                new HBox(currentCBoxLbl, currentProfessors),
-                new HBox(profInfoFNameLbl, profInfoFNameTf),
+        VBox hiddenOptionSContent = new VBox(20);
+
+        hiddenOptionSContent.getChildren().addAll(new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(addProfessor, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources)
+                new HBox(addProfessor, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources));
+        for (Node hboxs : hiddenOptionSContent.getChildren()) {
+            ((HBox) hboxs).setAlignment(Pos.CENTER);
+            ((HBox) hboxs).setSpacing(20);
 
+        }
+        TitledPane hiddenOptions = new TitledPane("Professor Information", hiddenOptionSContent);
+
+
+        mainAddPane.getChildren().addAll(
+                new HBox(20, currentCBoxLbl, currentProfessors),
+                hiddenOptions
         );
         for (Object tempElem : mainAddPane.getChildren()) {
-
-            ((HBox) tempElem).setSpacing(20);
-            ((HBox) tempElem).setAlignment(Pos.CENTER);
+            if (tempElem instanceof HBox) {
+                ((HBox) tempElem).setAlignment(Pos.CENTER);
+            }
         }
         mainAddPane.setSpacing(20);
         mainAddPane.setAlignment(Pos.CENTER);
@@ -1676,6 +1685,7 @@ public class Controller {
 
 
         dlg.show();
+        hiddenOptions.setExpanded(false);
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
                 selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();

@@ -79,7 +79,7 @@
                                  <effect>
                                     <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
                                  </effect></Label>
-                              <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectProf" text="Find &amp; Auto Fill Info" />
+                              <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectProfossor" text="Find &amp; Auto Fill Info" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
