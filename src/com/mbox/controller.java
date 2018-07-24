@@ -226,8 +226,12 @@ public class controller {
         public static String convertSeasonGUItoDB(String season){
             season = season.toLowerCase();
             season = season.substring(0, 1).toUpperCase() + season.substring(1);
-            if(season == "Summer_1" || season == "Summer_2")
-                season = season.replace('_', ' ');
+            if(season.equals("Summer_1")) {
+                season = "Summer 1";
+            }
+            if(season.equals("Summer_2")){
+                season = "Summer 2";
+            }
             return season;
         }
 

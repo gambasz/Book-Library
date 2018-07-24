@@ -2888,7 +2888,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static void updateSemester(frontend.data.Course c) {
 
-        int semesterID = getSemesterIDByName(c.getSEMESTER(),String.valueOf(c.getYEAR()));
+        int semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(c.getSEMESTER()),String.valueOf(c.getYEAR()));
         int commonID = c.getCommonID();
         System.out.println("Semester ID now " + semesterID);
 
