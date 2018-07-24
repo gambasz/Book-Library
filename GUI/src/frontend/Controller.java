@@ -83,6 +83,7 @@ public class Controller {
     private Publisher selectedPublisher;
     private Person selectedPerson;
     private int defaultSemester = 5;
+    private com.mbox.Semester defaultSemest = new com.mbox.Semester();
     private boolean isPersonResourcesView = false;
 
 
@@ -112,6 +113,8 @@ public class Controller {
 
     @FXML
     public void initialize() {
+        DBManager.openConnection();
+        defaultSemest = controller.findDefaultSemester();
         debugging = true;
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
@@ -240,12 +243,10 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
-//        semesterComBox.getItems().add(null);
-//        yearComBox.getItems().add(null);
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
-        for (int i = 2017; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
+        for (int i = Calendar.getInstance().get(Calendar.YEAR) -1; i < Calendar.getInstance().get(Calendar.YEAR) + 2; i++)
             years.add(i);
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
@@ -499,13 +500,14 @@ public class Controller {
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
 
-        if (selectedCourse != null && courseList != null)
-            for (Course c : tableTV.getItems()) {
-                if (c.getCommonID() == selectedCourse.getCommonID()) {
-                    tableTV.getSelectionModel().select(c);
-                    break;
-                }
-            }
+        if (selectedCourse != null && courseList!=null)
+            tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
+//            for (Course c : tableTV.getItems()) {
+//                if (c.getCommonID() == selectedCourse.getCommonID()) {
+//                    tableTV.getSelectionModel().select(c);
+//                    break;
+//                }
+//            }
 
 
     }
@@ -596,17 +598,8 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
+            insertCourseLocally(tempCour);
 
-
-            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-                if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                    courseList.add(tempCour);
-                }
-            } else {
-                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
-                    courseList.add(tempCour);
-                }
-            }
         }
         updateCourseTable();
     }
@@ -641,7 +634,7 @@ public class Controller {
 
             DBManager.openConnection();
 
-            ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemester);
+            ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
 
             if (pulledDatabase == null) {
                 showError("Connection Error", "The database did not return any  data",
@@ -730,7 +723,7 @@ public class Controller {
                     temp.append(tTitle, 0, Math.min(tTitle.length(), (78 / (length % 10))));
                     temp.append(" , ");
                 }
-                return new SimpleStringProperty(controller.resourcesFormat(res, 2));
+                return new SimpleStringProperty(controller.resourcesFormat(res, 5));
             }
         });
         timeCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Course, String>, ObservableValue<String>>() {
@@ -786,13 +779,15 @@ public class Controller {
     }
 
     public void update() {
+
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
                 resourceTable.getItems() == null) {
             showError("Error", "Missing required boxes",
                     "Please make sure that you fill out all the required sections.");
-            return;
-        } else if (selectedCourse == null) {
+
+        }
+        else if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
         }
 
@@ -867,22 +862,13 @@ public class Controller {
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
 
-            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-                if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                    courseList.add(selectedCourse);
-                }
-            } else {
-                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
-                    courseList.add(selectedCourse);
-                }
-
-
-            }
+            insertCourseLocally(selectedCourse);
 
             updateCourseTable();
 
         }
     }
+
 
     /**
      * Handles the filter check boxes action
@@ -1257,7 +1243,11 @@ public class Controller {
 
         } else if (typeCB.getSelectionModel().getSelectedItem().toString().equals("Book") && (isbn10TF.getText().trim().isEmpty() || isbn13TF.getText().trim().isEmpty())) {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
-        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
+        } else if(selectedPublisher == null){
+            showError("Update Error","Missing publisher", "Please add publisher for resource");
+
+        }
+        else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
@@ -1497,6 +1487,13 @@ public class Controller {
 
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
+
+
+            if(tempRes.getPublisher() != null && !tempRes.getPublisher().getName().isEmpty()) {
+                if (!DBManager.availablePublisher(tempRes.getPublisher())) {
+                    pubList.add(tempRes.getPublisher());
+                }
+            }
             selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
@@ -2254,7 +2251,7 @@ public class Controller {
     public void refreshTable() {
 
         if (semesterComBox.getValue() == null || yearComBox.getValue() == null)
-            courseList = DBManager.returnEverything2(defaultSemester);
+            courseList = DBManager.returnEverything2(defaultSemest.getId());
         else {
 
             String year = yearComBox.getValue().toString();
@@ -2266,6 +2263,7 @@ public class Controller {
             System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
+
         updateCourseTable();
     }
 
@@ -2295,6 +2293,16 @@ public class Controller {
 //        updateCourseTable();
     }
 
-
+    private void insertCourseLocally(Course tempCour){
+        if (yearComBox.getSelectionModel().getSelectedItem() == null) {
+            if (tempCour.getYEAR() == defaultSemest.getYear()) {
+                courseList.add(tempCour);
+            }
+        } else {
+            if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
+                courseList.add(tempCour);
+            }
+        }
+    }
 }
 

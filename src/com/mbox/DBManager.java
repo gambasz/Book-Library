@@ -146,11 +146,12 @@ public class DBManager {
             Semester semester = new Semester();
 
             if (rs.next()) {
-                semester.year = rs.getInt("YEAR");
-                semester.season = rs.getString("SEASON");
-                semester.season.toUpperCase();
-                if(semester.season == "SUMMER 1" || semester.season == "SUMMER 2")
-                    semester.season.replace(' ','_');
+                semester.setYear( rs.getInt("YEAR"));
+                String tempSeason = rs.getString("SEASON");
+                tempSeason = tempSeason.toUpperCase();
+                if(tempSeason == "SUMMER 1" || tempSeason == "SUMMER 2")
+                    tempSeason.replace(' ', '_');
+                semester.setSeason(tempSeason);
 
             }
             semester.setId(id);
@@ -2212,7 +2213,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             for (int j = 0; j < tmpCourse.size(); j++) {
 
-                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.year, semester.season));
+                hugeshit2.add(tmpCourse.get(j).initCourseGUI(semester.getYear(), semester.getSeason()));
 
 
             }
@@ -2887,7 +2888,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static void updateSemester(frontend.data.Course c) {
 
-        int semesterID = getSemesterIDByName(c.getSEMESTER(),String.valueOf(c.getYEAR()));
+        int semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(c.getSEMESTER()),String.valueOf(c.getYEAR()));
         int commonID = c.getCommonID();
         System.out.println("Semester ID now " + semesterID);
 
