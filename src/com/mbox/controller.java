@@ -222,5 +222,21 @@ public class controller {
 
         return result;
         }
+
+        public static String convertSeasonGUItoDB(String season){
+            season = season.toLowerCase();
+            season = season.substring(0, 1).toUpperCase() + season.substring(1);
+            if(season == "Summer_1" || season == "Summer_2")
+                season = season.replace('_', ' ');
+            return season;
+        }
+
+        public static String convertSeasonDBtoGUI(String season){
+            season = season.toUpperCase();
+            if(season == "SUMMER 1" || season == "SUMMER 2")
+                season = season.replace(' ', '_');
+
+            return season;
+        }
     }
 
