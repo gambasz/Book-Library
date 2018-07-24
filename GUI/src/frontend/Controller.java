@@ -1321,11 +1321,11 @@ public class Controller {
 
         if (requiredBoxes) {
             showError("Input Error", "Make sure you filled out all the required fields Resource Error",
-                    "Make sure you entered title, author, total and current amount");
+                    "Make sure you entered Title, Author, Edition, Total and Current amount");
 
         } else if (selectedPublisher == null || selectedPublisher.getName().isEmpty()) {
             showError("Input Error", "No publisher has been assigned!",
-                    "Please make sure you assigned a publisher for resource");
+                    "Please make sure you assigned a publisher for the resource");
         } else if (!com.mbox.controller.isInteger(totalAmTF.getText()) ||
                 !com.mbox.controller.isInteger(currentAmTF.getText())) {
             showError("Input Error",
@@ -1343,7 +1343,7 @@ public class Controller {
                     DBManager.capitalizeString(titleTF.getText()),
                     DBManager.capitalizeString(authorTF.getText()),
                     descriptionTF.getText(),
-                    false,
+                    true,
                     Integer.parseInt(totalAmTF.getText()),
                     Integer.parseInt(idTF.getText()),
                     Integer.parseInt(currentAmTF.getText()),
