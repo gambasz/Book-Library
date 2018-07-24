@@ -85,7 +85,7 @@ public class Controller {
     private Publisher selectedPublisher;
     private Person selectedPerson;
     private int defaultSemester = 5;
-    private String defaultSemest = "";
+    private com.mbox.Semester defaultSemest = new com.mbox.Semester();
     private boolean isPersonResourcesView = false;
 
 
@@ -115,7 +115,8 @@ public class Controller {
 
     @FXML
     public void initialize() {
-
+        DBManager.openConnection();
+        defaultSemest = controller.findDefaultSemester();
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
@@ -246,7 +247,7 @@ public class Controller {
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
-        for (int i = 2017; i < Calendar.getInstance().get(Calendar.YEAR) + 1; i++)
+        for (int i = Calendar.getInstance().get(Calendar.YEAR) -1; i < Calendar.getInstance().get(Calendar.YEAR) + 2; i++)
             years.add(i);
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
@@ -642,7 +643,7 @@ public class Controller {
 
             DBManager.openConnection();
 
-            ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemester);
+            ArrayList<Course> pulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
 
             if (pulledDatabase == null) {
                 showError("Connection Error", "The database did not return any  data",
@@ -2239,7 +2240,7 @@ public class Controller {
     public void refreshTable() {
 
         if (semesterComBox.getValue() == null || yearComBox.getValue() == null)
-            courseList = DBManager.returnEverything2(defaultSemester);
+            courseList = DBManager.returnEverything2(defaultSemest.getId());
         else {
 
             String year = yearComBox.getValue().toString();

@@ -1,18 +1,24 @@
 package com.mbox;
 
 public class Semester {
-    String season;
-    int year, id;
+    private String season;
+    private int year, id;
 
-    Semester(){
+    public Semester(){
         this.season = "FALL";
         this.year = 2018;
 
     }
-    Semester(String season, int  year){
+    public Semester(String season, int  year){
         this.season = season.toUpperCase();
         this.year = year;
 
+    }
+
+    public Semester(String season, int  year, int id){
+        this.season = season;
+        this.year = year;
+        this.id= id;
     }
 
     public int  getYear() {
@@ -40,4 +46,8 @@ public class Semester {
         this.season = season;
     }
 
+    @Override
+    public String toString(){
+        return String.format("Semester: %d %s wiht ID: %d ",this.getSeason(),this.getYear(), this.getId());
+    }
 }

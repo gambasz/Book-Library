@@ -168,7 +168,7 @@
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                                  <children>
                                     <Label text="Year*" />
-                                    <ComboBox fx:id="yearComBoxEdit" prefWidth="150.0" promptText="1876" />
+                                    <ComboBox fx:id="yearComBoxEdit" prefWidth="150.0" promptText="2018" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />

@@ -90,11 +90,18 @@ public class controller {
 
 
     @NotNull
-    public static String findDefaultSemester(){
-        String semester="";
-        semester = getSeason(Calendar.getInstance().MONTH);
-        semester = semester.toUpperCase();
-        return semester;
+    public static Semester findDefaultSemester(){
+        Calendar c = Calendar.getInstance();
+        String season="";
+        int year=0;
+        season = getSeason(c.get(Calendar.MONTH));
+        year = (c.get(Calendar.YEAR));
+        System.out.println("Semesterhey: "+ season+ "year: " +year);
+        Semester semester1 = new Semester(season, year,0);
+        semester1.setId(DBManager.getSemesterIDByName(season, Integer.toString(year)));
+
+        System.out.println("Sem: " + semester1.getSeason() + " year:  " + semester1.getYear());
+        return semester1;
     }
         public static String getSeason(int monthNumber) {
             String monthName = getMonthName(monthNumber);
@@ -115,16 +122,16 @@ public class controller {
                     return ("Spring");
 
                 case "May":
-                    return ("Spring");
+                    return ("Summer 1");
 
                 case "June":
-                    return ("Summer");
+                    return ("Summer 1");
 
                 case "July":
-                    return ("Summer");
+                    return ("Summer 2");
 
                 case "August":
-                    return ("Summer");
+                    return ("Summer 2");
 
                 case "September":
                     return ("Fall");
