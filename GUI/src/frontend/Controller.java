@@ -1474,12 +1474,13 @@ public class Controller {
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
 
-            selectedPublisher = tempRes.getPublisher();
-            if(selectedPublisher != null && !selectedPublisher.getName().isEmpty()) {
-                if (!DBManager.availablePublisher(selectedPublisher)) {
-                    pubList.add(selectedPublisher);
+
+            if(tempRes.getPublisher() != null && !tempRes.getPublisher().getName().isEmpty()) {
+                if (!DBManager.availablePublisher(tempRes.getPublisher())) {
+                    pubList.add(tempRes.getPublisher());
                 }
             }
+            selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
             setChildVisibility(true, update, delete);
