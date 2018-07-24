@@ -597,17 +597,8 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
+            insertCourseLocally(tempCour);
 
-
-            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-                if (tempCour.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                    courseList.add(tempCour);
-                }
-            } else {
-                if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
-                    courseList.add(tempCour);
-                }
-            }
         }
         updateCourseTable();
     }
@@ -870,15 +861,7 @@ public class Controller {
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
 
-            if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-                if (selectedCourse.getYEAR() == Calendar.getInstance().get(Calendar.YEAR)) {
-                    courseList.add(selectedCourse);
-                }
-            } else {
-                if (selectedCourse.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
-                    courseList.add(selectedCourse);
-                }
-            }
+            insertCourseLocally(selectedCourse);
 
             updateCourseTable();
 
@@ -1492,12 +1475,13 @@ public class Controller {
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
 
-            selectedPublisher = tempRes.getPublisher();
-            if(selectedPublisher != null && !selectedPublisher.getName().isEmpty()) {
-                if (!DBManager.availablePublisher(selectedPublisher)) {
-                    pubList.add(selectedPublisher);
+
+            if(tempRes.getPublisher() != null && !tempRes.getPublisher().getName().isEmpty()) {
+                if (!DBManager.availablePublisher(tempRes.getPublisher())) {
+                    pubList.add(tempRes.getPublisher());
                 }
             }
+            selectedPublisher = tempRes.getPublisher();
             totalAmTF.setText(String.valueOf(tempRes.getTotalAmount()));
             currentAmTF.setText(String.valueOf(tempRes.getCurrentAmount()));
             setChildVisibility(true, update, delete);
@@ -2283,6 +2267,16 @@ public class Controller {
 //        updateCourseTable();
     }
 
-
+    private void insertCourseLocally(Course tempCour){
+        if (yearComBox.getSelectionModel().getSelectedItem() == null) {
+            if (tempCour.getYEAR() == defaultSemest.getYear()) {
+                courseList.add(tempCour);
+            }
+        } else {
+            if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
+                courseList.add(tempCour);
+            }
+        }
+    }
 }
 
