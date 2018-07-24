@@ -20,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
@@ -41,15 +40,13 @@ import java.util.logging.Logger;
  *
  * @author Rajashow
  */
+@SuppressWarnings("ALL")
 public class Controller {
 
     private final String addIconImg = "/frontend/media/add.png";
     private final String updateIconImg = "/frontend/media/upload.png";
     private final String deleteIconImg = "/frontend/media/delete.png";
-    private final String searchIconImg = "/frontend/media/search.png";
     private final String programeIconImg = "/frontend/media/icon.png";
-    private final String questionIconImg = "/frontend/media/question.png";
-    private final String filterIconImg = "/frontend/media/filter.png";
 
     @FXML
     TextField courseInfoTitle;
@@ -73,7 +70,7 @@ public class Controller {
     ComboBox semesterComBox, semesterComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
-    boolean debugging = true;
+    private boolean debugging;
     private TableView<Resource> resourceTable;
     private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol, editionCol;
     private ArrayList<Course> courseList, templateList;
@@ -98,12 +95,12 @@ public class Controller {
      * - initializes the resource table
      * - marking all the filter checkboxes to true
      */
-    public void test() {
+    private void test() {
         System.out.println("The program started running now!");
     }
 
 
-    protected static void showError(String title, String headerMessage, String errorMessage) {
+    private static void showError(String title, String headerMessage, String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(headerMessage);
@@ -115,7 +112,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-
+        debugging = true;
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
         resList = new ArrayList<>();
@@ -173,10 +170,12 @@ public class Controller {
     }
 
     private void addButtonGraphics() {
+        String searchIconImg = "/frontend/media/search.png";
         ImageView searchImg = new ImageView(searchIconImg);
         ImageView addImg = new ImageView(addIconImg);
         ImageView deleteImg = new ImageView(deleteIconImg);
         ImageView updateImg = new ImageView(updateIconImg);
+        String filterIconImg = "/frontend/media/filter.png";
         ImageView filterImg = new ImageView(filterIconImg);
 
         addGraphicToButtons(searchImg, searchBtn);
@@ -958,15 +957,15 @@ public class Controller {
                 new HBox(contact, contactsTF),
                 new HBox(description, descriptionTF)
         );
-        for(Node hboxs: dataInfoPane.getChildren()){
-            ((HBox)hboxs).setAlignment(Pos.CENTER);
-            ((HBox)hboxs).setSpacing(20);
+        for (Node hboxs : dataInfoPane.getChildren()) {
+            ((HBox) hboxs).setAlignment(Pos.CENTER);
+            ((HBox) hboxs).setSpacing(20);
         }
         HBox deleteHB = new HBox(deleteBtn);
         deleteHB.setAlignment(Pos.CENTER);
         dataInfoPane.getChildren().add(deleteBtn);
         dataInfoPane.setAlignment(Pos.CENTER);
-        TitledPane dataInfoPaneWrapper = new TitledPane("Publisher Information",dataInfoPane);
+        TitledPane dataInfoPaneWrapper = new TitledPane("Publisher Information", dataInfoPane);
 
         mainPane.getChildren().addAll(
                 new HBox(listOfPublisher, publishersCB),
@@ -1660,6 +1659,7 @@ public class Controller {
         });
         addGraphicToButtons(new ImageView(addIconImg), addProfessor);
         addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
+        String questionIconImg = "/frontend/media/question.png";
         addGraphicToButtons(new ImageView(questionIconImg), NAME_ME_SOMETHING_ELSE);
 
         VBox hiddenOptionSContent = new VBox(20);
