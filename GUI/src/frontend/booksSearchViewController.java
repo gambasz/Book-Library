@@ -15,9 +15,11 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import org.json.JSONException;
 
+import javax.management.timer.Timer;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class booksSearchViewController {
@@ -31,13 +33,15 @@ public class booksSearchViewController {
     ListView<Book> tableOfBooks;
     @FXML
     GridPane scene;
-    boolean debugging = false;
-    final String programeIconImg = "/frontend/media/no_cover_thumb.png";
-    Image icon = new Image(this.getClass().getResource(programeIconImg).toString());
+    private Image icon;
+    private boolean debugging;
+
 
     @FXML
     void initialize() {
-
+        String programIconImf = "/frontend/media/no_cover_thumb.png";
+        icon = new Image(this.getClass().getResource(programIconImf).toString());
+        debugging = false;
         setTableOFBooksCellProperty();
 //        addFakeBook();
         setSearch();
@@ -45,9 +49,7 @@ public class booksSearchViewController {
     }
 
     private void setSearch() {
-        searchBtn.setOnMouseClicked(e -> {
-            search(searchTextF.getText());
-        });
+        searchBtn.setOnMouseClicked(e -> search(searchTextF.getText()));
         scene.setOnKeyPressed(e -> {
             if (e.getCode().equals(KeyCode.ENTER)) {
                 search(searchTextF.getText());
@@ -90,17 +92,17 @@ public class booksSearchViewController {
                             controller.setCellInfo(item);
                             GridPane cell = controller.getCell();
                             setGraphic(cell);
-                            this.runAnimation();
-
+                            this.runAnimation(cell);
                         }
                     }
 
-                    public void runAnimation() {
-
+                    void runAnimation(GridPane cell) {
+                        System.out.println(this.getParent().getParent().getParent());
                         FadeTransition ft = new FadeTransition(Duration.millis(3000), this);
                         ft.setFromValue(0.0);
                         ft.setToValue(1.0);
                         ft.play();
+
 
                     }
 
@@ -113,11 +115,9 @@ public class booksSearchViewController {
         if (searchQuery != null && !searchQuery.isEmpty()) {
             try {
                 tableOfBooks.getItems().clear();
-                tableOfBooks.getItems().addAll(BookAPI.search(searchQuery));
-            } catch (JSONException e) {
+                tableOfBooks.getItems().addAll(Objects.requireNonNull(BookAPI.search(searchQuery)));
+            } catch (JSONException | MalformedURLException e) {
                 e.printStackTrace();
-            } catch (MalformedURLException ex) {
-                ex.printStackTrace();
             }
         }
     }
@@ -158,7 +158,7 @@ public class booksSearchViewController {
             }
         }
 
-        public void setCellInfo(Book book) {
+        void setCellInfo(Book book) {
             try {
                 cellIcon.setImage(getValueOrDefault(book.getIcon(), icon));
             } catch (Exception e) {
@@ -208,7 +208,7 @@ public class booksSearchViewController {
             valueSet = true;
         }
 
-        public GridPane getCell() {
+        GridPane getCell() {
             if (valueSet) {
                 return bookSCell;
             }

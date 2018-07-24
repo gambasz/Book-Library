@@ -4,19 +4,21 @@ import java.util.Objects;
 
 public class Publisher {
 
-    int ID = 0;
+    private int ID;
     private String description, name, contacts;
 
     public Publisher() {
         this.name = "Default name";
         this.contacts = "Default contact info";
         this.description = "Default description";
+        ID = 0;
     }
 
     public Publisher(String name, String contacts, String Description) {
         this.name = name;
         this.contacts = contacts;
         this.description = Description;
+        ID = 0;
     }
 
     public Publisher(int ID, String name, String Description, String contacts) {

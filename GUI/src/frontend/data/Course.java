@@ -11,6 +11,7 @@ import java.util.ArrayList;
  *
  * @author Rajahsow Parajuli
  */
+@SuppressWarnings("unused")
 public class Course {
 
     private int ID;
