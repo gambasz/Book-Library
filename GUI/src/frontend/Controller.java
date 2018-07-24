@@ -952,16 +952,27 @@ public class Controller {
                 descriptionTF.setText(tempPub.getDescription());
             }
         }
-
-        HBox deleteHB = new HBox(deleteBtn);
-        deleteHB.setAlignment(Pos.CENTER);
-        mainPane.getChildren().addAll(
-                new HBox(listOfPublisher, publishersCB),
+        VBox dataInfoPane = new VBox(20);
+        dataInfoPane.getChildren().addAll(
                 new HBox(name, nameTF),
                 new HBox(contact, contactsTF),
-                new HBox(description, descriptionTF),
-                deleteHB
+                new HBox(description, descriptionTF)
         );
+        for(Node hboxs: dataInfoPane.getChildren()){
+            ((HBox)hboxs).setAlignment(Pos.CENTER);
+            ((HBox)hboxs).setSpacing(20);
+        }
+        HBox deleteHB = new HBox(deleteBtn);
+        deleteHB.setAlignment(Pos.CENTER);
+        dataInfoPane.getChildren().add(deleteBtn);
+        dataInfoPane.setAlignment(Pos.CENTER);
+        TitledPane dataInfoPaneWrapper = new TitledPane("Publisher Information",dataInfoPane);
+
+        mainPane.getChildren().addAll(
+                new HBox(listOfPublisher, publishersCB),
+                dataInfoPaneWrapper
+        );
+
 
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setSpacing(20);
@@ -970,6 +981,7 @@ public class Controller {
 
 
         dlg.show();
+        dataInfoPaneWrapper.setExpanded(false);
         dlg.setOnCloseRequest(e -> {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
         });
@@ -1980,9 +1992,10 @@ public class Controller {
         HBox buttons = new HBox(addBtn, deleteBtn);
         buttons.setSpacing(15);
         buttons.setAlignment(Pos.CENTER);
+        TitledPane dataInfoPaneWrapper = new TitledPane("Course Information", dataInfoPane);
         mainAddPane.getChildren().addAll(
                 new HBox(currentCBoxLbl, courseTemplates),
-                dataInfoPane,
+                dataInfoPaneWrapper,
                 buttons
         );
 
@@ -1998,6 +2011,7 @@ public class Controller {
 
 
         dlg.show();
+        dataInfoPaneWrapper.setExpanded(false);
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
 
