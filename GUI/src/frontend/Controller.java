@@ -242,8 +242,6 @@ public class Controller {
      * For the year combo boxes add the all the years since 1946 to next year
      */
     private void initComboBoxes() {
-//        semesterComBox.getItems().add(null);
-//        yearComBox.getItems().add(null);
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
@@ -500,14 +498,15 @@ public class Controller {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
-
+        
         if (selectedCourse != null && courseList!=null)
-            for (Course c : tableTV.getItems()) {
-                if (c.getCommonID() == selectedCourse.getCommonID()) {
-                    tableTV.getSelectionModel().select(c);
-                    break;
-                }
-            }
+            tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
+//            for (Course c : tableTV.getItems()) {
+//                if (c.getCommonID() == selectedCourse.getCommonID()) {
+//                    tableTV.getSelectionModel().select(c);
+//                    break;
+//                }
+//            }
 
 
     }
@@ -788,6 +787,7 @@ public class Controller {
     }
 
     public void update() {
+
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
                 resourceTable.getItems() == null) {
@@ -884,6 +884,7 @@ public class Controller {
 
         }
     }
+
     
     /**
      * Handles the filter check boxes action
@@ -2252,6 +2253,7 @@ public class Controller {
             System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
+
         updateCourseTable();
     }
 

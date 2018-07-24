@@ -1,6 +1,7 @@
 package com.mbox;
 
 import com.sun.istack.internal.NotNull;
+import frontend.data.Course;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -193,6 +194,33 @@ public class controller {
             }
 
 
+        }
+
+
+        public static Course searchForCourse(Course course, ArrayList<Course> courseList){
+        Course result= new Course();
+        int lastCourseID=0;
+            for (Course item : courseList){
+
+                if(item.getID() != lastCourseID){
+
+                    if(course.getID() == item.getID()){
+
+                        if (course.getCommonID() == item.getCommonID()) {
+                            return item;
+                        }
+                    }
+                    else
+                        lastCourseID = item.getID();
+
+                }
+
+
+            }
+
+
+
+        return result;
         }
     }
 

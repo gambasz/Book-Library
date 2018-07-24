@@ -46,8 +46,4 @@ public class Semester {
         this.season = season;
     }
 
-    @Override
-    public String toString(){
-        return String.format("Semester: %d %s wiht ID: %d ",this.getSeason(),this.getYear(), this.getId());
-    }
 }
