@@ -2,10 +2,7 @@ package com.mbox;
 
 import frontend.data.PersonType;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -1426,7 +1423,9 @@ public class DBManager {
                             rss.getString(3), rss.getString(4));
                     i++;
                 }
+                rss.close();
             }
+            rs2.close();
             resource1.setPublisherInstance(publisherInstance);
             return resource1;
         } catch (SQLException err) {
@@ -1538,6 +1537,36 @@ public class DBManager {
     }
 
 
+    public static void getHistory() throws SQLException {
+        int i=0;
+        StringBuilder lsd = new StringBuilder();
+        ResultSet ts3 = st.executeQuery("select v.SQL_TEXT,\n" +
+                "           v.FIRST_LOAD_TIME,\n" +
+                "           v.DISK_READS,\n" +
+                "           v.ROWS_PROCESSED,\n" +
+                "           v.ELAPSED_TIME\n" +
+                "           from v$sql v\n" +
+                "where to_date(v.FIRST_LOAD_TIME,'YYYY-MM-DD hh24:mi:ss')>ADD_MONTHS(trunc(sysdate,'MM'),-1) " +
+                " ORDER BY v.FIRST_LOAD_TIME DESC");
+            while (ts3.next()){
+                i++;
+                    if(i<800)
+                        continue;
+
+                    lsd.append(String.format("%s: ",Integer.toString(i)));
+                    lsd.append(ts3.getString("SQL_TEXT") +"\t"+ts3.getString("FIRST_LOAD_TIME")+"\n");
+                    lsd.append(String.format("____________________________\n"));
+            }
+        ts3.close();
+        try (PrintWriter out = new PrintWriter("DBHistory.txt")) {
+            out.println(lsd.toString());
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
 
 //======================================================================================================================
@@ -1570,10 +1599,12 @@ public class DBManager {
                                  rss.getString("DESCRIPTION"), rss.getString("CONTACT_INFO"));
                         i++;
                     }
+                    rss.close();
                     resource1.setPublisher(publisherInstance);
 
 
             }
+            rs2.close();
             return resource1;
         } catch (SQLException err) {
             err.printStackTrace();
@@ -2291,24 +2322,30 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return null;
     }
 
-    public static ArrayList<Resource> getResourceFromTable() {
+    public static ArrayList<frontend.data.Resource> getResourceFromTable() {
         DBManager DB = new DBManager();
-        ArrayList<Resource> arr = new ArrayList<>();
+        ArrayList<frontend.data.Resource> arr = new ArrayList<>();
         try {
 
             String query = String.format("SELECT * FROM RESOURCES ORDER BY TITLE ASC");
             ResultSet rs = DB.st.executeQuery(query);
 
             while (rs.next()) {
-                Resource p = new Resource(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5),
-                        Integer.parseInt(rs.getString(6)), Integer.parseInt(rs.getString(7)), rs.getString(8));
+                frontend.data.Resource p = new frontend.data.Resource(rs.getInt("ID"),
+                        rs.getString("ISBN"), rs.getString("TYPE"),
+                        rs.getString("TITLE"), rs.getString("AUTHOR"),
+                        rs.getString("DESCRIPTION"),
+                        Integer.parseInt(rs.getString("TOTAL_AMOUNT")),
+                        Integer.parseInt(rs.getString("CURRENT_AMOUNT")));
                 if(rs.getString("ISBN13")!=null)
-                    p.setIsbn13(rs.getString("ISBN13"));
+                    p.setISBN13(rs.getString("ISBN13"));
                 if(rs.getString("EDITION")!=null)
                     p.setEdition(rs.getString("EDITION"));
+                setPublisherForResource2(p);
+
                 arr.add(p);
             }
+            rs.close();
             return arr;
         } catch (Exception e) {
             System.out.println("DATA not found");
@@ -2767,13 +2804,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
     public static ArrayList<frontend.data.Resource> getResourceList() {
-        ArrayList<frontend.data.Resource> resList = new ArrayList<>();
-        ArrayList<Resource> tempList = getResourceFromTable();
+        ArrayList<frontend.data.Resource> resList = getResourceFromTable();
 
-        for (int i = 0; i < tempList.size(); i++) {
-
-            resList.add(setPublisherForResource(tempList.get(i)).initResourceGUI());
-        }
         return resList;
     }
 
@@ -3096,7 +3128,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
     public static String exportCSVResourcePublisher() {
-        ArrayList<Resource> allResources = getResourceFromTable();
+        ArrayList<frontend.data.Resource> allResources = getResourceFromTable();
 
 //        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
         StringBuilder sb = new StringBuilder();
@@ -3112,11 +3144,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         sb.append("Publisher contact info");
         sb.append('\n');
 
-        for (Resource resource : allResources) {
-            setPublisherForResource(resource);
+        for (frontend.data.Resource resource : allResources) {
             sb.append(resource.getID());
             sb.append(",");
-            sb.append(resource.getType());
+            sb.append(resource.getTYPE());
             sb.append(",");
             sb.append(resource.getTitle());
             sb.append(",");
@@ -3130,9 +3161,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(resource.getDescription());
             sb.append(",");
-            sb.append(resource.getPublisherInstance().getTitle());
+            sb.append(resource.getPublisher().getName());
             sb.append(",");
-            sb.append(resource.getPublisherInstance().getContactInformation());
+            sb.append(resource.getPublisher().getContacts());
             sb.append("\n");
         }
         return sb.toString();
@@ -3872,6 +3903,48 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void delete_person_by_id(int id){
+
+        ArrayList<Integer> commonids = new ArrayList<>();
+
+        try{
+
+            Statement state1 = conn.createStatement(); // get the commonids of that professor id
+            Statement state2 = conn.createStatement(); // delete those commonids from semester_course (listed as ID)
+            Statement state3 = conn.createStatement(); // delete commonids from relation_course_resources
+            Statement state4 = conn.createStatement(); // delete relation_course_person by personid
+            Statement state5 = conn.createStatement(); // delete relation_person_resources by personid
+            Statement state6 = conn.createStatement(); // delete person from PERSON table
+
+            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
+
+            while (rs.next()) {
+
+                commonids.add(rs.getInt("COMMONID"));
+
+            }
+
+            //deleting
+
+            for(int i = 0; i < commonids.size(); i++) {
+                state2.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d", commonids.get(i)));
+                state3.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = %d", commonids.get(i)));
+            }
+
+            state4.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
+            state5.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", id));
+            state6.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", id));
+
+
+        }catch(SQLException e){
+
+            System.out.println("Exception in the method delete_person_by_id()");
+
+        }
+
+
     }
 
 
