@@ -1537,7 +1537,7 @@ public class DBManager {
     }
 
 
-    public static void getHistory() throws SQLException {
+    public static void getHistory() throws SQLException{
         int i=0;
         StringBuilder lsd = new StringBuilder();
         ResultSet ts3 = st.executeQuery("select v.SQL_TEXT,\n" +
@@ -2047,8 +2047,57 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
 
-    public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources) {
 
+    public static void setIDforResource(frontend.data.Resource resource) {
+
+        try {
+            Statement st = conn.createStatement();
+
+            int resourceID = 0;
+
+            String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
+                            "EDITION = '%s' AND TYPE = '%s' ", resource.getTitle(), resource.getAuthor(), resource.getEdition(),
+                    resource.getTYPE());
+
+            ResultSet rs = st.executeQuery(query);
+            if (resource.getDescription().isEmpty()) {
+                resource.setDescription(" ");
+            }
+            if (rs.next()) {
+                resourceID = rs.getInt(1);
+                resource.setID(resourceID);
+                rs.close();
+            }
+            else {
+                rs.close();
+                Resource tempRes = new Resource(0, resource.getTYPE(), resource.getTitle(), resource.getAuthor(),
+                        resource.getISBN(), resource.getTotalAmount(), resource.getCurrentAmount(),
+                        resource.getDescription());
+                tempRes.setIsbn13(resource.getISBN13());
+                tempRes.setEdition(resource.getEdition());
+
+                String tempQr = insertResourceQuery(tempRes);
+                System.out.println(tempQr);
+                st.executeQuery(tempQr);
+
+                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s' AND " +
+                                "EDITION = '%s' AND TYPE = '%s' ",
+                        tempRes.getTitle(), tempRes.getAuthor(), tempRes.getEdition(), tempRes.getType()));
+                if (rs.next()) {
+                    resourceID = rs.getInt(1);
+                    resource.setID(resourceID);
+                }
+
+        }
+        } catch (Exception e) {
+            System.out.println("Error in returnIDinResource");
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources) {
 
         try {
             Statement st = conn.createStatement();
