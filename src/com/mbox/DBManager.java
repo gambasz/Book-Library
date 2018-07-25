@@ -4,7 +4,10 @@ import frontend.data.PersonType;
 
 import java.io.*;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class DBManager {
     public static Statement st;
@@ -1328,7 +1331,7 @@ public class DBManager {
                     ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
 
                     while (rss.next()) {
-                        System.out.println("");
+                        System.out.println();
                         // ID, Type, Title, Author, ISBN, total, current, desc
 
                         listResources.add(new Resource(rss.getInt(1), rss.getString(2),
@@ -2329,13 +2332,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     // =======The methods to get the array of objects========================
     public static ArrayList<Person> getPersonFromTable() {
-        DBManager DB = new DBManager();
         ArrayList<Person> arr = new ArrayList<>();
         try {
 
 
             String query = String.format("SELECT * FROM PERSON ORDER BY LASTNAME ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 Person p = new Person(rs.getInt(1), rs.getString(3), rs.getString(4), rs.getString(2));
@@ -2343,7 +2345,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             }
             return arr;
         } catch (Exception e) {
-            System.out.println("DATA not found");
+            e.printStackTrace();
         }
 
         return null;
@@ -2356,7 +2358,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             String query = String.format("SELECT * FROM COURSECT ORDER BY CNUMBER ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 Course p = new Course(rs.getInt(1), rs.getString(2) + rs.getString(3), rs.getString(4)
@@ -2377,7 +2379,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try {
 
             String query = String.format("SELECT * FROM RESOURCES ORDER BY TITLE ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 frontend.data.Resource p = new frontend.data.Resource(rs.getInt("ID"),
@@ -2410,7 +2412,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             String query = String.format("SELECT * FROM PUBLISHERS ORDER BY TITLE ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 Publisher p = new Publisher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
@@ -2468,7 +2470,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 //System.out.println("lol");
 
                 while (rs.next()) {
-                    System.out.println("");
+                    System.out.println();
 
                     // ID, Type, Title, Author, ISBN, total, current, desc
                     frontend.data.Resource resource = new Resource(rs.getInt(1), rs.getString(2),
@@ -3949,18 +3951,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static boolean isISBN(String s){
         String regex ="\\d+";
-        if(s.matches(regex) && s.length() == 10){
-            return true;
-        }
-        else {return false;}
+        return s.matches(regex) && s.length() == 10;
     }
 
     public static boolean isISBN13(String s){
         String regex ="\\d+";
-        if(s.matches(regex) && s.length() == 13){
-            return true;
-        }
-        else {return false;}
+        return s.matches(regex) && s.length() == 13;
     }
 
     public static void deleteResourceInDB(frontend.data.Resource r){

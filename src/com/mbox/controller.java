@@ -2,6 +2,7 @@ package com.mbox;
 
 import com.sun.istack.internal.NotNull;
 import frontend.data.Course;
+import frontend.data.Person;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -232,6 +233,15 @@ public class controller {
             season = season.replace(' ', '_');
 
         return season;
+    }
+
+    public static ArrayList<Person> convertBackendPersonToFrontendPerson(ArrayList<com.mbox.Person> backendPeople) {
+        ArrayList<Person> temp = new ArrayList<>();
+        if (backendPeople != null)
+            for (com.mbox.Person backendPerson : backendPeople) {
+                temp.add(backendPerson.initPersonGUI());
+            }
+        return temp;
     }
 }
 
