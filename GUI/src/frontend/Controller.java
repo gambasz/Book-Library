@@ -332,9 +332,11 @@ public class Controller {
 
         //if none are true - do nothing
         if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
-
+                refreshTable();
+                return;
             //nothing has been selected, do nothing
-            tmp_courses = DBManager.returnEverything2(5);
+
+//            tmp_courses = DBManager.returnEverything2(5);
         } else if (commonid_full) {
 
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
@@ -499,9 +501,14 @@ public class Controller {
 
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
+        System.out.println("He;;");
 
-        if (selectedCourse != null && courseList!=null)
+
+        if (selectedCourse != null && courseList!=null && !tableTV.getSelectionModel().isEmpty()){
+            System.out.println("He;2;");
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
+
+        }
 //            for (Course c : tableTV.getItems()) {
 //                if (c.getCommonID() == selectedCourse.getCommonID()) {
 //                    tableTV.getSelectionModel().select(c);
@@ -2264,8 +2271,7 @@ public class Controller {
             System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
-
-        updateCourseTable();
+            updateCourseTable();
     }
 
     public void oldsearch() {
