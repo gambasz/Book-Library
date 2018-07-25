@@ -333,11 +333,11 @@ public class Controller {
         if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
 
             //nothing has been selected, do nothing
-            tmp_courses = DBManager.returnEverything2(55);
+            tmp_courses = DBManager.returnEverything2(5);
         } else if (commonid_full) {
-            Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
-            all_ids.add(c.getCommonID());
 
+            Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
+            tmp_courses.add(c);
 
         } else if (professorname_full && coursename_full && resource_full) {
 
@@ -1883,10 +1883,10 @@ public class Controller {
         System.out.println("SELECTED PERSON: " + selectedPerson.getFirstName());
         System.out.println("SELECTED PERSON ID: " + selectedPerson.getID());
 
-//        DBManager.deletePerson(selectedPerson);
-//        profList.remove(selectedPerson);
-//        selectedPerson = null;
-//        refreshTable();
+        DBManager.delete_person_by_id(selectedPerson.getID());
+        profList.remove(selectedPerson);
+        selectedPerson = null;
+        refreshTable();
 
     }
 

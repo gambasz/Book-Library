@@ -3878,6 +3878,48 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
     }
 
+    public static void delete_person_by_id(int id){
+
+        ArrayList<Integer> commonids = new ArrayList<>();
+
+        try{
+
+            Statement state1 = conn.createStatement(); // get the commonids of that professor id
+            Statement state2 = conn.createStatement(); // delete those commonids from semester_course (listed as ID)
+            Statement state3 = conn.createStatement(); // delete commonids from relation_course_resources
+            Statement state4 = conn.createStatement(); // delete relation_course_person by personid
+            Statement state5 = conn.createStatement(); // delete relation_person_resources by personid
+            Statement state6 = conn.createStatement(); // delete person from PERSON table
+
+            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
+
+            while (rs.next()) {
+
+                commonids.add(rs.getInt("COMMONID"));
+
+            }
+
+            //deleting
+
+            for(int i = 0; i < commonids.size(); i++) {
+                state2.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d", commonids.get(i)));
+                state3.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = %d", commonids.get(i)));
+            }
+
+            state4.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
+            state5.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", id));
+            state6.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", id));
+
+
+        }catch(SQLException e){
+
+            System.out.println("Exception in the method delete_person_by_id()");
+
+        }
+
+
+    }
+
 
 }
 
