@@ -605,7 +605,9 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
-            insertCourseLocally(tempCour);
+            if(isClassInTheSameYear(tempCour)){
+                courseList.add(tempCour);
+            }
 
         }
         updateCourseTable();
@@ -812,7 +814,7 @@ public class Controller {
                             "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         } else if (selectedCourse != null) {
-            courseList.remove(selectedCourse);
+
             DBManager.deleteRelationCourseResources(selectedCourse);
 
 
@@ -868,7 +870,9 @@ public class Controller {
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
 
-            insertCourseLocally(selectedCourse);
+            if(!isClassInTheSameYear(selectedCourse)){
+                courseList.remove(selectedCourse);
+            }
 
             updateCourseTable();
 
@@ -2316,16 +2320,17 @@ public class Controller {
 //        updateCourseTable();
     }
 
-    private void insertCourseLocally(Course tempCour) {
+    private boolean isClassInTheSameYear(Course tempCour) {
         if (yearComBox.getSelectionModel().getSelectedItem() == null) {
             if (tempCour.getYEAR() == defaultSemest.getYear()) {
-                courseList.add(tempCour);
+                return true;
             }
         } else {
             if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
-                courseList.add(tempCour);
+                return true;
             }
         }
+         return false;
     }
 }
 
