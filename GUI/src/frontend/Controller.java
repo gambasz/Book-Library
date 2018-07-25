@@ -252,6 +252,12 @@ public class Controller {
         yearComBoxEdit.getItems().addAll(years);
         profInfoType.getItems().addAll(PersonType.values());
 
+        //init default semester
+        yearComBox.getSelectionModel().select(new Integer(defaultSemest.getYear()));
+        yearComBoxEdit.getSelectionModel().select(new Integer(defaultSemest.getYear()));
+        semesterComBox.getSelectionModel().select(controller.convertSeasonDBtoGUI(defaultSemest.getSeason()));
+        semesterComBoxEdit.getSelectionModel().select(controller.convertSeasonDBtoGUI(defaultSemest.getSeason()));
+
     }
 
     public void search() {
