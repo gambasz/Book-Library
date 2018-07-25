@@ -510,7 +510,7 @@ public class Controller {
         tableTV.getItems().addAll(courseList);
         System.out.println("He;;");
 
-        if (selectedCourse != null && courseList!=null && !tableTV.getSelectionModel().isEmpty()){
+        if (selectedCourse != null && courseList!=null && !tableTV.getSelectionModel().isEmpty())
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
 
 
