@@ -113,6 +113,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
+
         DBManager.openConnection();
         defaultSemest = controller.findDefaultSemester();
         debugging = true;
