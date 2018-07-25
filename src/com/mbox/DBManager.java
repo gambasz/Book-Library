@@ -2080,7 +2080,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 System.out.println(tempQr);
                 st.executeQuery(tempQr);
 
-                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s' AND" +
+                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s' AND " +
                                 "EDITION = '%s' AND TYPE = '%s' ",
                         tempRes.getTitle(), tempRes.getAuthor(), tempRes.getEdition(), tempRes.getType()));
                 if (rs.next()) {
