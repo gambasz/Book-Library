@@ -333,8 +333,11 @@ public class Controller {
         //if none are true - do nothing
         if (!commonid_full && !professorname_full && !coursename_full && !resource_full) {
 
-            //nothing has been selected, do nothing
-            tmp_courses = DBManager.returnEverything2(5);
+            //tmp_courses = DBManager.returnEverything2(5);
+
+            refreshTable();
+            System.out.println("hellow");
+
         } else if (commonid_full) {
 
             Course c = DBManager.find_class_by_commonid(Integer.parseInt(commonid));
