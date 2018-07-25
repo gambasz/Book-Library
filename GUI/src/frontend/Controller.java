@@ -353,8 +353,8 @@ public class Controller {
 
             //tmp_courses = DBManager.returnEverything2(5);
 
-                refreshTable();
-                return;
+            refreshTable();
+            return;
             //nothing has been selected, do nothing
 
 //            tmp_courses = DBManager.returnEverything2(5);
@@ -521,7 +521,7 @@ public class Controller {
         tableTV.getItems().addAll(courseList);
         System.out.println("He;;");
 
-        if (selectedCourse != null && courseList!=null && !tableTV.getSelectionModel().isEmpty())
+        if (selectedCourse != null && courseList != null && !tableTV.getSelectionModel().isEmpty())
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
 
 
@@ -1599,12 +1599,9 @@ public class Controller {
      */
     public void selectProfossor() {
         VBox mainAddPane = new VBox(2);
-        ArrayList<com.mbox.Person> allPersonTemp = DBManager.getPersonFromTable();
         profList.clear();
-        for (int i = 0; i < allPersonTemp.size(); i++) {
-            if (!profList.contains(allPersonTemp.get(i).initPersonGUI()))
-                profList.add(allPersonTemp.get(i).initPersonGUI());
-        }
+        profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
+
 
         Dialog dlg = new Dialog();
 
@@ -1612,7 +1609,7 @@ public class Controller {
 
         icon.setFitHeight(100);
         icon.setFitWidth(100);
-        ComboBox<Person> currentProfessors = new ComboBox();
+        ComboBox<Person> currentProfessors = new ComboBox<Person>();
         currentProfessors.getItems().addAll(profList);
 
         Label currentCBoxLbl = new Label("                      " + "Choose a Professor: ");
@@ -1624,7 +1621,7 @@ public class Controller {
         LimitedTextField profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
         profInfoFNameTf.setMaxLength(15);
         profInfoLNameTf.setMaxLength(15);
-        ComboBox profInfoTypeCB = new ComboBox<>();
+        ComboBox<String> profInfoTypeCB = new ComboBox<String>();
 
         profInfoTypeCB.setItems(profInfoType.getItems());
 
@@ -1670,9 +1667,8 @@ public class Controller {
         });
         PersonResources.setOnAction(e -> {
             // When the opening resources for person view button pressed
-            ArrayList<Resource> tempRes = new ArrayList<>();
+            ArrayList<Resource> tempRes = new ArrayList<>(resList);
             isPersonResourcesView = true;
-            tempRes.addAll(resList);
             System.out.print(tempRes);
             currentProfessors.getSelectionModel().getSelectedItem().setResources(tempRes);
             showPersonsResources(currentProfessors.getSelectionModel().getSelectedItem());
@@ -1777,7 +1773,7 @@ public class Controller {
 
 
             com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
-            selectedItem = tempPerson.initPersonGUI();
+            selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
             if (selectedItem.getResources() != null) {
                 profResources.getItems().addAll(selectedItem.getResources());
             }
@@ -1941,7 +1937,7 @@ public class Controller {
     public void selectCourse() {
         //TODO: add the template information transfer  to course functionality
         ArrayList<Course> tempCourses = new ArrayList<>();
-        templateList = DBManager.convertArrayCCBasic(DBManager.getCourseFromTable());
+        templateList = DBManager.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
         VBox mainAddPane = new VBox(2);
         VBox dataInfoPane = new VBox(2);
 
@@ -2286,7 +2282,7 @@ public class Controller {
     public void importData() {
     }
 
-    public void refreshTable() {
+    private void refreshTable() {
 
         if (semesterComBox.getValue() == null || yearComBox.getValue() == null)
             courseList = DBManager.returnEverything2(defaultSemest.getId());
@@ -2301,7 +2297,7 @@ public class Controller {
             System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
-            updateCourseTable();
+        updateCourseTable();
     }
 
     public void oldsearch() {
