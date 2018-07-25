@@ -113,6 +113,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
+
         DBManager.openConnection();
         defaultSemest = controller.findDefaultSemester();
         debugging = true;
@@ -246,7 +247,7 @@ public class Controller {
         semesterComBox.getItems().addAll(Semester.values());
         semesterComBoxEdit.getItems().addAll(Semester.values());
         ArrayList<Integer> years = new ArrayList<>();
-        for (int i = Calendar.getInstance().get(Calendar.YEAR) -1; i < Calendar.getInstance().get(Calendar.YEAR) + 2; i++)
+        for (int i = Calendar.getInstance().get(Calendar.YEAR) - 1; i < Calendar.getInstance().get(Calendar.YEAR) + 2; i++)
             years.add(i);
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
@@ -506,7 +507,7 @@ public class Controller {
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
 
-        if (selectedCourse != null && courseList!=null)
+        if (selectedCourse != null && courseList != null)
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
 //            for (Course c : tableTV.getItems()) {
 //                if (c.getCommonID() == selectedCourse.getCommonID()) {
@@ -792,8 +793,7 @@ public class Controller {
             showError("Error", "Missing required boxes",
                     "Please make sure that you fill out all the required sections.");
 
-        }
-        else if (selectedCourse == null) {
+        } else if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
         }
 
@@ -914,14 +914,16 @@ public class Controller {
         ImageView deletImgg = new ImageView(deleteIconImg);
         addGraphicToButtons(deletImgg, deleteBtn);
 
-
+        setChildVisibility(false, deleteBtn);
         publishersCB.getItems().addAll(pubList);
         icon.setFitHeight(75);
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(400);
         publishersCB.setOnAction(e -> {
+            setChildVisibility(false, deleteBtn);
             if (publishersCB.getSelectionModel().getSelectedItem() != null) {
+                setChildVisibility(true, deleteBtn);
                 Publisher tempPub = (Publisher) publishersCB.getSelectionModel().getSelectedItem();
                 nameTF.setText(tempPub.getName());
                 contactsTF.setText(tempPub.getContacts());
@@ -955,13 +957,12 @@ public class Controller {
         }
         HBox deleteHB = new HBox(deleteBtn);
         deleteHB.setAlignment(Pos.CENTER);
-        dataInfoPane.getChildren().add(deleteBtn);
         dataInfoPane.setAlignment(Pos.CENTER);
         TitledPane dataInfoPaneWrapper = new TitledPane("Publisher Information", dataInfoPane);
 
         mainPane.getChildren().addAll(
                 new HBox(listOfPublisher, publishersCB),
-                dataInfoPaneWrapper
+                dataInfoPaneWrapper, deleteBtn
         );
 
 
@@ -970,8 +971,9 @@ public class Controller {
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
 
-
+        dlg.getDialogPane().setMinHeight(500);
         dlg.show();
+
         dataInfoPaneWrapper.setExpanded(false);
         dlg.setOnCloseRequest(e -> {
             publisherBtn.setText(selectedPublisher != null ? selectedPublisher.getName() : "Click me to add a new Publisher");
@@ -1249,11 +1251,10 @@ public class Controller {
 
         } else if (typeCB.getSelectionModel().getSelectedItem().toString().equals("Book") && (isbn10TF.getText().trim().isEmpty() || isbn13TF.getText().trim().isEmpty())) {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
-        } else if(selectedPublisher == null){
-            showError("Update Error","Missing publisher", "Please add publisher for resource");
+        } else if (selectedPublisher == null) {
+            showError("Update Error", "Missing publisher", "Please add publisher for resource");
 
-        }
-        else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
+        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
@@ -1436,7 +1437,7 @@ public class Controller {
         dlg.getDialogPane().setContent(mainAddPane);
         dlg.getDialogPane().getButtonTypes().addAll(fill, ButtonType.CANCEL);
 
-
+        dlg.getDialogPane().setMinHeight(500);
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
@@ -1496,7 +1497,7 @@ public class Controller {
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
 
 
-            if(tempRes.getPublisher() != null && !tempRes.getPublisher().getName().isEmpty()) {
+            if (tempRes.getPublisher() != null && !tempRes.getPublisher().getName().isEmpty()) {
                 if (!DBManager.availablePublisher(tempRes.getPublisher())) {
                     pubList.add(tempRes.getPublisher());
                 }
@@ -1548,7 +1549,7 @@ public class Controller {
 
             dlg.getDialogPane().setContent(mainPane);
             dlg.getDialogPane().getButtonTypes().addAll(assign, ButtonType.CANCEL);
-
+            dlg.getDialogPane().setMinHeight(500);
             dlg.show();
             resourceTitlePane.setExpanded(false);
 
@@ -1671,7 +1672,7 @@ public class Controller {
         hiddenOptionSContent.getChildren().addAll(new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(addProfessor, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources));
+                new HBox(addProfessor));
         for (Node hboxs : hiddenOptionSContent.getChildren()) {
             ((HBox) hboxs).setAlignment(Pos.CENTER);
             ((HBox) hboxs).setSpacing(20);
@@ -1682,7 +1683,8 @@ public class Controller {
 
         mainAddPane.getChildren().addAll(
                 new HBox(20, currentCBoxLbl, currentProfessors),
-                hiddenOptions
+                hiddenOptions,
+                new HBox(20, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources)
         );
         for (Object tempElem : mainAddPane.getChildren()) {
             if (tempElem instanceof HBox) {
@@ -1698,7 +1700,7 @@ public class Controller {
         dlg.getDialogPane().setMinWidth(300);
         dlg.getDialogPane().setContent(mainAddPane);
         dlg.getDialogPane().getButtonTypes().addAll(fill, ButtonType.CANCEL);
-
+        dlg.getDialogPane().setMinHeight(500);
 
         dlg.show();
         hiddenOptions.setExpanded(false);
@@ -1980,12 +1982,23 @@ public class Controller {
         dataInfoPane.getChildren().addAll(
                 new HBox(25, tile, tileTf),
                 new HBox(25, description, descriptionTf),
-                new HBox(25, department, departmentTf)
+                new HBox(25, department, departmentTf),
+                new HBox(25, addBtn)
         );
         for (Node node : dataInfoPane.getChildren()) {
             HBox child = (HBox) node;
             child.setAlignment(Pos.CENTER);
         }
+        setChildVisibility(false, deleteBtn);
+
+        courseTemplates.setOnAction(
+                e -> {
+                    setChildVisibility(false, deleteBtn);
+                    if (courseTemplates.getSelectionModel().getSelectedItem() != null) {
+                        setChildVisibility(true, deleteBtn);
+
+                    }
+                });
         dataInfoPane.setMinWidth(300);
         dataInfoPane.setSpacing(20);
         dataInfoPane.setAlignment(Pos.CENTER);
@@ -1993,7 +2006,7 @@ public class Controller {
         addGraphicToButtons(new ImageView(addIconImg), addBtn);
         addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
 
-        HBox buttons = new HBox(addBtn, deleteBtn);
+        HBox buttons = new HBox(deleteBtn);
         buttons.setSpacing(15);
         buttons.setAlignment(Pos.CENTER);
         TitledPane dataInfoPaneWrapper = new TitledPane("Course Information", dataInfoPane);
@@ -2013,6 +2026,7 @@ public class Controller {
         dlg.getDialogPane().setContent(mainAddPane);
         dlg.getDialogPane().getButtonTypes().addAll(fill, ButtonType.CANCEL);
 
+        dlg.getDialogPane().setMinHeight(500);
 
         dlg.show();
         dataInfoPaneWrapper.setExpanded(false);
@@ -2192,6 +2206,8 @@ public class Controller {
         dlg.setHeaderText("Exporting Data");
         dlg.setGraphic(icon);
         dlg.getDialogPane().setMinWidth(300);
+        dlg.getDialogPane().setMinHeight(500);
+
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
 
@@ -2300,7 +2316,7 @@ public class Controller {
 //        updateCourseTable();
     }
 
-    private void insertCourseLocally(Course tempCour){
+    private void insertCourseLocally(Course tempCour) {
         if (yearComBox.getSelectionModel().getSelectedItem() == null) {
             if (tempCour.getYEAR() == defaultSemest.getYear()) {
                 courseList.add(tempCour);
