@@ -235,6 +235,7 @@ public class Controller {
                     "Quiting",
                     "Error code 5567\n" +
                             " Resource table cannot be created. If this persists contact your fellow interns.");
+            System.exit(5567);
         }
 
         idcCol.setPrefWidth(100);
@@ -352,15 +353,12 @@ public class Controller {
 
         } else if (professorname_full && coursename_full && resource_full) {
 
-            for (int i = 0; i < ids_from_coursename.size(); i++) {
-
+            for (int i = 0; i < ids_from_coursename.size(); i++)
                 if (ids_from_professorname.contains(ids_from_coursename.get(i)) && ids_from_resources.contains(ids_from_coursename.get(i))) {
 
                     hashset.add(ids_from_coursename.get(i));
 
                 }
-
-            }
 
             all_ids.addAll(hashset);
 
