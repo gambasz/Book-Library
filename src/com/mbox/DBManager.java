@@ -1426,7 +1426,9 @@ public class DBManager {
                             rss.getString(3), rss.getString(4));
                     i++;
                 }
+                rss.close();
             }
+            rs2.close();
             resource1.setPublisherInstance(publisherInstance);
             return resource1;
         } catch (SQLException err) {
@@ -2309,6 +2311,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     p.setEdition(rs.getString("EDITION"));
                 arr.add(p);
             }
+            rs.close();
             return arr;
         } catch (Exception e) {
             System.out.println("DATA not found");

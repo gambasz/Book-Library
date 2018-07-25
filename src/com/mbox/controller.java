@@ -42,9 +42,11 @@ public class controller {
         int difference = main.length() - modify.length();
 
         if(difference>=0){
-            for(int i=0; i<difference; i++){
-                modify+=" ";
-            }
+            StringBuilder modifyBuilder = new StringBuilder(modify);
+            for(int i = 0; i<difference; i++)
+                modifyBuilder.append(" ");
+            modify = modifyBuilder.toString();
+
 
         }
 
@@ -93,8 +95,8 @@ public class controller {
     @NotNull
     public static Semester findDefaultSemester(){
         Calendar c = Calendar.getInstance();
-        String season="";
-        int year=0;
+        String season;
+        int year;
         season = getSeason(c.get(Calendar.MONTH));
         year = (c.get(Calendar.YEAR));
         System.out.println("Semesterhey: "+ season+ "year: " +year);
@@ -104,7 +106,7 @@ public class controller {
         System.out.println("Sem: " + semester1.getSeason() + " year:  " + semester1.getYear());
         return semester1;
     }
-        public static String getSeason(int monthNumber) {
+        private static String getSeason(int monthNumber) {
             String monthName = getMonthName(monthNumber);
             switch (monthName) {
                 case "January":
@@ -148,7 +150,7 @@ public class controller {
             }
         }
 
-        public static String getMonthName(int monthNumber){
+        private static String getMonthName(int monthNumber){
 
 
             switch (monthNumber) {
