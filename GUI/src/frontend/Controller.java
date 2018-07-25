@@ -40,7 +40,6 @@ import java.util.logging.Logger;
  *
  * @author Rajashow
  */
-@SuppressWarnings("ALL")
 public class Controller {
 
     private final String addIconImg = "/frontend/media/add.png";
@@ -143,6 +142,7 @@ public class Controller {
     private void setTextFieldSMaxLength() {
         //        courseInfoTitle.setMaxLength(8);
         setTextFieldLength(courseInfoTitle, 10);
+        setTextFieldLength(courseInfoDepart, 20);
         courseInfoDepart.setMaxLength(20);
         courseInfoDescrip.setMaxLength(32);
         profInfoFName.setMaxLength(15);
@@ -154,15 +154,19 @@ public class Controller {
         resourceSearchTF.setMaxLength(32);
     }
 
-    private void setTextFieldLength(TextField textField, final int MAX_LENGHT) {
+    private void setTextFieldLength(TextField textField, final int MAX_LENGTH) {
         UnaryOperator<TextFormatter.Change> rejectChange = change -> {
             if (change.isContentChange()) {
-                if (change.getControlNewText().length() > MAX_LENGHT) {
+                if (change.getControlNewText().length() > MAX_LENGTH) {
                     final ContextMenu menu = new ContextMenu();
-                    MenuItem message = new MenuItem("This field takes\n" + MAX_LENGHT + " characters only.");
+                    MenuItem messageWrapper = new MenuItem();
+                    Label message = new Label("This field takes\n" + MAX_LENGTH + " characters only.");
+
                     message.setStyle("-fx-text-fill: red");
-                    menu.getItems().add(message);
-                    menu.setMinWidth(textField.getWidth());
+                    message.setMinWidth(textField.getWidth() - 24);
+                    messageWrapper.setGraphic(message);
+                    menu.getItems().add(messageWrapper);
+
                     menu.show(change.getControl(), Side.BOTTOM, 0, 0);
                     return null;
                 }
@@ -219,14 +223,20 @@ public class Controller {
      * > sets attributes for the resource table
      */
     private void initResourcesTable() {
-        resourceTable = new TableView();
-        publisherCol = new TableColumn<>("Publisher");
-        nameCol = new TableColumn<>("Title");
-        authorCol = new TableColumn<>("Author");
-        idcCol = new TableColumn<>("ID");
-        editionCol = new TableColumn<>("Edition");
+        resourceTable = new TableView<Resource>();
+        publisherCol = new TableColumn<Resource, String>("Publisher");
+        nameCol = new TableColumn<Resource, String>("Title");
+        authorCol = new TableColumn<Resource, String>("Author");
+        idcCol = new TableColumn<Resource, String>("ID");
+        editionCol = new TableColumn<Resource, String>("Edition");
 
-        resourceTable.getColumns().addAll(nameCol, authorCol, editionCol, publisherCol);
+        if (!resourceTable.getColumns().addAll(nameCol, authorCol, editionCol, publisherCol)) {
+            showError("Resource Table could not be created",
+                    "Quiting",
+                    "Error code 5567\n" +
+                            " Resource table cannot be created. If this persists contact your fellow interns.");
+        }
+
         idcCol.setPrefWidth(100);
         editionCol.setPrefWidth(70);
         nameCol.setPrefWidth(170);
@@ -252,7 +262,6 @@ public class Controller {
         yearComBox.getItems().addAll(years);
         yearComBoxEdit.getItems().addAll(years);
         profInfoType.getItems().addAll(PersonType.values());
-
     }
 
     public void search() {
@@ -918,7 +927,7 @@ public class Controller {
             setChildVisibility(false, deleteBtn);
             if (publishersCB.getSelectionModel().getSelectedItem() != null) {
                 setChildVisibility(true, deleteBtn);
-                Publisher tempPub = (Publisher) publishersCB.getSelectionModel().getSelectedItem();
+                Publisher tempPub = publishersCB.getSelectionModel().getSelectedItem();
                 nameTF.setText(tempPub.getName());
                 contactsTF.setText(tempPub.getContacts());
                 descriptionTF.setText(tempPub.getDescription());
