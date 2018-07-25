@@ -1367,10 +1367,11 @@ public class Controller {
             temp.setISBN(isbn10.getText());
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem().toString());
             if (!isPersonResourcesView) {
+                selectedPublisher = tempPub;
+                DBManager.setIDforResource(temp);
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
-                selectedPublisher = tempPub;
-                DBManager.setIDinResourceFromArrayList(resList);
+
                 System.out.println("This is add button");
                 //add(+) button is fine
             } else {
