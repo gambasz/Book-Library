@@ -3420,7 +3420,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return classids;
     }
 
-    public static ArrayList<Integer> find_classids_by_course_name(String name){
+    public static ArrayList<Integer> find_classids_by_course_name(String courseTitle, String name){
 
         ArrayList<Integer> courseids = new ArrayList<>();
         ArrayList<Integer> classids = new ArrayList<>();
@@ -3430,7 +3430,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try{
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE TITLE LIKE '%"+name+"%' OR CNUMBER LIKE '%"+name+"%'");
+            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE CNUMBER LIKE  '" +
+                        name + "%' AND TITLE LIKE '" + courseTitle+ "%' " );
 
             while(rs.next()){
 
@@ -3453,7 +3454,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             return classids;
 
         }catch(SQLException e){
-
+            e.printStackTrace();
             System.out.println("Something went wrong with find_classes_by_course_name(String name)");
         }
 

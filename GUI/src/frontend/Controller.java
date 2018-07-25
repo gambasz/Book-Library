@@ -286,6 +286,7 @@ public class Controller {
         String commonid = "";
         String professorname = "";
         String coursename = "";
+        String courseCode="";
         String resource = "";
         boolean commonid_full = false;
         boolean professorname_full = false;
@@ -319,6 +320,7 @@ public class Controller {
         }
         if (!courseSearchTF.getText().isEmpty()) {
             coursename = courseSearchTF.getText();
+
             String tempCourseTitle = coursename.replaceAll("\\s", "");
             String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
@@ -336,8 +338,12 @@ public class Controller {
             } else
                 coursename_full = true;
             coursename = cSplit[1];
+            courseCode = cSplit[0].toUpperCase();
+            System.out.println("Course code: " + courseCode);
+            System.out.println("Course name: " + coursename);
 
-            ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
+
+            ids_from_coursename = DBManager.find_classids_by_course_name(courseCode,coursename);
         }
         if (!resourceSearchTF.getText().isEmpty()) {
             resource = DBManager.capitalizeString(resourceSearchTF.getText());
