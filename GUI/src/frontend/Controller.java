@@ -340,7 +340,7 @@ public class Controller {
             ids_from_coursename = DBManager.find_classids_by_course_name(coursename);
         }
         if (!resourceSearchTF.getText().isEmpty()) {
-            resource = resourceSearchTF.getText();
+            resource = DBManager.capitalizeString(resourceSearchTF.getText());
             resource_full = true;
 
             ids_from_resources = DBManager.find_classids_by_resource_name(resource);
