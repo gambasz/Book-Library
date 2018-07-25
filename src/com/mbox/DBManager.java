@@ -4,7 +4,10 @@ import frontend.data.PersonType;
 
 import java.io.*;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class DBManager {
     public static Statement st;
@@ -1328,7 +1331,7 @@ public class DBManager {
                     ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
 
                     while (rss.next()) {
-                        System.out.println("");
+                        System.out.println();
                         // ID, Type, Title, Author, ISBN, total, current, desc
 
                         listResources.add(new Resource(rss.getInt(1), rss.getString(2),
@@ -2329,13 +2332,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     // =======The methods to get the array of objects========================
     public static ArrayList<Person> getPersonFromTable() {
-        DBManager DB = new DBManager();
         ArrayList<Person> arr = new ArrayList<>();
         try {
 
 
             String query = String.format("SELECT * FROM PERSON ORDER BY LASTNAME ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 Person p = new Person(rs.getInt(1), rs.getString(3), rs.getString(4), rs.getString(2));
@@ -2343,7 +2345,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             }
             return arr;
         } catch (Exception e) {
-            System.out.println("DATA not found");
+            e.printStackTrace();
         }
 
         return null;
@@ -2356,7 +2358,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             String query = String.format("SELECT * FROM COURSECT ORDER BY CNUMBER ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 Course p = new Course(rs.getInt(1), rs.getString(2) + rs.getString(3), rs.getString(4)
@@ -2377,7 +2379,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try {
 
             String query = String.format("SELECT * FROM RESOURCES ORDER BY TITLE ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 frontend.data.Resource p = new frontend.data.Resource(rs.getInt("ID"),
@@ -2410,7 +2412,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
             String query = String.format("SELECT * FROM PUBLISHERS ORDER BY TITLE ASC");
-            ResultSet rs = DB.st.executeQuery(query);
+            ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
                 Publisher p = new Publisher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4));
@@ -2468,7 +2470,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 //System.out.println("lol");
 
                 while (rs.next()) {
-                    System.out.println("");
+                    System.out.println();
 
                     // ID, Type, Title, Author, ISBN, total, current, desc
                     frontend.data.Resource resource = new Resource(rs.getInt(1), rs.getString(2),
@@ -3346,6 +3348,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 courseids.add(rs.getInt("ID"));
             }
 
+            rs.close();
+
 
             for(int i = 0; i < courseids.size(); i++){
 
@@ -3392,6 +3396,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 resourceids.add(rs.getInt("ID"));
             }
 
+            rs.close();
+
             ResultSet rs2;
 
             for(int i = 0; i < resourceids.size(); i++){
@@ -3402,6 +3408,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                     classids.add(rs2.getInt("COMMONID"));
                 }
+
+                rs2.close();
             }
 
 
@@ -3428,6 +3436,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                 courseids.add(rs.getInt("ID"));
             }
+
+            rs.close();
 
 
             for(int i = 0; i < courseids.size(); i++){
@@ -3466,6 +3476,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 classids.add(rs.getInt("ID"));
             }
 
+            rs.close();
+
             return classids;
 
         }catch(SQLException e){
@@ -3496,12 +3508,16 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 personids.add(rs.getInt("ID"));
             }
 
+            rs.close();
+
             ResultSet rs2 = st.executeQuery("SELECT * FROM PERSON WHERE LASTNAME LIKE '%"+name+"%'");
 
             while(rs2.next()){
 
                 personids.add(rs2.getInt("ID"));
             }
+
+            rs2.close();
 
 
             for(int i = 0; i < personids.size(); i++){
@@ -3512,6 +3528,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                     courseids.add(rs3.getInt("COMMONID"));
                 }
+
+                rs3.close();
 
             }
 
@@ -3551,6 +3569,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 personids.add(rs.getInt("ID"));
             }
 
+            rs.close();
+
 
             for(int i = 0; i < personids.size(); i++){
 
@@ -3561,6 +3581,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     courseids.add(rs2.getInt("COMMONID"));
                 }
 
+                rs2.close();
             }
 
             return courseids;
@@ -3611,6 +3632,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 course.setYEAR(2018);
             }
 
+            rs2.close();
+
             course.setResource(resources);
             course.setProfessor(person);
 
@@ -3639,6 +3662,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                 resourceids.add(rs.getInt("ID"));
             }
+
+            rs.close();
 
             for(int i : resourceids){
 
@@ -3669,6 +3694,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 resids.add(rs.getInt("RESOURCEID"));
 
             }
+
+            rs.close();
 
             for(int i = 0; i < resids.size(); i++){
 
@@ -3706,6 +3733,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 idtmp = rs.getInt("PERSONID");
             }
 
+            rs.close();
+
             person = find_person_by_id(idtmp);
 
             return person;
@@ -3734,6 +3763,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 person.setFirstName(rs.getString("FIRSTNAME"));
                 person.setLastName(rs.getString("LASTNAME"));
             }
+
+            rs.close();
 
             return person;
 
@@ -3765,6 +3796,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 publisherid = rs.getInt("PUBLISHERID");
 
             }
+
+            rs.close();
 
             if (publisherid == -1){
 
@@ -3818,6 +3851,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 publisher.setContacts(rs.getString("CONTACT_INFO"));
             }
 
+            rs.close();
+
 
             if(publisher.getID() == -1){
 
@@ -3848,6 +3883,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                 System.out.println("|" + rs.getInt("SEMESTERID") + "|");
             }
+
+            rs.close();
 
         }catch(SQLException e){
 
@@ -3915,18 +3952,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static boolean isISBN(String s){
         String regex ="\\d+";
-        if(s.matches(regex) && s.length() == 10){
-            return true;
-        }
-        else {return false;}
+        return s.matches(regex) && s.length() == 10;
     }
 
     public static boolean isISBN13(String s){
         String regex ="\\d+";
-        if(s.matches(regex) && s.length() == 13){
-            return true;
-        }
-        else {return false;}
+        return s.matches(regex) && s.length() == 13;
     }
 
     public static void deleteResourceInDB(frontend.data.Resource r){
@@ -3975,6 +4006,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 commonids.add(rs.getInt("COMMONID"));
 
             }
+
+            rs.close();
 
             //deleting
 
