@@ -422,11 +422,7 @@ public class DBManager {
         }
     }
 
-    //================================ Just prints a long line of equal signs===========================================
-    public static void printSeparator() {
 
-        System.out.println("=========================================================================================");
-    }
 
     //================================================= QUERIES ========================================================
 
@@ -2038,7 +2034,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
                 String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
-                        "EDITION = '%s'", title, author,resources.get(i).getEdition());
+                        "EDITION = '%s' AND TYPE = 's' ", title, author,resources.get(i).getEdition(), type);
                 ResultSet rs = st.executeQuery(query);
 
                 if (rs.next()) {

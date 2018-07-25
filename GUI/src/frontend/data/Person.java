@@ -2,6 +2,7 @@ package frontend.data;
 
 import java.util.ArrayList;
 import java.util.Objects;
+@SuppressWarnings("unused")
 
 public class Person {
 

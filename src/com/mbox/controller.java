@@ -237,7 +237,7 @@ public class controller {
 
         public static String convertSeasonDBtoGUI(String season){
             season = season.toUpperCase();
-            if(season == "SUMMER 1" || season == "SUMMER 2")
+            if(season.equals( "SUMMER 1") || season.equals("SUMMER 2"))
                 season = season.replace(' ', '_');
 
             return season;
