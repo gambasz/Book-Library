@@ -1662,9 +1662,10 @@ public class Controller {
         Button NAME_ME_SOMETHING_ELSE = new Button("Info");
 
         Button deleteBtn = new Button("Delete");
+        Button updateBtn = new Button("Update");
 
 
-        setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
+        setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
         addProfessor.setOnMouseClicked(e -> {
             addNewProfessor(profInfoFNameTf.getText(), profInfoLNameTf.getText(), profInfoTypeCB.getSelectionModel().getSelectedItem());
             currentProfessors.getItems().clear();
@@ -1681,11 +1682,11 @@ public class Controller {
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
                 profInfoTypeCB.setValue(currentProfessors.getSelectionModel().getSelectedItem().getType());
 
-                setChildVisibility(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
+                setChildVisibility(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
 
 
             } else {
-                setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn);
+                setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
 
 
             }
@@ -1696,6 +1697,7 @@ public class Controller {
             currentProfessors.getItems().addAll(profList);
 
         });
+        updateBtn.setOnMouseClicked(e -> updateProfessor(currentProfessors, profInfoFName, profInfoLName, profInfoTypeCB));
         PersonResources.setOnAction(e -> {
             // When the opening resources for person view button pressed
             ArrayList<Resource> tempRes = new ArrayList<>(resList);
@@ -1714,7 +1716,7 @@ public class Controller {
         hiddenOptionSContent.getChildren().addAll(new HBox(profInfoFNameLbl, profInfoFNameTf),
                 new HBox(profInfoLNameLbl, profInfoLNameTf),
                 new HBox(profInfoTypeLbl, profInfoTypeCB),
-                new HBox(addProfessor));
+                new HBox(addProfessor, updateBtn));
         for (Node hboxs : hiddenOptionSContent.getChildren()) {
             ((HBox) hboxs).setAlignment(Pos.CENTER);
             ((HBox) hboxs).setSpacing(20);
@@ -1761,12 +1763,31 @@ public class Controller {
 
     }
 
+    private void updateProfessor(ComboBox<Person> currentProfessors, LimitedTextField profInfoFName, LimitedTextField profInfoLName, ComboBox profInfoType) {
+        Person professor = currentProfessors.getSelectionModel().getSelectedItem();
+        System.err.println(professor.getID());
+        String firstName = capitalizeFirstLetter(profInfoFName.getText());
+        String lastName = capitalizeFirstLetter(profInfoLName.getText());
+        professor.setFirstName(firstName);
+        professor.setLastName(lastName);
+        professor.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+        DBManager.updatePersonGUI(professor.getID(), firstName, lastName, profInfoType.getSelectionModel().getSelectedItem().toString());
+        DBManager.updatePersonQuery(professor);
+    }
+
     private void setChildVisibility(Boolean state, Node... args) {
         for (Node arg : args) {
             arg.setVisible(state);
             arg.setManaged(state);
         }
 
+    }
+
+    public String capitalizeFirstLetter(String original) {
+        if (original == null || original.length() == 0) {
+            return original;
+        }
+        return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
     private void resourcePersonDiffView(Person selectedItem) {
