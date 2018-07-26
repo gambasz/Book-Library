@@ -3654,17 +3654,21 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             ResultSet rs2 = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", courseid));
             course.setCommonID(id);
 
+            String[] semester = new String[2];
+            semester = get_semester_by_semesterid(find_semester_id_by_commonid(course.getCommonID()));
+
             while(rs2.next()){
 
                 course.setID(rs2.getInt("ID"));
                 course.setTitle(rs2.getString("TITLE") + rs2.getString("CNUMBER"));
                 course.setDescription(rs2.getString("DESCRIPTION"));
                 course.setDepartment(rs2.getString("DEPARTMENT"));
-                course.setSEMESTER("FALL");
-                course.setYEAR(2018);
             }
 
             rs2.close();
+
+            course.setSEMESTER("FALL");
+            course.setYEAR(2018);
 
             course.setResource(resources);
             course.setProfessor(person);
@@ -4059,6 +4063,95 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         }
 
+
+    }
+
+    public static ArrayList<Integer> find_classids_by_semester_id(int id){
+
+        ArrayList<Integer> classids = new ArrayList<>();
+
+        try{
+
+            Statement state1 = conn.createStatement();
+            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID = %d", id));
+
+            while(rs.next()){
+
+                classids.add(rs.getInt("ID"));
+
+            }
+
+            rs.close();
+
+            return classids;
+
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong @ find_classids_by_semester_id()");
+
+        }
+
+        return null;
+
+    }
+
+    public static int find_semester_id_by_commonid(int id){
+
+        try{
+
+            Statement state = conn.createStatement();
+            ResultSet rs = state.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                return rs.getInt("SEMESTERID");
+
+            }
+
+            rs.close();
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong with find_semester_id_by_commonid()");
+
+        }
+
+        return -1;
+
+    }
+
+    public static String[] get_semester_by_semesterid(int id){
+
+        String[] semester = new String[2];
+
+        try{
+
+            Statement state = conn.createStatement();
+            ResultSet rs = state.executeQuery(String.format("SELECT * FROM SEMESTER WHERE ID = %d", id));
+
+            while(rs.next()){
+
+                semester[0] = rs.getString("SEASON").toUpperCase();
+                semester[1] = rs.getString("YEAR").toUpperCase();
+            }
+
+            rs.close();
+
+            if(semester[0] == "SUMMER 1" || semester[0] == "SUMMER 2")
+                semester[0].replace(' ', '_');
+
+            System.out.println(semester[0]);
+
+            return semester;
+
+        }catch(SQLException e){
+
+            System.out.println("Something went wrong @ get_semester_by_semesterid()");
+
+        }
+
+        return null;
 
     }
 
