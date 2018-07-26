@@ -653,15 +653,27 @@ public class DBManager {
 
     }
 
-    public static String updateCourseQuery(Course course) {
+    public static void updateCourseDB(frontend.data.Course course) {
+        String query = "UPDATE COURSECT SET TITLE = ?, CNUMBER = ?, DESCRIPTION = ?, DEPARTMENT = ? WHERE ID = ?";
+        try {
+            // Seperate corusfe title from course number HERE
+            String courseTitle="", courseNumber="";
 
-        return String.format("UPDATE COURSECT SET TITLE = '%s', CNUMBER = '%s', DESCRIPTION = '%s', DEPARTMENT = '%s" +
-                        "WHERE ID = %d", course.getTitle().substring(0, 4), course.getTitle().substring(4), course.getDescription(), course.getDepartment(),
-                course.getID());
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1, courseTitle);
+            stl.setString(2, courseNumber);
+            stl.setString(3, course.getDescription());
+            stl.setString(4, course.getDepartment());
+            stl.setInt(5, course.getID());
+            stl.executeQuery();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public static void updateCourseQuery(frontend.data.Course c) {
+    public static void updateCourseQuery(Course c) {
         System.out.println("Title: " + c.getTitle().substring(0, 4) + "  CNUMBER: " + c.getTitle().substring(4) +
                 "  DESCRIPTION: " + c.getDescription() + "  DEPARTMENT: " + c.getDepartment() + "  ID: " + c.getID());
 
@@ -2906,9 +2918,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return resList;
     }
 
-    public static void updateCourseGUI(int courseID, String title, String description, String department) {
-        Course c = new Course(courseID, title, description, department, courseID + "");
-        executeNoReturnQuery(updateCourseQuery(c));
+    public static void updateCourseGUI(frontend.data.Course course) {
+        updateCourseDB(course);
 
     }
 
