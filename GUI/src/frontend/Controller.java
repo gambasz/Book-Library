@@ -2198,6 +2198,36 @@ public class Controller {
 
     }
 
+    private void updateCourse(Course course, LimitedTextField courseTitle, LimitedTextField courseDepart,
+                              LimitedTextField courseDescrip){
+
+        String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
+        String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
+        if (cSplit.length != 2) {
+
+            showError("Inout Error",
+                    "Unable to update because the course title you entered " +
+                            "is not valid.",
+                    "Correct format examples --> CMSC 100, MATH 181 (Hint: Make sure to have a space in" +
+                            " between the course character and number) ");
+        } else if (!com.mbox.controller.isInteger(cSplit[1])) {
+            showError("Inout Error",
+                    "Unable to update because the course you title entered " +
+                            "is not valid.",
+                    "Correct format examples --> CMSC 100, MATH 181. (Hint: Make sure to have a number after space) ");
+        } else {
+
+            //Everything should be happening here, and then call the function in DB
+            course.setTitle(courseTitle.getText());
+            course.setDepartment(courseDepart.getText());
+            course.setDescription(courseDescrip.getText());
+
+            DBManager.updateCourseGUI(course);
+            refreshTable();
+        }
+
+    }
+
     private void setCourseTemplatesCellValue(ComboBox<Course> courseTemplates) {
         courseTemplates.setConverter(new StringConverter<Course>() {
             @Override

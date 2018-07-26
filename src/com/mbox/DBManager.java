@@ -656,6 +656,7 @@ public class DBManager {
     public static void updateCourseDB(frontend.data.Course course) {
         String query = "UPDATE COURSECT SET TITLE = ?, CNUMBER = ?, DESCRIPTION = ?, DEPARTMENT = ? WHERE ID = ?";
         try {
+
             // Seperate corusfe title from course number HERE
             String courseTitle="", courseNumber="";
 
