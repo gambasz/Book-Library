@@ -296,9 +296,19 @@ public class Controller {
         ArrayList<Integer> ids_from_coursename = new ArrayList<>();
         ArrayList<Integer> ids_from_resources = new ArrayList<>();
         ArrayList<Integer> all_ids = new ArrayList<>();
+        ArrayList<Integer> semester_ids = new ArrayList<>();
         ArrayList<Course> tmp_courses = new ArrayList<>();
 
         Set<Integer> hashset = new HashSet<>();
+
+        String year = yearComBox.getValue().toString();
+        String semester = semesterComBox.getValue().toString();
+        semester = semester.toLowerCase();
+        semester = semester.substring(0, 1).toUpperCase() + semester.substring(1);
+        semester = semester.replace('_', ' ');
+        int semesterid = DBManager.getSemesterIDByName(semester, year);
+
+        semester_ids.addAll(DBManager.find_classids_by_semester_id(semesterid));
 
 
         if (!crnSearchTF.getText().isEmpty()) {
@@ -372,7 +382,7 @@ public class Controller {
         } else if (professorname_full && coursename_full && resource_full) {
 
             for (Integer id : ids_from_coursename) {
-                if (ids_from_professorname.contains(id) && ids_from_resources.contains(id)) {
+                if (ids_from_professorname.contains(id) && ids_from_resources.contains(id) && semester_ids.contains(id)) {
 
                     hashset.add(id);
 
@@ -391,7 +401,7 @@ public class Controller {
 
             for (Integer id : ids_from_coursename) {
 
-                if (ids_from_professorname.contains(id)) {
+                if (ids_from_professorname.contains(id) && semester_ids.contains(id)) {
 
                     hashset.add(id);
 
@@ -413,7 +423,7 @@ public class Controller {
 
             for (int i = 0; i < ids_from_resources.size(); i++) {
 
-                if (ids_from_professorname.contains(ids_from_resources.get(i))) {
+                if (ids_from_professorname.contains(ids_from_resources.get(i)) && semester_ids.contains(i)) {
 
                     hashset.add(ids_from_resources.get(i));
 
@@ -436,7 +446,7 @@ public class Controller {
 
             for (int i = 0; i < ids_from_coursename.size(); i++) {
 
-                if (ids_from_resources.contains(ids_from_coursename.get(i))) {
+                if (ids_from_resources.contains(ids_from_coursename.get(i)) && semester_ids.contains(i)) {
 
                     hashset.add(ids_from_coursename.get(i));
 
@@ -459,7 +469,11 @@ public class Controller {
 
             for (Integer id : ids_from_professorname) {
 
-                tmp_courses.add(DBManager.find_class_by_commonid(id));
+                if(semester_ids.contains(id)){
+
+                    tmp_courses.add(DBManager.find_class_by_commonid(id));
+                }
+
             }
 
 
@@ -467,14 +481,21 @@ public class Controller {
 
             for (Integer id : ids_from_coursename) {
 
-                tmp_courses.add(DBManager.find_class_by_commonid(id));
+                if(semester_ids.contains(id)){
+
+                    tmp_courses.add(DBManager.find_class_by_commonid(id));
+                }
+
             }
 
         } else if (resource_full) {
 
             for (Integer id : ids_from_resources) {
 
-                tmp_courses.add(DBManager.find_class_by_commonid(id));
+                if(semester_ids.contains(id)){
+
+                    tmp_courses.add(DBManager.find_class_by_commonid(id));
+                }
             }
 
         } else {
