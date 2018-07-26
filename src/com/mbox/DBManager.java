@@ -656,13 +656,15 @@ public class DBManager {
     public static void updateCourseDB(frontend.data.Course course) {
         String query = "UPDATE COURSECT SET TITLE = ?, CNUMBER = ?, DESCRIPTION = ?, DEPARTMENT = ? WHERE ID = ?";
         try {
+            course.setTitle(course.getTitle().replaceAll("\\s", ""));
+            String[] titleSplit = course.getTitle().split("(?<=\\D)(?=\\d)");
 
             // Seperate corusfe title from course number HERE
             String courseTitle="", courseNumber="";
 
             PreparedStatement stl = conn.prepareStatement(query);
-            stl.setString(1, courseTitle);
-            stl.setString(2, courseNumber);
+            stl.setString(1, titleSplit[0].toUpperCase());
+            stl.setString(2, titleSplit[1]);
             stl.setString(3, course.getDescription());
             stl.setString(4, course.getDepartment());
             stl.setInt(5, course.getID());
