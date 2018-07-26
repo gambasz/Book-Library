@@ -1425,17 +1425,16 @@ public class Controller {
                 resourceTable.getItems().add(temp);
 
             } else {
-                for (Resource resource : selectedPerson.getResources()) {
-                    System.out.println("ResourceID After *BEFORE* to list: " + resource.getID());
-                }
-                System.out.println("add button person section");
+                // Add method for person resources
+
                 resourceTable.getItems().add(temp);
                 selectedPublisher = tempPub;
+                DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
-                //DBManager.insertPersonResources(selectedPerson);
-                for (Resource resource : selectedPerson.getResources()) {
-                    System.out.println("ResourceID After adding to list: " + resource.getID());
-                }
+//                DBManager.insertPersonResources(selectedPerson);
+//                for (Resource resource : selectedPerson.getResources()) {
+//                    System.out.println("ResourceID After adding to list: " + resource.getID());
+//                }
             }
         }
 

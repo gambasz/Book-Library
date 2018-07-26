@@ -388,7 +388,7 @@ public class DBManager {
 
         try {
 
-            ResultSet rs = st.executeQuery(getResourceInTableQuery(id));
+            ResultSet rs = getResourceInTableQuery(id).executeQuery();
 
             while (rs.next()) {
                 System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
@@ -489,9 +489,13 @@ public class DBManager {
         return String.format("SELECT * FROM COURSECT WHERE ID=%d", id);
     }
 
-    public static String getResourceInTableQuery(int id) {
+    public static PreparedStatement getResourceInTableQuery(int id) throws SQLException{
 
-        return String.format("SELECT * FROM RESOURCES WHERE ID=%d", id);
+        String query = String.format("SELECT * FROM RESOURCES WHERE ID= ?");
+        PreparedStatement stl = conn.prepareStatement(query);
+        stl.setInt(1, id);
+
+        return stl;
     }
 
     public static String getPublisherInTableQuery(int id) {
@@ -1281,30 +1285,36 @@ public class DBManager {
         int resourceID;
         int i = 0;
 
-        //Resource[] resourcesList = new Resource[20];
         ArrayList<Resource> tempResourceList = new ArrayList<Resource>();
 
         try {
-            Statement stTemp = conn.createStatement();
+            String queryl = String.format("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = ?");
+            PreparedStatement stl = conn.prepareStatement(queryl);
+            stl.setInt(1, person1.getID());
 
-            rss = stTemp.executeQuery("SELECT * FROM RELATION_PERSON_RESOURCES WHERE PERSONID = " + person1.getID());
+            rss = stl.executeQuery();
             while (rss.next()) {
                 //there will be a list of all reousrces ID that is owned by Person
                 resourceID = rss.getInt(2);
-
-                rss2 = st3.executeQuery(getResourceInTableQuery(resourceID));
+                rss2 = getResourceInTableQuery(resourceID).executeQuery();
                 while (rss2.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
-//                    resourcesList[i] = new Resource(rss2.getInt(1), rss2.getString(2),
-//                            rss2.getString(3), rss2.getString(4), rss2.getString(5),
-//                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8));
-
-                    tempResourceList.add(new Resource(rss2.getInt(1), rss2.getString(2),
+//                    frontend.data.Resource tempRes = new frontend.data.Resource(rss2.getInt("ID"),
+//                            rss2.getString("ISBN"), rss2.getString("TYPE"),
+//                            rss2.getString("TITLE"), rss2.getString("AUTHOR"),
+//                            rss2.getString("DESCRIPTION"), rss2.getInt("TOTAL_AMOUNT"),
+//                            rss2.getInt("CURRENT_AMOUNT"));
+                    Resource tempRes = new Resource(rss2.getInt(1), rss2.getString(2),
                             rss2.getString(3), rss2.getString(4), rss2.getString(5),
-                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8)));
+                            rss2.getInt(6), rss2.getInt(7), rss2.getString(8));
+                        tempRes.setEdition(rss2.getString("EDITION"));
+                        tempRes.setIsbn13(rss2.getString("ISBN13"));
+                        setPublisherForResource(tempRes);
 
-                    //setPublisherForResource(resourcesList[i]);
-                    setPublisherForResource(tempResourceList.get(i));
+                        tempResourceList.add(tempRes);
+
+//                    //setPublisherForResource(resourcesList[i]);
+//                    setPublisherForResource(tempResourceList.get(i));
 
                     i++;
                 }
@@ -1338,7 +1348,7 @@ public class DBManager {
                 resourceID = rs.getInt("RESOURCEID");
                 if (before != resourceID) {
                     before = resourceID;
-                    ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
+                    ResultSet rss = getResourceInTableQuery(resourceID).executeQuery();
 
                     while (rss.next()) {
                         System.out.println();
@@ -1383,7 +1393,7 @@ public class DBManager {
 
             while (rs.next()) {
                 resourceID = rs.getInt(2);
-                ResultSet rss = st5.executeQuery(getResourceInTableQuery(resourceID));
+                ResultSet rss = getResourceInTableQuery(resourceID).executeQuery();
 
                 while (rss.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
@@ -1648,7 +1658,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             else {
 
-                rss = stTemp.executeQuery(getResourceInTableQuery(resourceID));
+                rss = getResourceInTableQuery(resourceID).executeQuery();
 
                 if (rss.next()) {
                     // ID, Type, Title, Author, ISBN, total, current, desc
@@ -2132,57 +2142,57 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
 
-    public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources) {
-
-        try {
-            Statement st = conn.createStatement();
-
-            String title;
-            String type;
-            String author;
-
-            for (int i = 0; i < resources.size(); i++) {
-                int resourceID = 0;
-                title = resources.get(i).getTitle();
-                type = resources.get(i).getTYPE();
-                author = resources.get(i).getAuthor();
-
-
-                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
-                        "EDITION = '%s' AND TYPE = 's' ", title, author,resources.get(i).getEdition(), type);
-                ResultSet rs = st.executeQuery(query);
-
-                if (rs.next()) {
-                    resourceID = rs.getInt(1);
-                    resources.get(i).setID(resourceID);
-                    continue;
-                }
-                if(resources.get(i).getDescription().isEmpty()){
-                    resources.get(i).setDescription(" ");
-                }
-                Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
-                        resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
-                        resources.get(i).getDescription());
-                tempRes.setIsbn13(resources.get(i).getISBN13());
-                tempRes.setEdition(resources.get(i).getEdition());
-
-                PreparedStatement tempInsertSt = insertResourceQuery(tempRes);
-                tempInsertSt.executeQuery();
-
-                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s'",
-                        tempRes.getTitle(),  tempRes.getAuthor()));
-                while (rs.next()) {
-                    resourceID = rs.getInt(1);
-                    resources.get(i).setID(resourceID);
-
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error in returnIDinResource");
-            e.printStackTrace();
-        }
-    }
+//    public static void setIDinResourceFromArrayList(ArrayList<frontend.data.Resource> resources) {
+//
+//        try {
+//            Statement st = conn.createStatement();
+//
+//            String title;
+//            String type;
+//            String author;
+//
+//            for (int i = 0; i < resources.size(); i++) {
+//                int resourceID = 0;
+//                title = resources.get(i).getTitle();
+//                type = resources.get(i).getTYPE();
+//                author = resources.get(i).getAuthor();
+//
+//
+//                String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
+//                        "EDITION = '%s' AND TYPE = 's' ", title, author,resources.get(i).getEdition(), type);
+//                ResultSet rs = st.executeQuery(query);
+//
+//                if (rs.next()) {
+//                    resourceID = rs.getInt(1);
+//                    resources.get(i).setID(resourceID);
+//                    continue;
+//                }
+//                if(resources.get(i).getDescription().isEmpty()){
+//                    resources.get(i).setDescription(" ");
+//                }
+//                Resource tempRes = new Resource(0, resources.get(i).getTYPE(), resources.get(i).getTitle(), resources.get(i).getAuthor(),
+//                        resources.get(i).getISBN(), resources.get(i).getTotalAmount(), resources.get(i).getCurrentAmount(),
+//                        resources.get(i).getDescription());
+//                tempRes.setIsbn13(resources.get(i).getISBN13());
+//                tempRes.setEdition(resources.get(i).getEdition());
+//
+//                PreparedStatement tempInsertSt = insertResourceQuery(tempRes);
+//                tempInsertSt.executeQuery();
+//
+//                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s'",
+//                        tempRes.getTitle(),  tempRes.getAuthor()));
+//                while (rs.next()) {
+//                    resourceID = rs.getInt(1);
+//                    resources.get(i).setID(resourceID);
+//
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println("Error in returnIDinResource");
+//            e.printStackTrace();
+//        }
+//    }
 
     public static boolean availablePublisher(frontend.data.Publisher p) {
         try {
@@ -2497,7 +2507,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             while (rs.next()) {
                 resourceID = rs.getInt(2);
-                rs = st.executeQuery(getResourceInTableQuery(resourceID));
+                rs = getResourceInTableQuery(resourceID).executeQuery();
                 //System.out.println("lol");
 
                 while (rs.next()) {
@@ -3134,6 +3144,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         int commonID = 0;
 //        setIDinResourceFromArrayList(person.getResources());
+
         executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
                 " PERSONID = '%d' ", person.getID()));
 
@@ -3308,7 +3319,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                         before = rs.getInt("RESOURCEID");
                         listOfIDs.add(before);
-                        rs3 = st3.executeQuery(getResourceInTableQuery(rs.getInt("RESOURCEID")));
+                        rs3 = getResourceInTableQuery(rs.getInt("RESOURCEID")).executeQuery();
 
                         while (rs3.next()) {
                             // ID, Type, Title, Author, ISBN, total, current, desc
