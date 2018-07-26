@@ -1403,8 +1403,6 @@ public class Controller {
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
 
-                System.out.println("This is add button");
-                //add(+) button is fine
             } else {
                 for (Resource resource : selectedPerson.getResources()) {
                     System.out.println("ResourceID After *BEFORE* to list: " + resource.getID());

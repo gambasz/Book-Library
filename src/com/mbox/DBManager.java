@@ -597,13 +597,23 @@ public class DBManager {
     }
 
 
-    public static String insertResourceQuery(Resource resource) {
-//TODO: Khanh is here. IF in description, someone writes in it's a.... It will mistakenly understand that 'it's a test'(which three ' )
-        return String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
-                        "DESCRIPTION, ISBN13, EDITION) VALUES ('%s', '%s', '%s', '%s', %d, %d, '%s','%s','%s')",
-                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(),
-                resource.getIsbn13(),resource.getEdition());
+    public static PreparedStatement insertResourceQuery(Resource resource) throws SQLException {
+
+        String queryl = String.format("INSERT INTO RESOURCES (TYPE, TITLE, AUTHOR, ISBN, TOTAL_AMOUNT, CURRENT_AMOUNT, " +
+                "DESCRIPTION, ISBN13, EDITION) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)");
+        PreparedStatement stl = conn.prepareStatement(queryl);
+
+        stl.setString(1, resource.getType());
+        stl.setString(2, resource.getTitle());
+        stl.setString(3, resource.getAuthor());
+        stl.setString(4, resource.getISBN());
+        stl.setInt(5, resource.getTotalAmount());
+        stl.setInt(6, resource.getCurrentAmount());
+        stl.setString(7, resource.getDescription());
+        stl.setString(8, resource.getIsbn13());
+        stl.setString(9, resource.getEdition());
+
+        return stl;
 
     }
 
@@ -2055,20 +2065,30 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try {
             Statement st = conn.createStatement();
-
             int resourceID = 0;
 
-            String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
-                            "EDITION = '%s' AND TYPE = '%s' ", resource.getTitle(), resource.getAuthor(), resource.getEdition(),
-                    resource.getTYPE());
+            String queryl = String.format("SELECT * FROM RESOURCES WHERE TITLE = ? AND AUTHOR = ? AND " +
+                            "EDITION = ? AND TYPE = ? ");
+            PreparedStatement stl = conn.prepareStatement(queryl);
+            stl.setString(1, resource.getTitle());
+            stl.setString(2, resource.getAuthor());
+            stl.setString(3, resource.getEdition());
+            stl.setString(4, resource.getTYPE());
 
-            ResultSet rs = st.executeQuery(query);
+
+//            String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
+//                            "EDITION = '%s' AND TYPE = '%s' ", resource.getTitle(), resource.getAuthor(), resource.getEdition(),
+//                    resource.getTYPE());
+
+            ResultSet rs = stl.executeQuery();
+
             if (resource.getDescription().isEmpty()) {
                 resource.setDescription(" ");
             }
             if (rs.next()) {
                 resourceID = rs.getInt(1);
                 resource.setID(resourceID);
+                System.out.println("Resource Found, ID: " + resourceID);
                 rs.close();
             }
             else {
@@ -2079,19 +2099,31 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 tempRes.setIsbn13(resource.getISBN13());
                 tempRes.setEdition(resource.getEdition());
 
-                String tempQr = insertResourceQuery(tempRes);
-                System.out.println(tempQr);
-                st.executeQuery(tempQr);
+                PreparedStatement tempInsertSt = insertResourceQuery(tempRes);
+                tempInsertSt.executeQuery();
 
-                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s' AND " +
-                                "EDITION = '%s' AND TYPE = '%s' ",
-                        tempRes.getTitle(), tempRes.getAuthor(), tempRes.getEdition(), tempRes.getType()));
+                 queryl = String.format("SELECT * FROM RESOURCES WHERE TITLE = ? AND AUTHOR = ? AND " +
+                        "EDITION = ? AND TYPE = ? ");
+                 stl = conn.prepareStatement(queryl);
+                stl.setString(1, tempRes.getTitle());
+                stl.setString(2, tempRes.getAuthor());
+                stl.setString(3, tempRes.getEdition());
+                stl.setString(4, tempRes.getType());
+
+                rs = stl.executeQuery();
+
+//                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s' AND " +
+//                                "EDITION = '%s' AND TYPE = '%s' ",
+//                        tempRes.getTitle(), tempRes.getAuthor(), tempRes.getEdition(), tempRes.getType()));
                 if (rs.next()) {
                     resourceID = rs.getInt(1);
                     resource.setID(resourceID);
+                    System.out.println("Resource NOT Found, ID: " + resourceID);
+
                 }
 
-        }
+
+            }
         } catch (Exception e) {
             System.out.println("Error in returnIDinResource");
             e.printStackTrace();
@@ -2134,9 +2166,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 tempRes.setIsbn13(resources.get(i).getISBN13());
                 tempRes.setEdition(resources.get(i).getEdition());
 
-                String tempQr = insertResourceQuery(tempRes);
-                System.out.println(tempQr);
-                st.executeQuery(tempQr);
+                PreparedStatement tempInsertSt = insertResourceQuery(tempRes);
+                tempInsertSt.executeQuery();
 
                 rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s'",
                         tempRes.getTitle(),  tempRes.getAuthor()));
@@ -3102,7 +3133,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     public static void insertPersonResources(frontend.data.Person person) {
 
         int commonID = 0;
-        setIDinResourceFromArrayList(person.getResources());
+//        setIDinResourceFromArrayList(person.getResources());
         executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
                 " PERSONID = '%d' ", person.getID()));
 
