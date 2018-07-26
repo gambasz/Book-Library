@@ -547,7 +547,7 @@ public class Controller {
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
 
-        if (selectedCourse != null && courseList != null && !tableTV.getSelectionModel().isEmpty())
+        if (selectedCourse != null && courseList != null )
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
 
 
@@ -1352,22 +1352,23 @@ public class Controller {
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
                                 Button publisherBtn, ComboBox typeCB, ComboBox editionCB, Button addNAssignNewResource, Button delete, Button update) {
+
         ArrayList<Resource> temp = new ArrayList<>(resourceTable.getSelectionModel().getSelectedItems());
         for (Resource r : temp) {
 //            resList.remove(r);
             resourceTable.getItems().remove(r);
-            resInfoList.getItems().remove(r.getTitle());
-            //TODO: THIS is Khanh'change, remember to cut and add when pull
-            if (!isPersonResourcesView)
-                if (selectedCourse != null) {
-                    selectedCourse.getResource().remove(r);
-                } else {
-                    if (selectedCourse != null) {
-                        selectedPerson.getResources().remove(r);
-                    }
-                }
+//            resInfoList.getItems().remove(r.getTitle());
+
+//            if (!isPersonResourcesView)
+//                if (selectedCourse != null) {
+//                    selectedCourse.getResource().remove(r);
+//                } else {
+//                    if (selectedCourse != null) {
+//                        selectedPerson.getResources().remove(r);
+//                    }
+//                }
         }
-        updateCourseTable();
+//        updateCourseTable();
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF,
                 isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
                 addNAssignNewResource, update, delete);
@@ -1605,8 +1606,8 @@ public class Controller {
                     if (selectedCourse != null) {
                         selectedCourse.getResource().clear();
                         selectedCourse.getResource().addAll(resourceTable.getItems());
+                        updateCourseTable();
                     }
-
                     resInfoList.getItems().clear();
                     for (Resource r : resourceTable.getItems())
                         resInfoList.getItems().add(r.getTitle());
