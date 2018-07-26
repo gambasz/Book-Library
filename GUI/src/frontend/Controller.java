@@ -54,7 +54,8 @@ public class Controller {
             courseInfoDescrip = new LimitedTextField(), profInfoFName = new LimitedTextField(),
             profInfoLName = new LimitedTextField(), crnSearchTF = new LimitedTextField(),
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
-            departSearchTF = new LimitedTextField(), resourceSearchTF = new LimitedTextField();
+            departSearchTF = new LimitedTextField(), resourceSearchTF = new LimitedTextField(),
+            profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
     @FXML
     ListView<String> resInfoList;
     @FXML
@@ -1597,7 +1598,6 @@ public class Controller {
             dlg.getDialogPane().setMinHeight(500);
             dlg.show();
             resourceTitlePane.setExpanded(false);
-
             dlg.setResultConverter(dialogButton -> {
                 if (dialogButton == assign) {
 
@@ -1648,7 +1648,7 @@ public class Controller {
         Label profInfoTypeLbl = new Label(controller.stringAdjustment("First Name:*  ", " Type:* ") +
                 "    ");
 
-        LimitedTextField profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
+//        LimitedTextField profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
         profInfoFNameTf.setMaxLength(15);
         profInfoLNameTf.setMaxLength(15);
         ComboBox<String> profInfoTypeCB = new ComboBox<String>();
@@ -1696,7 +1696,7 @@ public class Controller {
             currentProfessors.getItems().addAll(profList);
 
         });
-        updateBtn.setOnMouseClicked(e -> updateProfessor(currentProfessors, profInfoFName, profInfoLName, profInfoTypeCB));
+        updateBtn.setOnMouseClicked(e -> updateProfessor(currentProfessors, profInfoFNameTf, profInfoLNameTf, profInfoTypeCB));
         PersonResources.setOnAction(e -> {
             // When the opening resources for person view button pressed
             ArrayList<Resource> tempRes = new ArrayList<>(resList);
@@ -1764,14 +1764,14 @@ public class Controller {
 
     private void updateProfessor(ComboBox<Person> currentProfessors, LimitedTextField profInfoFName, LimitedTextField profInfoLName, ComboBox profInfoType) {
         Person professor = currentProfessors.getSelectionModel().getSelectedItem();
-        System.err.println(professor.getID());
         String firstName = capitalizeFirstLetter(profInfoFName.getText());
         String lastName = capitalizeFirstLetter(profInfoLName.getText());
         professor.setFirstName(firstName);
         professor.setLastName(lastName);
         professor.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-        DBManager.updatePersonGUI(professor.getID(), firstName, lastName, profInfoType.getSelectionModel().getSelectedItem().toString());
-        DBManager.updatePersonQuery(professor);
+        DBManager.updatePersonGUI(professor);
+
+        refreshTable();
     }
 
     private void setChildVisibility(Boolean state, Node... args) {

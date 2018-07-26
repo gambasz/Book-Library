@@ -14,9 +14,7 @@ public class controller {
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return false;
-        } catch (NullPointerException e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return false;
         }
         // only got here if we didn't return false
@@ -54,7 +52,7 @@ public class controller {
         return modify;
     }
 
-    public static String multipyStr(String string, int times) {
+    private static String multiplyStr(String string, int times) {
         String returned = "";
         for (int i = 0; i < times; i++) {
             returned += string;
@@ -67,7 +65,7 @@ public class controller {
     public static String resourcesFormat(ArrayList<frontend.data.Resource> allResources, int max) {
 
         StringBuilder resFormated = new StringBuilder();
-        ArrayList<Integer> ids = new ArrayList<Integer>();
+        ArrayList<Integer> ids = new ArrayList<>();
 //        ArrayList<String> editions = new ArrayList<String>();
 
         int counter = 0;
@@ -77,7 +75,7 @@ public class controller {
                     resFormated.append(tempResource.toString() + "\n");
                     ids.add(tempResource.getID());
                     if (counter < max - 1)
-                        resFormated.append(multipyStr("-", tempResource.toString().length()) + "\n");
+                        resFormated.append(multiplyStr("-", tempResource.toString().length()) + "\n");
                 }
             } else {
 //                resFormated.deleteCharAt(resFormated.length()-1);

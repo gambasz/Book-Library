@@ -636,14 +636,19 @@ public class DBManager {
                 person.getFirstName(), person.getLastName(), person.getType(), person.getID());
     }
 
-    public static void updatePersonQuery(frontend.data.Person person) {
+    public static void updatePersonDB(frontend.data.Person person) {
+        String query = "UPDATE PERSON SET FIRSTNAME = ?, LASTNAME = ?, TYPE = ? WHERE ID = ? ";
 
-        String query = String.format("UPDATE PERSON SET FIRSTNAME = '%s', LASTNAME = '%s', TYPE = '%s' WHERE ID =%d",
-                person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()), person.getID());
         try {
-            st.executeQuery(query);
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1, person.getFirstName());
+            stl.setString(2, person.getLastName());
+            stl.setString(3, person.getType());
+            stl.setInt(4, person.getID());
+            stl.executeQuery();
+
         } catch (Exception e) {
-            System.out.println("Update fail because of person error");
+            e.printStackTrace();
         }
 
     }
@@ -2907,9 +2912,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
-    public static void updatePersonGUI(int personID, String fname, String lname, String type) {
-        Person p = new Person(personID, fname, lname, type);
-        executeNoReturnQuery(updatePersonQuery(p));
+    public static void updatePersonGUI(frontend.data.Person person) {
+        System.out.println("Firstname; " + person.getFirstName() + " Lastname: " + person.getLastName() +
+        " ID: " + person.getID() + " Type: " + person.getType());
+        updatePersonDB(person);
     }
 
     public static void updateCourseQuery123(ArrayList<frontend.data.Course> c) {
