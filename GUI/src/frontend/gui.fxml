@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import frontend.data.LimitedTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import frontend.data.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.ColorAdjust?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.Controller">
    <children>
       <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
@@ -79,7 +69,9 @@
                                  <effect>
                                     <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
                                  </effect></Label>
-                              <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectProfossor" text="Find &amp; Auto Fill Info" />
+                               <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER"
+                                       mnemonicParsing="false" onAction="#selectProfessor"
+                                       text="Find &amp; Auto Fill Info"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />

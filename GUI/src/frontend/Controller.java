@@ -286,7 +286,7 @@ public class Controller {
         String commonid = "";
         String professorname = "";
         String coursename = "";
-        String courseCode="";
+        String courseCode = "";
         String resource = "";
         boolean commonid_full = false;
         boolean professorname_full = false;
@@ -353,7 +353,7 @@ public class Controller {
             System.out.println("Course name: " + coursename);
 
 
-            ids_from_coursename = DBManager.find_classids_by_course_name(courseCode,coursename);
+            ids_from_coursename = DBManager.find_classids_by_course_name(courseCode, coursename);
         }
         if (!resourceSearchTF.getText().isEmpty()) {
             resource = DBManager.capitalizeString(resourceSearchTF.getText());
@@ -469,7 +469,7 @@ public class Controller {
 
             for (Integer id : ids_from_professorname) {
 
-                if(semester_ids.contains(id)){
+                if (semester_ids.contains(id)) {
 
                     tmp_courses.add(DBManager.find_class_by_commonid(id));
                 }
@@ -481,7 +481,7 @@ public class Controller {
 
             for (Integer id : ids_from_coursename) {
 
-                if(semester_ids.contains(id)){
+                if (semester_ids.contains(id)) {
 
                     tmp_courses.add(DBManager.find_class_by_commonid(id));
                 }
@@ -492,7 +492,7 @@ public class Controller {
 
             for (Integer id : ids_from_resources) {
 
-                if(semester_ids.contains(id)){
+                if (semester_ids.contains(id)) {
 
                     tmp_courses.add(DBManager.find_class_by_commonid(id));
                 }
@@ -547,7 +547,7 @@ public class Controller {
         tableTV.getItems().clear();
         tableTV.getItems().addAll(courseList);
 
-        if (selectedCourse != null && courseList != null )
+        if (selectedCourse != null && courseList != null)
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
 
 
@@ -647,7 +647,7 @@ public class Controller {
             }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
-            if(isClassInTheSameYear(tempCour)){
+            if (isClassInTheSameYear(tempCour)) {
                 courseList.add(tempCour);
             }
 
@@ -685,15 +685,15 @@ public class Controller {
 
             DBManager.openConnection();
 
-            ArrayList<Course> courcesPulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
+            ArrayList<Course> coursesPulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
 
-            if (courcesPulledDatabase == null) {
+            if (coursesPulledDatabase == null) {
                 showError("Connection Error", "The database did not return any  data",
                         "Check your connection,and database settings in DBinformation.txt file");
-                courcesPulledDatabase = new ArrayList<>();
+                coursesPulledDatabase = new ArrayList<>();
             }
 
-            for (Course course : courcesPulledDatabase) {
+            for (Course course : coursesPulledDatabase) {
                 courseList.add(course);
                 for (Resource r : course.getResource()) {
                     if (!resList.contains(r))
@@ -720,11 +720,11 @@ public class Controller {
         }
     }
 
-    private void setTablesSelectionProperty(TableView table) {
-        table.setRowFactory(new Callback<TableView<Course>, TableRow<Course>>() {
+    private <T> void setTablesSelectionProperty(TableView<T> table) {
+        table.setRowFactory(new Callback<TableView<T>, TableRow<T>>() {
             @Override
-            public TableRow<Course> call(TableView<Course> tableView2) {
-                final TableRow<Course> row = new TableRow<>();
+            public TableRow<T> call(TableView<T> tableView2) {
+                final TableRow<T> row = new TableRow<T>();
                 row.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -734,7 +734,9 @@ public class Controller {
                             System.out.println("Deselect, isSelected is false");
                             selectedPublisher = null;
                             event.consume();
-                            updateRowSelected();
+                            if (table.equals(tableTV)) {
+                                updateRowSelected();
+                            }
                         }
                     }
                 });
@@ -912,7 +914,7 @@ public class Controller {
             //add new relation between current resources in course instance and that course
             DBManager.insertRelationCourseResources(selectedCourse);
 
-            if(!isClassInTheSameYear(selectedCourse)){
+            if (!isClassInTheSameYear(selectedCourse)) {
                 courseList.remove(selectedCourse);
             }
 
@@ -1224,7 +1226,7 @@ public class Controller {
     private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                           TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
                                           TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
-                                          ComboBox editionCB, Button addNAssignNewResource, Button update,
+                                          ComboBox<String> editionCB, Button addNAssignNewResource, Button update,
                                           Button delete) {
         try {
             Dialog dlg = new Dialog();
@@ -1285,7 +1287,7 @@ public class Controller {
 
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
-                                ComboBox typeCB, ComboBox editionCB) {
+                                ComboBox<String> typeCB, ComboBox<String> editionCB) {
         boolean isbnFormat = !DBManager.isISBN(isbn10TF.getText()) || !DBManager.isISBN13(isbn13TF.getText());
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         if (resourceTable.getSelectionModel().getSelectedItem() == null) {
@@ -1295,12 +1297,12 @@ public class Controller {
             showError("Could not insert the Resource", "Unable to insert the Resource",
                     "Please make sure you filled out all the required fields");
 
-        } else if (typeCB.getSelectionModel().getSelectedItem().toString().equals("Book") && (isbn10TF.getText().trim().isEmpty() || isbn13TF.getText().trim().isEmpty())) {
+        } else if (typeCB.getSelectionModel().getSelectedItem().equals("Book") && (isbn10TF.getText().trim().isEmpty() || isbn13TF.getText().trim().isEmpty())) {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
         } else if (selectedPublisher == null) {
             showError("Update Error", "Missing publisher", "Please add publisher for resource");
 
-        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
+        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
@@ -1314,8 +1316,8 @@ public class Controller {
             int new_total = Integer.parseInt(totalAmTF.getText());
             int new_current = Integer.parseInt(currentAmTF.getText());
             String new_descrip = descriptionTF.getText();
-            String new_type = typeCB.getSelectionModel().getSelectedItem().toString();
-            String new_edition = editionCB.getSelectionModel().getSelectedItem().toString();
+            String new_type = typeCB.getSelectionModel().getSelectedItem();
+            String new_edition = editionCB.getSelectionModel().getSelectedItem();
             Publisher new_publisher = selectedPublisher;
 
 
@@ -1351,7 +1353,7 @@ public class Controller {
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
-                                Button publisherBtn, ComboBox typeCB, ComboBox editionCB, Button addNAssignNewResource, Button delete, Button update) {
+                                Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB, Button addNAssignNewResource, Button delete, Button update) {
 
         ArrayList<Resource> temp = new ArrayList<>(resourceTable.getSelectionModel().getSelectedItems());
         for (Resource r : temp) {
@@ -1376,7 +1378,7 @@ public class Controller {
 
     private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF,
                                          TextField isbn10, TextField isbn13, TextField totalAmTF, TextField currentAmTF,
-                                         TextField descriptionTF, ComboBox typeCB, ComboBox editionCB) {
+                                         TextField descriptionTF, ComboBox<String> typeCB, ComboBox<String> editionCB) {
 
         Boolean requiredBoxes = titleTF.getText().trim().isEmpty() || authorTF.getText().trim().isEmpty() ||
                 totalAmTF.getText().trim().isEmpty() || currentAmTF.getText().trim().isEmpty() ||
@@ -1397,15 +1399,15 @@ public class Controller {
             showError("Input Error",
                     "Total and Current format must be an integer",
                     "Correct format examples --> 100, 90");
-        } else if (typeCB.getSelectionModel().getSelectedItem().toString().equals("") && (isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty())) {
+        } else if (typeCB.getSelectionModel().getSelectedItem().equals("") && (isbn10.getText().trim().isEmpty() || isbn13.getText().trim().isEmpty())) {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
-        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().toString().equals("Book")) {
+        } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
             idTF.setText("0");
             Publisher tempPub = selectedPublisher;
-            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem().toString(),
+            Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
                     DBManager.capitalizeString(titleTF.getText()),
                     DBManager.capitalizeString(authorTF.getText()),
                     descriptionTF.getText(),
@@ -1417,7 +1419,7 @@ public class Controller {
             );
             temp.setISBN13(isbn13.getText());
             temp.setISBN(isbn10.getText());
-            temp.setEdition(editionCB.getSelectionModel().getSelectedItem().toString());
+            temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
             if (!isPersonResourcesView) {
                 selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
@@ -1443,8 +1445,8 @@ public class Controller {
 
     private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                          TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
-                                         TextField descriptionTF, Button publisherBtn, ComboBox typeCB,
-                                         ComboBox editionCB, Button addNAssignNewResource, Button update, Button delete) {
+                                         TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
+                                         ComboBox<String> editionCB, Button addNAssignNewResource, Button update, Button delete) {
         VBox mainAddPane = new VBox(2);
         Dialog dlg = new Dialog();
 
@@ -1509,7 +1511,7 @@ public class Controller {
 
     private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                        TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
-                                       TextField descriptionTF, Button publisherBtn, ComboBox typeCB, ComboBox editionCB,
+                                       TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB,
                                        Button addNAssignNewResource, Button update, Button delete) {
 
         if (tempRes != null) {
@@ -1626,7 +1628,7 @@ public class Controller {
      * Assign a new Professor to Course.
      * It creates a Person object and assign the person as the Professor for the course object
      */
-    public void selectProfossor() {
+    public void selectProfessor() {
         VBox mainAddPane = new VBox(2);
         profList.clear();
         profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
@@ -1885,8 +1887,8 @@ public class Controller {
         });
     }
 
-    private void addNewProfessor(String firstName, String lastName, Object type) {
-        Person tempNewPerson = new Person(lastName, firstName, type.toString()
+    private void addNewProfessor(String firstName, String lastName, String type) {
+        Person tempNewPerson = new Person(lastName, firstName, type
         );
         profList.add(tempNewPerson);
         DBManager.insertPersonQuery(tempNewPerson);
@@ -2357,15 +2359,10 @@ public class Controller {
 
     private boolean isClassInTheSameYear(Course tempCour) {
         if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-            if (tempCour.getYEAR() == defaultSemest.getYear()) {
-                return true;
-            }
+            return tempCour.getYEAR() == defaultSemest.getYear();
         } else {
-            if (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString())) {
-                return true;
-            }
+            return tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
         }
-         return false;
     }
 }
 
