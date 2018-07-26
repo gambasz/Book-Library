@@ -11,6 +11,7 @@ import java.util.ArrayList;
  *
  * @author Rajahsow Parajuli
  */
+@SuppressWarnings("unused")
 public class Course {
 
     private int ID;
@@ -22,10 +23,8 @@ public class Course {
     private int commonID;
 
 
-
-
     public Course() {
-        commonID =0;
+        commonID = 0;
     }
 
     public Course(int CRN, int YEAR, String SEMESTER) {
@@ -62,18 +61,23 @@ public class Course {
     }
 
     public void setDescription(String description) {
-        SimpleStringProperty tmp = new SimpleStringProperty();
-        tmp.set(description);
 
-        this.description = tmp;
+
+        this.description = new SimpleStringProperty(description);
+
     }
 
     public int getID() {
         return ID;
     }
 
-    public int getCommonID() { return commonID; }
-    public void setCommonID(int commonID) { this.commonID = commonID; }
+    public int getCommonID() {
+        return commonID;
+    }
+
+    public void setCommonID(int commonID) {
+        this.commonID = commonID;
+    }
 
     public void setID(int ID) {
         this.ID = ID;
@@ -122,10 +126,9 @@ public class Course {
 
     public void setTitle(String title) {
 
-        SimpleStringProperty tmp = new SimpleStringProperty();
-        tmp.set(title);
 
-        this.title = tmp;
+        this.title = new SimpleStringProperty(title);
+        ;
     }
 
     public String getDepartment() {
@@ -137,10 +140,9 @@ public class Course {
     }
 
     public void setDepartment(String department) {
-        SimpleStringProperty tmp = new SimpleStringProperty();
-        tmp.set(department);
 
-        this.department = tmp;
+        this.department = new SimpleStringProperty(department);
+        ;
     }
 
     public Person getProfessor() {
@@ -177,6 +179,8 @@ public class Course {
                 ", resource=" + resource +
                 '}';
     }
+
+
 
 //    @Override
 //    public boolean equals(Object o) {

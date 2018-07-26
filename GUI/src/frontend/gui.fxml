@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import frontend.data.LimitedTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import frontend.data.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.ColorAdjust?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<?import javafx.scene.image.ImageView?>
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.Controller">
    <children>
       <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
          <children>
-            <VBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="300.0" spacing="20.0">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -32,11 +22,17 @@
                                  </effect></Label>
                               <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectCourse" text="Find &amp; Auto Fill Info" />
                            </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <padding>
+                              <Insets bottom="5.0" />
+                           </padding>
                         </HBox>
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
                               <Label text="Title *" />
-                              <LimitedTextField fx:id="courseInfoTitle" />
+                              <TextField fx:id="courseInfoTitle" alignment="CENTER" promptText="EG. CMSC 140"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -45,7 +41,8 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="62.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Department *" />
-                              <LimitedTextField fx:id="courseInfoDepart" />
+                              <LimitedTextField fx:id="courseInfoDepart" alignment="CENTER"
+                                                promptText="EG.  Computer Science"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -54,7 +51,8 @@
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="15.0">
                            <children>
                               <Label text="Description *" />
-                              <LimitedTextField fx:id="courseInfoDescrip" />
+                              <LimitedTextField fx:id="courseInfoDescrip" alignment="CENTER"
+                                                promptText="EG. Introduction to Programming"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -67,13 +65,19 @@
                   <Separator prefWidth="200.0" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <HBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="65.0">
+                        <HBox layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0">
                            <children>
                               <Label style="-fx-font-weight: bold;" text="Professor" textAlignment="CENTER" underline="true">
                                  <effect>
                                     <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
                                  </effect></Label>
-                              <Button fx:id="profInfoBtn" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#selectProf" text="Find &amp; Auto Fill Info" />
+                              <Button fx:id="profInfoBtn" alignment="CENTER" contentDisplay="CENTER"
+                                      mnemonicParsing="false" onAction="#selectProfessor" prefHeight="25.0"
+                                      prefWidth="141.0" text="Find &amp; Auto Fill Info">
+                                 <HBox.margin>
+                                    <Insets left="50.0"/>
+                                 </HBox.margin>
+                              </Button>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -81,28 +85,44 @@
                         </HBox>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="96.0" text="First Name:*" />
-                                    <LimitedTextField fx:id="profInfoFName" />
+                                    <LimitedTextField fx:id="profInfoFName" alignment="CENTER" disable="true"
+                                                      promptText="EG. Alla">
+                                       <HBox.margin>
+                                          <Insets left="10.0"/>
+                                       </HBox.margin>
+                                    </LimitedTextField>
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0"
+                                    prefWidth="100.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="100.0" text="Last Name:*" />
-                                    <LimitedTextField fx:id="profInfoLName" />
+                                    <LimitedTextField fx:id="profInfoLName" alignment="CENTER" disable="true"
+                                                      promptText="EG. Web">
+                                       <HBox.margin>
+                                          <Insets left="5.0"/>
+                                       </HBox.margin>
+                                    </LimitedTextField>
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER" layoutX="10.0" layoutY="45.0" prefHeight="50.0" prefWidth="100.0" spacing="80.0">
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="50.0"
+                                    prefWidth="100.0">
                                  <children>
                                     <Label text="Type:*" />
-                                    <ComboBox fx:id="profInfoType" prefWidth="150.0" />
+                                    <ComboBox fx:id="profInfoType" prefWidth="150.0" promptText="Course Instructor">
+                                       <HBox.margin>
+                                          <Insets left="73.0"/>
+                                       </HBox.margin>
+                                    </ComboBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />
@@ -118,7 +138,10 @@
                         <Label fx:id="resInfoLbl1" lineSpacing="3.0" style="-fx-font-weight: bold;" text="Resources:" underline="true">
                            <effect>
                               <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
-                           </effect></Label>
+                           </effect>
+                           <padding>
+                              <Insets bottom="5.0" />
+                           </padding></Label>
                         <HBox prefWidth="99.0" spacing="10.0">
                            <children>
                               <VBox alignment="CENTER_LEFT" spacing="5.0">
@@ -150,7 +173,7 @@
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                                  <children>
                                     <Label text="Season*" />
-                                    <ComboBox fx:id="semesterComBoxEdit" prefWidth="150.0" />
+                                    <ComboBox fx:id="semesterComBoxEdit" prefWidth="150.0" promptText="Fall" />
                                  </children>
                                  <padding>
                                     <Insets bottom="10.0" />
@@ -186,17 +209,17 @@
                </padding>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox onMousePressed="#resetSelect" prefHeight="600.0" prefWidth="800.0">
+            <VBox prefHeight="600.0" prefWidth="892.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="125.0" prefWidth="100.0">
                      <children>
                         <Label text="Search" />
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="845.0">
                            <children>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="CommonID" textAlignment="CENTER" />
-                                    <LimitedTextField fx:id="crnSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="crnSearchTF" alignment="CENTER" promptText="5579" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -205,7 +228,7 @@
                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" />
-                                    <LimitedTextField fx:id="profSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="profSearchTF" alignment="CENTER" promptText="Alla Web" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -214,16 +237,17 @@
                               <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" />
-                                    <LimitedTextField fx:id="courseSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="courseSearchTF" alignment="CENTER" promptText="CMSC 140" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </VBox>
-                              <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                              <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="150.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" />
-                                    <LimitedTextField fx:id="departSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="departSearchTF" alignment="CENTER" disable="true"
+                                                      promptText="Computer Science"/>
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -232,7 +256,7 @@
                               <VBox alignment="CENTER" layoutX="310.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Resources" textAlignment="CENTER" />
-                                    <LimitedTextField fx:id="resourceSearchTF" alignment="CENTER" />
+                                    <LimitedTextField fx:id="resourceSearchTF" alignment="CENTER" promptText="C++" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -287,23 +311,23 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <TableView fx:id="tableTV" editable="true">
+                  <TableView fx:id="tableTV" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="839.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="timeCol" prefWidth="85.0" text="Semester" />
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Professor" />
                         <TableColumn fx:id="courseCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Course" />
                         <TableColumn fx:id="departCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" text="Department" />
-                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="490.0" text="Course Resources" />
+                        <TableColumn fx:id="resourceCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="531.0" text="Course Resources" />
                     </columns>
                      <VBox.margin>
-                        <Insets />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </VBox.margin>
                   </TableView>
                </children>
             </VBox>
          </children></HBox>
       <Separator prefWidth="200.0" />
-      <HBox alignment="CENTER" onMousePressed="#resetSelect" prefHeight="50.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
          <children>
             <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importData" text="Import">
                <HBox.margin>

@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class Resource {
     private String TYPE, title, author, description, ISBN, ISBN13, edition;
     private boolean mcUnique;
-    private int totalAmount, ID, currentAmount, commonID = 0;
+    private int totalAmount, ID, currentAmount, commonID;
     private Publisher publisher;
     private Map<String, String> ids;
 
@@ -15,6 +16,7 @@ public class Resource {
         this.TYPE = TYPE;
         this.ID = ID;
         this.ids = new HashMap<String, String>();
+        commonID = 0;
     }
 
     public Resource(String TYPE, int ID, String title, Publisher publisher, String author, String description, boolean mcUnique) {
@@ -26,9 +28,10 @@ public class Resource {
         this.description = description;
         this.mcUnique = mcUnique;
         this.ids = new HashMap<String, String>();
+        commonID = 0;
     }
 
-    public Resource(String type, int id, String title, Publisher publisherInstance, String description){
+    public Resource(String type, int id, String title, Publisher publisherInstance, String description) {
 
         this.TYPE = type;
         this.ID = id;
@@ -36,6 +39,7 @@ public class Resource {
         this.publisher = publisherInstance;
         this.description = description;
 
+        commonID = 0;
     }
 
     public Resource(String TYPE, int ID, String title, String author, String description, boolean mcUnique, int ammount, Publisher publisher) {
@@ -48,6 +52,7 @@ public class Resource {
         this.totalAmount = ammount;
         this.publisher = publisher;
         this.ids = new HashMap<String, String>();
+        commonID = 0;
     }
 
     public Resource(String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
@@ -61,6 +66,7 @@ public class Resource {
         this.currentAmount = currentAmount;
         this.publisher = publisher;
         this.ids = new HashMap<String, String>();
+        commonID = 0;
     }
 
     public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount, Publisher publisher) {
@@ -74,6 +80,7 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.publisher = publisher;
+        commonID = 0;
     }
 
     public Resource(String ISBN, String TYPE, String title, String author, String description, boolean mcUnique, int totalAmount, int ID, int currentAmount) {
@@ -88,7 +95,7 @@ public class Resource {
         this.currentAmount = currentAmount;
         this.publisher = publisher;
         this.ids = new HashMap<String, String>();
-
+        commonID = 0;
     }
 
     public Resource(int ID, String ISBN, String TYPE, String title, String author, String description, int totalAmount, int currentAmount) {
@@ -102,6 +109,7 @@ public class Resource {
         this.ID = ID;
         this.currentAmount = currentAmount;
         this.ids = new HashMap<String, String>();
+        commonID = 0;
     }
 
     public String getISBN() {
@@ -200,6 +208,10 @@ public class Resource {
         this.edition = edition;
     }
 
+    public void removePublisher() {
+        this.publisher = null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -218,14 +230,14 @@ public class Resource {
     public String toString() {
         StringBuilder resFormated = new StringBuilder();
 
-        resFormated.append(String.format("Title: %s, ",this.getTitle()));
+        resFormated.append(String.format("Title: %s, ", this.getTitle()));
 //        resFormated.append(String.format("ISBN10: %s, ",this.getISBN()));
-        resFormated.append(String.format("Edition: %s, ",this.getEdition()));
+        resFormated.append(String.format("Edition: %s, ", this.getEdition()));
 
-        if(this.getPublisher()!=null && this.getPublisher().getName()!="")
-            resFormated.append(String.format("Publisher: %s ",this.getPublisher().getName()));
+        if (this.getPublisher() != null && !this.getPublisher().getName().isEmpty())
+            resFormated.append(String.format("Publisher: %s ", this.getPublisher().getName()));
         else
-            resFormated.append(String.format("Publisher: Not Assigned"));
+            resFormated.append("Publisher: Not Assigned");
 //        resFormated.append(String.format("Edition: %s, ",this.getEdition()));
 
         return resFormated.toString();
