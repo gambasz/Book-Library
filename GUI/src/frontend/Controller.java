@@ -357,7 +357,7 @@ public class Controller {
             ids_from_coursename = DBManager.find_classids_by_course_name(courseCode, coursename);
         }
         if (!resourceSearchTF.getText().isEmpty()) {
-            resource = DBManager.capitalizeString(resourceSearchTF.getText());
+            resource = controller.capitalizeString(resourceSearchTF.getText());
             resource_full = true;
 
             ids_from_resources = DBManager.find_classids_by_resource_name(resource);
@@ -938,7 +938,7 @@ public class Controller {
 
     private void selectPublisher(Button publisherBtn) {
         Dialog dlg = new Dialog();
-        pubList = DBManager.convertArrayPubPub(Objects.requireNonNull(DBManager.getPublisherFromTable()));
+        pubList = controller.convertArrayPubPub(Objects.requireNonNull(DBManager.getPublisherFromTable()));
 
         dlg.setTitle("Publisher");
         dlg.setHeaderText("Select Publisher");
@@ -1034,7 +1034,7 @@ public class Controller {
             } else {
                 deletePublisher(publishersCB.getSelectionModel().getSelectedItem(), nameTF, contactsTF, descriptionTF, publishersCB);
                 publishersCB.getItems().clear();
-                publishersCB.getItems().addAll(DBManager.convertArrayPubPub(DBManager.getPublisherFromTable()));
+                publishersCB.getItems().addAll(controller.convertArrayPubPub(DBManager.getPublisherFromTable()));
 
             }
             //Then refresh the combo boxes
@@ -1289,7 +1289,7 @@ public class Controller {
     private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
                                 ComboBox<String> typeCB, ComboBox<String> editionCB) {
-        boolean isbnFormat = !DBManager.isISBN(isbn10TF.getText()) || !DBManager.isISBN13(isbn13TF.getText());
+        boolean isbnFormat = !controller.isISBN(isbn10TF.getText()) || !controller.isISBN13(isbn13TF.getText());
 //make sure to have method that find the resourceID & publisherID=0, to change it from 0 to the right one
         if (resourceTable.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing selected resource", "Make sure you choose a resource to update");
@@ -1310,10 +1310,10 @@ public class Controller {
             ArrayList<Resource> tempResArr = new ArrayList<Resource>(resourceTable.getItems());
             selectedResource = resourceTable.getSelectionModel().getSelectedItem();
             tempResArr.remove(selectedResource);
-            String new_title = DBManager.capitalizeString(titleTF.getText());
+            String new_title = controller.capitalizeString(titleTF.getText());
             String isbn = isbn10TF.getText();
             String isbn13 = isbn13TF.getText();
-            String new_author = DBManager.capitalizeString(authorTF.getText());
+            String new_author = controller.capitalizeString(authorTF.getText());
             int new_total = Integer.parseInt(totalAmTF.getText());
             int new_current = Integer.parseInt(currentAmTF.getText());
             String new_descrip = descriptionTF.getText();
@@ -1385,7 +1385,7 @@ public class Controller {
                 totalAmTF.getText().trim().isEmpty() || currentAmTF.getText().trim().isEmpty() ||
                 typeCB.getSelectionModel().getSelectedItem() == null ||
                 editionCB.getSelectionModel().getSelectedItem() == null;
-        Boolean isbnFormat = !DBManager.isISBN(isbn10.getText()) || !DBManager.isISBN13(isbn13.getText());
+        Boolean isbnFormat = !controller.isISBN(isbn10.getText()) || !controller.isISBN13(isbn13.getText());
 
 
         if (requiredBoxes) {
@@ -1409,8 +1409,8 @@ public class Controller {
             idTF.setText("0");
             Publisher tempPub = selectedPublisher;
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
-                    DBManager.capitalizeString(titleTF.getText()),
-                    DBManager.capitalizeString(authorTF.getText()),
+                    controller.capitalizeString(titleTF.getText()),
+                    controller.capitalizeString(authorTF.getText()),
                     descriptionTF.getText(),
                     true,
                     Integer.parseInt(totalAmTF.getText()),
@@ -1988,7 +1988,7 @@ public class Controller {
     public void selectCourse() {
         //TODO: add the template information transfer  to course functionality
         ArrayList<Course> tempCourses = new ArrayList<>();
-        templateList = DBManager.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
+        templateList = controller.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
         VBox mainAddPane = new VBox(2);
         VBox dataInfoPane = new VBox(2);
 

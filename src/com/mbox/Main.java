@@ -22,7 +22,7 @@ public class Main {
         resList.add(r1);
         resList.add(r2);
 
-        DBManager.setIDinResourceFromArrayList(resList);
+//        DBManager.setIDinResourceFromArrayList(resList);
         System.out.println("Here is the ID of the first one" +resList.get(0).getID());
         System.out.println("Here is the ID of the second one" +resList.get(1).getID());
 
