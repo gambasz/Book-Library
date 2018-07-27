@@ -1986,7 +1986,6 @@ public class Controller {
     }
 
     public void selectCourse() {
-        //TODO: add the template information transfer  to course functionality
         ArrayList<Course> tempCourses = new ArrayList<>();
         templateList = controller.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
         VBox mainAddPane = new VBox(2);
@@ -2034,10 +2033,13 @@ public class Controller {
         );
         courseTemplates.setOnAction(e -> {
             Course tempSelectedCourse = courseTemplates.getSelectionModel().getSelectedItem();
+            setChildVisibility(false, deleteBtn);
+
             if (tempSelectedCourse != null) {
                 tileTf.setText(tempSelectedCourse.getTitle());
                 departmentTf.setText(tempSelectedCourse.getDepartment());
                 descriptionTf.setText(tempSelectedCourse.getDescription());
+                setChildVisibility(true, deleteBtn);
             }
         });
 
@@ -2053,14 +2055,7 @@ public class Controller {
         }
         setChildVisibility(false, deleteBtn);
 
-        courseTemplates.setOnAction(
-                e -> {
-                    setChildVisibility(false, deleteBtn);
-                    if (courseTemplates.getSelectionModel().getSelectedItem() != null) {
-                        setChildVisibility(true, deleteBtn);
 
-                    }
-                });
         dataInfoPane.setMinWidth(300);
         dataInfoPane.setSpacing(20);
         dataInfoPane.setAlignment(Pos.CENTER);
@@ -2199,7 +2194,7 @@ public class Controller {
     }
 
     private void updateCourse(Course course, LimitedTextField courseTitle, LimitedTextField courseDepart,
-                              LimitedTextField courseDescrip){
+                              LimitedTextField courseDescrip) {
 
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
