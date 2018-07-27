@@ -1338,7 +1338,7 @@ public class Controller {
                 tempRes.setIsbn13(isbn13);
                 tempRes.setEdition(new_edition);
                 selectedResource = tempRes.initResourceGUI();
-                DBManager.executeNoReturnQuery(DBManager.updateResourceQuery(tempRes));
+                DBManager.updateResource(tempRes);
                 System.out.println("Updated resource with ID: " + selectedResource.getID());
                 DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
                 selectedResource.setPublisher(selectedPublisher);

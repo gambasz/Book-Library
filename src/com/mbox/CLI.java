@@ -175,7 +175,7 @@ public class CLI {
             case"publisher":{
                 try{
                     Publisher  pub =new Publisher(values[2],values[3],values[4]);
-                    DB.executeNoReturnQuery(DB.insertPublisherQuery(pub));
+                    DB.insertPublisher(pub);
                     System.out.println("Added Publisher");
                 }catch(Exception e){
                     System.out.println("It must be title crn description department");

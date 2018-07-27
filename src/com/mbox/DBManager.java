@@ -524,8 +524,12 @@ public class DBManager {
 
 
         try {
-            rs = st5.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' AND LASTNAME='%s' AND TYPE='%s'",
-                    person.getFirstName(), person.getLastName(), person.getType()));
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME= ? AND LASTNAME= ?  AND TYPE= ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,person.getFirstName());
+            stl.setString(2,person.getLastName());
+            stl.setString(3,person.getType());
+            rs = stl.executeQuery();
 
             while (rs.next()) {
                 // Check if there is repetitive data in the db
@@ -534,16 +538,26 @@ public class DBManager {
 //                    return rs.getInt(1);
 //                }
             }
-            String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
-                    person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
-            st.executeQuery(query);
-            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' OR LASTNAME='%s'",
-                    person.getFirstName(), person.getLastName());
-            rs = st.executeQuery(query2);
+            String query1 = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES (?, ?, ?)");
+            PreparedStatement stl1 = conn.prepareStatement(query1);
+            stl1.setString(1,person.getFirstName());
+            stl1.setString(2,person.getLastName());
+            stl1.setString(3,person.getType());
+            stl1.executeQuery();
+
+
+
+            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME= ? OR LASTNAME= ?");
+            PreparedStatement stl2 = conn.prepareStatement(query2);
+            stl2.setString(1,person.getFirstName());
+            stl2.setString(2,person.getLastName());
+            rs = stl2.executeQuery();
+
             while (rs.next()) {
 
                 id = (rs.getInt(1));
             }
+            rs.close();
             return id;
 
         } catch (SQLException err) {
@@ -570,27 +584,41 @@ public class DBManager {
         System.out.println("INsertCOurseFunction: CourseTitle: " + cSplit[0] + " CourseN: " + cSplit[1]);
         try {
 
-            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s'",
-                    cSplit[0], cSplit[1]);
-            rs = st.executeQuery(query2);
+            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE= ?  AND CNUMBER = ?");
+            PreparedStatement stl = conn.prepareStatement(query2);
+            stl.setString(1,cSplit[0]);
+            stl.setString(2,cSplit[1]);
+            rs = stl.executeQuery();
+
+
             while (rs.next()) {
                 id = (rs.getInt(1));
                 return id;
             }
             String query = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
-                            "('%s', '%s', '%s', '%s')", cSplit[0], cSplit[1], course.getDescription(),
-                    course.getDepartment());
+                            "(?, ?, ?, ?)");
+            PreparedStatement stl2 = conn.prepareStatement(query);
+            stl2.setString(1,cSplit[0]);
+            stl2.setString(2, cSplit[1]);
+            stl2.setString(3,course.getDescription());
+            stl2.setString(4,course.getDepartment());
+            stl2.executeQuery();
 
 
-            st.executeQuery(query);
-            query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s' AND DESCRIPTION = '%s'",
+            query2 = String.format("SELECT * FROM COURSECT WHERE TITLE= ? AND CNUMBER = ? AND DESCRIPTION = ?",
                     cSplit[0], cSplit[1], course.getDescription());
-            rs = st.executeQuery(query2);
+            PreparedStatement stl3 = conn.prepareStatement(query2);
+            stl3.setString(1,cSplit[0]);
+            stl3.setString(2,cSplit[1]);
+            stl3.setString(3, course.getDescription());
+
+            rs = stl3.executeQuery();
             while (rs.next()) {
 
                 id = (rs.getInt(1));
             }
             //System.out.println("ID dar akharin marhale hast: "+id);
+            rs.close();
             return id;
 
 
@@ -598,6 +626,7 @@ public class DBManager {
             System.out.println(err);
             err.printStackTrace();
         }
+
         return 0;
     }
 
@@ -622,10 +651,19 @@ public class DBManager {
 
     }
 
-    public static String insertPublisherQuery(Publisher publisher) {
+    public static void insertPublisher(Publisher publisher) {
 
-        return String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
-                publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription());
+        String query = String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES (?, ?, ?)");
+        try{
+        PreparedStatement stl = conn.prepareStatement(query);
+        stl.setString(1,publisher.getTitle());
+        stl.setString(2,publisher.getContactInformation());
+        stl.setString(3,publisher.getDescription());
+        stl.executeQuery();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -818,15 +856,28 @@ public class DBManager {
 
     //==================================
 
-    public static String updateResourceQuery(Resource resource) {
+    public static void updateResource(Resource resource) {
 
-        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', " +
-                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s', ISBN13 = '%s'," +
-                        "EDITION = '%s' WHERE ID = '%d'",
-                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getIsbn13(),
-                resource.getEdition(),
-                resource.getID());
+        String query =  String.format("UPDATE RESOURCES SET TYPE = ?, TITLE = ?, AUTHOR = ?, ISBN = ?, " +
+                        "TOTAL_AMOUNT = ?, CURRENT_AMOUNT = ?, DESCRIPTION = ?, ISBN13 = ?," +
+                        "EDITION = ? WHERE ID = ?");
+        try{
+        PreparedStatement stl = conn.prepareStatement(query);
+        stl.setString(1,resource.getType());
+        stl.setString(2,resource.getTitle());
+        stl.setString(3,resource.getAuthor());
+        stl.setString(4,resource.getISBN());
+        stl.setInt(5,resource.getTotalAmount());
+        stl.setInt(6,resource.getCurrentAmount());
+        stl.setString(7,resource.getDescription());
+        stl.setString(8,resource.getIsbn13());
+        stl.setString(9,resource.getEdition());
+        stl.setInt(10,resource.getID());
+        stl.executeQuery();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -2000,6 +2051,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             }
             c.setCommonID(commonID);
+            rs.close();
             return c;
 
         }
@@ -2104,8 +2156,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                         stl1.executeQuery();
 
                     }
+                    rs.close();
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2175,6 +2229,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     System.out.println("Resource NOT Found, ID: " + resourceID);
 
                 }
+                rs.close();
 
 
             }
@@ -2251,8 +2306,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             info = p.getContacts();
             descrip = p.getDescription();
 
-            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' ", title);
-            ResultSet rs = st.executeQuery(query);
+            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE= ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,title);
+            ResultSet rs = stl.executeQuery();
 
             while (rs.next()) {
                 pubID = rs.getInt(1);
@@ -2272,23 +2329,28 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
 
-                String tempQr = insertPublisherQuery(tempPub);
-                System.out.println(tempQr);
-                st.executeQuery(tempQr);
+                insertPublisher(tempPub);
+
                 // Errorrrrrrrr
 
 
-                rs = st.executeQuery(String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' AND CONTACT_INFO ='%s' AND DESCRIPTION ='%s'",
-                        title, info, descrip));
+                String query1 = String.format("SELECT * FROM PUBLISHERS WHERE TITLE= ? AND CONTACT_INFO = ? AND DESCRIPTION = ?");
+                PreparedStatement stl1 = conn.prepareStatement(query1);
+                stl1.setString(1,title);
+                stl1.setString(2,info);
+                stl1.setString(3,descrip);
+                rs = stl1.executeQuery();
                 while (rs.next()) {
                     pubID = rs.getInt(1);
 
                 }
                 p.setID(pubID);
+                rs.close();
                 return false;
 
             } else {
                 p.setID(pubID);
+                rs.close();
                 return true;
             }
 
