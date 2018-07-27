@@ -1434,10 +1434,7 @@ public class Controller {
                 selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
-//                DBManager.insertPersonResources(selectedPerson);
-//                for (Resource resource : selectedPerson.getResources()) {
-//                    System.out.println("ResourceID After adding to list: " + resource.getID());
-//                }
+
             }
         }
 
@@ -1929,7 +1926,7 @@ public class Controller {
 
         resourceTable.getItems().clear();
         com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
-        selectedItem = tempPerson.initPersonGUI();
+        selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
         selectedPerson = selectedItem;
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
@@ -1961,10 +1958,8 @@ public class Controller {
 
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
+//                selectedPerson.setResources(resourceTable.getItems().toArray());
                 DBManager.insertPersonResources(selectedPerson);
-
-//                selectedItem.getResources().clear();
-//                selectedItem.getResources().addAll(resourceTable.getItems());
 
                 return null;
             }
