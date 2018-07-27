@@ -244,12 +244,19 @@ public class controller {
 
     public static String capitalizeString(String s){
         String result = "";
-        String[] tempString = s.split("\\s");
-        for(String a : tempString){
-            result = result + a.substring(0,1).toUpperCase() + a.substring(1) + " ";
+
+        try {
+            String[] tempString = s.split("\\s");
+            for (String a : tempString) {
+                result = result + a.substring(0, 1).toUpperCase() + a.substring(1) + " ";
+            }
+            result = result.substring(0, result.length() - 1);
         }
-        result = result.substring(0,result.length()-1);
+        catch (Exception e){
+            e.printStackTrace();
+        }
         return result;
+
     }
 
     public static boolean isISBN(String s){

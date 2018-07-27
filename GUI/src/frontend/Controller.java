@@ -47,10 +47,9 @@ public class Controller {
     private final String deleteIconImg = "/frontend/media/delete.png";
     private final String programeIconImg = "/frontend/media/icon.png";
 
+
     @FXML
-    TextField courseInfoTitle;
-    @FXML
-    LimitedTextField courseInfoDepart = new LimitedTextField(),
+    private LimitedTextField courseInfoTitle = new LimitedTextField(), courseInfoDepart = new LimitedTextField(),
             courseInfoDescrip = new LimitedTextField(), profInfoFName = new LimitedTextField(),
             profInfoLName = new LimitedTextField(), crnSearchTF = new LimitedTextField(),
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
@@ -141,9 +140,9 @@ public class Controller {
     }
 
     private void setTextFieldSMaxLength() {
-        //        courseInfoTitle.setMaxLength(8);
-        setTextFieldLength(courseInfoTitle, 10);
-        setTextFieldLength(courseInfoDepart, 20);
+//        setTextFieldLength(courseInfoTitle, 10);
+//        setTextFieldLength(courseInfoDepart, 20);
+        courseInfoTitle.setMaxLength(8);
         courseInfoDepart.setMaxLength(20);
         courseInfoDescrip.setMaxLength(32);
         profInfoFName.setMaxLength(15);
@@ -155,28 +154,28 @@ public class Controller {
         resourceSearchTF.setMaxLength(32);
     }
 
-    private void setTextFieldLength(TextField textField, final int MAX_LENGTH) {
-        UnaryOperator<TextFormatter.Change> rejectChange = change -> {
-            if (change.isContentChange()) {
-                if (change.getControlNewText().length() > MAX_LENGTH) {
-                    final ContextMenu menu = new ContextMenu();
-                    MenuItem messageWrapper = new MenuItem();
-                    Label message = new Label("This field takes\n" + MAX_LENGTH + " characters only.");
-
-                    message.setStyle("-fx-text-fill: red");
-                    message.setMinWidth(textField.getWidth() - 24);
-                    messageWrapper.setGraphic(message);
-                    menu.getItems().add(messageWrapper);
-
-                    menu.show(change.getControl(), Side.BOTTOM, 0, 0);
-                    return null;
-                }
-            }
-            return change;
-        };
-        textField.setTextFormatter(new TextFormatter(rejectChange));
-
-    }
+//    private void setTextFieldLength(TextField textField, final int MAX_LENGTH) {
+//        UnaryOperator<TextFormatter.Change> rejectChange = change -> {
+//            if (change.isContentChange()) {
+//                if (change.getControlNewText().length() > MAX_LENGTH) {
+//                    final ContextMenu menu = new ContextMenu();
+//                    MenuItem messageWrapper = new MenuItem();
+//                    Label message = new Label("This field takes\n" + MAX_LENGTH + " characters only.");
+//
+//                    message.setStyle("-fx-text-fill: red");
+//                    message.setMinWidth(textField.getWidth() - 24);
+//                    messageWrapper.setGraphic(message);
+//                    menu.getItems().add(messageWrapper);
+//
+//                    menu.show(change.getControl(), Side.BOTTOM, 0, 0);
+//                    return null;
+//                }
+//            }
+//            return change;
+//        };
+//        textField.setTextFormatter(new TextFormatter(rejectChange));
+//
+//    }
 
     private void addButtonGraphics() {
         String searchIconImg = "/frontend/media/search.png";
@@ -1116,7 +1115,9 @@ public class Controller {
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
-
+        Label counter = new Label();
+        counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
+        titleTF.setCounter(counter);
         titleTF.setMaxLength(25);
         authorTF.setMaxLength(10);
         idTF.setMaxLength(8);
@@ -1200,7 +1201,7 @@ public class Controller {
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
                 new HBox(type, typeCB, hiddenSpacer, searchBtn, new Separator(), autoFillBtn),
-                new HBox(title, titleTF),
+                new HBox(title, titleTF, counter),
                 new HBox(author, authorTF),
                 new HBox(ISBN10, isbn10TF),
                 new HBox(ISBN13, isbn13TF),
