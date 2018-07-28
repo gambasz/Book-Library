@@ -1556,7 +1556,7 @@ public class Controller {
                     if (selectedCourse != null) {
                         selectedCourse.getResource().clear();
                         selectedCourse.getResource().addAll(resourceTable.getItems());
-                        updateCourseTable();
+//                        updateCourseTable();
                     }
                     resInfoList.getItems().clear();
                     for (Resource r : resourceTable.getItems())

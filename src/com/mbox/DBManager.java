@@ -3138,10 +3138,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try {
 
-            Statement st = conn.createStatement();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
-                    title, cnumber));
+
+            String query = String.format("SELECT * FROM COURSECT WHERE TITLE = ? AND CNUMBER = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,title);
+            stl.setString(2,cnumber);
+            ResultSet rs = stl.executeQuery();
 
             while (rs.next()) {
 
@@ -3150,22 +3153,32 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             if (id == -1) {
 
-                st.executeQuery(String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
-                        "('%s', '%s', '%s', '%s')", title, cnumber, c.getDescription(), c.getDepartment()));
+                String query1 = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
+                        "(?,?, ?, ?, ?)");
+                PreparedStatement stl1 = conn.prepareStatement(query1);
+                stl1.setString(1,title);
+                stl1.setString(2,cnumber);
+                stl1.setString(3,c.getDescription());
+                stl1.setString(4, c.getDepartment());
+
+                stl1.executeQuery();
 
 
-                rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
-                        title, cnumber));
+                String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE = ? AND CNUMBER = ?");
+                PreparedStatement stl2 = conn.prepareStatement(query2);
+                stl2.setString(1,title);
+                stl2.setString(2,cnumber);
+                rs = stl2.executeQuery();
 
                 while (rs.next()) {
 
                     id = rs.getInt("id");
                 }
-
+                rs.close();
                 return id;
 
             } else {
-
+                rs.close();
                 return id;
             }
 
@@ -3188,8 +3201,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try {
 
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = '%s'", p.getFirstName(), p.getLastName()));
+
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME = ? AND LASTNAME = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,p.getFirstName());
+            stl.setString(2,p.getLastName());
+
+            ResultSet rs = stl.executeQuery();
 
             while (rs.next()) {
 
@@ -3198,11 +3216,18 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             if (id == -1) {
 
-                st.executeQuery(String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES('%s', '%s', '%s')"
-                        , p.getFirstName(), p.getLastName(), p.getType()));
+                String query1 = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES(?, ?, ?)");
+                PreparedStatement stl1 = conn.prepareStatement(query1);
+                stl1.setString(1,p.getFirstName());
+                stl1.setString(2,p.getLastName());
+                stl1.setString(3,p.getType());
+                stl1.executeQuery();
 
-                rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = " +
-                        "'%s'", p.getFirstName(), p.getLastName()));
+                String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME = ? AND LASTNAME = ?");
+                PreparedStatement stl2 = conn.prepareStatement(query2);
+                stl2.setString(1,p.getFirstName());
+                stl2.setString(2,p.getLastName());
+                rs = stl2.executeQuery();
 
                 while (rs.next()) {
 
