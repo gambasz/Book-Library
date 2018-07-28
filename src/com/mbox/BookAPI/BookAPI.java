@@ -1,10 +1,8 @@
 package com.mbox.BookAPI;
 
 import frontend.data.Resource;
-import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,18 +10,18 @@ import java.util.Map;
 public class BookAPI {
 
 
-    public static ArrayList<Book> search(String query) throws JSONException, MalformedURLException {
+    public static ArrayList<Book> search(String query) {
 
         String encodedUrl = null;
         try {
             encodedUrl = URLEncoder.encode(query, "UTF-8");
-            System.out.println(encodedUrl.toString());
+            System.out.println(encodedUrl);
         } catch (UnsupportedEncodingException ignored) {
 
         }
 
         try {
-            return Request_Json.call_me(encodedUrl.toString());
+            return Request_Json.call_me(encodedUrl);
 
         } catch (Exception e) {
             e.printStackTrace();
