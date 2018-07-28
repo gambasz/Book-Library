@@ -116,7 +116,7 @@ public class booksSearchViewController {
             try {
                 tableOfBooks.getItems().clear();
                 tableOfBooks.getItems().addAll(Objects.requireNonNull(BookAPI.search(searchQuery)));
-            } catch (JSONException | MalformedURLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

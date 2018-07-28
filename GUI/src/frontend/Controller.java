@@ -1072,9 +1072,7 @@ public class Controller {
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
-        Label counter = new Label();
-        counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
-        titleTF.setCounter(counter);
+
         titleTF.setMaxLength(25);
         authorTF.setMaxLength(10);
         idTF.setMaxLength(8);
@@ -1157,7 +1155,7 @@ public class Controller {
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
                 new HBox(type, typeCB, hiddenSpacer, searchBtn, new Separator(), autoFillBtn),
-                new HBox(title, titleTF, counter),
+                new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(ISBN10, isbn10TF),
                 new HBox(ISBN13, isbn13TF),

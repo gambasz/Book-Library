@@ -49,7 +49,7 @@ public class LimitedTextField extends TextField {
 
         UnaryOperator<TextFormatter.Change> rejectChange = change -> {
             if (change.isContentChange()) {
-                if (counter !=null)
+//                if (counter !=null)
 //                    this.counter.setVisible(true);
                 if (change.getControlNewText().length() > this.getMaxLength()) {
                     if(counter!=null)
