@@ -576,7 +576,7 @@ public class Controller {
 
             if (selectedCourse != null) {
                 selectedPerson = new Person(selectedPerson);
-                ArrayList<Resource> tempRes = selectedCourse.getResource();
+                ArrayList<Resource> tempRes = new ArrayList<>(resourceTable.getItems());
 
                 tempCour = new Course(
                         selectedCourse.getID(),
@@ -834,7 +834,7 @@ public class Controller {
                 selectedCourse.setID(comboBoxesCourse.getID());
             }
 
-            ArrayList<Resource> selected_resources = selectedCourse.getResource();
+            ArrayList<Resource> selected_resources = new ArrayList<>(resourceTable.getItems());
             ArrayList<Resource> new_resources = resList;
             //delete all exist relation between course and its resources
 
@@ -1554,8 +1554,8 @@ public class Controller {
                 if (dialogButton == assign) {
 
                     if (selectedCourse != null) {
-                        selectedCourse.getResource().clear();
-                        selectedCourse.getResource().addAll(resourceTable.getItems());
+//                        selectedCourse.getResource().clear();
+//                        selectedCourse.getResource().addAll(resourceTable.getItems());
 //                        updateCourseTable();
                     }
                     resInfoList.getItems().clear();
