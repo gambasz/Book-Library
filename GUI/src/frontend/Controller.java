@@ -1461,6 +1461,7 @@ public class Controller {
         for (Person p : profList) {
             p.getResources().remove(res);
         }
+        resInfoList.getItems().remove(res);
         updateCourseTable();
     }
 
