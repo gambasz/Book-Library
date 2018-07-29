@@ -3624,6 +3624,31 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
+    public static void insertRelationResourcePublisher(frontend.data.Resource resource){
+        int resID = 0;
+        try{
+
+            ResultSet rs = st.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE PUBLISHERID = "+
+            resource.getPublisher().getID() + " AND RESOURCEID = " + resource.getID());
+
+            while(rs.next()){
+                resID = rs.getInt(2);
+            }
+
+            if(resID == 0){
+                st.executeQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE (PUBLISHERID, RESOURCEID) VALUES " +
+                        "('%d','%d')",resource.getPublisher().getID(),resource.getID()));
+            }
+
+            rs.close();
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     public static ArrayList<Integer> find_classids_by_courseid(int id){
 
         ArrayList<Integer> classids = new ArrayList<>();

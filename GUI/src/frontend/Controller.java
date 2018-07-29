@@ -1377,11 +1377,13 @@ public class Controller {
             temp.setISBN13(isbn13.getText());
             temp.setISBN(isbn10.getText());
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
+
             if (!isPersonResourcesView) {
                 selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
+                DBManager.insertRelationResourcePublisher(temp);
 
             } else {
                 // Add method for person resources
@@ -1390,6 +1392,7 @@ public class Controller {
                 selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
+                DBManager.insertRelationResourcePublisher(temp);
 
             }
         }
