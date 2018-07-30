@@ -1188,13 +1188,13 @@ public class Controller {
 
     private void showHelp() {
         Dialog dlg = new Dialog();
-        dlg.setHeaderText("HELP and Tutorials");
+        dlg.setTitle("HELP and Tutorials");
         VBox mainPane = new VBox(20);
         ImageView img = new ImageView();
-        Label test = new Label("Hello");
+        Label title = new Label("Hello");
 
 
-        mainPane.getChildren().addAll(test, img);
+        mainPane.getChildren().addAll(title, img);
         mainPane.setAlignment(Pos.CENTER);
 
         dlg.getDialogPane().setContent(mainPane);
@@ -1217,7 +1217,7 @@ public class Controller {
                         numberOfElement = 0;
                     }
                 } else {
-                    test.setText("Nothing here add images");
+                    title.setText("Nothing here add images");
                 }
 
 
