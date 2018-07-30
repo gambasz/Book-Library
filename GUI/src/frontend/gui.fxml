@@ -267,8 +267,8 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="helpBtn" alignment="TOP_RIGHT" contentDisplay="CENTER"
-                                      mnemonicParsing="false" text="Help">
+                              <Button fx:id="helpBtn" alignment="TOP_RIGHT" contentDisplay="CENTER" graphicTextGap="0.0"
+                                      text="_?">
                                  <HBox.margin>
                                     <Insets bottom="25.0" left="70.0"/>
                                  </HBox.margin>

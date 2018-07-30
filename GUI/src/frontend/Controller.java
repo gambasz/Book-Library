@@ -1153,7 +1153,7 @@ public class Controller {
 
         } catch (Exception ex) {
             if (debugging) {
-                System.out.print("Hey the esourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                System.out.print("Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -1188,6 +1188,7 @@ public class Controller {
 
     private void showHelp() {
         Dialog dlg = new Dialog();
+        dlg.setHeaderText("HELP and Tutorials");
         VBox mainPane = new VBox(20);
         ImageView img = new ImageView();
         Label test = new Label("Hello");
@@ -1201,13 +1202,14 @@ public class Controller {
         ArrayList<Image> images = new ArrayList<>();
         images.add(new Image(addIconImg));
         images.add(new Image(deleteIconImg));
+
         Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 
             int numberOfElement = 0;
 
             @Override
             public void handle(ActionEvent event) {
-                if (images != null && !images.isEmpty()) {
+                if (!images.isEmpty()) {
                     if (numberOfElement < images.size()) {
                         img.setImage(images.get(numberOfElement));
                         numberOfElement++;
@@ -1225,6 +1227,8 @@ public class Controller {
         timer.play();
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dlg.setHeight(760);
+        dlg.setResizable(true);
+        dlg.setWidth(500);
         dlg.setResultConverter(dialogButton -> {
             timer.stop();
             return null;
