@@ -360,7 +360,7 @@ public class Controller {
 
             for (Integer id : ids_from_coursename) {
                 if (ids_from_professorname.contains(id) && ids_from_resources.contains(id) && semester_ids.contains(id)) {
-
+                    
                     hashset.add(id);
 
                 }
