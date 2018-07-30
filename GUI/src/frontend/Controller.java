@@ -5,11 +5,8 @@ import com.mbox.BookAPI.BookAPI;
 import com.mbox.DBManager;
 import com.mbox.controller;
 import frontend.data.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.util.Callback;
-import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.io.File;
@@ -1199,6 +1195,8 @@ public class Controller {
         Button previousMediaBtn = new Button("<<");
         Button nextMediaBtn = new Button(">>");
 
+        img.setFitHeight(500);
+        img.setFitWidth(500);
         navBtn.getChildren().addAll(previousMediaBtn, nextMediaBtn);
         navBtn.setAlignment(Pos.CENTER);
         previousMediaBtn.setAlignment(Pos.CENTER_LEFT);
@@ -1208,15 +1206,17 @@ public class Controller {
         mainPane.setAlignment(Pos.CENTER);
 
         dlg.getDialogPane().setContent(mainPane);
-        dlg.show();
         ArrayList<Image> images = new ArrayList<>();
         images.add(new Image(addIconImg));
         images.add(new Image(deleteIconImg));
-
+        images.add(new Image("frontend/media/testGif.gif"));
+        if (!images.isEmpty()) {
+            img.setImage(images.get(0));
+        }
         previousMediaBtn.setOnMouseClicked(e -> {
             int currentIndex = images.indexOf(img.getImage());
             if (currentIndex != 0) {
-                img.setImage(images.get(currentIndex - 1));
+                img.setImage(images.get(--currentIndex));
             } else {
                 img.setImage(images.get(images.size() - 1));
 
@@ -1225,47 +1225,54 @@ public class Controller {
         nextMediaBtn.setOnMouseClicked(e -> {
             int currentIndex = images.indexOf(img.getImage());
             if (currentIndex != images.size() - 1) {
-                img.setImage(images.get(currentIndex + 1));
+
+                img.setImage(images.get(++currentIndex));
             } else {
                 img.setImage(images.get(0));
 
             }
         });
-        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-
-            int numberOfElement = 0;
-
-            @Override
-            public void handle(ActionEvent event) {
-                if (!images.isEmpty()) {
-                    if (numberOfElement < images.size()) {
-                        img.setImage(images.get(numberOfElement));
-                        numberOfElement++;
-                    } else {
-                        numberOfElement = 0;
-                    }
-                } else {
-                    title.setText("Nothing here add images");
-                }
-
-
-            }
-        }));
-        timer.setCycleCount(Timeline.INDEFINITE);
-        timer.play();
-
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dlg.setHeight(760);
         dlg.setResizable(true);
         dlg.setWidth(500);
-        dlg.setResultConverter(dialogButton -> {
-            timer.stop();
+        dlg.show();
+
+
+//        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+//
+//            int numberOfElement = 0;
+//
+//            @Override
+//            public void handle(ActionEvent event) {
+//                if (!images.isEmpty()) {
+//                    if (numberOfElement < images.size()) {
+//                        img.setImage(images.get(numberOfElement));
+//                        numberOfElement++;
+//                    } else {
+//                        numberOfElement = 0;
+//                    }
+//                } else {
+//                    title.setText("Nothing here add images");
+//                }
+//
+//
+//            }
+//        }));
+//        timer.setCycleCount(Timeline.INDEFINITE);
+//        timer.play();
+
+        dlg.setResultConverter(dialogButton ->
+
+        {
+//            timer.stop();
             return null;
         });
 
     }
 
-    private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
+    private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField
+            isbn10TF,
                                           TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
                                           TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
                                           ComboBox<String> editionCB, Button addNAssignNewResource, Button update,
@@ -1401,7 +1408,8 @@ public class Controller {
 
     private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
-                                Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB, Button addNAssignNewResource, Button delete, Button update) {
+                                Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB, Button
+                                        addNAssignNewResource, Button delete, Button update) {
 
         ArrayList<Resource> temp = new ArrayList<>(resourceTable.getSelectionModel().getSelectedItems());
         for (Resource r : temp) {
@@ -1556,7 +1564,8 @@ public class Controller {
         updateCourseTable();
     }
 
-    private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
+    private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField
+            idTF, TextField isbn10TF,
                                        TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
                                        TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB,
                                        Button addNAssignNewResource, Button update, Button delete) {
@@ -1814,7 +1823,8 @@ public class Controller {
 
     }
 
-    private void updateProfessor(ComboBox<Person> currentProfessors, LimitedTextField profInfoFName, LimitedTextField profInfoLName, ComboBox profInfoType) {
+    private void updateProfessor(ComboBox<Person> currentProfessors, LimitedTextField
+            profInfoFName, LimitedTextField profInfoLName, ComboBox profInfoType) {
         Person professor = currentProfessors.getSelectionModel().getSelectedItem();
         String firstName = capitalizeFirstLetter(profInfoFName.getText());
         String lastName = capitalizeFirstLetter(profInfoLName.getText());
