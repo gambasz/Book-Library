@@ -1279,7 +1279,7 @@ public class Controller {
             try {
                 dlg.showAndWait();
             } catch (Exception ex) {
-                showError("Could set state.", "State invaild", ex.getCause().toString());
+                showError("Could set state.", "State invaildco", ex.getCause().toString());
             }
         } catch (Exception ex) {
             showError(
