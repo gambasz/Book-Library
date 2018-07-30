@@ -1244,6 +1244,7 @@ public class Controller {
                                           Button delete) {
         try {
             Dialog dlg = new Dialog();
+
             Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
             dlg.getDialogPane().setMinWidth(650);
             dlg.getDialogPane().setContent(root);
@@ -1275,7 +1276,11 @@ public class Controller {
                 return null;
             });
             dlg.initModality(Modality.APPLICATION_MODAL);
-            dlg.showAndWait();
+            try {
+                dlg.showAndWait();
+            } catch (Exception ex) {
+                showError("Could set state.", "State invaild", ex.getCause().toString());
+            }
         } catch (Exception ex) {
             showError(
                     "Could not open the view",

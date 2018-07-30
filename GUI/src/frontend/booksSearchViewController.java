@@ -117,7 +117,6 @@ public class booksSearchViewController {
                 tableOfBooks.getItems().addAll(Objects.requireNonNull(BookAPI.search(searchQuery)));
             }
             catch (NullPointerException e) {
-                // need to pass back to show error will be done is next commit
                 e.printStackTrace();
             }
 
