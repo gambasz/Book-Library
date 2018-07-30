@@ -1187,7 +1187,7 @@ public class Controller {
         Dialog dlg = new Dialog();
         dlg.setTitle("HELP and Tutorials");
         VBox mainPane = new VBox(20);
-        HBox navBtn = new HBox(20);
+        HBox mediaNavBtnPane = new HBox(20);
 
         ImageView img = new ImageView();
         Label title = new Label("Hello");
@@ -1197,15 +1197,18 @@ public class Controller {
 
         img.setFitHeight(500);
         img.setFitWidth(500);
-        navBtn.getChildren().addAll(previousMediaBtn, nextMediaBtn);
-        navBtn.setAlignment(Pos.CENTER);
+
+        mediaNavBtnPane.getChildren().addAll(previousMediaBtn, nextMediaBtn);
+        mediaNavBtnPane.setSpacing((500 / mediaNavBtnPane.getChildren().size()));
+        mediaNavBtnPane.setAlignment(Pos.CENTER);
+
         previousMediaBtn.setAlignment(Pos.CENTER_LEFT);
         nextMediaBtn.setAlignment(Pos.CENTER_RIGHT);
 
-        mainPane.getChildren().addAll(title, img, navBtn);
+        mainPane.getChildren().addAll(title, img, mediaNavBtnPane);
         mainPane.setAlignment(Pos.CENTER);
 
-        dlg.getDialogPane().setContent(mainPane);
+
         ArrayList<Image> images = new ArrayList<>();
         images.add(new Image(addIconImg));
         images.add(new Image(deleteIconImg));
@@ -1232,6 +1235,8 @@ public class Controller {
 
             }
         });
+
+        dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dlg.setHeight(760);
         dlg.setResizable(true);

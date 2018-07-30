@@ -218,7 +218,8 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="CommonID" textAlignment="CENTER" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Common IDs"
+                                           textAlignment="CENTER"/>
                                     <LimitedTextField fx:id="crnSearchTF" alignment="CENTER" promptText="5579" />
                                  </children>
                                  <HBox.margin>
@@ -228,7 +229,8 @@
                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0"
                                     prefWidth="125.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Professor's Name" textAlignment="CENTER" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Professors' Name"
+                                           textAlignment="CENTER"/>
                                     <LimitedTextField fx:id="profSearchTF" alignment="CENTER" prefWidth="125.0"
                                                       promptText="Alla Web &amp; David"/>
                                  </children>
@@ -238,7 +240,8 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Course's Name" textAlignment="CENTER" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Courses' Name"
+                                           textAlignment="CENTER"/>
                                     <LimitedTextField fx:id="courseSearchTF" alignment="CENTER" promptText="CMSC 140" />
                                  </children>
                                  <HBox.margin>
@@ -247,7 +250,8 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="150.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Department" textAlignment="CENTER" />
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Departments"
+                                           textAlignment="CENTER"/>
                                     <LimitedTextField fx:id="departSearchTF" alignment="CENTER" disable="true"
                                                       promptText="Computer Science"/>
                                  </children>
@@ -286,7 +290,7 @@
                   <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                      <children>
                         <Label text="Table Filters" />
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                        <HBox alignment="CENTER" opacity="0.73" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                            <children>
                               <CheckBox fx:id="profCB" mnemonicParsing="false" onAction="#filter" text="Professor" />
                               <CheckBox fx:id="courseCB" mnemonicParsing="false" onAction="#filter" text="Course" />
@@ -319,7 +323,9 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <TableView fx:id="tableTV" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="839.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tableTV" editable="true" maxHeight="1.7976931348623157E308"
+                             maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="839.0"
+                             tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="timeCol" prefWidth="85.0" text="Semester" />
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Professor" />
