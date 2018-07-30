@@ -3822,11 +3822,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             rs2.close();
 
-            course.setSEMESTER("FALL");
-            course.setYEAR(2018);
+            semester[0] = semester[0].replace(' ', '_');
+
+            course.setSEMESTER(frontend.data.Semester.valueOf(semester[0]).toString());
+            course.setYEAR(Integer.parseInt(semester[1]));
 
             course.setResource(resources);
             course.setProfessor(person);
+
 
             return course;
 

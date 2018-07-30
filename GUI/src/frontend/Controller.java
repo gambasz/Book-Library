@@ -302,7 +302,9 @@ public class Controller {
                 commonid_full = true;
         }
         if (!profSearchTF.getText().isEmpty()) {
-            professorname = profSearchTF.getText();
+            
+            professorname = profSearchTF.getText().substring(0, 1).toUpperCase() + profSearchTF.getText().substring(1).toLowerCase();
+
             professorname_full = true;
 
             ids_from_professorname = DBManager.find_classids_by_professor_name(professorname);
