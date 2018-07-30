@@ -581,7 +581,7 @@ public class Controller {
 
             if (selectedCourse != null) {
                 selectedPerson = new Person(selectedPerson);
-                ArrayList<Resource> tempRes = selectedCourse.getResource();
+                ArrayList<Resource> tempRes = new ArrayList<>(resourceTable.getItems());
 
                 tempCour = new Course(
                         selectedCourse.getID(),
@@ -839,7 +839,7 @@ public class Controller {
                 selectedCourse.setID(comboBoxesCourse.getID());
             }
 
-            ArrayList<Resource> selected_resources = selectedCourse.getResource();
+            ArrayList<Resource> selected_resources = new ArrayList<>(resourceTable.getItems());
             ArrayList<Resource> new_resources = resList;
             //delete all exist relation between course and its resources
 
@@ -1081,6 +1081,7 @@ public class Controller {
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
         titleTF.setCounter(counter);
         titleTF.setMaxLength(50);
+
         authorTF.setMaxLength(10);
         idTF.setMaxLength(8);
         totalAmTF.setMaxLength(5);
@@ -1162,7 +1163,7 @@ public class Controller {
         hiddenSpacer.setVisible(false);
         resourceEditPane.getChildren().addAll(
                 new HBox(type, typeCB, hiddenSpacer, searchBtn, new Separator(), autoFillBtn),
-                new HBox(title, titleTF, counter),
+                new HBox(title, titleTF),
                 new HBox(author, authorTF),
                 new HBox(ISBN10, isbn10TF),
                 new HBox(ISBN13, isbn13TF),
@@ -1434,11 +1435,13 @@ public class Controller {
             temp.setISBN13(isbn13.getText());
             temp.setISBN(isbn10.getText());
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
+
             if (!isPersonResourcesView) {
                 selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
+                DBManager.insertRelationResourcePublisher(temp);
 
             } else {
                 // Add method for person resources
@@ -1447,6 +1450,7 @@ public class Controller {
                 selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
+                DBManager.insertRelationResourcePublisher(temp);
 
             }
         }
@@ -1515,6 +1519,7 @@ public class Controller {
         for (Person p : profList) {
             p.getResources().remove(res);
         }
+        resInfoList.getItems().remove(res);
         updateCourseTable();
     }
 
@@ -1611,9 +1616,9 @@ public class Controller {
                 if (dialogButton == assign) {
 
                     if (selectedCourse != null) {
-                        selectedCourse.getResource().clear();
-                        selectedCourse.getResource().addAll(resourceTable.getItems());
-                        updateCourseTable();
+//                        selectedCourse.getResource().clear();
+//                        selectedCourse.getResource().addAll(resourceTable.getItems());
+//                        updateCourseTable();
                     }
                     resInfoList.getItems().clear();
                     for (Resource r : resourceTable.getItems())

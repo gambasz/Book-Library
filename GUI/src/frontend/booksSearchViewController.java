@@ -19,6 +19,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class booksSearchViewController {
@@ -112,14 +113,14 @@ public class booksSearchViewController {
 //        call the api using this query
         if (searchQuery != null && !searchQuery.isEmpty()) {
             try {
-                ArrayList data = BookAPI.search(searchQuery);
-                if (data != null) {
-                    tableOfBooks.getItems().clear();
-                    tableOfBooks.getItems().addAll(data);
-                }
-            } catch (NullPointerException e) {
+                tableOfBooks.getItems().clear();
+                tableOfBooks.getItems().addAll(Objects.requireNonNull(BookAPI.search(searchQuery)));
+            }
+            catch (NullPointerException e) {
+                // need to pass back to show error will be done is next commit
                 e.printStackTrace();
             }
+
         }
     }
 
