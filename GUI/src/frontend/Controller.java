@@ -5,8 +5,11 @@ import com.mbox.BookAPI.BookAPI;
 import com.mbox.DBManager;
 import com.mbox.controller;
 import frontend.data.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -23,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import java.io.File;
@@ -57,7 +62,7 @@ public class Controller {
     @FXML
     ListView<String> resInfoList;
     @FXML
-    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn;
+    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn, helpBtn;
     @FXML
     TableView<Course> tableTV;
     @FXML
@@ -115,7 +120,7 @@ public class Controller {
 
     @FXML
     public void initialize() {
-
+        helpBtn.setOnMouseClicked(e -> showHelp());
         DBManager.openConnection();
         defaultSemest = controller.findDefaultSemester();
         debugging = true;
@@ -1075,7 +1080,7 @@ public class Controller {
         Label counter = new Label();
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
         titleTF.setCounter(counter);
-        titleTF.setMaxLength(25);
+        titleTF.setMaxLength(50);
         authorTF.setMaxLength(10);
         idTF.setMaxLength(8);
         totalAmTF.setMaxLength(5);
@@ -1179,6 +1184,52 @@ public class Controller {
         resourceEditPane.setSpacing(20);
 
         return resourceEditPane;
+    }
+
+    private void showHelp() {
+        Dialog dlg = new Dialog();
+        VBox mainPane = new VBox(20);
+        ImageView img = new ImageView();
+        Label test = new Label("Hello");
+
+
+        mainPane.getChildren().addAll(test, img);
+        mainPane.setAlignment(Pos.CENTER);
+
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.show();
+        ArrayList<Image> images = new ArrayList<>();
+        images.add(new Image(addIconImg));
+        images.add(new Image(deleteIconImg));
+        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+
+            int numberOfElement = 0;
+
+            @Override
+            public void handle(ActionEvent event) {
+                if (images != null && !images.isEmpty()) {
+                    if (numberOfElement < images.size()) {
+                        img.setImage(images.get(numberOfElement));
+                        numberOfElement++;
+                    } else {
+                        numberOfElement = 0;
+                    }
+                } else {
+                    test.setText("Nothing here add images");
+                }
+
+
+            }
+        }));
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.setHeight(760);
+        dlg.setResultConverter(dialogButton -> {
+            timer.stop();
+            return null;
+        });
+
     }
 
     private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,

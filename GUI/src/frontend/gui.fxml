@@ -267,6 +267,12 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Button>
+                              <Button fx:id="helpBtn" alignment="TOP_RIGHT" contentDisplay="CENTER"
+                                      mnemonicParsing="false" text="Help">
+                                 <HBox.margin>
+                                    <Insets bottom="25.0" left="70.0"/>
+                                 </HBox.margin>
+                              </Button>
                            </children>
                            <VBox.margin>
                               <Insets />

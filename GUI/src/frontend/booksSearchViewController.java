@@ -7,19 +7,18 @@ import frontend.data.Publisher;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
-import org.json.JSONException;
 
-import javax.management.timer.Timer;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class booksSearchViewController {
@@ -97,7 +96,6 @@ public class booksSearchViewController {
                     }
 
                     void runAnimation(GridPane cell) {
-                        System.out.println(this.getParent().getParent().getParent());
                         FadeTransition ft = new FadeTransition(Duration.millis(3000), this);
                         ft.setFromValue(0.0);
                         ft.setToValue(1.0);
@@ -114,9 +112,12 @@ public class booksSearchViewController {
 //        call the api using this query
         if (searchQuery != null && !searchQuery.isEmpty()) {
             try {
-                tableOfBooks.getItems().clear();
-                tableOfBooks.getItems().addAll(Objects.requireNonNull(BookAPI.search(searchQuery)));
-            } catch (JSONException | MalformedURLException e) {
+                ArrayList data = BookAPI.search(searchQuery);
+                if (data != null) {
+                    tableOfBooks.getItems().clear();
+                    tableOfBooks.getItems().addAll(data);
+                }
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
