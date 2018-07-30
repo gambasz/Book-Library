@@ -1191,11 +1191,20 @@ public class Controller {
         Dialog dlg = new Dialog();
         dlg.setTitle("HELP and Tutorials");
         VBox mainPane = new VBox(20);
+        HBox navBtn = new HBox(20);
+
         ImageView img = new ImageView();
         Label title = new Label("Hello");
 
+        Button previousMediaBtn = new Button("<<");
+        Button nextMediaBtn = new Button(">>");
 
-        mainPane.getChildren().addAll(title, img);
+        navBtn.getChildren().addAll(previousMediaBtn, nextMediaBtn);
+        navBtn.setAlignment(Pos.CENTER);
+        previousMediaBtn.setAlignment(Pos.CENTER_LEFT);
+        nextMediaBtn.setAlignment(Pos.CENTER_RIGHT);
+
+        mainPane.getChildren().addAll(title, img, navBtn);
         mainPane.setAlignment(Pos.CENTER);
 
         dlg.getDialogPane().setContent(mainPane);
@@ -1204,6 +1213,24 @@ public class Controller {
         images.add(new Image(addIconImg));
         images.add(new Image(deleteIconImg));
 
+        previousMediaBtn.setOnMouseClicked(e -> {
+            int currentIndex = images.indexOf(img.getImage());
+            if (currentIndex != 0) {
+                img.setImage(images.get(currentIndex - 1));
+            } else {
+                img.setImage(images.get(images.size() - 1));
+
+            }
+        });
+        nextMediaBtn.setOnMouseClicked(e -> {
+            int currentIndex = images.indexOf(img.getImage());
+            if (currentIndex != images.size() - 1) {
+                img.setImage(images.get(currentIndex + 1));
+            } else {
+                img.setImage(images.get(0));
+
+            }
+        });
         Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 
             int numberOfElement = 0;
@@ -1226,6 +1253,7 @@ public class Controller {
         }));
         timer.setCycleCount(Timeline.INDEFINITE);
         timer.play();
+
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dlg.setHeight(760);
         dlg.setResizable(true);
