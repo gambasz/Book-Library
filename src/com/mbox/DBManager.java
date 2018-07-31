@@ -531,13 +531,12 @@ public class DBManager {
             stl.setString(3,person.getType());
             rs = stl.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 // Check if there is repetitive data in the db
-                return rs.getInt(1);
-//                if (person.getFirstName() == rs.getString(3)) {
-//                    return rs.getInt(1);
-//                }
+                return rs.getInt("ID");
+
             }
+            rs.close();
             String query1 = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES (?, ?, ?)");
             PreparedStatement stl1 = conn.prepareStatement(query1);
             stl1.setString(1,person.getFirstName());
@@ -547,10 +546,12 @@ public class DBManager {
 
 
 
-            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME= ? OR LASTNAME= ?");
+            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME= ? AND LASTNAME= ? AND TYPE = ?");
             PreparedStatement stl2 = conn.prepareStatement(query2);
             stl2.setString(1,person.getFirstName());
             stl2.setString(2,person.getLastName());
+            stl2.setString(3,person.getType());
+
             rs = stl2.executeQuery();
 
             while (rs.next()) {
@@ -561,9 +562,10 @@ public class DBManager {
             return id;
 
         } catch (SQLException err) {
-            System.out.println(err);
+            err.printStackTrace();
+            return 0;
+
         }
-        return 0;
     }
 
     public static String insertCourseQuery(Course course) {
@@ -1998,7 +2000,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         System.out.println("Semester: "+semester + " ID foudn: " + semesterid);
 
-        System.out.println(personid);
+        System.out.println("PersonID: " + personid);
         System.out.println(semesterid);
 
         // Fall 2018 ID = 52

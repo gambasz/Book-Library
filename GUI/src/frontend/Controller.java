@@ -145,8 +145,8 @@ public class Controller {
     private void setTextFieldSMaxLength() {
 
         courseInfoTitle.setMaxLength(8);
-        courseInfoDepart.setMaxLength(20);
-        courseInfoDescrip.setMaxLength(32);
+        courseInfoDepart.setMaxLength(30);
+        courseInfoDescrip.setMaxLength(64);
         profInfoFName.setMaxLength(15);
         profInfoLName.setMaxLength(15);
         courseSearchTF.setMaxLength(8);
@@ -165,12 +165,16 @@ public class Controller {
         ImageView updateImg = new ImageView(updateIconImg);
         String filterIconImg = "/frontend/media/filter.png";
         ImageView filterImg = new ImageView(filterIconImg);
+        String tutoriaIconImg = "/frontend/media/tutorial.png";
+        ImageView tutorialImg = new ImageView(tutoriaIconImg);
 
         addGraphicToButtons(searchImg, searchBtn);
         addGraphicToButtons(addImg, addBtn);
         addGraphicToButtons(deleteImg, deleteBtn);
         addGraphicToButtons(updateImg, updateBtn);
         addGraphicToButtons(filterImg, filterBtn);
+        addGraphicToButtons(tutorialImg, helpBtn);
+
 
     }
 
@@ -566,60 +570,82 @@ public class Controller {
                     "Correct format examples --> CMSC 100, MATH 181 ");
         } else {
 
-            boolean professorChanged = false, courseChanged = false, resourceChanged = false;
             Course tempCour = new Course();
-            if (selectedCourse == null) {
+            Person tempPers = new Person();
+            ArrayList<Resource> tempRes = new ArrayList<>(resourceTable.getItems());
 
-                selectedPerson = new Person();
-                tempCour.setID(0);
-                selectedCourse = tempCour;
-                ArrayList<Resource> resArr = new ArrayList<>(resourceTable.getItems());
-                selectedCourse.setResource(resArr);
-            }
+            String firstName = profInfoFName.getText().substring(0, 1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
+            String lastName = profInfoLName.getText().substring(0, 1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
+            String type = profInfoType.getSelectionModel().getSelectedItem().toString();
 
-            if (selectedCourse != null) {
-                selectedPerson = new Person(selectedPerson);
-                ArrayList<Resource> tempRes = new ArrayList<>(resourceTable.getItems());
+            tempPers = new Person(lastName, firstName, type);
+            tempPers.setID(DBManager.insertPersonQuery(tempPers));
 
-                tempCour = new Course(
-                        selectedCourse.getID(),
-                        selectedCourse.getID(),
-                        Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
-                        semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-                        courseInfoTitle.getText(),
-                        courseInfoDepart.getText(),
-                        selectedPerson,
-                        courseInfoDescrip.getText(),
-                        tempRes);
-
-                professorChanged = tempCour.getProfessor().getFirstName().equals(profInfoFName.getText()) ||
-                        tempCour.getProfessor().getLastName().equals(profInfoLName.getText());
-                courseChanged = tempCour.getTitle().equals(courseInfoTitle.getText()) || tempCour.getDescription().equals(courseInfoDepart.getText()) ||
-                        tempCour.getDepartment().equals(courseInfoDescrip.getText());
-            }
+            tempCour = new Course(
+                    0,
+                    0,
+                    Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
+                    semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+                    courseInfoTitle.getText(),
+                    courseInfoDepart.getText(),
+                    tempPers,
+                    courseInfoDescrip.getText(),
+                    tempRes);
+             tempCour.setID(DBManager.insertCourseQuery(tempCour));
 
 
-            if (professorChanged) {
-                String firstName = profInfoFName.getText().substring(0, 1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
-                String lastName = profInfoLName.getText().substring(0, 1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
-                tempCour.getProfessor().setFirstName(firstName);
-                tempCour.getProfessor().setLastName(lastName);
-                tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-                int id = DBManager.insertPersonQuery(selectedPerson);
-                tempCour.getProfessor().setID(id);
-            }
-            if (courseChanged) {
-                System.out.println(courseInfoDepart.getText());
-                System.out.println(courseInfoDescrip.getText());
 
-                tempCour.setDepartment(courseInfoDepart.getText());
-                tempCour.setTitle(courseInfoTitle.getText());
-                tempCour.setDescription(courseInfoDescrip.getText());
-                int cID = DBManager.insertCourseQuery(tempCour);
-                //System.out.println("Course ID is: " + tempCour.getID()+"  Should be: " + cID);
-                tempCour.setID(cID);
-                System.out.println("New Course Added");
-            }
+//
+//
+//            if (selectedCourse == null) {
+//
+//                selectedPerson = new Person();
+//                tempCour.setID(0);
+//                selectedCourse = tempCour;
+//                ArrayList<Resource> resArr = new ArrayList<>(resourceTable.getItems());
+//                selectedCourse.setResource(resArr);
+//            }
+
+//             if (selectedCourse != null) {
+//                selectedPerson = new Person(selectedPerson);
+//                 tempRes = new ArrayList<>(resourceTable.getItems());
+//                tempCour = new Course(
+//                        selectedCourse.getID(),
+//                        selectedCourse.getID(),
+//                        Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
+//                        semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
+//                        courseInfoTitle.getText(),
+//                        courseInfoDepart.getText(),
+//                        selectedPerson,
+//                        courseInfoDescrip.getText(),
+//                        tempRes);
+//
+//                professorChanged = tempCour.getProfessor().getFirstName().equals(profInfoFName.getText()) ||
+//                        tempCour.getProfessor().getLastName().equals(profInfoLName.getText());
+//                courseChanged = tempCour.getTitle().equals(courseInfoTitle.getText()) || tempCour.getDescription().equals(courseInfoDepart.getText()) ||
+//                        tempCour.getDepartment().equals(courseInfoDescrip.getText());
+//            }
+
+//
+//            if (professorChanged) {
+//                String firstName = profInfoFName.getText().substring(0, 1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
+//                String lastName = profInfoLName.getText().substring(0, 1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
+//                tempCour.getProfessor().setFirstName(firstName);
+//                tempCour.getProfessor().setLastName(lastName);
+//                tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
+//                int id = DBManager.insertPersonQuery(selectedPerson);
+//                tempCour.getProfessor().setID(id);
+//            }
+//            if (courseChanged) {
+//
+//                tempCour.setDepartment(courseInfoDepart.getText());
+//                tempCour.setTitle(courseInfoTitle.getText());
+//                tempCour.setDescription(courseInfoDescrip.getText());
+//                int cID = DBManager.insertCourseQuery(tempCour);
+//
+//                tempCour.setID(cID);
+//                System.out.println("New Course Added");
+//            }
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
             if (isClassInTheSameYear(tempCour)) {
@@ -915,9 +941,9 @@ public class Controller {
         LimitedTextField nameTF = new LimitedTextField(), contactsTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
-        nameTF.setMaxLength(15);
-        contactsTF.setMaxLength(30);
-        descriptionTF.setMaxLength(30);
+        nameTF.setMaxLength(30);
+        contactsTF.setMaxLength(60);
+        descriptionTF.setMaxLength(60);
 
         Button deleteBtn = new Button("Delete");
         ImageView deletImgg = new ImageView(deleteIconImg);
@@ -1080,7 +1106,7 @@ public class Controller {
         titleTF.setCounter(counter);
         titleTF.setMaxLength(50);
 
-        authorTF.setMaxLength(10);
+        authorTF.setMaxLength(25);
         idTF.setMaxLength(8);
         totalAmTF.setMaxLength(5);
         currentAmTF.setMaxLength(5);
@@ -2042,8 +2068,6 @@ public class Controller {
 
     private void deleteProfessor(Person selectedPerson) {
 
-        System.out.println("SELECTED PERSON: " + selectedPerson.getFirstName());
-        System.out.println("SELECTED PERSON ID: " + selectedPerson.getID());
 
         DBManager.delete_person_by_id(selectedPerson.getID());
         profList.remove(selectedPerson);
@@ -2077,7 +2101,7 @@ public class Controller {
                 departmentTf = new LimitedTextField();
 
         tileTf.setMaxLength(8);
-        descriptionTf.setMaxLength(30);
+        descriptionTf.setMaxLength(64);
         departmentTf.setMaxLength(30);
 
         setCourseTemplatesCellValue(courseTemplates);
