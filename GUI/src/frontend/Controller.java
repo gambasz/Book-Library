@@ -55,6 +55,9 @@ public class Controller {
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
             departSearchTF = new LimitedTextField(), resourceSearchTF = new LimitedTextField(),
             profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
+    //promt text
+
+
     @FXML
     ListView<String> resInfoList;
     @FXML
@@ -940,6 +943,10 @@ public class Controller {
         ComboBox<Publisher> publishersCB = new ComboBox<Publisher>();
         LimitedTextField nameTF = new LimitedTextField(), contactsTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
+        nameTF.setPromptText("Name of publisher");
+        contactsTF.setPromptText("Contact information");
+        descriptionTF.setPromptText("Description for publisher");
+
 
         nameTF.setMaxLength(30);
         contactsTF.setMaxLength(60);
@@ -1100,6 +1107,14 @@ public class Controller {
                 idTF = new LimitedTextField(), totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
+
+        titleTF.setPromptText("Ex. Starting out with C");
+        authorTF.setPromptText("Author of resource");
+        totalAmTF.setPromptText("Ex. 100");
+        isbn10TF.setPromptText("ISBN10 of resource");
+        isbn13TF.setPromptText("ISBN13 of resource");
+        currentAmTF.setPromptText("Ex. 90");
+        descriptionTF.setPromptText("Description for resource");
 
         Label counter = new Label();
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
@@ -1723,6 +1738,11 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
+        profInfoFNameTf.setPromptText("EG. Alla");
+        profInfoLNameTf.setPromptText("EG. Webb");
+
+
+
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
 
         icon.setFitHeight(100);
@@ -2090,6 +2110,8 @@ public class Controller {
         ComboBox<Course> courseTemplates = new ComboBox<Course>();
 
 
+
+
         Label currentCBoxLbl = new Label("Course Templates:   ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
@@ -2099,6 +2121,10 @@ public class Controller {
         Label department = new Label("Department:* ");
         LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),
                 departmentTf = new LimitedTextField();
+
+        tileTf.setPromptText("EG. CMSC 140");
+        descriptionTf.setPromptText("EG. Intro To Programming");
+        departmentTf.setPromptText("EG. Computer Science");
 
         tileTf.setMaxLength(8);
         descriptionTf.setMaxLength(64);
