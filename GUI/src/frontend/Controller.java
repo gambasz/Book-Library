@@ -1712,8 +1712,8 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
-        profInfoFNameTf.setPromptText("Ex. John");
-        profInfoLNameTf.setPromptText("Ex. Smith");
+        profInfoFNameTf.setPromptText("EG. Alla");
+        profInfoLNameTf.setPromptText("EG. Webb");
 
 
 
@@ -2098,9 +2098,9 @@ public class Controller {
         LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),
                 departmentTf = new LimitedTextField();
 
-        tileTf.setPromptText("Ex. CMSC 140");
-        descriptionTf.setPromptText("Ex. Intro To Programming");
-        departmentTf.setPromptText("Ex. Computer Science");
+        tileTf.setPromptText("EG. CMSC 140");
+        descriptionTf.setPromptText("EG. Intro To Programming");
+        departmentTf.setPromptText("EG. Computer Science");
 
         tileTf.setMaxLength(8);
         descriptionTf.setMaxLength(30);
