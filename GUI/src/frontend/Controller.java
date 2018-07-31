@@ -55,6 +55,9 @@ public class Controller {
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
             departSearchTF = new LimitedTextField(), resourceSearchTF = new LimitedTextField(),
             profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
+    //promt text
+
+
     @FXML
     ListView<String> resInfoList;
     @FXML
@@ -914,6 +917,10 @@ public class Controller {
         ComboBox<Publisher> publishersCB = new ComboBox<Publisher>();
         LimitedTextField nameTF = new LimitedTextField(), contactsTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
+        nameTF.setPromptText("Name of publisher");
+        contactsTF.setPromptText("Contact information");
+        descriptionTF.setPromptText("Description for publisher");
+
 
         nameTF.setMaxLength(15);
         contactsTF.setMaxLength(30);
@@ -1074,6 +1081,14 @@ public class Controller {
                 idTF = new LimitedTextField(), totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
+
+        titleTF.setPromptText("Enter title of resource");
+        authorTF.setPromptText("Enter author of resource");
+        totalAmTF.setPromptText("Enter total amount of resource");
+        isbn10TF.setPromptText("Enter ISBN10 of resource");
+        isbn13TF.setPromptText("Enter ISBN13 of resource");
+        currentAmTF.setPromptText("Enter current amount of resource");
+        descriptionTF.setPromptText("Enter description for resource");
 
         Label counter = new Label();
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
@@ -1697,6 +1712,11 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
+        profInfoFNameTf.setPromptText("Enter prof's first name");
+        profInfoLNameTf.setPromptText("Enter prof's last name");
+
+
+
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
 
         icon.setFitHeight(100);
@@ -2066,6 +2086,8 @@ public class Controller {
         ComboBox<Course> courseTemplates = new ComboBox<Course>();
 
 
+
+
         Label currentCBoxLbl = new Label("Course Templates:   ");
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
@@ -2075,6 +2097,10 @@ public class Controller {
         Label department = new Label("Department:* ");
         LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),
                 departmentTf = new LimitedTextField();
+
+        tileTf.setPromptText("Enter course's title");
+        descriptionTf.setPromptText("Enter course's description");
+        departmentTf.setPromptText("Enter course's department");
 
         tileTf.setMaxLength(8);
         descriptionTf.setMaxLength(30);
