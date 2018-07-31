@@ -1082,13 +1082,13 @@ public class Controller {
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
-        titleTF.setPromptText("Enter title of resource");
-        authorTF.setPromptText("Enter author of resource");
-        totalAmTF.setPromptText("Enter total amount of resource");
-        isbn10TF.setPromptText("Enter ISBN10 of resource");
-        isbn13TF.setPromptText("Enter ISBN13 of resource");
-        currentAmTF.setPromptText("Enter current amount of resource");
-        descriptionTF.setPromptText("Enter description for resource");
+        titleTF.setPromptText("Ex. Starting out with C");
+        authorTF.setPromptText("Author of resource");
+        totalAmTF.setPromptText("Ex. 100");
+        isbn10TF.setPromptText("ISBN10 of resource");
+        isbn13TF.setPromptText("ISBN13 of resource");
+        currentAmTF.setPromptText("Ex. 90");
+        descriptionTF.setPromptText("Description for resource");
 
         Label counter = new Label();
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
@@ -1712,8 +1712,8 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
-        profInfoFNameTf.setPromptText("Enter prof's first name");
-        profInfoLNameTf.setPromptText("Enter prof's last name");
+        profInfoFNameTf.setPromptText("Ex. John");
+        profInfoLNameTf.setPromptText("Ex. Smith");
 
 
 
@@ -2098,9 +2098,9 @@ public class Controller {
         LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),
                 departmentTf = new LimitedTextField();
 
-        tileTf.setPromptText("Enter course's title");
-        descriptionTf.setPromptText("Enter course's description");
-        departmentTf.setPromptText("Enter course's department");
+        tileTf.setPromptText("Ex. CMSC 140");
+        descriptionTf.setPromptText("Ex. Intro To Programming");
+        departmentTf.setPromptText("Ex. Computer Science");
 
         tileTf.setMaxLength(8);
         descriptionTf.setMaxLength(30);
