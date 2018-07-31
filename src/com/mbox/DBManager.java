@@ -583,7 +583,6 @@ public class DBManager {
         course.setTitle(course.getTitle().replaceAll("\\s", ""));
         String[] cSplit = course.getTitle().split("(?<=\\D)(?=\\d)");
 
-        System.out.println("INsertCOurseFunction: CourseTitle: " + cSplit[0] + " CourseN: " + cSplit[1]);
         try {
 
             String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE= ?  AND CNUMBER = ?");
@@ -593,10 +592,11 @@ public class DBManager {
             rs = stl.executeQuery();
 
 
-            while (rs.next()) {
+            if (rs.next()) {
                 id = (rs.getInt(1));
                 return id;
             }
+            rs.close();
             String query = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
                             "(?, ?, ?, ?)");
             PreparedStatement stl2 = conn.prepareStatement(query);
@@ -607,19 +607,16 @@ public class DBManager {
             stl2.executeQuery();
 
 
-            query2 = String.format("SELECT * FROM COURSECT WHERE TITLE= ? AND CNUMBER = ? AND DESCRIPTION = ?",
-                    cSplit[0], cSplit[1], course.getDescription());
-            PreparedStatement stl3 = conn.prepareStatement(query2);
-            stl3.setString(1,cSplit[0]);
-            stl3.setString(2,cSplit[1]);
-            stl3.setString(3, course.getDescription());
+//            query2 = String.format("SELECT * FROM COURSECT WHERE TITLE= ? AND CNUMBER = ? AND DESCRIPTION = ?");
+//            PreparedStatement stl3 = conn.prepareStatement(query2);
+//            stl3.setString(1,cSplit[0]);
+//            stl3.setString(2,cSplit[1]);
+//            stl3.setString(3, course.getDescription());
 
-            rs = stl3.executeQuery();
-            while (rs.next()) {
-
+            rs = stl.executeQuery();
+            if (rs.next()) {
                 id = (rs.getInt(1));
             }
-            //System.out.println("ID dar akharin marhale hast: "+id);
             rs.close();
             return id;
 
@@ -627,9 +624,9 @@ public class DBManager {
         } catch (SQLException err) {
             System.out.println(err);
             err.printStackTrace();
+            return 0;
         }
 
-        return 0;
     }
 
 

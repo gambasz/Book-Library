@@ -551,27 +551,45 @@ public class Controller {
         setChildVisibility(false, updateBtn, deleteBtn);
     }
 
-    public void add() {
+    private boolean checkFirstRequiredBoxes() {
         String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
         String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
 
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
                 resourceTable.getItems().isEmpty() ||
-                yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
+                yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null)
+        {
             showError("Error", "Missing info", "You need to fulfill all sections");
-        } else if (cSplit.length != 2) {
+            return false;
+        }
+
+        else if (cSplit.length != 2)
+        {
 
             showError("Inout Error",
                     "Unable to insert because the course you title entered " +
                             "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
-        } else if (!com.mbox.controller.isInteger(cSplit[1])) {
+            return false;
+
+        }
+        else if (!com.mbox.controller.isInteger(cSplit[1]))
+        {
             showError("Inout Error",
                     "Unable to insert because the course you title entered " +
                             "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
-        } else {
+            return false;
+
+        }
+        else
+            return true;
+    }
+
+    public void add() {
+
+        if(checkFirstRequiredBoxes()) {
 
             Course tempCour = new Course();
             Person tempPers = new Person();
@@ -595,60 +613,7 @@ public class Controller {
                     courseInfoDescrip.getText(),
                     tempRes);
              tempCour.setID(DBManager.insertCourseQuery(tempCour));
-
-
-
-//
-//
-//            if (selectedCourse == null) {
-//
-//                selectedPerson = new Person();
-//                tempCour.setID(0);
-//                selectedCourse = tempCour;
-//                ArrayList<Resource> resArr = new ArrayList<>(resourceTable.getItems());
-//                selectedCourse.setResource(resArr);
-//            }
-
-//             if (selectedCourse != null) {
-//                selectedPerson = new Person(selectedPerson);
-//                 tempRes = new ArrayList<>(resourceTable.getItems());
-//                tempCour = new Course(
-//                        selectedCourse.getID(),
-//                        selectedCourse.getID(),
-//                        Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
-//                        semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
-//                        courseInfoTitle.getText(),
-//                        courseInfoDepart.getText(),
-//                        selectedPerson,
-//                        courseInfoDescrip.getText(),
-//                        tempRes);
-//
-//                professorChanged = tempCour.getProfessor().getFirstName().equals(profInfoFName.getText()) ||
-//                        tempCour.getProfessor().getLastName().equals(profInfoLName.getText());
-//                courseChanged = tempCour.getTitle().equals(courseInfoTitle.getText()) || tempCour.getDescription().equals(courseInfoDepart.getText()) ||
-//                        tempCour.getDepartment().equals(courseInfoDescrip.getText());
-//            }
-
-//
-//            if (professorChanged) {
-//                String firstName = profInfoFName.getText().substring(0, 1).toUpperCase() + profInfoFName.getText().substring(1).toLowerCase();
-//                String lastName = profInfoLName.getText().substring(0, 1).toUpperCase() + profInfoLName.getText().substring(1).toLowerCase();
-//                tempCour.getProfessor().setFirstName(firstName);
-//                tempCour.getProfessor().setLastName(lastName);
-//                tempCour.getProfessor().setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-//                int id = DBManager.insertPersonQuery(selectedPerson);
-//                tempCour.getProfessor().setID(id);
-//            }
-//            if (courseChanged) {
-//
-//                tempCour.setDepartment(courseInfoDepart.getText());
-//                tempCour.setTitle(courseInfoTitle.getText());
-//                tempCour.setDescription(courseInfoDescrip.getText());
-//                int cID = DBManager.insertCourseQuery(tempCour);
-//
-//                tempCour.setID(cID);
-//                System.out.println("New Course Added");
-//            }
+             
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
             if (isClassInTheSameYear(tempCour)) {
@@ -823,31 +788,11 @@ public class Controller {
 
     public void update() {
 
-        if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
-                profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
-                resourceTable.getItems() == null) {
-            showError("Error", "Missing required boxes",
-                    "Please make sure that you fill out all the required sections.");
-
-        } else if (selectedCourse == null) {
+        if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
         }
 
-        String tempCourseTitle = courseInfoTitle.getText().replaceAll("\\s", "");
-        String[] cSplit = tempCourseTitle.split("(?<=\\D)(?=\\d)");
-
-        if (cSplit.length != 2) {
-
-            showError("Inout Error",
-                    "Unable to insert because the course you title entered " +
-                            "is not valid.",
-                    "Correct format examples --> CMSC 100, MATH 181 ");
-        } else if (!com.mbox.controller.isInteger(cSplit[1])) {
-            showError("Inout Error",
-                    "Unable to insert because the course you title entered " +
-                            "is not valid.",
-                    "Correct format examples --> CMSC 100, MATH 181 ");
-        } else if (selectedCourse != null) {
+        else if (selectedCourse != null && checkFirstRequiredBoxes() ) {
 
             DBManager.deleteRelationCourseResources(selectedCourse);
 
