@@ -766,23 +766,21 @@ public class Controller {
     public void exit() {
         System.exit(0);
     }
-    //thjanks :)) hard to see
 
     public void delete() {
 
-        if (selectedCourse == null) {
+        if (selectedCourse == null)
+        {
             showError("Error", "Nothing is selected", "Choose a course to delete");
-            return;
         }
-        System.out.println("SelectedCourse TItle BEFORE: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
-        if (selectedCourse != null) {
-            System.out.println("CommonID: " + selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
-            DBManager.delete_relation_course(selectedCourse);
-            System.out.println("CommonID: " + selectedCourse.getCommonID() + " and title: " + selectedCourse.getTitle());
-            System.out.println("SelectedCourse TItle: " + selectedCourse.getTitle() + "ObjID: " + selectedCourse.hashCode());
-            courseList.remove(selectedCourse);
-            selectedCourse = null;
-            updateCourseTable();
+
+        else
+        {
+                DBManager.delete_relation_course(selectedCourse);
+                courseList.remove(selectedCourse);
+                selectedCourse = null;
+                updateCourseTable();
+
         }
     }
 
