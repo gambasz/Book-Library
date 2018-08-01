@@ -2,22 +2,25 @@ package frontend.data;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.paint.Color;
 
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 public class LimitedTextField extends TextField {
 
     private final IntegerProperty maxLength;
+    private Label counter;
 
     public LimitedTextField() {
         super();
         this.maxLength = new SimpleIntegerProperty(0);
+        counter = null;
     }
 
-    public IntegerProperty maxLengthProperty() {
-        return this.maxLength;
-    }
 
     public final Integer getMaxLength() {
         return this.maxLength.getValue();
@@ -26,37 +29,51 @@ public class LimitedTextField extends TextField {
     public final void setMaxLength(Integer maxLength) {
         Objects.requireNonNull(maxLength, "Max length cannot be null, -1 for no limit");
         this.maxLength.setValue(maxLength);
+        this.checkMaxLength();
     }
 
-    @Override
-    public void replaceText(int start, int end, String insertedText) {
-        if (this.getMaxLength() <= 0) {
-            // Default behavior, in case of no max length
-            super.replaceText(start, end, insertedText);
-        }
-        else {
-            // Get the text in the textfield, before the user enters something
-            String currentText = this.getText() == null ? "" : this.getText();
+    public void setCounter(Label counter){
+        this.counter = counter;
+        counter.setTextFill(Color.web("#0076a3"));
 
-            // Compute the text that should normally be in the textfield now
-            String finalText = currentText.substring(0, start) + insertedText + currentText.substring(end);
-
-            // If the max length is not excedeed
-            int numberOfexceedingCharacters = finalText.length() - this.getMaxLength();
-            if (numberOfexceedingCharacters <= 0) {
-                // Normal behavior
-                super.replaceText(start, end, insertedText);
-            }
-            else {
-                // Otherwise, cut the the text that was going to be inserted
-                String cutInsertedText = insertedText.substring(
-                        0,
-                        insertedText.length() - numberOfexceedingCharacters
-                );
-
-                // And replace this text
-                super.replaceText(start, end, cutInsertedText);
-            }
-        }
     }
+
+    private void maxCharLabel(){
+        if (counter != null)
+            counter.setTextFill(Color.web("#FF0000"));
+
+
+    }
+
+    private void checkMaxLength() {
+
+        UnaryOperator<TextFormatter.Change> rejectChange = change -> {
+            if (change.isContentChange()) {
+//                if (counter !=null)
+//                    this.counter.setVisible(true);
+                if (change.getControlNewText().length() > this.getMaxLength()) {
+                    if(counter!=null)
+                        maxCharLabel();
+                    this.setStyle("-fx-focus-color: red;");
+
+                    return null;
+                }
+            }
+            if(counter!=null)
+            {
+//                this.counter.setVisible(false);
+                counter.setTextFill(Color.web("#0076a3"));
+            }
+            this.setStyle("-fx-text-inner-color: black;");
+
+            return change;
+        };
+        this.setTextFormatter(new TextFormatter(rejectChange));
+//        if(counter!=null)
+//            this.counter.setVisible(false);
+
+
+    }
+
+
 }

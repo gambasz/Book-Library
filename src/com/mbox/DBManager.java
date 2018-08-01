@@ -1,6 +1,8 @@
 package com.mbox;
 
 import frontend.data.PersonType;
+import javafx.scene.control.ComboBox;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.io.*;
 import java.sql.*;
@@ -523,32 +525,48 @@ public class DBManager {
 
 
         try {
-            rs = st5.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' AND LASTNAME='%s' AND TYPE='%s'",
-                    person.getFirstName(), person.getLastName(), person.getType()));
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME= ? AND LASTNAME= ?  AND TYPE= ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,person.getFirstName());
+            stl.setString(2,person.getLastName());
+            stl.setString(3,person.getType());
+            rs = stl.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 // Check if there is repetitive data in the db
-                return rs.getInt(1);
-//                if (person.getFirstName() == rs.getString(3)) {
-//                    return rs.getInt(1);
-//                }
+                return rs.getInt("ID");
+
             }
-            String query = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES ('%s', '%s', '%s')",
-                    person.getFirstName(), person.getLastName(), PersonType.valueOf(person.getType()));
-            st.executeQuery(query);
-            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME='%s' OR LASTNAME='%s'",
-                    person.getFirstName(), person.getLastName());
-            rs = st.executeQuery(query2);
+            rs.close();
+            String query1 = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES (?, ?, ?)");
+            PreparedStatement stl1 = conn.prepareStatement(query1);
+            stl1.setString(1,person.getFirstName());
+            stl1.setString(2,person.getLastName());
+            stl1.setString(3,person.getType());
+            stl1.executeQuery();
+
+
+
+            String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME= ? AND LASTNAME= ? AND TYPE = ?");
+            PreparedStatement stl2 = conn.prepareStatement(query2);
+            stl2.setString(1,person.getFirstName());
+            stl2.setString(2,person.getLastName());
+            stl2.setString(3,person.getType());
+
+            rs = stl2.executeQuery();
+
             while (rs.next()) {
 
                 id = (rs.getInt(1));
             }
+            rs.close();
             return id;
 
         } catch (SQLException err) {
-            System.out.println(err);
+            err.printStackTrace();
+            return 0;
+
         }
-        return 0;
     }
 
     public static String insertCourseQuery(Course course) {
@@ -566,38 +584,43 @@ public class DBManager {
         course.setTitle(course.getTitle().replaceAll("\\s", ""));
         String[] cSplit = course.getTitle().split("(?<=\\D)(?=\\d)");
 
-        System.out.println("INsertCOurseFunction: CourseTitle: " + cSplit[0] + " CourseN: " + cSplit[1]);
         try {
 
-            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s'",
-                    cSplit[0], cSplit[1]);
-            rs = st.executeQuery(query2);
-            while (rs.next()) {
+            String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE= ?  AND CNUMBER = ?");
+            PreparedStatement stl = conn.prepareStatement(query2);
+            stl.setString(1,cSplit[0]);
+            stl.setString(2,cSplit[1]);
+            rs = stl.executeQuery();
+
+
+            if (rs.next()) {
                 id = (rs.getInt(1));
                 return id;
             }
+            rs.close();
             String query = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
-                            "('%s', '%s', '%s', '%s')", cSplit[0], cSplit[1], course.getDescription(),
-                    course.getDepartment());
+                            "(?, ?, ?, ?)");
+            PreparedStatement stl2 = conn.prepareStatement(query);
+            stl2.setString(1,cSplit[0]);
+            stl2.setString(2, cSplit[1]);
+            stl2.setString(3,course.getDescription());
+            stl2.setString(4,course.getDepartment());
+            stl2.executeQuery();
 
-
-            st.executeQuery(query);
-            query2 = String.format("SELECT * FROM COURSECT WHERE TITLE='%s' AND CNUMBER = '%s' AND DESCRIPTION = '%s'",
-                    cSplit[0], cSplit[1], course.getDescription());
-            rs = st.executeQuery(query2);
-            while (rs.next()) {
-
+            rs = stl.executeQuery();
+            if (rs.next()) {
                 id = (rs.getInt(1));
             }
-            //System.out.println("ID dar akharin marhale hast: "+id);
+            rs.close();
             return id;
 
 
         } catch (SQLException err) {
             System.out.println(err);
             err.printStackTrace();
+            return 0;
         }
-        return 0;
+
     }
 
 
@@ -621,10 +644,19 @@ public class DBManager {
 
     }
 
-    public static String insertPublisherQuery(Publisher publisher) {
+    public static void insertPublisher(Publisher publisher) {
 
-        return String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES ('%s', '%s', '%s')",
-                publisher.getTitle(), publisher.getContactInformation(), publisher.getDescription());
+        String query = String.format("INSERT INTO PUBLISHERS (TITLE, CONTACT_INFO, DESCRIPTION) VALUES (?, ?, ?)");
+        try{
+        PreparedStatement stl = conn.prepareStatement(query);
+        stl.setString(1,publisher.getTitle());
+        stl.setString(2,publisher.getContactInformation());
+        stl.setString(3,publisher.getDescription());
+        stl.executeQuery();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -817,15 +849,28 @@ public class DBManager {
 
     //==================================
 
-    public static String updateResourceQuery(Resource resource) {
+    public static void updateResource(Resource resource) {
 
-        return String.format("UPDATE RESOURCES SET TYPE = '%s', TITLE = '%s', AUTHOR = '%s', ISBN = '%s', " +
-                        "TOTAL_AMOUNT = '%d', CURRENT_AMOUNT = '%d', DESCRIPTION = '%s', ISBN13 = '%s'," +
-                        "EDITION = '%s' WHERE ID = '%d'",
-                resource.getType(), resource.getTitle(), resource.getAuthor(), resource.getISBN(),
-                resource.getTotalAmount(), resource.getCurrentAmount(), resource.getDescription(), resource.getIsbn13(),
-                resource.getEdition(),
-                resource.getID());
+        String query =  String.format("UPDATE RESOURCES SET TYPE = ?, TITLE = ?, AUTHOR = ?, ISBN = ?, " +
+                        "TOTAL_AMOUNT = ?, CURRENT_AMOUNT = ?, DESCRIPTION = ?, ISBN13 = ?," +
+                        "EDITION = ? WHERE ID = ?");
+        try{
+        PreparedStatement stl = conn.prepareStatement(query);
+        stl.setString(1,resource.getType());
+        stl.setString(2,resource.getTitle());
+        stl.setString(3,resource.getAuthor());
+        stl.setString(4,resource.getISBN());
+        stl.setInt(5,resource.getTotalAmount());
+        stl.setInt(6,resource.getCurrentAmount());
+        stl.setString(7,resource.getDescription());
+        stl.setString(8,resource.getIsbn13());
+        stl.setString(9,resource.getEdition());
+        stl.setInt(10,resource.getID());
+        stl.executeQuery();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -1303,8 +1348,6 @@ public class DBManager {
         ResultSet rss, rss2;
 
         int resourceID;
-        int i = 0;
-
         ArrayList<Resource> tempResourceList = new ArrayList<Resource>();
 
         try {
@@ -1318,12 +1361,6 @@ public class DBManager {
                 resourceID = rss.getInt(2);
                 rss2 = getResourceInTableQuery(resourceID).executeQuery();
                 while (rss2.next()) {
-                    // ID, Type, Title, Author, ISBN, total, current, desc
-//                    frontend.data.Resource tempRes = new frontend.data.Resource(rss2.getInt("ID"),
-//                            rss2.getString("ISBN"), rss2.getString("TYPE"),
-//                            rss2.getString("TITLE"), rss2.getString("AUTHOR"),
-//                            rss2.getString("DESCRIPTION"), rss2.getInt("TOTAL_AMOUNT"),
-//                            rss2.getInt("CURRENT_AMOUNT"));
                     Resource tempRes = new Resource(rss2.getInt(1), rss2.getString(2),
                             rss2.getString(3), rss2.getString(4), rss2.getString(5),
                             rss2.getInt(6), rss2.getInt(7), rss2.getString(8));
@@ -1333,20 +1370,15 @@ public class DBManager {
 
                         tempResourceList.add(tempRes);
 
-//                    //setPublisherForResource(resourcesList[i]);
-//                    setPublisherForResource(tempResourceList.get(i));
-
-                    i++;
                 }
             }
-            //person1.setResourcesPerson(resourcesList);
             person1.setResourceList(tempResourceList);
             return person1;
         } catch (SQLException err) {
             err.printStackTrace();
+            return null;
+
         }
-        // Adding the list of the resources to the person object
-        return null;
     }
 
 
@@ -1355,7 +1387,6 @@ public class DBManager {
         ResultSet rs;
         int resourceID = 0,
                 i = 0, before = -1;
-        //Resource[] resourcesList = new Resource[20];
         ArrayList<Resource> listResources = new ArrayList<Resource>();
 
         try {
@@ -1946,7 +1977,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         System.out.println("Semester: "+semester + " ID foudn: " + semesterid);
 
-        System.out.println(personid);
+        System.out.println("PersonID: " + personid);
         System.out.println(semesterid);
 
         // Fall 2018 ID = 52
@@ -1999,6 +2030,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             }
             c.setCommonID(commonID);
+            rs.close();
             return c;
 
         }
@@ -2011,22 +2043,24 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
     public static void deleteRelationCourseResources(frontend.data.Course c) {
-        ResultSet rs;
-        int personID = c.getProfessor().getID();
         int courseID = c.getID();
 
         try {
 
-            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE" +
-                    " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
-//            executeNoReturnQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE" +
-//                    " PERSONID = '%d' AND COMMONID = '%d'", personID, c.getCommonID()));
-//            executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE" +
-//                    " COURSEID = '%d' AND COMMONID = '%d'", courseID, c.getCommonID()));
-            for (int i = 0; i < c.getResource().size(); i++) {
-                executeNoReturnQuery(String.format("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE" +
-                        " RESOURCEID = '%d'", c.getResource().get(i).getID()));
-            }
+            String query = String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE" +
+                    " COURSEID = ? AND COMMONID = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setInt(1,courseID);
+            stl.setInt(2,c.getCommonID());
+            stl.executeQuery();
+
+//          DONOT TOUCH publiser resource relation! :| :|
+//            for (int i = 0; i < c.getResource().size(); i++) {
+//                String qery = String.format("DELETE FROM RELATION_PUBLISHER_RESOURCE WHERE" +
+//                        " RESOURCEID = ?");
+//                PreparedStatement stl1 = conn.prepareStatement(qery);
+//                stl1.setInt(1,c.getResource().get(i).getID());
+//            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -2034,60 +2068,67 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
-    public static void insertRelationCourseResources(frontend.data.Course c) {
-
-        //getting all the data
-        int id = c.getID();
-        int commonID = c.getCommonID();
-
-        int personid = c.getProfessor().getID();
-
-        ArrayList<frontend.data.Resource> r = c.getResource();
-
-
-
-
-
-        for (int j = 0; j < c.getResource().size(); j++) {
-            String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
-                    " (COURSEID, RESOURCEID, COMMONID) VALUES ('%d', '%d', '%d')", id, c.getResource().get(j).getID(), commonID);
-            executeNoReturnQuery(tempQuerry);
-
-//            String tempQuery = String.format("INSERT INTO RELATION_PERSON_RESOURCES" +
-//                    " (PERSONID, RESOURCEID, COMMONID) VALUES ('%d', '%d','%d')", personid, resourceidlist[j], commonID);
-//            executeNoReturnQuery(tempQuery);
-
-
-            // there is a problm with this
-//            System.out.println("Testing purpose:\n" + tempQuery + "\n\n\n\n");
-
-
-
-        }
+    public static void updateRelationCourseResources(frontend.data.Course course) {
         try {
-            for (int k = 0; k < r.size(); k++) {
 
-                int resourceID = 0;
-                if(r.get(k).getPublisher() != null) {
-                    ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID ='%d' AND " +
-                            "PUBLISHERID = '%d'", r.get(k).getID(), r.get(k).getPublisher().getID()));
-                    while (rs.next()) {
-                        resourceID = rs.getInt(2);
-                    }
-                    System.out.println("resourceID now " + resourceID);
-                    if (resourceID == 0) {
-                        executeNoReturnQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
-                                        " (PUBLISHERID, RESOURCEID) VALUES ('%d', '%d')", r.get(k).getPublisher().getID(),
-                                r.get(k).getID()));
-                    }
-                }
+            deleteRelationCourseResources(course);
+            //getting all the data
+            int id = course.getID();
+            int commonID = course.getCommonID();
+
+            String tempQuerry = String.format("INSERT INTO RELATION_COURSE_RESOURCES" +
+                    " (COURSEID, RESOURCEID, COMMONID) VALUES (?, ?, ?)");
+            PreparedStatement stl = conn.prepareStatement(tempQuerry);
+
+
+            for (frontend.data.Resource resource : course.getResource()) {
+
+                stl.setInt(1, id);
+                stl.setInt(2, resource.getID());
+                stl.setInt(3, commonID);
+                stl.executeQuery();
+
             }
+//
+//            for (int k = 0; k < r.size(); k++) {
+//
+//                int resourceID = 0;
+//
+//
+//                if(r.get(k).getPublisher() != null) {
+//
+//
+//                    String queryl = String.format("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE RESOURCEID = ? AND " +
+//                    "PUBLISHERID = ?");
+//                    PreparedStatement stl = conn.prepareStatement(queryl);
+//                    stl.setInt(1, r.get(k).getID());
+//                    stl.setInt(2, r.get(k).getPublisher().getID());
+//
+//
+//                    ResultSet rs = stl.executeQuery();
+//
+//                    while (rs.next()) {
+//                        resourceID = rs.getInt(2);
+//                    }
+//                    System.out.println("resourceID now " + resourceID);
+//                    if (resourceID == 0) {
+//                        String query = String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE" +
+//                                        " (PUBLISHERID, RESOURCEID) VALUES (?, ?)");
+//
+//                        PreparedStatement stl1 = conn.prepareStatement(query);
+//                        stl1.setInt(1,r.get(k).getPublisher().getID());
+//                        stl1.setInt(2,r.get(k).getID());
+//                        stl1.executeQuery();
+//
+//                    }
+//                    rs.close();
+//                }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
     }
+
 
 
 
@@ -2151,6 +2192,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     System.out.println("Resource NOT Found, ID: " + resourceID);
 
                 }
+                rs.close();
 
 
             }
@@ -2227,8 +2269,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             info = p.getContacts();
             descrip = p.getDescription();
 
-            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' ", title);
-            ResultSet rs = st.executeQuery(query);
+            String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE= ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,title);
+            ResultSet rs = stl.executeQuery();
 
             while (rs.next()) {
                 pubID = rs.getInt(1);
@@ -2248,23 +2292,28 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
 
-                String tempQr = insertPublisherQuery(tempPub);
-                System.out.println(tempQr);
-                st.executeQuery(tempQr);
+                insertPublisher(tempPub);
+
                 // Errorrrrrrrr
 
 
-                rs = st.executeQuery(String.format("SELECT * FROM PUBLISHERS WHERE TITLE='%s' AND CONTACT_INFO ='%s' AND DESCRIPTION ='%s'",
-                        title, info, descrip));
+                String query1 = String.format("SELECT * FROM PUBLISHERS WHERE TITLE= ? AND CONTACT_INFO = ? AND DESCRIPTION = ?");
+                PreparedStatement stl1 = conn.prepareStatement(query1);
+                stl1.setString(1,title);
+                stl1.setString(2,info);
+                stl1.setString(3,descrip);
+                rs = stl1.executeQuery();
                 while (rs.next()) {
                     pubID = rs.getInt(1);
 
                 }
                 p.setID(pubID);
+                rs.close();
                 return false;
 
             } else {
                 p.setID(pubID);
+                rs.close();
                 return true;
             }
 
@@ -2435,7 +2484,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
     public static ArrayList<frontend.data.Resource> getResourceFromTable() {
-        DBManager DB = new DBManager();
         ArrayList<frontend.data.Resource> arr = new ArrayList<>();
         try {
 
@@ -2488,29 +2536,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
     //======================================================================================
 
-    public static ArrayList<frontend.data.Course> convertArrayCC(ArrayList<com.mbox.Course> c) {
-        ArrayList<frontend.data.Course> arr = new ArrayList<>();
-        for (int i = 0; i < c.size(); i++) {
-            arr.add(c.get(i).initCourseGUI());
-        }
-        return arr;
-    }
 
-    public static ArrayList<frontend.data.Publisher> convertArrayPubPub(ArrayList<com.mbox.Publisher> pub) {
-        ArrayList<frontend.data.Publisher> arr = new ArrayList<>();
-        for (int i = 0; i < pub.size(); i++) {
-            arr.add(pub.get(i).initPublisherGUI());
-        }
-        return arr;
-    }
-
-    public static ArrayList<frontend.data.Course> convertArrayCCBasic(ArrayList<com.mbox.Course> c) {
-        ArrayList<frontend.data.Course> arr = new ArrayList<>();
-        for (int i = 0; i < c.size(); i++) {
-            arr.add(c.get(i).initCourseGUIBasic());
-        }
-        return arr;
-    }
 
 
     public static ArrayList<frontend.data.Resource> findResourcesCourseReturnList(int courseID) {
@@ -2694,12 +2720,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return arr;
     }
 
-    public static void delete_relation_course(frontend.data.Course c) {
+    public static void delete_relation_course(frontend.data.Course course) {
 
         try {
-            int commonID = c.getCommonID();
+            int commonID = course.getCommonID();
             Statement st = conn.createStatement();
-
 
 
                 st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = " +
@@ -2711,13 +2736,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
         } catch (SQLException e) {
-
-            System.out.println("Something went wrong when trying to delete resources");
-
+            e.printStackTrace();
         }
     }
 
     public static void delete_course(frontend.data.Course c) {
+
         executeNoReturnQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
         executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
         executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
@@ -2725,9 +2749,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         executeNoReturnQuery(String.format("DELETE FROM COURSECT WHERE ID = %d", c.getID()));
     }
 
-    //todo (GUIDO):
-    // Delete method person
-    // put delete method (course in gui)
 
 
     public static void delete_person(frontend.data.Person p) {
@@ -2992,36 +3013,34 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
 
-    public static void updateCourseAndPerson(frontend.data.Course c) {
-
-
-
-            c.getProfessor().setID(find_person_by_name(c.getProfessor()));
+    public static void updateCoursePersonSemester(frontend.data.Course course) {
 
             try {
-
-                Statement st = conn.createStatement();
-
-                System.out.println("Course title: "+c.getTitle()+"id: "+c.getID() + "person name: "+ c.getProfessor().getFirstName()+" "+c.getProfessor().getLastName()+
-                "Person ID: " + c.getProfessor().getID() + "\nResources list: "+c.getResource()+" Commonid: "+c.getCommonID());
+                int semesterID = 0;
+                semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(course.getSEMESTER()),
+                        String.valueOf(course.getYEAR()));
 
 
+                //Updating Semester_Course
+                String queryString = String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = ?, SEMESTERID = ?" +
+                        " WHERE ID = ?");
+                PreparedStatement stl = conn.prepareStatement(queryString);
+                stl.setInt(1,course.getID());
+                stl.setInt(2,semesterID);
+                stl.setInt(3,course.getCommonID());
+                stl.executeQuery();
 
-                st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET COURSEID = %d WHERE ID = %d",
-                        c.getID(), c.getCommonID()));
-
-
-                c.getProfessor().setID(find_person_by_name(c.getProfessor()));
-                System.out.println(c.getProfessor().getID());
-
-
-                st.executeQuery(String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = %d, PERSONID = %d WHERE " +
-                                "COMMONID = %d", c.getID(), c.getProfessor().getID(),
-                        c.getCommonID()));
+                // Updatin Course_Perosn
+                String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSEID = ?, PERSONID = ? WHERE " +
+                                "COMMONID = ?");
+                PreparedStatement stl1 = conn.prepareStatement(query);
+                stl1.setInt(1,course.getID());
+                stl1.setInt(2,course.getProfessor().getID());
+                stl1.setInt(3,course.getCommonID());
+                stl1.executeQuery();
 
             } catch (SQLException e) {
-
-                System.out.println("Something went wrong when trying to update course and person table");
+                e.printStackTrace();
             }
 
         }
@@ -3034,11 +3053,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try {
 
-            Statement st = conn.createStatement();
 
 
-            st.executeQuery(String.format("UPDATE RELATION_SEMESTER_COURSE SET SEMESTERID = %d WHERE ID = %d",
-                    semesterID,commonID));
+
+            String query = String.format("UPDATE RELATION_SEMESTER_COURSE SET SEMESTERID = ? WHERE ID = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setInt(1,semesterID);
+            stl.setInt(2,commonID);
+            stl.executeQuery();
 
         } catch (SQLException e) {
 
@@ -3064,10 +3086,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try {
 
-            Statement st = conn.createStatement();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
-                    title, cnumber));
+
+            String query = String.format("SELECT * FROM COURSECT WHERE TITLE = ? AND CNUMBER = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,title);
+            stl.setString(2,cnumber);
+            ResultSet rs = stl.executeQuery();
 
             while (rs.next()) {
 
@@ -3076,22 +3101,32 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             if (id == -1) {
 
-                st.executeQuery(String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
-                        "('%s', '%s', '%s', '%s')", title, cnumber, c.getDescription(), c.getDepartment()));
+                String query1 = String.format("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION, DEPARTMENT) VALUES " +
+                        "(?,?, ?, ?, ?)");
+                PreparedStatement stl1 = conn.prepareStatement(query1);
+                stl1.setString(1,title);
+                stl1.setString(2,cnumber);
+                stl1.setString(3,c.getDescription());
+                stl1.setString(4, c.getDepartment());
+
+                stl1.executeQuery();
 
 
-                rs = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE TITLE = '%s' AND CNUMBER = '%s'",
-                        title, cnumber));
+                String query2 = String.format("SELECT * FROM COURSECT WHERE TITLE = ? AND CNUMBER = ?");
+                PreparedStatement stl2 = conn.prepareStatement(query2);
+                stl2.setString(1,title);
+                stl2.setString(2,cnumber);
+                rs = stl2.executeQuery();
 
                 while (rs.next()) {
 
                     id = rs.getInt("id");
                 }
-
+                rs.close();
                 return id;
 
             } else {
-
+                rs.close();
                 return id;
             }
 
@@ -3114,8 +3149,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try {
 
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = '%s'", p.getFirstName(), p.getLastName()));
+
+            String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME = ? AND LASTNAME = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1,p.getFirstName());
+            stl.setString(2,p.getLastName());
+
+            ResultSet rs = stl.executeQuery();
 
             while (rs.next()) {
 
@@ -3124,11 +3164,18 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             if (id == -1) {
 
-                st.executeQuery(String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES('%s', '%s', '%s')"
-                        , p.getFirstName(), p.getLastName(), p.getType()));
+                String query1 = String.format("INSERT INTO PERSON (FIRSTNAME, LASTNAME, TYPE) VALUES(?, ?, ?)");
+                PreparedStatement stl1 = conn.prepareStatement(query1);
+                stl1.setString(1,p.getFirstName());
+                stl1.setString(2,p.getLastName());
+                stl1.setString(3,p.getType());
+                stl1.executeQuery();
 
-                rs = st.executeQuery(String.format("SELECT * FROM PERSON WHERE FIRSTNAME = '%s' AND LASTNAME = " +
-                        "'%s'", p.getFirstName(), p.getLastName()));
+                String query2 = String.format("SELECT * FROM PERSON WHERE FIRSTNAME = ? AND LASTNAME = ?");
+                PreparedStatement stl2 = conn.prepareStatement(query2);
+                stl2.setString(1,p.getFirstName());
+                stl2.setString(2,p.getLastName());
+                rs = stl2.executeQuery();
 
                 while (rs.next()) {
 
@@ -3179,9 +3226,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
 
-    public static String exportCSVCourseResources() {
-        ArrayList<Course> allCourses = getCourseFromTable();
+    public static String exportCSVCourseResources(ComboBox season, ComboBox year) {
+        int semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(season.getSelectionModel().getSelectedItem().toString()),
+                year.getSelectionModel().getSelectedItem().toString());
+        ArrayList<frontend.data.Course> allCourses = returnEverything2(semesterID);
         StringBuilder sb = new StringBuilder();
+
         sb.append("id,");
         sb.append("Title,");
         sb.append("Description,");
@@ -3189,8 +3239,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         sb.append("Resources -->");
         sb.append('\n');
 
-        for (Course course : allCourses) {
-            course.setResourceInstances(findResourcesCourseAvoidRepetitive(course.getID()));
+        for (frontend.data.Course course : allCourses) {
             sb.append(course.getID());
             sb.append(",");
             sb.append(course.getTitle());
@@ -3199,7 +3248,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(course.getDepartment());
             sb.append(",");
-            for (Resource resource : course.getResourceInstances()) {
+            for (frontend.data.Resource resource : course.getResource()) {
                 sb.append(resource.getTitle());
                 sb.append(",");
             }
@@ -3250,6 +3299,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         sb.append("Title,");
         sb.append("Author,");
         sb.append("ISBN,");
+        sb.append("ISBN13,");
+        sb.append("Edition,");
         sb.append("Total amount,");
         sb.append("Current amount,");
         sb.append("Description,");
@@ -3268,6 +3319,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(resource.getISBN());
             sb.append(",");
+            sb.append(resource.getISBN13());
+            sb.append(",");
+            sb.append(resource.getEdition());
+            sb.append(",");
             sb.append(resource.getTotalAmount());
             sb.append(",");
             sb.append(resource.getCurrentAmount());
@@ -3285,9 +3340,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static String exportCSVPersonResources() {
         ArrayList<Person> allPerson = getPersonFromTable();
-
-//        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
         StringBuilder sb = new StringBuilder();
+
         sb.append("id,");
         sb.append("First Name,");
         sb.append("Last Name,");
@@ -3525,6 +3579,31 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     }
 
+    public static void insertRelationResourcePublisher(frontend.data.Resource resource){
+        int resID = 0;
+        try{
+
+            ResultSet rs = st.executeQuery("SELECT * FROM RELATION_PUBLISHER_RESOURCE WHERE PUBLISHERID = "+
+            resource.getPublisher().getID() + " AND RESOURCEID = " + resource.getID());
+
+            while(rs.next()){
+                resID = rs.getInt(2);
+            }
+
+            if(resID == 0){
+                st.executeQuery(String.format("INSERT INTO RELATION_PUBLISHER_RESOURCE (PUBLISHERID, RESOURCEID) VALUES " +
+                        "('%d','%d')",resource.getPublisher().getID(),resource.getID()));
+            }
+
+            rs.close();
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     public static ArrayList<Integer> find_classids_by_courseid(int id){
 
         ArrayList<Integer> classids = new ArrayList<>();
@@ -3698,11 +3777,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             rs2.close();
 
-            course.setSEMESTER("FALL");
-            course.setYEAR(2018);
+            semester[0] = semester[0].replace(' ', '_');
+
+            course.setSEMESTER(frontend.data.Semester.valueOf(semester[0]).toString());
+            course.setYEAR(Integer.parseInt(semester[1]));
 
             course.setResource(resources);
             course.setProfessor(person);
+
 
             return course;
 
@@ -4007,25 +4089,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 //        }
 
     }
-    public static String capitalizeString(String s){
-        String result = "";
-        String[] tempString = s.split("\\s");
-        for(String a : tempString){
-            result = result + a.substring(0,1).toUpperCase() + a.substring(1) + " ";
-        }
-        result = result.substring(0,result.length()-1);
-        return result;
-    }
 
-    public static boolean isISBN(String s){
-        String regex ="\\d+";
-        return s.matches(regex) && s.length() == 10;
-    }
-
-    public static boolean isISBN13(String s){
-        String regex ="\\d+";
-        return s.matches(regex) && s.length() == 13;
-    }
 
     public static void deleteResourceInDB(frontend.data.Resource r){
         try {
@@ -4053,45 +4117,36 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
     }
 
-    public static void delete_person_by_id(int id){
+    public static void deletePersonEveyrwhere(frontend.data.Person person){
 
-        ArrayList<Integer> commonids = new ArrayList<>();
+        ArrayList<Integer> commonIDs = new ArrayList<>();
 
         try{
 
             Statement state1 = conn.createStatement(); // get the commonids of that professor id
-            Statement state2 = conn.createStatement(); // delete those commonids from semester_course (listed as ID)
-            Statement state3 = conn.createStatement(); // delete commonids from relation_course_resources
-            Statement state4 = conn.createStatement(); // delete relation_course_person by personid
-            Statement state5 = conn.createStatement(); // delete relation_person_resources by personid
-            Statement state6 = conn.createStatement(); // delete person from PERSON table
 
-            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
+            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+                    person.getID()));
 
             while (rs.next()) {
-
-                commonids.add(rs.getInt("COMMONID"));
-
+                commonIDs.add(rs.getInt("COMMONID"));
             }
-
             rs.close();
+            state1.executeQuery("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = " + person.getID());
+            state1.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d",
+                    person.getID()));
 
             //deleting
+            for(Integer commonID : commonIDs) {
 
-            for(int i = 0; i < commonids.size(); i++) {
-                state2.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d", commonids.get(i)));
-                state3.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = %d", commonids.get(i)));
+                state1.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d", commonID));
+                state1.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = %d", commonID));
             }
 
-            state4.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
-            state5.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", id));
-            state6.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", id));
-
+            state1.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", person.getID()));
 
         }catch(SQLException e){
-
-            System.out.println("Exception in the method delete_person_by_id()");
-
+            e.printStackTrace();
         }
 
 

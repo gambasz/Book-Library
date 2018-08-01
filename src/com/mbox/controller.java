@@ -241,5 +241,72 @@ public class controller {
             }
         return temp;
     }
+
+    public static String capitalizeString(String s){
+        String result = "";
+
+        try {
+            String[] tempString = s.split("\\s");
+            for (String a : tempString) {
+                result = result + a.substring(0, 1).toUpperCase() + a.substring(1) + " ";
+            }
+            result = result.substring(0, result.length() - 1);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+
+    }
+
+    public static boolean isISBN(String s){
+        String regex ="\\d+";
+        return s.matches(regex) && s.length() == 10;
+    }
+
+    public static boolean isISBN13(String s){
+        String regex ="\\d+";
+        return s.matches(regex) && s.length() == 13;
+    }
+
+    public static ArrayList<frontend.data.Course> convertArrayCC(ArrayList<com.mbox.Course> c) {
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        for (int i = 0; i < c.size(); i++) {
+            arr.add(c.get(i).initCourseGUI());
+        }
+        return arr;
+    }
+
+    public static ArrayList<frontend.data.Publisher> convertArrayPubPub(ArrayList<com.mbox.Publisher> pub) {
+        ArrayList<frontend.data.Publisher> arr = new ArrayList<>();
+        for (int i = 0; i < pub.size(); i++) {
+            arr.add(pub.get(i).initPublisherGUI());
+        }
+        return arr;
+    }
+
+    public static ArrayList<frontend.data.Course> convertArrayCCBasic(ArrayList<com.mbox.Course> c) {
+        ArrayList<frontend.data.Course> arr = new ArrayList<>();
+        for (int i = 0; i < c.size(); i++) {
+            arr.add(c.get(i).initCourseGUIBasic());
+        }
+        return arr;
+    }
+
+    @NotNull
+    public static void copyCourse(Course selectedCourse, Course updated ) {
+
+        selectedCourse.setID(updated.getID());
+        selectedCourse.setTitle(updated.getTitle());
+        selectedCourse.setDescription(updated.getDescription());
+        selectedCourse.setDepartment(updated.getDepartment());
+
+        selectedCourse.setSEMESTER(updated.getSEMESTER());
+        selectedCourse.setYEAR(updated.getYEAR());
+
+        selectedCourse.setResource(updated.getResource());
+        selectedCourse.setProfessor(updated.getProfessor());
+
+    }
 }
 
