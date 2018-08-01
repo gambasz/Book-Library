@@ -23,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -101,9 +100,6 @@ public class Controller {
      */
     private void test() {
         System.out.println("The program started running now!");
-        for (Node n : courseInfoDepart.getChildrenUnmodifiable()) {
-            System.out.println(n + " 125");
-        }
 
     }
 
@@ -142,8 +138,6 @@ public class Controller {
 
         yearCB.getSelectionModel().select(new Integer(defaultSemest.getYear()));
         semester.getSelectionModel().select(controller.convertSeasonDBtoGUI(defaultSemest.getSeason()));
-
-
 
 
         mainPane.getChildren().
@@ -210,15 +204,15 @@ public class Controller {
     private void setTextFieldSMaxLength() {
 
         courseInfoTitle.setMaxLength(8);
-        courseInfoDepart.setMaxLength(30);
-        courseInfoDescrip.setMaxLength(64);
-        profInfoFName.setMaxLength(15);
-        profInfoLName.setMaxLength(15);
+        courseInfoDepart.setMaxLength(120);
+        courseInfoDescrip.setMaxLength(250);
+        profInfoFName.setMaxLength(25);
+        profInfoLName.setMaxLength(25);
         courseSearchTF.setMaxLength(8);
-        departSearchTF.setMaxLength(20);
-        profSearchTF.setMaxLength(25);
+        departSearchTF.setMaxLength(120);
+        profSearchTF.setMaxLength(50);
         crnSearchTF.setMaxLength(8);
-        resourceSearchTF.setMaxLength(32);
+        resourceSearchTF.setMaxLength(256);
     }
 
 
@@ -368,7 +362,7 @@ public class Controller {
         semester = semester.replace('_', ' ');
         int semesterid = DBManager.getSemesterIDByName(semester, year);
 
-        semester_ids.addAll(DBManager.find_classids_by_semester_id(semesterid));
+        semester_ids.addAll(Objects.requireNonNull(DBManager.find_classids_by_semester_id(semesterid)));
 //        Boolean[] searchPattern = getSearchPattern(crnSearchTF, courseSearchTF, profSearchTF, departSearchTF, resourceSearchTF);
         if (!crnSearchTF.getText().isEmpty()) {
             commonid = crnSearchTF.getText();
@@ -409,8 +403,6 @@ public class Controller {
                 coursename_full = true;
             coursename = cSplit[1];
             courseCode = cSplit[0].toUpperCase();
-            System.out.println("Course code: " + courseCode);
-            System.out.println("Course name: " + coursename);
 
 
             ids_from_coursename = DBManager.find_classids_by_course_name(courseCode, coursename);
@@ -552,10 +544,8 @@ public class Controller {
             }
 
         } else {
-
-            System.out.println("IDK whats going on m8");
+            showError("IDK M8", "IDK What is going on", "IDK");
         }
-
         courseList.clear();
         courseList.addAll(tmp_courses);
         updateCourseTable();
@@ -750,7 +740,6 @@ public class Controller {
                         final int index = row.getIndex();
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
-                            System.out.println("Deselect, isSelected is false");
                             selectedPublisher = null;
                             event.consume();
                             if (table.equals(tableTV)) {
@@ -916,9 +905,9 @@ public class Controller {
         descriptionTF.setPromptText("Description for publisher");
 
 
-        nameTF.setMaxLength(30);
-        contactsTF.setMaxLength(60);
-        descriptionTF.setMaxLength(60);
+        nameTF.setMaxLength(120);
+        contactsTF.setMaxLength(250);
+        descriptionTF.setMaxLength(250);
 
         Button deleteBtn = new Button("Delete");
         ImageView deletImgg = new ImageView(deleteIconImg);
@@ -1024,11 +1013,9 @@ public class Controller {
 
     private void deletePublisher(Publisher publisher, LimitedTextField nameTF, LimitedTextField contacTF,
                                  LimitedTextField descripTF, ComboBox<Publisher> publisherComboBox) {
-        System.out.println("This is pubID" + publisher.getID());
         if (publisher.getID() == 0) {
             showError("Error", "Missing Publisher", "Please choose publisher in the box");
         } else {
-            System.out.println("Publisher should be deleted, write the method");
             DBManager.deletePublisherInDB(publisher);
 
             resourceTable.getItems().clear();
@@ -1063,7 +1050,6 @@ public class Controller {
         Label author = new Label((controller.stringAdjustment("Edition:* ", "Author:* ")));
         Label ISBN10 = new Label(controller.stringAdjustment("Edition:* ", "ISBN10: "));
         Label ISBN13 = new Label(controller.stringAdjustment("Edition:* ", "ISBN13: "));
-        Label id = new Label("ID: ");
         Label totalAmount = new Label((controller.stringAdjustment("Current Amount:* ", "Total Amount:* ")
                 + "  "));
         Label currentAmount = new Label(("Current Amount:* "));
@@ -1076,9 +1062,9 @@ public class Controller {
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
-        titleTF.setPromptText("Ex. Starting out with C");
-        authorTF.setPromptText("Author of resource");
-        totalAmTF.setPromptText("Ex. 100");
+        titleTF.setPromptText("e.g., Starting out with C++");
+        authorTF.setPromptText("e.g., Author");
+        totalAmTF.setPromptText("e.g., 100");
         isbn10TF.setPromptText("ISBN10 of resource");
         isbn13TF.setPromptText("ISBN13 of resource");
         currentAmTF.setPromptText("Ex. 90");
@@ -1087,15 +1073,15 @@ public class Controller {
         Label counter = new Label();
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
         titleTF.setCounter(counter);
-        titleTF.setMaxLength(50);
+        titleTF.setMaxLength(250);
 
-        authorTF.setMaxLength(25);
+        authorTF.setMaxLength(250);
         idTF.setMaxLength(8);
-        totalAmTF.setMaxLength(5);
-        currentAmTF.setMaxLength(5);
+        totalAmTF.setMaxLength(6);
+        currentAmTF.setMaxLength(6);
         isbn10TF.setMaxLength(10);
         isbn13TF.setMaxLength(13);
-        descriptionTF.setMaxLength(45);
+        descriptionTF.setMaxLength(250);
 
         Button publisherBtn = new Button("Click here to add a new Publisher");
         ComboBox<String> typeCB = new ComboBox<String>();
@@ -1161,7 +1147,7 @@ public class Controller {
 
         } catch (Exception ex) {
             if (debugging) {
-                System.out.print("Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                showError("Resouse data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -1397,7 +1383,6 @@ public class Controller {
                     && selectedResource.getISBN().equals(isbn) && selectedResource.getISBN13().equals(isbn13)
                     && selectedResource.getTotalAmount() == (new_total) && selectedResource.getDescription().equals(new_descrip)
                     && selectedResource.getEdition().equals(new_edition)) {
-                System.out.println("Everything is the same, no change, so do nothing");
                 DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
                 selectedResource.setPublisher(selectedPublisher);
                 tempResArr.add(selectedResource);
@@ -1408,12 +1393,10 @@ public class Controller {
                 tempRes.setEdition(new_edition);
                 selectedResource = tempRes.initResourceGUI();
                 DBManager.updateResource(tempRes);
-                System.out.println("Updated resource with ID: " + selectedResource.getID());
                 DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
                 selectedResource.setPublisher(selectedPublisher);
                 tempResArr.add(selectedResource);
             }
-            System.out.println("Publisher  now is " + selectedPublisher);
             resourceTable.getItems().clear();
             resourceTable.getItems().addAll(tempResArr);
             //check if this resource and publisher already had relation or not, delete the old one and add the new one
@@ -1723,8 +1706,8 @@ public class Controller {
         Label profInfoTypeLbl = new Label(controller.stringAdjustment("First Name:*  ", " Type:* ") +
                 "    ");
 
-        profInfoFNameTf.setMaxLength(15);
-        profInfoLNameTf.setMaxLength(15);
+        profInfoFNameTf.setMaxLength(25);
+        profInfoLNameTf.setMaxLength(25);
         ComboBox profInfoTypeCB = new ComboBox<>();
 
         profInfoTypeCB.setItems(profInfoType.getItems());
@@ -1732,13 +1715,13 @@ public class Controller {
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button PersonResources = new Button("View Person's Resources");
         Button addProfessor = new Button("Add");
-        Button NAME_ME_SOMETHING_ELSE = new Button("Info");
+        Button infoBtn = new Button("Info");
 
         Button deleteBtn = new Button("Delete");
         Button updateBtn = new Button("Update");
 
 
-        setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
+        setChildVisibility(false, PersonResources, infoBtn, deleteBtn, updateBtn);
         addProfessor.setOnMouseClicked(e -> {
             if (profInfoFName.getText() == null || profInfoFName.getText() == null || profInfoTypeCB.getSelectionModel().getSelectedItem() == null) {
                 showError("Invalid input", "please fill all the fields", "You must enter all the information to create a new professor");
@@ -1750,21 +1733,21 @@ public class Controller {
                 currentProfessors.getItems().addAll(profList);
             }
         });
-        NAME_ME_SOMETHING_ELSE.setOnMouseClicked(e -> {
+        infoBtn.setOnMouseClicked(e -> {
             resourcePersonDiffView(currentProfessors.getSelectionModel().getSelectedItem());
         });
         currentProfessors.setOnAction(e -> {
-            System.out.println(currentProfessors.getSelectionModel().getSelectedItem());
+
             if (currentProfessors.getSelectionModel().getSelectedItem() != null) {
                 profInfoFNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getFirstName());
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
                 profInfoTypeCB.setValue(currentProfessors.getSelectionModel().getSelectedItem().getType());
 
-                setChildVisibility(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
+                setChildVisibility(true, PersonResources, infoBtn, deleteBtn, updateBtn);
 
 
             } else {
-                setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
+                setChildVisibility(false, PersonResources, infoBtn, deleteBtn, updateBtn);
 
 
             }
@@ -1778,17 +1761,15 @@ public class Controller {
         });
         updateBtn.setOnMouseClicked(e -> updateProfessor(currentProfessors, profInfoFNameTf, profInfoLNameTf, profInfoTypeCB));
         PersonResources.setOnAction(e -> {
-            // When the opening resources for person view button pressed
             ArrayList<Resource> tempRes = new ArrayList<>(resList);
             isPersonResourcesView = true;
-            System.out.print(tempRes);
             currentProfessors.getSelectionModel().getSelectedItem().setResources(tempRes);
             showPersonsResources(currentProfessors.getSelectionModel().getSelectedItem());
         });
         addGraphicToButtons(new ImageView(addIconImg), addProfessor);
         addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
         String questionIconImg = "/frontend/media/question.png";
-        addGraphicToButtons(new ImageView(questionIconImg), NAME_ME_SOMETHING_ELSE);
+        addGraphicToButtons(new ImageView(questionIconImg), infoBtn);
 
         VBox hiddenOptionSContent = new VBox(20);
 
@@ -1809,7 +1790,7 @@ public class Controller {
         mainAddPane.getChildren().addAll(
                 new HBox(20, currentCBoxLbl, currentProfessors),
                 hiddenOptions,
-                new HBox(20, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources)
+                new HBox(20, deleteBtn, infoBtn, PersonResources)
         );
         for (Object tempElem : mainAddPane.getChildren()) {
             if (tempElem instanceof HBox) {
@@ -1872,22 +1853,32 @@ public class Controller {
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
-    private void resourcePersonDiffView(Person selectedItem) {
+    private void resourcePersonDiffView(Person selectedPerson) {
         Dialog dlg = new Dialog();
-        HBox mainPane = new HBox();
-        String title = selectedItem.getFirstName().concat(" ").concat(selectedItem.getLastName())
+        HBox tablePane = new HBox();
+        VBox mainPane = new VBox(20);
+
+        String title = selectedPerson.getFirstName().concat(" ").concat(selectedPerson.getLastName())
                 .concat(", ")
-                .concat(selectedItem.getType());
-        dlg.setTitle(title);
-        dlg.setHeaderText("Here are all the resources needed for " + selectedItem.getFirstName() + " " + selectedItem.getLastName());
+                .concat(selectedPerson.getType());
+
+        final String defaultHeader = "Here are all the resources needed for " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName();
+
         ImageView icon = new ImageView(programeIconImg);
+
         icon.setFitHeight(75);
         icon.setFitWidth(75);
-        dlg.setGraphic(icon);
 
-        ArrayList<Resource> diffResArr = new ArrayList<>();
+        ComboBox semester = new ComboBox();
+        ComboBox years = new ComboBox();
 
-        //TODO :: add naming consistency ---- Rajashow
+        semester.getItems().addAll(semesterComBox.getItems());
+        semester.getSelectionModel().select(semesterComBox.getSelectionModel().getSelectedItem());
+        years.getItems().addAll(yearComBox.getItems());
+        years.getSelectionModel().select(yearComBox.getSelectionModel().getSelectedItem());
+
+        Button fillerResourcesBasedOnSemester = new Button("filter");
+
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
@@ -1895,61 +1886,65 @@ public class Controller {
         setCellFactoryForProfDiffvView(allResources);
         setCellFactoryForProfDiffvView(diffResources);
 
-        try
 
-        {
-// Do not delete this
-//            profResources.getItems().addAll(selectedPerson.getResources());
-//            allResources.getItems().addAll(resList);
-//            diffResArr.addAll( DBManager.getAllResourcesNeededForPerson(selectedItem));
-//            diffResArr.removeAll(selectedPerson.getResources());
-//            diffResources.getItems().addAll(diffResArr);
-
-
-            com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
-            selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
-            if (selectedItem.getResources() != null) {
-                profResources.getItems().addAll(selectedItem.getResources());
-            }
-
-            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem);
-            if (allRequiredResources != null) {
-                allResources.getItems().addAll(allRequiredResources);
-                diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
-            }
+        ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+                semester.getSelectionModel().getSelectedItem().toString(),
+                years.getSelectionModel().getSelectedItem().toString());
+        profResources.getItems().addAll(selectedPerson.getResources());
+        allResources.getItems().addAll(allRequiredResources);
+        diffResources.getItems().addAll(allRequiredResources);
+        diffResources.getItems().removeAll(selectedPerson.getResources());
 
 
-        } catch (
-                Exception ex)
-
-        {
-            if (debugging)
-                System.out.print(ex.getMessage());
-        }
-
-
-        Label professorSResourcesLbl = new Label(selectedItem.getLastName().concat("'s Resources"));
+        Label professorSResourcesLbl = new Label(selectedPerson.getLastName().concat("'s Resources"));
         Label resourcesLbl = new Label("Required Resources");
         Label diffResourcesLbl = new Label("Required Difference ");
+        fillerResourcesBasedOnSemester.setOnMouseClicked(e -> {
+            if (semester.getSelectionModel().getSelectedItem() != null && years.getSelectionModel().getSelectedItem() != null) {
+
+
+                ArrayList<Resource> allRequiredResourcesRePulled = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+                        semester.getSelectionModel().getSelectedItem().toString(),
+                        years.getSelectionModel().getSelectedItem().toString());
+
+                allResources.getItems().clear();
+                diffResources.getItems().clear();
+
+                System.out.println("All Res :This must be empty" + allResources.getItems());
+                System.out.println("diff Res :This must be empty" + diffResources.getItems());
+
+                allResources.getItems().addAll(allRequiredResourcesRePulled);
+                diffResources.getItems().addAll(allRequiredResourcesRePulled);
+                diffResources.getItems().removeAll(selectedPerson.getResources());
+
+
+                String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
+                semesterStr = semesterStr.replace('_', ' ').toLowerCase();
+                dlg.setHeaderText(defaultHeader
+                        + " for " + semesterStr
+                        + " in " + years.getSelectionModel().getSelectedItem()
+                );
+            } else {
+                System.out.println("Please select filter data");
+            }
+
+
+        });
 
         professorSResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         resourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         diffResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
-        mainPane.getChildren().
+        tablePane.getChildren().
 
                 addAll(
                         new VBox(5, professorSResourcesLbl, profResources),
-                        new
-
-                                VBox(5, resourcesLbl, allResources),
-                        new
-
-                                VBox(5, diffResourcesLbl, diffResources)
+                        new VBox(5, resourcesLbl, allResources),
+                        new VBox(5, diffResourcesLbl, diffResources)
                 );
-        mainPane.setAlignment(Pos.CENTER);
-        mainPane.setStyle("-fx-border-radius: 10px;");
+        tablePane.setAlignment(Pos.CENTER);
+        tablePane.setStyle("-fx-border-radius: 10px;");
         for (
-                Node temp : mainPane.getChildren())
+                Node temp : tablePane.getChildren())
 
         {
             if (temp.getClass().equals(VBox.class)) {
@@ -1960,6 +1955,16 @@ public class Controller {
             }
 
         }
+
+        HBox semesterInfoComboBoxes = new HBox(20, semester, years, fillerResourcesBasedOnSemester);
+
+        semesterInfoComboBoxes.setAlignment(Pos.CENTER);
+
+        mainPane.getChildren().
+
+                addAll(semesterInfoComboBoxes, tablePane);
+        mainPane.setAlignment(Pos.CENTER);
+
         dlg.getDialogPane().
 
                 setContent(mainPane);
@@ -1968,7 +1973,17 @@ public class Controller {
                 getButtonTypes().
 
                 addAll(ButtonType.CLOSE);
+        dlg.setTitle(title);
+        String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
+        semesterStr = semesterStr.replace('_', ' ').toLowerCase();
+        dlg.setHeaderText(defaultHeader
+                + " for " + semesterStr
+                + " in " + years.getSelectionModel().getSelectedItem()
+        );
+        dlg.setGraphic(icon);
+
         dlg.show();
+
     }
 
     private void setCellFactoryForProfDiffvView(ListView<Resource> diffListview) {
@@ -2093,8 +2108,8 @@ public class Controller {
         departmentTf.setPromptText("e.g., Computer Science");
 
         tileTf.setMaxLength(8);
-        descriptionTf.setMaxLength(64);
-        departmentTf.setMaxLength(30);
+        descriptionTf.setMaxLength(250);
+        departmentTf.setMaxLength(120);
 
         setCourseTemplatesCellValue(courseTemplates);
         courseTemplates.getItems().addAll(templateList);
@@ -2353,7 +2368,7 @@ public class Controller {
 
         }
         if (checkBoxes[3]) {
-             askSemester();
+            askSemester();
 
         }
     }
@@ -2399,7 +2414,6 @@ public class Controller {
             semester = semester.substring(0, 1).toUpperCase() + semester.substring(1);
             semester = semester.replace('_', ' ');
             int semesterid = DBManager.getSemesterIDByName(semester, year);
-            System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
         updateCourseTable();
