@@ -3299,6 +3299,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         sb.append("Title,");
         sb.append("Author,");
         sb.append("ISBN,");
+        sb.append("ISBN13,");
+        sb.append("Edition,");
         sb.append("Total amount,");
         sb.append("Current amount,");
         sb.append("Description,");
@@ -3316,6 +3318,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(resource.getAuthor());
             sb.append(",");
             sb.append(resource.getISBN());
+            sb.append(",");
+            sb.append(resource.getISBN13());
+            sb.append(",");
+            sb.append(resource.getEdition());
             sb.append(",");
             sb.append(resource.getTotalAmount());
             sb.append(",");
