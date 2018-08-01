@@ -3365,7 +3365,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return sb.toString();
     }
 
-    public static ArrayList<frontend.data.Resource> getAllResourcesNeededForPerson(frontend.data.Person person) {
+    public static ArrayList<frontend.data.Resource> getAllResourcesNeededForPerson(frontend.data.Person person,
+                                                                                   String semester, String year) {
+        int semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(semester), year);
 
         //GO to person-course, get a list of commonids of the courses being teached by the person
         ResultSet rss, rs, rs3;
@@ -3377,10 +3379,18 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try {
             Statement st = conn.createStatement();
             Statement st2 = conn.createStatement();
-            Statement st3 = conn.createStatement();
+            PreparedStatement stl;
+            String query = "SELECT * FROM RELATION_COURSE_PERSON cp " +
+                    "INNER JOIN RELATION_SEMESTER_COURSE sc " +
+                    "ON sc.SEMESTERID = ? " +
+                    "AND sc.ID = cp.COMMONID AND cp.PERSONID = ? ";
 
-            rss = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = '%d'",
-                    person.getID()));
+            stl = conn.prepareStatement(query);
+            stl.setInt(1, semesterID);
+            stl.setInt(2, person.getID());
+
+
+            rss = stl.executeQuery();
             while (rss.next()) {
                 commonID = (rss.getInt("COMMONID"));
                 rs = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID = '%d' ORDER BY RESOURCEID ASC",

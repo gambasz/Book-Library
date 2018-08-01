@@ -1885,7 +1885,6 @@ public class Controller {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
 
-        ArrayList<Resource> diffResArr = new ArrayList<>();
 
         //TODO :: add naming consistency ---- Rajashow
         ListView<Resource> profResources = new ListView<>();
@@ -1912,7 +1911,8 @@ public class Controller {
                 profResources.getItems().addAll(selectedItem.getResources());
             }
 
-            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem);
+            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem,
+                    "SUMMER_2","2018");
             if (allRequiredResources != null) {
                 allResources.getItems().addAll(allRequiredResources);
                 diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
