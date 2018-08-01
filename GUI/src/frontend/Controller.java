@@ -259,6 +259,17 @@ public class Controller {
 
     }
 
+
+    private Boolean[] getSearchPattern(TextField... textFields) {
+        Boolean[] searchPattern = new Boolean[textFields.length];
+        for (int index = 0; index < textFields.length; index++) {
+            Boolean isTextfieldEmpty;
+            isTextfieldEmpty = !textFields[index].getText().isEmpty();
+            searchPattern[index] = isTextfieldEmpty;
+        }
+        return searchPattern;
+    }
+
     public void search() {
 
         // Searching professor individually: works
@@ -296,12 +307,10 @@ public class Controller {
         int semesterid = DBManager.getSemesterIDByName(semester, year);
 
         semester_ids.addAll(DBManager.find_classids_by_semester_id(semesterid));
-
-
+//        Boolean[] searchPattern = getSearchPattern(crnSearchTF, courseSearchTF, profSearchTF, departSearchTF, resourceSearchTF);
         if (!crnSearchTF.getText().isEmpty()) {
             commonid = crnSearchTF.getText();
-
-            if (!com.mbox.controller.isInteger(commonid)) {
+            if (!controller.isInteger(commonid)) {
                 showError("Unable to search",
                         "Unable to search because the commonID you entered is not valid.",
                         "Correct format examples --> 180, 98 ");
@@ -309,7 +318,7 @@ public class Controller {
                 commonid_full = true;
         }
         if (!profSearchTF.getText().isEmpty()) {
-            
+
             professorname = profSearchTF.getText().substring(0, 1).toUpperCase() + profSearchTF.getText().substring(1).toLowerCase();
 
             professorname_full = true;
@@ -329,7 +338,7 @@ public class Controller {
                         "Unable to search because the course title format in the search box " +
                                 "is not valid.",
                         "Correct format examples --> CMSC 100, MATH 181 ");
-            } else if (!com.mbox.controller.isInteger(cSplit[1])) {
+            } else if (!controller.isInteger(cSplit[1])) {
                 showError("Input Error",
                         "Unable to search because the course title format in the search box " +
                                 "is not valid.",
@@ -558,14 +567,10 @@ public class Controller {
         if (courseInfoDepart.getText().trim().isEmpty() || courseInfoDescrip.getText().trim().isEmpty() || courseInfoTitle.getText().trim().isEmpty() ||
                 profInfoFName.getText().trim().isEmpty() || profInfoLName.getText().trim().isEmpty() || profInfoType.getSelectionModel().getSelectedItem() == null ||
                 resourceTable.getItems().isEmpty() ||
-                yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null)
-        {
+                yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return false;
-        }
-
-        else if (cSplit.length != 2)
-        {
+        } else if (cSplit.length != 2) {
 
             showError("Inout Error",
                     "Unable to insert because the course you title entered " +
@@ -573,23 +578,20 @@ public class Controller {
                     "Correct format examples --> CMSC 100, MATH 181 ");
             return false;
 
-        }
-        else if (!com.mbox.controller.isInteger(cSplit[1]))
-        {
+        } else if (!com.mbox.controller.isInteger(cSplit[1])) {
             showError("Inout Error",
                     "Unable to insert because the course you title entered " +
                             "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
             return false;
 
-        }
-        else
+        } else
             return true;
     }
 
     public void add() {
 
-        if(checkFirstRequiredBoxes()) {
+        if (checkFirstRequiredBoxes()) {
 
             Course tempCour = new Course();
             Person tempPers = new Person();
@@ -612,7 +614,7 @@ public class Controller {
                     tempPers,
                     courseInfoDescrip.getText(),
                     tempRes);
-             tempCour.setID(DBManager.insertCourseQuery(tempCour));
+            tempCour.setID(DBManager.insertCourseQuery(tempCour));
 
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
@@ -769,17 +771,13 @@ public class Controller {
 
     public void delete() {
 
-        if (selectedCourse == null)
-        {
+        if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to delete");
-        }
-
-        else
-        {
-                DBManager.delete_relation_course(selectedCourse);
-                courseList.remove(selectedCourse);
-                selectedCourse = null;
-                updateCourseTable();
+        } else {
+            DBManager.delete_relation_course(selectedCourse);
+            courseList.remove(selectedCourse);
+            selectedCourse = null;
+            updateCourseTable();
 
         }
     }
@@ -788,9 +786,7 @@ public class Controller {
 
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
-        }
-
-        else if (selectedCourse != null && checkFirstRequiredBoxes() ) {
+        } else if (selectedCourse != null && checkFirstRequiredBoxes()) {
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
@@ -1652,7 +1648,6 @@ public class Controller {
         profInfoLNameTf.setPromptText("EG. Webb");
 
 
-
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
 
         icon.setFitHeight(100);
@@ -1713,7 +1708,7 @@ public class Controller {
             }
         });
         deleteBtn.setOnAction(e -> {
-           selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
+            selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
             deleteProfessor();
             currentProfessors.getItems().clear();
             currentProfessors.getItems().addAll(profList);
@@ -1939,7 +1934,7 @@ public class Controller {
         profList.add(tempNewPerson);
         DBManager.insertPersonQuery(tempNewPerson);
         currentProfessors.getSelectionModel().select(tempNewPerson);
-   }
+    }
 
     private void showPersonsResources(Person selectedItem) {
         VBox mainPane = new VBox();
@@ -2019,8 +2014,6 @@ public class Controller {
         icon.setFitHeight(100);
         icon.setFitWidth(100);
         ComboBox<Course> courseTemplates = new ComboBox<Course>();
-
-
 
 
         Label currentCBoxLbl = new Label("Course Templates:   ");
