@@ -2298,8 +2298,11 @@ public class Controller {
         CheckBox personWResInfo = new CheckBox("All the Person with resources associated");
         CheckBox courseWResInfo = new CheckBox(" All the courses with resources associated.");
 
-
+        String exportIconImg = "/frontend/media/export.png";
+        ImageView exportImg = new ImageView(exportIconImg);
         Button exportNSave = new Button("Export");
+        addGraphicToButtons(exportImg, exportNSave);
+
         exportNSave.setOnAction(e -> {
             checkBoxes[0] = pubInfo.isSelected();
             checkBoxes[1] = resNPubInfo.isSelected();
