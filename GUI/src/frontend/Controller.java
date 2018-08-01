@@ -1889,7 +1889,9 @@ public class Controller {
         ComboBox years = new ComboBox();
 
         semester.getItems().addAll(semesterComBoxEdit.getItems());
+        semester.getSelectionModel().select(semesterComBoxEdit.getSelectionModel().getSelectedItem());
         years.getItems().addAll(yearComBox.getItems());
+        years.getSelectionModel().select(yearComBox.getSelectionModel().getSelectedItem());
 
         Button fillerResourcesBasedOnSemester = new Button("filter");
 
@@ -1910,9 +1912,9 @@ public class Controller {
             }
 
             ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem,
-                    "SUMMER_2", "2018");
-            semester.getSelectionModel().select(Semester.SUMMER_2);
-            years.getSelectionModel().select(new Integer(2018));
+                    semester.getSelectionModel().getSelectedItem().toString(),
+                    years.getSelectionModel().getSelectedItem().toString());
+
             if (allRequiredResources != null) {
                 allResources.getItems().addAll(allRequiredResources);
                 diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
