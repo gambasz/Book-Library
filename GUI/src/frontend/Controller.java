@@ -204,15 +204,15 @@ public class Controller {
     private void setTextFieldSMaxLength() {
 
         courseInfoTitle.setMaxLength(8);
-        courseInfoDepart.setMaxLength(30);
-        courseInfoDescrip.setMaxLength(64);
-        profInfoFName.setMaxLength(15);
-        profInfoLName.setMaxLength(15);
+        courseInfoDepart.setMaxLength(120);
+        courseInfoDescrip.setMaxLength(250);
+        profInfoFName.setMaxLength(25);
+        profInfoLName.setMaxLength(25);
         courseSearchTF.setMaxLength(8);
-        departSearchTF.setMaxLength(20);
-        profSearchTF.setMaxLength(25);
+        departSearchTF.setMaxLength(120);
+        profSearchTF.setMaxLength(50);
         crnSearchTF.setMaxLength(8);
-        resourceSearchTF.setMaxLength(32);
+        resourceSearchTF.setMaxLength(256);
     }
 
 
@@ -905,9 +905,9 @@ public class Controller {
         descriptionTF.setPromptText("Description for publisher");
 
 
-        nameTF.setMaxLength(30);
-        contactsTF.setMaxLength(60);
-        descriptionTF.setMaxLength(60);
+        nameTF.setMaxLength(120);
+        contactsTF.setMaxLength(250);
+        descriptionTF.setMaxLength(250);
 
         Button deleteBtn = new Button("Delete");
         ImageView deletImgg = new ImageView(deleteIconImg);
@@ -1050,7 +1050,6 @@ public class Controller {
         Label author = new Label((controller.stringAdjustment("Edition:* ", "Author:* ")));
         Label ISBN10 = new Label(controller.stringAdjustment("Edition:* ", "ISBN10: "));
         Label ISBN13 = new Label(controller.stringAdjustment("Edition:* ", "ISBN13: "));
-        Label id = new Label("ID: ");
         Label totalAmount = new Label((controller.stringAdjustment("Current Amount:* ", "Total Amount:* ")
                 + "  "));
         Label currentAmount = new Label(("Current Amount:* "));
@@ -1063,9 +1062,9 @@ public class Controller {
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
-        titleTF.setPromptText("Ex. Starting out with C");
-        authorTF.setPromptText("Author of resource");
-        totalAmTF.setPromptText("Ex. 100");
+        titleTF.setPromptText("e.g., Starting out with C++");
+        authorTF.setPromptText("e.g., Author");
+        totalAmTF.setPromptText("e.g., 100");
         isbn10TF.setPromptText("ISBN10 of resource");
         isbn13TF.setPromptText("ISBN13 of resource");
         currentAmTF.setPromptText("Ex. 90");
@@ -1074,15 +1073,15 @@ public class Controller {
         Label counter = new Label();
         counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
         titleTF.setCounter(counter);
-        titleTF.setMaxLength(50);
+        titleTF.setMaxLength(250);
 
-        authorTF.setMaxLength(25);
+        authorTF.setMaxLength(250);
         idTF.setMaxLength(8);
-        totalAmTF.setMaxLength(5);
-        currentAmTF.setMaxLength(5);
+        totalAmTF.setMaxLength(6);
+        currentAmTF.setMaxLength(6);
         isbn10TF.setMaxLength(10);
         isbn13TF.setMaxLength(13);
-        descriptionTF.setMaxLength(45);
+        descriptionTF.setMaxLength(250);
 
         Button publisherBtn = new Button("Click here to add a new Publisher");
         ComboBox<String> typeCB = new ComboBox<String>();
@@ -1707,8 +1706,8 @@ public class Controller {
         Label profInfoTypeLbl = new Label(controller.stringAdjustment("First Name:*  ", " Type:* ") +
                 "    ");
 
-        profInfoFNameTf.setMaxLength(15);
-        profInfoLNameTf.setMaxLength(15);
+        profInfoFNameTf.setMaxLength(25);
+        profInfoLNameTf.setMaxLength(25);
         ComboBox profInfoTypeCB = new ComboBox<>();
 
         profInfoTypeCB.setItems(profInfoType.getItems());
@@ -2109,8 +2108,8 @@ public class Controller {
         departmentTf.setPromptText("e.g., Computer Science");
 
         tileTf.setMaxLength(8);
-        descriptionTf.setMaxLength(64);
-        departmentTf.setMaxLength(30);
+        descriptionTf.setMaxLength(250);
+        departmentTf.setMaxLength(120);
 
         setCourseTemplatesCellValue(courseTemplates);
         courseTemplates.getItems().addAll(templateList);
