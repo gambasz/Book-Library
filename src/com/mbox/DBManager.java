@@ -3965,6 +3965,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 resource.setTitle(rs2.getString("TITLE"));
                 resource.setAuthor(rs2.getString("AUTHOR"));
                 resource.setISBN(rs2.getString("ISBN"));
+                resource.setISBN13(rs2.getString("ISBN13"));
                 resource.setTotalAmount(rs2.getInt("TOTAL_AMOUNT"));
                 resource.setCurrentAmount(rs2.getInt("CURRENT_AMOUNT"));
                 resource.setDescription(rs2.getString("DESCRIPTION"));
