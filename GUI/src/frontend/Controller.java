@@ -613,7 +613,7 @@ public class Controller {
                     courseInfoDescrip.getText(),
                     tempRes);
              tempCour.setID(DBManager.insertCourseQuery(tempCour));
-             
+
 
             tempCour = DBManager.relationalInsertByID2(tempCour);
             if (isClassInTheSameYear(tempCour)) {
@@ -794,60 +794,27 @@ public class Controller {
 
         else if (selectedCourse != null && checkFirstRequiredBoxes() ) {
 
-            DBManager.deleteRelationCourseResources(selectedCourse);
+            Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
+                    courseInfoDescrip.getText());
+            tempCourse.setID(DBManager.insertCourseQuery(tempCourse));
+            tempCourse.setCommonID(selectedCourse.getCommonID());
+
+            ArrayList<Resource> tempResource = new ArrayList<>(resourceTable.getItems());
+            tempCourse.setResource(tempResource);
+
+            Person updatedPerson = new Person(profInfoLName.getText(), profInfoFName.getText(),
+                    profInfoType.getSelectionModel().getSelectedItem().toString());
+            updatedPerson.setID(DBManager.insertPersonQuery(updatedPerson));
+            tempCourse.setProfessor(updatedPerson);
+
+            tempCourse.setYEAR(Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()));
+            tempCourse.setSEMESTER(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString());
 
 
-            Boolean courseChanged = false;
-            courseChanged = selectedCourse.getTitle().equals(courseInfoTitle.getText()) || selectedCourse.getDescription().equals(courseInfoDepart.getText()) ||
-                    selectedCourse.getDepartment().equals(courseInfoDescrip.getText());
-            if (courseChanged) {
-                Course comboBoxesCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
-                        courseInfoDescrip.getText());
-                //comboBoxesCourse.setCommonID(selectedCourse.getCommonID());
-                comboBoxesCourse.setID(DBManager.insertCourseQuery(comboBoxesCourse));
-                selectedCourse.setTitle(comboBoxesCourse.getTitle());
-                selectedCourse.setDepartment(comboBoxesCourse.getDepartment());
-                selectedCourse.setDescription(comboBoxesCourse.getDescription());
-                selectedCourse.setID(comboBoxesCourse.getID());
-            }
+            DBManager.updateCoursePersonSemester(tempCourse);
+            DBManager.updateRelationCourseResources(tempCourse);
 
-            ArrayList<Resource> selected_resources = new ArrayList<>(resourceTable.getItems());
-            ArrayList<Resource> new_resources = resList;
-            //delete all exist relation between course and its resources
-
-
-            String newFirstName = profInfoFName.getText();
-            String newLastName = profInfoLName.getText();
-            String newType = profInfoType.getSelectionModel().getSelectedItem().toString();
-
-
-            Person selected_person = selectedPerson;
-            Person new_person = new Person(newLastName, newFirstName, newType);
-
-            //checking person
-            //if they are the same
-
-            if (selected_person.getFirstName().equals(new_person.getFirstName()) && selected_person.getLastName().equals(new_person.getLastName())) {
-
-                selectedCourse.setProfessor(selected_person);
-                System.out.println("The two people are the same");
-
-            } else {
-
-                selectedCourse.setProfessor(new_person);
-                System.out.println("Two people are different");
-
-            }
-            selectedCourse.setYEAR(Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()));
-            selectedCourse.setSEMESTER(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString());
-
-            selectedCourse.setResource(selected_resources);
-
-            DBManager.updateCourseAndPerson(selectedCourse);
-            DBManager.updateSemester(selectedCourse);
-
-            //add new relation between current resources in course instance and that course
-            DBManager.insertRelationCourseResources(selectedCourse);
+            controller.copyCourse(selectedCourse, tempCourse);
 
             if (!isClassInTheSameYear(selectedCourse)) {
                 courseList.remove(selectedCourse);

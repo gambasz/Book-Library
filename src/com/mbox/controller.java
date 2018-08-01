@@ -292,5 +292,21 @@ public class controller {
         }
         return arr;
     }
+
+    @NotNull
+    public static void copyCourse(Course selectedCourse, Course updated ) {
+
+        selectedCourse.setID(updated.getID());
+        selectedCourse.setTitle(updated.getTitle());
+        selectedCourse.setDescription(updated.getDescription());
+        selectedCourse.setDepartment(updated.getDepartment());
+
+        selectedCourse.setSEMESTER(updated.getSEMESTER());
+        selectedCourse.setYEAR(updated.getYEAR());
+
+        selectedCourse.setResource(updated.getResource());
+        selectedCourse.setProfessor(updated.getProfessor());
+
+    }
 }
 
