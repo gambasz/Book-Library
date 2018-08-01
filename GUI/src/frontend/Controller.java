@@ -1666,7 +1666,6 @@ public class Controller {
         Label profInfoTypeLbl = new Label(controller.stringAdjustment("First Name:*  ", " Type:* ") +
                 "    ");
 
-//        LimitedTextField profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
         profInfoFNameTf.setMaxLength(15);
         profInfoLNameTf.setMaxLength(15);
         ComboBox profInfoTypeCB = new ComboBox<>();
@@ -1685,10 +1684,11 @@ public class Controller {
         setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
         addProfessor.setOnMouseClicked(e -> {
             if (profInfoFName.getText() == null || profInfoFName.getText() == null || profInfoTypeCB.getSelectionModel().getSelectedItem() == null) {
-                showError("Invaild input", "please fill all the fields", "You must enter all the information to create a new professor");
+                showError("Invalid input", "please fill all the fields", "You must enter all the information to create a new professor");
                 e.consume();
             } else {
-                addNewProfessor(profInfoFNameTf.getText(), profInfoLNameTf.getText(), profInfoTypeCB.getSelectionModel().getSelectedItem().toString());
+                addNewProfessor(profInfoFNameTf.getText(), profInfoLNameTf.getText(),
+                        profInfoTypeCB.getSelectionModel().getSelectedItem().toString(), currentProfessors);
                 currentProfessors.getItems().clear();
                 currentProfessors.getItems().addAll(profList);
             }
@@ -1933,12 +1933,13 @@ public class Controller {
         });
     }
 
-    private void addNewProfessor(String firstName, String lastName, String type) {
+    private void addNewProfessor(String firstName, String lastName, String type, ComboBox currentProfessors) {
         Person tempNewPerson = new Person(lastName, firstName, type
         );
         profList.add(tempNewPerson);
         DBManager.insertPersonQuery(tempNewPerson);
-    }
+        currentProfessors.getSelectionModel().select(tempNewPerson);
+   }
 
     private void showPersonsResources(Person selectedItem) {
         VBox mainPane = new VBox();
