@@ -1940,7 +1940,7 @@ public class Controller {
 
                 ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
                         semester.getSelectionModel().getSelectedItem().toString(),
-                        "" + years.getSelectionModel().getSelectedItem());
+                        years.getSelectionModel().getSelectedItem().toString());
                 allResources.getItems().clear();
                 diffResources.getItems().clear();
                 if (allRequiredResources != null) {
