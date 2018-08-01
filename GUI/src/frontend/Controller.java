@@ -23,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -142,8 +141,6 @@ public class Controller {
 
         yearCB.getSelectionModel().select(new Integer(defaultSemest.getYear()));
         semester.getSelectionModel().select(controller.convertSeasonDBtoGUI(defaultSemest.getSeason()));
-
-
 
 
         mainPane.getChildren().
@@ -1880,18 +1877,22 @@ public class Controller {
         String title = selectedItem.getFirstName().concat(" ").concat(selectedItem.getLastName())
                 .concat(", ")
                 .concat(selectedItem.getType());
-        dlg.setTitle(title);
+
         final String defaultHeader = "Here are all the resources needed for " + selectedItem.getFirstName() + " " + selectedItem.getLastName();
-        dlg.setHeaderText(defaultHeader);
+
         ImageView icon = new ImageView(programeIconImg);
+
         icon.setFitHeight(75);
         icon.setFitWidth(75);
-        dlg.setGraphic(icon);
+
         ComboBox semester = new ComboBox();
         ComboBox years = new ComboBox();
+
         semester.getItems().addAll(semesterComBoxEdit.getItems());
         years.getItems().addAll(yearComBox.getItems());
+
         Button fillerResourcesBasedOnSemester = new Button("filter");
+
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
@@ -1909,7 +1910,9 @@ public class Controller {
             }
 
             ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem,
-                    "SUMMER_2","2018");
+                    "SUMMER_2", "2018");
+            semester.getSelectionModel().select(Semester.SUMMER_2);
+            years.getSelectionModel().select(new Integer(2018));
             if (allRequiredResources != null) {
                 allResources.getItems().addAll(allRequiredResources);
                 diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
@@ -1928,16 +1931,32 @@ public class Controller {
         Label professorSResourcesLbl = new Label(selectedItem.getLastName().concat("'s Resources"));
         Label resourcesLbl = new Label("Required Resources");
         Label diffResourcesLbl = new Label("Required Difference ");
-
+        final Person selectedPerson = selectedItem;
         fillerResourcesBasedOnSemester.setOnMouseClicked(e -> {
             if (semester.getSelectionModel().getSelectedItem() != null && years.getSelectionModel().getSelectedItem() != null) {
+
+
+                ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+                        semester.getSelectionModel().getSelectedItem().toString(),
+                        "" + years.getSelectionModel().getSelectedItem());
+                allResources.getItems().clear();
+                diffResources.getItems().clear();
+                if (allRequiredResources != null) {
+                    allResources.getItems().addAll(allRequiredResources);
+                    diffResources.getItems().addAll(DBManager.findDifferene(selectedPerson, allRequiredResources));
+                }
+
                 String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
                 semesterStr = semesterStr.replace('_', ' ').toLowerCase();
                 dlg.setHeaderText(defaultHeader
                         + " for " + semesterStr
                         + " in " + years.getSelectionModel().getSelectedItem()
                 );
+            } else {
+                System.out.println("Please select filter data");
             }
+
+
         });
 
         professorSResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
@@ -1964,12 +1983,28 @@ public class Controller {
             }
 
         }
+
         HBox semesterInfoComboBoxes = new HBox(20, semester, years, fillerResourcesBasedOnSemester);
-        mainPane.getChildren().addAll(semesterInfoComboBoxes, tablePane);
+
         semesterInfoComboBoxes.setAlignment(Pos.CENTER);
+
+        mainPane.getChildren().
+
+                addAll(semesterInfoComboBoxes, tablePane);
         mainPane.setAlignment(Pos.CENTER);
-        dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+
+        dlg.getDialogPane().
+
+                setContent(mainPane);
+        dlg.getDialogPane().
+
+                getButtonTypes().
+
+                addAll(ButtonType.CLOSE);
+        dlg.setTitle(title);
+        dlg.setHeaderText(defaultHeader);
+        dlg.setGraphic(icon);
+
         dlg.show();
 
     }
@@ -2356,7 +2391,7 @@ public class Controller {
 
         }
         if (checkBoxes[3]) {
-             askSemester();
+            askSemester();
 
         }
     }
