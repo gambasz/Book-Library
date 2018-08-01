@@ -306,7 +306,7 @@ public class Controller {
         semester = semester.replace('_', ' ');
         int semesterid = DBManager.getSemesterIDByName(semester, year);
 
-        semester_ids.addAll(DBManager.find_classids_by_semester_id(semesterid));
+        semester_ids.addAll(Objects.requireNonNull(DBManager.find_classids_by_semester_id(semesterid)));
 //        Boolean[] searchPattern = getSearchPattern(crnSearchTF, courseSearchTF, profSearchTF, departSearchTF, resourceSearchTF);
         if (!crnSearchTF.getText().isEmpty()) {
             commonid = crnSearchTF.getText();
@@ -1670,13 +1670,13 @@ public class Controller {
         ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button PersonResources = new Button("View Person's Resources");
         Button addProfessor = new Button("Add");
-        Button NAME_ME_SOMETHING_ELSE = new Button("Info");
+        Button infoBtn = new Button("Info");
 
         Button deleteBtn = new Button("Delete");
         Button updateBtn = new Button("Update");
 
 
-        setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
+        setChildVisibility(false, PersonResources, infoBtn, deleteBtn, updateBtn);
         addProfessor.setOnMouseClicked(e -> {
             if (profInfoFName.getText() == null || profInfoFName.getText() == null || profInfoTypeCB.getSelectionModel().getSelectedItem() == null) {
                 showError("Invalid input", "please fill all the fields", "You must enter all the information to create a new professor");
@@ -1688,7 +1688,7 @@ public class Controller {
                 currentProfessors.getItems().addAll(profList);
             }
         });
-        NAME_ME_SOMETHING_ELSE.setOnMouseClicked(e -> {
+        infoBtn.setOnMouseClicked(e -> {
             resourcePersonDiffView(currentProfessors.getSelectionModel().getSelectedItem());
         });
         currentProfessors.setOnAction(e -> {
@@ -1698,11 +1698,11 @@ public class Controller {
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
                 profInfoTypeCB.setValue(currentProfessors.getSelectionModel().getSelectedItem().getType());
 
-                setChildVisibility(true, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
+                setChildVisibility(true, PersonResources, infoBtn, deleteBtn, updateBtn);
 
 
             } else {
-                setChildVisibility(false, PersonResources, NAME_ME_SOMETHING_ELSE, deleteBtn, updateBtn);
+                setChildVisibility(false, PersonResources, infoBtn, deleteBtn, updateBtn);
 
 
             }
@@ -1726,7 +1726,7 @@ public class Controller {
         addGraphicToButtons(new ImageView(addIconImg), addProfessor);
         addGraphicToButtons(new ImageView(deleteIconImg), deleteBtn);
         String questionIconImg = "/frontend/media/question.png";
-        addGraphicToButtons(new ImageView(questionIconImg), NAME_ME_SOMETHING_ELSE);
+        addGraphicToButtons(new ImageView(questionIconImg), infoBtn);
 
         VBox hiddenOptionSContent = new VBox(20);
 
@@ -1747,7 +1747,7 @@ public class Controller {
         mainAddPane.getChildren().addAll(
                 new HBox(20, currentCBoxLbl, currentProfessors),
                 hiddenOptions,
-                new HBox(20, deleteBtn, NAME_ME_SOMETHING_ELSE, PersonResources)
+                new HBox(20, deleteBtn, infoBtn, PersonResources)
         );
         for (Object tempElem : mainAddPane.getChildren()) {
             if (tempElem instanceof HBox) {
@@ -1822,10 +1822,9 @@ public class Controller {
         icon.setFitHeight(75);
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
+        ComboBox<> semester = new ComboBox(semesterComBoxEdit.getItems());
+        ComboBox<> years = new ComboBox(yearComBox.getItems());
 
-        ArrayList<Resource> diffResArr = new ArrayList<>();
-
-        //TODO :: add naming consistency ---- Rajashow
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
@@ -1836,14 +1835,6 @@ public class Controller {
         try
 
         {
-// Do not delete this
-//            profResources.getItems().addAll(selectedPerson.getResources());
-//            allResources.getItems().addAll(resList);
-//            diffResArr.addAll( DBManager.getAllResourcesNeededForPerson(selectedItem));
-//            diffResArr.removeAll(selectedPerson.getResources());
-//            diffResources.getItems().addAll(diffResArr);
-
-
             com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
             selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
             if (selectedItem.getResources() != null) {
@@ -1862,7 +1853,7 @@ public class Controller {
 
         {
             if (debugging)
-                System.out.print(ex.getMessage());
+                ex.printStackTrace();
         }
 
 
@@ -1877,12 +1868,8 @@ public class Controller {
 
                 addAll(
                         new VBox(5, professorSResourcesLbl, profResources),
-                        new
-
-                                VBox(5, resourcesLbl, allResources),
-                        new
-
-                                VBox(5, diffResourcesLbl, diffResources)
+                        new VBox(5, resourcesLbl, allResources),
+                        new VBox(5, diffResourcesLbl, diffResources)
                 );
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setStyle("-fx-border-radius: 10px;");
