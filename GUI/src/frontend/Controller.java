@@ -1713,7 +1713,8 @@ public class Controller {
             }
         });
         deleteBtn.setOnAction(e -> {
-            deleteProfessor(currentProfessors.getSelectionModel().getSelectedItem());
+           selectedPerson = currentProfessors.getSelectionModel().getSelectedItem();
+            deleteProfessor();
             currentProfessors.getItems().clear();
             currentProfessors.getItems().addAll(profList);
 
@@ -1996,10 +1997,9 @@ public class Controller {
 
     }
 
-    private void deleteProfessor(Person selectedPerson) {
+    private void deleteProfessor() {
 
-
-        DBManager.delete_person_by_id(selectedPerson.getID());
+        DBManager.deletePersonEveyrwhere(selectedPerson);
         profList.remove(selectedPerson);
         selectedPerson = null;
         refreshTable();

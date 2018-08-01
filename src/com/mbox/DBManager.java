@@ -4126,45 +4126,36 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         }
     }
 
-    public static void delete_person_by_id(int id){
+    public static void deletePersonEveyrwhere(frontend.data.Person person){
 
-        ArrayList<Integer> commonids = new ArrayList<>();
+        ArrayList<Integer> commonIDs = new ArrayList<>();
 
         try{
 
             Statement state1 = conn.createStatement(); // get the commonids of that professor id
-            Statement state2 = conn.createStatement(); // delete those commonids from semester_course (listed as ID)
-            Statement state3 = conn.createStatement(); // delete commonids from relation_course_resources
-            Statement state4 = conn.createStatement(); // delete relation_course_person by personid
-            Statement state5 = conn.createStatement(); // delete relation_person_resources by personid
-            Statement state6 = conn.createStatement(); // delete person from PERSON table
 
-            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
+            ResultSet rs = state1.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d",
+                    person.getID()));
 
             while (rs.next()) {
-
-                commonids.add(rs.getInt("COMMONID"));
-
+                commonIDs.add(rs.getInt("COMMONID"));
             }
-
             rs.close();
+            state1.executeQuery("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = " + person.getID());
+            state1.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d",
+                    person.getID()));
 
             //deleting
+            for(Integer commonID : commonIDs) {
 
-            for(int i = 0; i < commonids.size(); i++) {
-                state2.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d", commonids.get(i)));
-                state3.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = %d", commonids.get(i)));
+                state1.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = %d", commonID));
+                state1.executeQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COMMONID = %d", commonID));
             }
 
-            state4.executeQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", id));
-            state5.executeQuery(String.format("DELETE FROM RELATION_PERSON_RESOURCES WHERE PERSONID = %d", id));
-            state6.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", id));
-
+            state1.executeQuery(String.format("DELETE FROM PERSON WHERE ID = %d", person.getID()));
 
         }catch(SQLException e){
-
-            System.out.println("Exception in the method delete_person_by_id()");
-
+            e.printStackTrace();
         }
 
 
