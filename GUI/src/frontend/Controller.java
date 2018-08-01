@@ -1812,7 +1812,9 @@ public class Controller {
 
     private void resourcePersonDiffView(Person selectedItem) {
         Dialog dlg = new Dialog();
-        HBox mainPane = new HBox();
+        HBox tablePane = new HBox();
+        VBox mainPane = new VBox(20);
+
         String title = selectedItem.getFirstName().concat(" ").concat(selectedItem.getLastName())
                 .concat(", ")
                 .concat(selectedItem.getType());
@@ -1822,8 +1824,10 @@ public class Controller {
         icon.setFitHeight(75);
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
-        ComboBox<> semester = new ComboBox(semesterComBoxEdit.getItems());
-        ComboBox<> years = new ComboBox(yearComBox.getItems());
+        ComboBox semester = new ComboBox();
+        ComboBox years = new ComboBox();
+        semester.getItems().addAll(semesterComBoxEdit.getItems());
+        years.getItems().addAll(yearComBox.getItems());
 
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
@@ -1864,17 +1868,17 @@ public class Controller {
         professorSResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         resourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         diffResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
-        mainPane.getChildren().
+        tablePane.getChildren().
 
                 addAll(
                         new VBox(5, professorSResourcesLbl, profResources),
                         new VBox(5, resourcesLbl, allResources),
                         new VBox(5, diffResourcesLbl, diffResources)
                 );
-        mainPane.setAlignment(Pos.CENTER);
-        mainPane.setStyle("-fx-border-radius: 10px;");
+        tablePane.setAlignment(Pos.CENTER);
+        tablePane.setStyle("-fx-border-radius: 10px;");
         for (
-                Node temp : mainPane.getChildren())
+                Node temp : tablePane.getChildren())
 
         {
             if (temp.getClass().equals(VBox.class)) {
@@ -1885,14 +1889,12 @@ public class Controller {
             }
 
         }
-        dlg.getDialogPane().
-
-                setContent(mainPane);
-        dlg.getDialogPane().
-
-                getButtonTypes().
-
-                addAll(ButtonType.CLOSE);
+        HBox semesterInfoComboBoxes = new HBox(20, semester, years);
+        mainPane.getChildren().addAll(semesterInfoComboBoxes, tablePane);
+        semesterInfoComboBoxes.setAlignment(Pos.CENTER);
+        mainPane.setAlignment(Pos.CENTER);
+        dlg.getDialogPane().setContent(mainPane);
+        dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
         dlg.show();
     }
 
