@@ -3963,6 +3963,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 resource.setID(rs2.getInt("ID"));
                 resource.setTYPE(rs2.getString("TYPE"));
                 resource.setTitle(rs2.getString("TITLE"));
+                resource.setEdition("EDITION");
                 resource.setAuthor(rs2.getString("AUTHOR"));
                 resource.setISBN(rs2.getString("ISBN"));
                 resource.setISBN13(rs2.getString("ISBN13"));
