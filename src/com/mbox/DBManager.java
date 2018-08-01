@@ -1,6 +1,7 @@
 package com.mbox;
 
 import frontend.data.PersonType;
+import javafx.scene.control.ComboBox;
 import oracle.jdbc.proxy.annotation.Pre;
 
 import java.io.*;
@@ -1347,8 +1348,6 @@ public class DBManager {
         ResultSet rss, rss2;
 
         int resourceID;
-        int i = 0;
-
         ArrayList<Resource> tempResourceList = new ArrayList<Resource>();
 
         try {
@@ -1362,12 +1361,6 @@ public class DBManager {
                 resourceID = rss.getInt(2);
                 rss2 = getResourceInTableQuery(resourceID).executeQuery();
                 while (rss2.next()) {
-                    // ID, Type, Title, Author, ISBN, total, current, desc
-//                    frontend.data.Resource tempRes = new frontend.data.Resource(rss2.getInt("ID"),
-//                            rss2.getString("ISBN"), rss2.getString("TYPE"),
-//                            rss2.getString("TITLE"), rss2.getString("AUTHOR"),
-//                            rss2.getString("DESCRIPTION"), rss2.getInt("TOTAL_AMOUNT"),
-//                            rss2.getInt("CURRENT_AMOUNT"));
                     Resource tempRes = new Resource(rss2.getInt(1), rss2.getString(2),
                             rss2.getString(3), rss2.getString(4), rss2.getString(5),
                             rss2.getInt(6), rss2.getInt(7), rss2.getString(8));
@@ -1377,20 +1370,15 @@ public class DBManager {
 
                         tempResourceList.add(tempRes);
 
-//                    //setPublisherForResource(resourcesList[i]);
-//                    setPublisherForResource(tempResourceList.get(i));
-
-                    i++;
                 }
             }
-            //person1.setResourcesPerson(resourcesList);
             person1.setResourceList(tempResourceList);
             return person1;
         } catch (SQLException err) {
             err.printStackTrace();
+            return null;
+
         }
-        // Adding the list of the resources to the person object
-        return null;
     }
 
 
@@ -1399,7 +1387,6 @@ public class DBManager {
         ResultSet rs;
         int resourceID = 0,
                 i = 0, before = -1;
-        //Resource[] resourcesList = new Resource[20];
         ArrayList<Resource> listResources = new ArrayList<Resource>();
 
         try {
@@ -2497,7 +2484,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
     public static ArrayList<frontend.data.Resource> getResourceFromTable() {
-        DBManager DB = new DBManager();
         ArrayList<frontend.data.Resource> arr = new ArrayList<>();
         try {
 
@@ -3240,9 +3226,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
 
-    public static String exportCSVCourseResources() {
-        ArrayList<Course> allCourses = getCourseFromTable();
+    public static String exportCSVCourseResources(ComboBox season, ComboBox year) {
+        int semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(season.getSelectionModel().getSelectedItem().toString()),
+                year.getSelectionModel().getSelectedItem().toString());
+        ArrayList<frontend.data.Course> allCourses = returnEverything2(semesterID);
         StringBuilder sb = new StringBuilder();
+
         sb.append("id,");
         sb.append("Title,");
         sb.append("Description,");
@@ -3250,8 +3239,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         sb.append("Resources -->");
         sb.append('\n');
 
-        for (Course course : allCourses) {
-            course.setResourceInstances(findResourcesCourseAvoidRepetitive(course.getID()));
+        for (frontend.data.Course course : allCourses) {
             sb.append(course.getID());
             sb.append(",");
             sb.append(course.getTitle());
@@ -3260,7 +3248,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(course.getDepartment());
             sb.append(",");
-            for (Resource resource : course.getResourceInstances()) {
+            for (frontend.data.Resource resource : course.getResource()) {
                 sb.append(resource.getTitle());
                 sb.append(",");
             }
@@ -3311,6 +3299,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         sb.append("Title,");
         sb.append("Author,");
         sb.append("ISBN,");
+        sb.append("ISBN13,");
+        sb.append("Edition,");
         sb.append("Total amount,");
         sb.append("Current amount,");
         sb.append("Description,");
@@ -3329,6 +3319,10 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(resource.getISBN());
             sb.append(",");
+            sb.append(resource.getISBN13());
+            sb.append(",");
+            sb.append(resource.getEdition());
+            sb.append(",");
             sb.append(resource.getTotalAmount());
             sb.append(",");
             sb.append(resource.getCurrentAmount());
@@ -3346,9 +3340,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static String exportCSVPersonResources() {
         ArrayList<Person> allPerson = getPersonFromTable();
-
-//        PrintWriter pw = new PrintWriter(new File("Course_Resources.csv"));
         StringBuilder sb = new StringBuilder();
+
         sb.append("id,");
         sb.append("First Name,");
         sb.append("Last Name,");
@@ -3372,7 +3365,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return sb.toString();
     }
 
-    public static ArrayList<frontend.data.Resource> getAllResourcesNeededForPerson(frontend.data.Person person) {
+    public static ArrayList<frontend.data.Resource> getAllResourcesNeededForPerson(frontend.data.Person person,
+                                                                                   String semester, String year) {
+        int semesterID = getSemesterIDByName(controller.convertSeasonGUItoDB(semester), year);
 
         //GO to person-course, get a list of commonids of the courses being teached by the person
         ResultSet rss, rs, rs3;
@@ -3384,10 +3379,18 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try {
             Statement st = conn.createStatement();
             Statement st2 = conn.createStatement();
-            Statement st3 = conn.createStatement();
+            PreparedStatement stl;
+            String query = "SELECT * FROM RELATION_COURSE_PERSON cp " +
+                    "INNER JOIN RELATION_SEMESTER_COURSE sc " +
+                    "ON sc.SEMESTERID = ? " +
+                    "AND sc.ID = cp.COMMONID AND cp.PERSONID = ? ";
 
-            rss = st.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = '%d'",
-                    person.getID()));
+            stl = conn.prepareStatement(query);
+            stl.setInt(1, semesterID);
+            stl.setInt(2, person.getID());
+
+
+            rss = stl.executeQuery();
             while (rss.next()) {
                 commonID = (rss.getInt("COMMONID"));
                 rs = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE COMMONID = '%d' ORDER BY RESOURCEID ASC",
@@ -3972,6 +3975,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 resource.setTitle(rs2.getString("TITLE"));
                 resource.setAuthor(rs2.getString("AUTHOR"));
                 resource.setISBN(rs2.getString("ISBN"));
+                resource.setISBN13(rs2.getString("ISBN13"));
                 resource.setTotalAmount(rs2.getInt("TOTAL_AMOUNT"));
                 resource.setCurrentAmount(rs2.getInt("CURRENT_AMOUNT"));
                 resource.setDescription(rs2.getString("DESCRIPTION"));

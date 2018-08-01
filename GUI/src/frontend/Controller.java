@@ -23,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -114,6 +115,67 @@ public class Controller {
         alert.setContentText(errorMessage);
 
         alert.showAndWait();
+    }
+
+    private final ArrayList<ComboBox> askSemester() {
+        Dialog dlg = new Dialog();
+        HBox mainPane = new HBox();
+        ArrayList<ComboBox> returnedList = new ArrayList<ComboBox>();
+        dlg.setTitle("Choose a semester for Course_Resources");
+        dlg.setHeaderText("Please choose a semester for exporting Course Resources data!");
+        ImageView icon = new ImageView(programeIconImg);
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+
+        Label semesterLB = new Label("Choose a semester   ");
+        ComboBox semester = new ComboBox();
+        ComboBox<Integer> yearCB = new ComboBox<Integer>();
+        ArrayList<Integer> year = new ArrayList<>();
+        ButtonType next = new ButtonType("Next", ButtonBar.ButtonData.NEXT_FORWARD);
+
+
+        semester.getItems().addAll(Semester.values());
+        for (int i = Calendar.getInstance().get(Calendar.YEAR) - 1; i < Calendar.getInstance().get(Calendar.YEAR) + 2; i++)
+            year.add(i);
+        yearCB.getItems().addAll(year);
+
+        yearCB.getSelectionModel().select(new Integer(defaultSemest.getYear()));
+        semester.getSelectionModel().select(controller.convertSeasonDBtoGUI(defaultSemest.getSeason()));
+
+
+
+
+        mainPane.getChildren().
+
+                addAll(
+                        new VBox(semesterLB),
+                        new VBox(10, semester),
+                        new VBox(10, yearCB)
+                );
+        returnedList.add(yearCB);
+        returnedList.add(semester);
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setStyle("-fx-border-radius: 10px;");
+
+        dlg.getDialogPane().
+
+                setContent(mainPane);
+        dlg.getDialogPane().
+
+                getButtonTypes().
+
+                addAll(next);
+
+        dlg.show();
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == next) {
+                File exportFile = pickSaveFile("All Courses with Resources");
+                saveFile(DBManager.exportCSVCourseResources(semester, yearCB), exportFile);
+            }
+            return null;
+        });
+        return returnedList;
     }
 
 
@@ -1846,7 +1908,8 @@ public class Controller {
                 profResources.getItems().addAll(selectedItem.getResources());
             }
 
-            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem);
+            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem,
+                    "SUMMER_2","2018");
             if (allRequiredResources != null) {
                 allResources.getItems().addAll(allRequiredResources);
                 diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
@@ -2234,12 +2297,15 @@ public class Controller {
         Boolean[] checkBoxes = new Boolean[4];
 
         CheckBox pubInfo = new CheckBox("All Publisher Info");
-        CheckBox resNPubInfo = new CheckBox("  All the resources data, associate with publisher");
+        CheckBox resNPubInfo = new CheckBox("All the resources data, associate with publisher");
         CheckBox personWResInfo = new CheckBox("All the Person with resources associated");
         CheckBox courseWResInfo = new CheckBox(" All the courses with resources associated.");
 
-
+        String exportIconImg = "/frontend/media/export.png";
+        ImageView exportImg = new ImageView(exportIconImg);
         Button exportNSave = new Button("Export");
+        addGraphicToButtons(exportImg, exportNSave);
+
         exportNSave.setOnAction(e -> {
             checkBoxes[0] = pubInfo.isSelected();
             checkBoxes[1] = resNPubInfo.isSelected();
@@ -2290,8 +2356,7 @@ public class Controller {
 
         }
         if (checkBoxes[3]) {
-            File exportFile = pickSaveFile("All Courses with Resources");
-            saveFile(DBManager.exportCSVCourseResources(), exportFile);
+             askSemester();
 
         }
     }
