@@ -100,9 +100,6 @@ public class Controller {
      */
     private void test() {
         System.out.println("The program started running now!");
-        for (Node n : courseInfoDepart.getChildrenUnmodifiable()) {
-            System.out.println(n + " 125");
-        }
 
     }
 
@@ -406,8 +403,6 @@ public class Controller {
                 coursename_full = true;
             coursename = cSplit[1];
             courseCode = cSplit[0].toUpperCase();
-            System.out.println("Course code: " + courseCode);
-            System.out.println("Course name: " + coursename);
 
 
             ids_from_coursename = DBManager.find_classids_by_course_name(courseCode, coursename);
@@ -549,10 +544,8 @@ public class Controller {
             }
 
         } else {
-
-            System.out.println("IDK whats going on m8");
+            showError("IDK M8", "IDK What is going on", "IDK");
         }
-
         courseList.clear();
         courseList.addAll(tmp_courses);
         updateCourseTable();
@@ -747,7 +740,6 @@ public class Controller {
                         final int index = row.getIndex();
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
-                            System.out.println("Deselect, isSelected is false");
                             selectedPublisher = null;
                             event.consume();
                             if (table.equals(tableTV)) {
@@ -1021,11 +1013,9 @@ public class Controller {
 
     private void deletePublisher(Publisher publisher, LimitedTextField nameTF, LimitedTextField contacTF,
                                  LimitedTextField descripTF, ComboBox<Publisher> publisherComboBox) {
-        System.out.println("This is pubID" + publisher.getID());
         if (publisher.getID() == 0) {
             showError("Error", "Missing Publisher", "Please choose publisher in the box");
         } else {
-            System.out.println("Publisher should be deleted, write the method");
             DBManager.deletePublisherInDB(publisher);
 
             resourceTable.getItems().clear();
@@ -1158,7 +1148,7 @@ public class Controller {
 
         } catch (Exception ex) {
             if (debugging) {
-                System.out.print("Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                showError("Resouse data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -1394,7 +1384,6 @@ public class Controller {
                     && selectedResource.getISBN().equals(isbn) && selectedResource.getISBN13().equals(isbn13)
                     && selectedResource.getTotalAmount() == (new_total) && selectedResource.getDescription().equals(new_descrip)
                     && selectedResource.getEdition().equals(new_edition)) {
-                System.out.println("Everything is the same, no change, so do nothing");
                 DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
                 selectedResource.setPublisher(selectedPublisher);
                 tempResArr.add(selectedResource);
@@ -1405,12 +1394,10 @@ public class Controller {
                 tempRes.setEdition(new_edition);
                 selectedResource = tempRes.initResourceGUI();
                 DBManager.updateResource(tempRes);
-                System.out.println("Updated resource with ID: " + selectedResource.getID());
                 DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
                 selectedResource.setPublisher(selectedPublisher);
                 tempResArr.add(selectedResource);
             }
-            System.out.println("Publisher  now is " + selectedPublisher);
             resourceTable.getItems().clear();
             resourceTable.getItems().addAll(tempResArr);
             //check if this resource and publisher already had relation or not, delete the old one and add the new one
@@ -1751,7 +1738,7 @@ public class Controller {
             resourcePersonDiffView(currentProfessors.getSelectionModel().getSelectedItem());
         });
         currentProfessors.setOnAction(e -> {
-            System.out.println(currentProfessors.getSelectionModel().getSelectedItem());
+
             if (currentProfessors.getSelectionModel().getSelectedItem() != null) {
                 profInfoFNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getFirstName());
                 profInfoLNameTf.setText(currentProfessors.getSelectionModel().getSelectedItem().getLastName());
@@ -1775,10 +1762,8 @@ public class Controller {
         });
         updateBtn.setOnMouseClicked(e -> updateProfessor(currentProfessors, profInfoFNameTf, profInfoLNameTf, profInfoTypeCB));
         PersonResources.setOnAction(e -> {
-            // When the opening resources for person view button pressed
             ArrayList<Resource> tempRes = new ArrayList<>(resList);
             isPersonResourcesView = true;
-            System.out.print(tempRes);
             currentProfessors.getSelectionModel().getSelectedItem().setResources(tempRes);
             showPersonsResources(currentProfessors.getSelectionModel().getSelectedItem());
         });
@@ -1869,16 +1854,16 @@ public class Controller {
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
-    private void resourcePersonDiffView(Person selectedItem) {
+    private void resourcePersonDiffView(Person selectedPerson) {
         Dialog dlg = new Dialog();
         HBox tablePane = new HBox();
         VBox mainPane = new VBox(20);
 
-        String title = selectedItem.getFirstName().concat(" ").concat(selectedItem.getLastName())
+        String title = selectedPerson.getFirstName().concat(" ").concat(selectedPerson.getLastName())
                 .concat(", ")
-                .concat(selectedItem.getType());
+                .concat(selectedPerson.getType());
 
-        final String defaultHeader = "Here are all the resources needed for " + selectedItem.getFirstName() + " " + selectedItem.getLastName();
+        final String defaultHeader = "Here are all the resources needed for " + selectedPerson.getFirstName() + " " + selectedPerson.getLastName();
 
         ImageView icon = new ImageView(programeIconImg);
 
@@ -1902,51 +1887,37 @@ public class Controller {
         setCellFactoryForProfDiffvView(allResources);
         setCellFactoryForProfDiffvView(diffResources);
 
-        try
 
-        {
-            com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
-            selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
-            if (selectedItem.getResources() != null) {
-                profResources.getItems().addAll(selectedItem.getResources());
-            }
-
-            ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedItem,
-                    semester.getSelectionModel().getSelectedItem().toString(),
-                    years.getSelectionModel().getSelectedItem().toString());
-
-            if (allRequiredResources != null) {
-                allResources.getItems().addAll(allRequiredResources);
-                diffResources.getItems().addAll(DBManager.findDifferene(selectedItem, allRequiredResources));
-            }
+        ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+                semester.getSelectionModel().getSelectedItem().toString(),
+                years.getSelectionModel().getSelectedItem().toString());
+        profResources.getItems().addAll(selectedPerson.getResources());
+        allResources.getItems().addAll(allRequiredResources);
+        diffResources.getItems().addAll(allRequiredResources);
+        diffResources.getItems().removeAll(selectedPerson.getResources());
 
 
-        } catch (
-                Exception ex)
-
-        {
-            if (debugging)
-                ex.printStackTrace();
-        }
-
-
-        Label professorSResourcesLbl = new Label(selectedItem.getLastName().concat("'s Resources"));
+        Label professorSResourcesLbl = new Label(selectedPerson.getLastName().concat("'s Resources"));
         Label resourcesLbl = new Label("Required Resources");
         Label diffResourcesLbl = new Label("Required Difference ");
-        final Person selectedPerson = selectedItem;
         fillerResourcesBasedOnSemester.setOnMouseClicked(e -> {
             if (semester.getSelectionModel().getSelectedItem() != null && years.getSelectionModel().getSelectedItem() != null) {
 
 
-                ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+                ArrayList<Resource> allRequiredResourcesRePulled = DBManager.getAllResourcesNeededForPerson(selectedPerson,
                         semester.getSelectionModel().getSelectedItem().toString(),
                         years.getSelectionModel().getSelectedItem().toString());
+
                 allResources.getItems().clear();
                 diffResources.getItems().clear();
-                if (allRequiredResources != null) {
-                    allResources.getItems().addAll(allRequiredResources);
-                    diffResources.getItems().addAll(DBManager.findDifferene(selectedPerson, allRequiredResources));
-                }
+
+                System.out.println("All Res :This must be empty" + allResources.getItems());
+                System.out.println("diff Res :This must be empty" + diffResources.getItems());
+
+                allResources.getItems().addAll(allRequiredResourcesRePulled);
+                diffResources.getItems().addAll(allRequiredResourcesRePulled);
+                diffResources.getItems().removeAll(selectedPerson.getResources());
+
 
                 String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
                 semesterStr = semesterStr.replace('_', ' ').toLowerCase();
@@ -2004,7 +1975,12 @@ public class Controller {
 
                 addAll(ButtonType.CLOSE);
         dlg.setTitle(title);
-        dlg.setHeaderText(defaultHeader);
+        String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
+        semesterStr = semesterStr.replace('_', ' ').toLowerCase();
+        dlg.setHeaderText(defaultHeader
+                + " for " + semesterStr
+                + " in " + years.getSelectionModel().getSelectedItem()
+        );
         dlg.setGraphic(icon);
 
         dlg.show();
@@ -2439,7 +2415,6 @@ public class Controller {
             semester = semester.substring(0, 1).toUpperCase() + semester.substring(1);
             semester = semester.replace('_', ' ');
             int semesterid = DBManager.getSemesterIDByName(semester, year);
-            System.out.println(String.format("Semester: %s  id found: %d", semester, semesterid));
             courseList = DBManager.returnEverything2(semesterid);
         }
         updateCourseTable();
