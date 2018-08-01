@@ -2734,12 +2734,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         return arr;
     }
 
-    public static void delete_relation_course(frontend.data.Course c) {
+    public static void delete_relation_course(frontend.data.Course course) {
 
         try {
-            int commonID = c.getCommonID();
+            int commonID = course.getCommonID();
             Statement st = conn.createStatement();
-
 
 
                 st.executeQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE ID = " +
@@ -2751,9 +2750,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
 
         } catch (SQLException e) {
-
-            System.out.println("Something went wrong when trying to delete resources");
-
+            e.printStackTrace();
         }
     }
 
