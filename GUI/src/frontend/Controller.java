@@ -1819,7 +1819,8 @@ public class Controller {
                 .concat(", ")
                 .concat(selectedItem.getType());
         dlg.setTitle(title);
-        dlg.setHeaderText("Here are all the resources needed for " + selectedItem.getFirstName() + " " + selectedItem.getLastName());
+        final String defaultHeader = "Here are all the resources needed for " + selectedItem.getFirstName() + " " + selectedItem.getLastName();
+        dlg.setHeaderText(defaultHeader);
         ImageView icon = new ImageView(programeIconImg);
         icon.setFitHeight(75);
         icon.setFitWidth(75);
@@ -1828,7 +1829,7 @@ public class Controller {
         ComboBox years = new ComboBox();
         semester.getItems().addAll(semesterComBoxEdit.getItems());
         years.getItems().addAll(yearComBox.getItems());
-
+        Button fillerResourcesBasedOnSemester = new Button("filter");
         ListView<Resource> profResources = new ListView<>();
         ListView<Resource> allResources = new ListView<>();
         ListView<Resource> diffResources = new ListView<>();
@@ -1865,6 +1866,17 @@ public class Controller {
         Label resourcesLbl = new Label("Required Resources");
         Label diffResourcesLbl = new Label("Required Difference ");
 
+        fillerResourcesBasedOnSemester.setOnMouseClicked(e -> {
+            if (semester.getSelectionModel().getSelectedItem() != null && years.getSelectionModel().getSelectedItem() != null) {
+                String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
+                semesterStr = semesterStr.replace('_', ' ').toLowerCase();
+                dlg.setHeaderText(defaultHeader
+                        + " for " + semesterStr
+                        + " in " + years.getSelectionModel().getSelectedItem()
+                );
+            }
+        });
+
         professorSResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         resourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
         diffResourcesLbl.setStyle("-fx-text-fill: white;-fx-font-weight: bold;");
@@ -1889,13 +1901,14 @@ public class Controller {
             }
 
         }
-        HBox semesterInfoComboBoxes = new HBox(20, semester, years);
+        HBox semesterInfoComboBoxes = new HBox(20, semester, years, fillerResourcesBasedOnSemester);
         mainPane.getChildren().addAll(semesterInfoComboBoxes, tablePane);
         semesterInfoComboBoxes.setAlignment(Pos.CENTER);
         mainPane.setAlignment(Pos.CENTER);
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
         dlg.show();
+
     }
 
     private void setCellFactoryForProfDiffvView(ListView<Resource> diffListview) {
