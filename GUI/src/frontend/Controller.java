@@ -1888,8 +1888,8 @@ public class Controller {
         ComboBox semester = new ComboBox();
         ComboBox years = new ComboBox();
 
-        semester.getItems().addAll(semesterComBoxEdit.getItems());
-        semester.getSelectionModel().select(semesterComBoxEdit.getSelectionModel().getSelectedItem());
+        semester.getItems().addAll(semesterComBox.getItems());
+        semester.getSelectionModel().select(semesterComBox.getSelectionModel().getSelectedItem());
         years.getItems().addAll(yearComBox.getItems());
         years.getSelectionModel().select(yearComBox.getSelectionModel().getSelectedItem());
 
