@@ -2755,6 +2755,7 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
     }
 
     public static void delete_course(frontend.data.Course c) {
+
         executeNoReturnQuery(String.format("DELETE FROM RELATION_SEMESTER_COURSE WHERE COURSEID = %d", c.getID()));
         executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_PERSON WHERE COURSEID = %d", c.getID()));
         executeNoReturnQuery(String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE COURSEID = %d",
@@ -2762,9 +2763,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         executeNoReturnQuery(String.format("DELETE FROM COURSECT WHERE ID = %d", c.getID()));
     }
 
-    //todo (GUIDO):
-    // Delete method person
-    // put delete method (course in gui)
 
 
     public static void delete_person(frontend.data.Person p) {

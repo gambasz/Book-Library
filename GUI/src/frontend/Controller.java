@@ -2033,9 +2033,9 @@ public class Controller {
         LimitedTextField tileTf = new LimitedTextField(), descriptionTf = new LimitedTextField(),
                 departmentTf = new LimitedTextField();
 
-        tileTf.setPromptText("EG. CMSC 140");
-        descriptionTf.setPromptText("EG. Intro To Programming");
-        departmentTf.setPromptText("EG. Computer Science");
+        tileTf.setPromptText("e.g., CMSC 140");
+        descriptionTf.setPromptText("e.g., Intro To Programming");
+        departmentTf.setPromptText("e.g., Computer Science");
 
         tileTf.setMaxLength(8);
         descriptionTf.setMaxLength(64);
@@ -2157,9 +2157,7 @@ public class Controller {
 
         DBManager.delete_course(selectedCourseTemplate);
         templateList.remove(selectedCourseTemplate);
-        courseList.remove(selectedCourseTemplate);
         selectedCourseTemplate = null;
-//        semesterComBoxEdit.get
         refreshTable();
 
 
