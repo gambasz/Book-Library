@@ -1452,7 +1452,7 @@ public class Controller {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
-            Publisher tempPub = selectedPublisher;
+
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
                     controller.capitalizeString(titleTF.getText()),
                     controller.capitalizeString(authorTF.getText()),
@@ -1468,7 +1468,7 @@ public class Controller {
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
 
             if (!isPersonResourcesView) {
-                selectedPublisher = tempPub;
+//                selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
@@ -1478,7 +1478,7 @@ public class Controller {
                 // Add method for person resources
 
                 resourceTable.getItems().add(temp);
-                selectedPublisher = tempPub;
+//                selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
                 DBManager.insertRelationResourcePublisher(temp);
@@ -2020,6 +2020,7 @@ public class Controller {
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
         }
+
 
         resourceTitlePane.setContent(resourceEditPane);
         resourceTitlePane.setText("Resource Details and Management");

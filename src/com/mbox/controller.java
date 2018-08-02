@@ -255,6 +255,7 @@ public class controller {
         }
         catch (Exception e){
             e.printStackTrace();
+            result = s;
         }
         return result;
 
@@ -312,9 +313,7 @@ public class controller {
 
     public static ArrayList<Image> tutorialImages() {
         ArrayList<Image> images = new ArrayList<>();
-//        images.add(new Image("frontend/media/search.png"));
-//        images.add(new Image("frontend/media/icon.png"));
-//        images.add(new Image("frontend/media/testGif.gif"));
+
         images.add(new Image("frontend/media/firstView.png"));
         images.add(new Image("frontend/media/courseView.png"));
         images.add(new Image("frontend/media/profView.png"));
