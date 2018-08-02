@@ -2133,8 +2133,8 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             Statement st = conn.createStatement();
             int resourceID = 0;
 
-            String queryl = String.format("SELECT * FROM RESOURCES WHERE TITLE = ? AND AUTHOR = ? AND " +
-                            "EDITION = ? AND TYPE = ? ");
+            String queryl = String.format("SELECT * FROM RESOURCES WHERE UPPER(TITLE) = UPPER(?) AND UPPER(AUTHOR) = " +
+                    "UPPER(?) AND EDITION = ? AND TYPE = ? ");
             PreparedStatement stl = conn.prepareStatement(queryl);
             stl.setString(1, resource.getTitle());
             stl.setString(2, resource.getAuthor());
@@ -2142,9 +2142,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             stl.setString(4, resource.getTYPE());
 
 
-//            String query = String.format("SELECT * FROM RESOURCES WHERE TITLE='%s' AND AUTHOR ='%s' AND " +
-//                            "EDITION = '%s' AND TYPE = '%s' ", resource.getTitle(), resource.getAuthor(), resource.getEdition(),
-//                    resource.getTYPE());
 
             ResultSet rs = stl.executeQuery();
 
@@ -2178,9 +2175,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
                 rs = stl.executeQuery();
 
-//                rs = st.executeQuery(String.format("SELECT * FROM RESOURCES WHERE TITLE='%s'  AND AUTHOR ='%s' AND " +
-//                                "EDITION = '%s' AND TYPE = '%s' ",
-//                        tempRes.getTitle(), tempRes.getAuthor(), tempRes.getEdition(), tempRes.getType()));
                 if (rs.next()) {
                     resourceID = rs.getInt(1);
                     resource.setID(resourceID);

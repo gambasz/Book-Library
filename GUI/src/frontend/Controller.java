@@ -1483,7 +1483,7 @@ public class Controller {
         } else {
 
             idTF.setText("0");
-            Publisher tempPub = selectedPublisher;
+//            Publisher tempPub = selectedPublisher;
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
                     controller.capitalizeString(titleTF.getText()),
                     controller.capitalizeString(authorTF.getText()),
@@ -1499,7 +1499,7 @@ public class Controller {
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
 
             if (!isPersonResourcesView) {
-                selectedPublisher = tempPub;
+//                selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
@@ -1509,7 +1509,7 @@ public class Controller {
                 // Add method for person resources
 
                 resourceTable.getItems().add(temp);
-                selectedPublisher = tempPub;
+//                selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
                 DBManager.insertRelationResourcePublisher(temp);
@@ -2055,7 +2055,7 @@ public class Controller {
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
         }
-        //updateRowSelected();
+//        updateRowSelected();
 
 
         resourceTitlePane.setContent(resourceEditPane);
