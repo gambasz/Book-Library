@@ -1157,7 +1157,7 @@ public class Controller {
 
         } catch (Exception ex) {
             if (debugging) {
-                showError("Resouse data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                showError("Resource data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -1258,33 +1258,9 @@ public class Controller {
         dlg.show();
 
 
-//        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-//
-//            int numberOfElement = 0;
-//
-//            @Override
-//            public void handle(ActionEvent event) {
-//                if (!images.isEmpty()) {
-//                    if (numberOfElement < images.size()) {
-//                        img.setImage(images.get(numberOfElement));
-//                        numberOfElement++;
-//                    } else {
-//                        numberOfElement = 0;
-//                    }
-//                } else {
-//                    title.setText("Nothing here add images");
-//                }
-//
-//
-//            }
-//        }));
-//        timer.setCycleCount(Timeline.INDEFINITE);
-//        timer.play();
-
         dlg.setResultConverter(dialogButton ->
 
         {
-//            timer.stop();
             return null;
         });
 
@@ -1673,11 +1649,7 @@ public class Controller {
             dlg.setResultConverter(dialogButton -> {
                 if (dialogButton == assign) {
 
-                    if (selectedCourse != null) {
-//                        selectedCourse.getResource().clear();
-//                        selectedCourse.getResource().addAll(resourceTable.getItems());
-//                        updateCourseTable();
-                    }
+
                     resInfoList.getItems().clear();
                     for (Resource r : resourceTable.getItems())
                         resInfoList.getItems().add(r.getTitle());
