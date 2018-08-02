@@ -1266,8 +1266,7 @@ public class Controller {
     }
 
     private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField
-            isbn10TF,
-                                          TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
+            isbn10TF, TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
                                           TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
                                           ComboBox<String> editionCB, Button addNAssignNewResource, Button update,
                                           Button delete) {
@@ -1391,8 +1390,7 @@ public class Controller {
             }
             resourceTable.getItems().clear();
             resourceTable.getItems().addAll(tempResArr);
-            //check if this resource and publisher already had relation or not, delete the old one and add the new one
-            // what if there is no publisher yet? the publisherID should be 0
+
         }
         refreshTable();
     }
@@ -1404,20 +1402,9 @@ public class Controller {
 
         ArrayList<Resource> temp = new ArrayList<>(resourceTable.getSelectionModel().getSelectedItems());
         for (Resource r : temp) {
-//            resList.remove(r);
             resourceTable.getItems().remove(r);
-//            resInfoList.getItems().remove(r.getTitle());
 
-//            if (!isPersonResourcesView)
-//                if (selectedCourse != null) {
-//                    selectedCourse.getResource().remove(r);
-//                } else {
-//                    if (selectedCourse != null) {
-//                        selectedPerson.getResources().remove(r);
-//                    }
-//                }
         }
-//        updateCourseTable();
         onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF,
                 isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
                 addNAssignNewResource, update, delete);
@@ -2331,10 +2318,7 @@ public class Controller {
         dlg.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
 
         dlg.show();
-        dlg.setResultConverter(dialogButton -> {
-
-            return null;
-        });
+        dlg.setResultConverter(dialogButton -> null);
 
 
     }
@@ -2350,7 +2334,6 @@ public class Controller {
         }
         if (checkBoxes[2]) {
             File exportFile = pickSaveFile("All Persons with Resources");
-            //todo:: modifity this for person with resources
             saveFile(DBManager.exportCSVPersonResources(), exportFile);
 
         }
@@ -2369,21 +2352,21 @@ public class Controller {
         File file = fileChooser.showSaveDialog(null);
 
 
-        if (file != null) {
-            return file;
-        }
-        return null;
+        return file;
     }
 
     private void saveFile(String content, File file) {
-        try {
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(content);
-            fileWriter.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (file != null) {
 
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(content);
+                fileWriter.close();
+
+            } catch (IOException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void importData() {
