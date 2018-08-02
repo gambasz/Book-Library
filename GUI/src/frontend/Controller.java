@@ -605,16 +605,6 @@ public class Controller {
 
         if (selectedCourse != null && courseList != null)
             tableTV.getSelectionModel().select(controller.searchForCourse(selectedCourse, courseList));
-
-
-//            for (Course c : tableTV.getItems()) {
-//                if (c.getCommonID() == selectedCourse.getCommonID()) {
-//                    tableTV.getSelectionModel().select(c);
-//                    break;
-//                }
-//            }
-
-
     }
 
     /**
@@ -1250,20 +1240,16 @@ public class Controller {
 
             }
         });
-
+        ButtonType closeBtnTy = ButtonType.CLOSE;
         dlg.getDialogPane().setContent(mainPane);
-        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.getDialogPane().getButtonTypes().add(closeBtnTy);
         dlg.setHeight(1000);
         dlg.setResizable(true);
         dlg.setWidth(1200);
         dlg.show();
-
-
-        dlg.setResultConverter(dialogButton ->
-
-        {
-            return null;
-        });
+        Button closeBtn = (Button) dlg.getDialogPane().lookupButton(closeBtnTy);
+        closeBtn.setVisible(false);
+        dlg.setResultConverter(dialogButton -> null);
 
     }
 
@@ -1457,17 +1443,14 @@ public class Controller {
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
 
             if (!isPersonResourcesView) {
-//                selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 resList.add(temp);
                 resourceTable.getItems().add(temp);
                 DBManager.insertRelationResourcePublisher(temp);
 
             } else {
-                // Add method for person resources
 
                 resourceTable.getItems().add(temp);
-//                selectedPublisher = tempPub;
                 DBManager.setIDforResource(temp);
                 selectedPerson.getResources().add(temp);
                 DBManager.insertRelationResourcePublisher(temp);
@@ -2035,7 +2018,7 @@ public class Controller {
 
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
-//                selectedPerson.setResources(resourceTable.getItems().toArray());
+
                 DBManager.insertPersonResources(selectedPerson);
 
                 return null;
