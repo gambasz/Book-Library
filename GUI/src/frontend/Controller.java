@@ -177,11 +177,9 @@ public class Controller {
     @FXML
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
-        try
-        {
+        try {
             DBManager.openConnection();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
@@ -755,10 +753,7 @@ public class Controller {
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
                             selectedPublisher = null;
-                            event.consume();
-                            if (table.equals(tableTV)) {
-                                updateRowSelected();
-                            }
+
                         }
                     }
                 });
@@ -1073,7 +1068,7 @@ public class Controller {
         Label type = new Label("Type:*     ");
         Label publisher = new Label("Publisher:* ");
         LimitedTextField titleTF = new LimitedTextField(), authorTF = new LimitedTextField(),
-                idTF = new LimitedTextField(), totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
+                totalAmTF = new LimitedTextField(), isbn10TF = new LimitedTextField(),
                 isbn13TF = new LimitedTextField(), currentAmTF = new LimitedTextField(),
                 descriptionTF = new LimitedTextField();
 
@@ -1091,7 +1086,6 @@ public class Controller {
         titleTF.setMaxLength(250);
 
         authorTF.setMaxLength(250);
-        idTF.setMaxLength(8);
         totalAmTF.setMaxLength(6);
         currentAmTF.setMaxLength(6);
         isbn10TF.setMaxLength(10);
@@ -1114,23 +1108,23 @@ public class Controller {
         Button searchBtn = new Button("Search");
 
         autoFillBtn.setOnAction(e -> {
-            selectResourceTemplates(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+            selectResourceTemplates(titleTF, authorTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
                     publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
 
         });
 
         addNAssignNewResource.setOnAction(e -> {
-            addAndAssignNewResource(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+            addAndAssignNewResource(titleTF, authorTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
                     typeCB, editionCB);
         });
 
         delete.setOnAction(e -> {
-            deleteResource(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+            deleteResource(titleTF, authorTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
                     publisherBtn, typeCB, editionCB, addNAssignNewResource, delete, update);
         });
 
         update.setOnAction(e -> {
-            updateResource(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB,
+            updateResource(titleTF, authorTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, typeCB,
                     editionCB);
         });
 
@@ -1145,24 +1139,24 @@ public class Controller {
         });
 
         resourceTable.setOnMouseClicked(e -> {
-            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF,
+            onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF,
                     isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
                     addNAssignNewResource, update, delete);
 
         });
         searchBtn.setOnMouseClicked(e -> {
-            openResourceSearchWindow(titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
+            openResourceSearchWindow(titleTF, authorTF, isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF,
                     publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
         });
         try {
             Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
-            onResourceTableSelect(tempRes, titleTF, authorTF, idTF, isbn10TF,
+            onResourceTableSelect(tempRes, titleTF, authorTF, isbn10TF,
                     isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
                     addNAssignNewResource, update, delete);
 
         } catch (Exception ex) {
             if (debugging) {
-                showError("Resouse data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                showError("Resource data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -1207,7 +1201,7 @@ public class Controller {
         Button previousMediaBtn = new Button("<<");
         Button nextMediaBtn = new Button(">>");
 
-        img.setFitHeight(600);
+        img.setFitHeight(500);
         img.setFitWidth(900);
 
         mediaNavBtnPane.getChildren().addAll(previousMediaBtn, nextMediaBtn);
@@ -1236,7 +1230,7 @@ public class Controller {
 
             } else {
                 img.setImage(images.get(images.size() - 1));
-                title.setText(labelText.get(labelText.size()-1));
+                title.setText(labelText.get(labelText.size() - 1));
 
 
             }
@@ -1257,45 +1251,21 @@ public class Controller {
 
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        dlg.setHeight(800);
+        dlg.setHeight(1000);
         dlg.setResizable(true);
         dlg.setWidth(1200);
         dlg.show();
 
 
-//        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-//
-//            int numberOfElement = 0;
-//
-//            @Override
-//            public void handle(ActionEvent event) {
-//                if (!images.isEmpty()) {
-//                    if (numberOfElement < images.size()) {
-//                        img.setImage(images.get(numberOfElement));
-//                        numberOfElement++;
-//                    } else {
-//                        numberOfElement = 0;
-//                    }
-//                } else {
-//                    title.setText("Nothing here add images");
-//                }
-//
-//
-//            }
-//        }));
-//        timer.setCycleCount(Timeline.INDEFINITE);
-//        timer.play();
-
         dlg.setResultConverter(dialogButton ->
 
         {
-//            timer.stop();
             return null;
         });
 
     }
 
-    private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField idTF, TextField
+    private void openResourceSearchWindow(TextField titleTF, TextField authorTF, TextField
             isbn10TF,
                                           TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
                                           TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
@@ -1328,7 +1298,7 @@ public class Controller {
                             }
                         }
                     }
-                    onResourceTableSelect(searchedResource, titleTF, authorTF, idTF, isbn10TF, isbn13TF, totalAmTF,
+                    onResourceTableSelect(searchedResource, titleTF, authorTF, isbn10TF, isbn13TF, totalAmTF,
                             currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
                     return null;
                 }
@@ -1364,7 +1334,7 @@ public class Controller {
         return l;
     }
 
-    private void updateResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
+    private void updateResource(TextField titleTF, TextField authorTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
                                 ComboBox<String> typeCB, ComboBox<String> editionCB) {
         boolean isbnFormat = !controller.isISBN(isbn10TF.getText()) || !controller.isISBN13(isbn13TF.getText());
@@ -1427,7 +1397,7 @@ public class Controller {
         refreshTable();
     }
 
-    private void deleteResource(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
+    private void deleteResource(TextField titleTF, TextField authorTF, TextField isbn10TF,
                                 TextField isbn13TF, TextField totalAmTF, TextField currentAmTF, TextField descriptionTF,
                                 Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB, Button
                                         addNAssignNewResource, Button delete, Button update) {
@@ -1448,12 +1418,12 @@ public class Controller {
 //                }
         }
 //        updateCourseTable();
-        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF, idTF,
+        onResourceTableSelect(resourceTable.getSelectionModel().getSelectedItems().get(0), titleTF, authorTF,
                 isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
                 addNAssignNewResource, update, delete);
     }
 
-    private void addAndAssignNewResource(TextField titleTF, TextField authorTF, TextField idTF,
+    private void addAndAssignNewResource(TextField titleTF, TextField authorTF,
                                          TextField isbn10, TextField isbn13, TextField totalAmTF, TextField currentAmTF,
                                          TextField descriptionTF, ComboBox<String> typeCB, ComboBox<String> editionCB) {
 
@@ -1482,15 +1452,14 @@ public class Controller {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
         } else {
 
-            idTF.setText("0");
-//            Publisher tempPub = selectedPublisher;
+
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
                     controller.capitalizeString(titleTF.getText()),
                     controller.capitalizeString(authorTF.getText()),
                     descriptionTF.getText(),
                     true,
                     Integer.parseInt(totalAmTF.getText()),
-                    Integer.parseInt(idTF.getText()),
+                    ((int) Math.random()),
                     Integer.parseInt(currentAmTF.getText()),
                     selectedPublisher
             );
@@ -1519,7 +1488,7 @@ public class Controller {
 
     }
 
-    private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField idTF, TextField isbn10TF,
+    private void selectResourceTemplates(TextField titleTF, TextField authorTF, TextField isbn10TF,
                                          TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
                                          TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
                                          ComboBox<String> editionCB, Button addNAssignNewResource, Button update, Button delete) {
@@ -1562,7 +1531,7 @@ public class Controller {
         dlg.show();
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == fill) {
-                onResourceTableSelect(resources.getSelectionModel().getSelectedItem(), titleTF, authorTF, idTF,
+                onResourceTableSelect(resources.getSelectionModel().getSelectedItem(), titleTF, authorTF,
                         isbn10TF, isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
                         addNAssignNewResource, update, delete);
             }
@@ -1585,10 +1554,10 @@ public class Controller {
         updateCourseTable();
     }
 
-    private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField
-            idTF, TextField isbn10TF,
+    private void onResourceTableSelect(Resource tempRes, TextField titleTF, TextField authorTF, TextField isbn10TF,
                                        TextField isbn13TF, TextField totalAmTF, TextField currentAmTF,
-                                       TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB, ComboBox<String> editionCB,
+                                       TextField descriptionTF, Button publisherBtn, ComboBox<String> typeCB,
+                                       ComboBox<String> editionCB,
                                        Button addNAssignNewResource, Button update, Button delete) {
 
         if (tempRes != null) {
@@ -1605,7 +1574,7 @@ public class Controller {
             } else {
                 isbn13TF.setText("");
             }
-            idTF.setText(String.valueOf(tempRes.getID()));
+
             if (!typeCB.getItems().contains(tempRes.getTYPE()))
                 typeCB.getItems().addAll(tempRes.getTYPE());
 
@@ -1678,11 +1647,7 @@ public class Controller {
             dlg.setResultConverter(dialogButton -> {
                 if (dialogButton == assign) {
 
-                    if (selectedCourse != null) {
-//                        selectedCourse.getResource().clear();
-//                        selectedCourse.getResource().addAll(resourceTable.getItems());
-//                        updateCourseTable();
-                    }
+
                     resInfoList.getItems().clear();
                     for (Resource r : resourceTable.getItems())
                         resInfoList.getItems().add(r.getTitle());
@@ -2055,7 +2020,6 @@ public class Controller {
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
         }
-//        updateRowSelected();
 
 
         resourceTitlePane.setContent(resourceEditPane);
@@ -2087,6 +2051,7 @@ public class Controller {
 
                 return null;
             }
+            isPersonResourcesView = false;
             return null;
         });
 
