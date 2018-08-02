@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -176,7 +177,20 @@ public class Controller {
     @FXML
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
-        DBManager.openConnection();
+        try
+        {
+            DBManager.openConnection();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            showError("Connection Error", "The database did not return any  data",
+                    "Check your internet connection, and database settings provided" +
+                            " in DBinformation.txt file");
+            return;
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         defaultSemest = controller.findDefaultSemester();
         debugging = true;
         courseList = new ArrayList<>();
@@ -692,7 +706,7 @@ public class Controller {
 
             setTablesSelectionProperty(tableTV);
             setTablesSelectionProperty(resourceTable);
-            DBManager.openConnection();
+//            DBManager.openConnection();
 
             ArrayList<Course> coursesPulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
 
@@ -817,6 +831,7 @@ public class Controller {
     }
 
     public void exit() {
+        DBManager.closeConnection();
         System.exit(0);
     }
 

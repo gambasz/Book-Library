@@ -61,8 +61,7 @@ public class DBManager {
     }
 
 
-    public static void openConnection() {
-        try {
+    public static void openConnection() throws SQLException, ClassNotFoundException {
             String url = readFromFile();
             Class.forName("oracle.jdbc.driver.OracleDriver");
             conn = DriverManager.getConnection(url);
@@ -75,26 +74,22 @@ public class DBManager {
             st4 = conn.createStatement();
             st5 = conn.createStatement();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Connection to the database was NOT successful");
 
-        }
     }
 
     public static void closeConnection() {
         try {
+            if(conn !=null)
             if (conn.isClosed()) {
 
                 System.out.println("The connection has already been closed");
             }
-
-            conn.close();
-            System.out.println("The connection to the database has been successfully terminated.");
-
+            else {
+                conn.close();
+                System.out.println("The connection to the database has been successfully terminated.");
+            }
         } catch (SQLException e) {
-
-            System.out.println("Something went wrong when trying to close the connection");
+            e.printStackTrace();
         }
     }
 
@@ -1867,9 +1862,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static Map<Integer, ArrayList<Integer>> getCourseIdsBySemesterID2(int id) {
 
-        int i = 0, before =0;
+        int before =0;
         Map<Integer, ArrayList<Integer>> courseIDs = new HashMap<Integer, ArrayList<Integer>>();
-        String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d ORDER BY COURSEID ASC",
+        String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE SEMESTERID=%d ORDER BY COURSEID DESC",
                 id);
         ArrayList<Integer> commonIDs = new ArrayList<Integer>();
 
@@ -1891,13 +1886,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                     courseIDs.put(rs.getInt("COURSEID"), commonIDs);
                 }
             }
+            rs.close();
 
             return courseIDs;
 
 
         } catch (SQLException e) {
-
-            System.out.println("Something went wrong");
+            e.printStackTrace();
 
         }
 
