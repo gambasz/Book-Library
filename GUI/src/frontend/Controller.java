@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -1204,6 +1205,7 @@ public class Controller {
         img.setFitHeight(500);
         img.setFitWidth(900);
 
+        title.setMinHeight(Region.USE_PREF_SIZE);
         mediaNavBtnPane.getChildren().addAll(previousMediaBtn, nextMediaBtn);
         mediaNavBtnPane.setSpacing((500 / mediaNavBtnPane.getChildren().size()));
         mediaNavBtnPane.setAlignment(Pos.CENTER);
