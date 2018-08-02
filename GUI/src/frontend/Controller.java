@@ -1217,23 +1217,27 @@ public class Controller {
         previousMediaBtn.setAlignment(Pos.CENTER_LEFT);
         nextMediaBtn.setAlignment(Pos.CENTER_RIGHT);
 
-        mainPane.getChildren().addAll(title, img, mediaNavBtnPane);
+        mainPane.getChildren().addAll(img, title, mediaNavBtnPane);
         mainPane.setAlignment(Pos.CENTER);
 
 
-        ArrayList<Image> images = new ArrayList<>();
-        images.add(new Image(addIconImg));
-        images.add(new Image(deleteIconImg));
-        images.add(new Image("frontend/media/testGif.gif"));
+        ArrayList<Image> images = controller.tutorialImages();
+        ArrayList<String> labelText = controller.tutorialText();
+
         if (!images.isEmpty()) {
             img.setImage(images.get(0));
+            title.setText(labelText.get(0));
         }
         previousMediaBtn.setOnMouseClicked(e -> {
             int currentIndex = images.indexOf(img.getImage());
             if (currentIndex != 0) {
                 img.setImage(images.get(--currentIndex));
+                title.setText(labelText.get(currentIndex));
+
             } else {
                 img.setImage(images.get(images.size() - 1));
+                title.setText(labelText.get(labelText.size()-1));
+
 
             }
         });
@@ -1241,9 +1245,12 @@ public class Controller {
             int currentIndex = images.indexOf(img.getImage());
             if (currentIndex != images.size() - 1) {
 
-                img.setImage(images.get(++currentIndex));
+                title.setText(labelText.get(++currentIndex));
+                img.setImage(images.get(currentIndex));
+
             } else {
                 img.setImage(images.get(0));
+                title.setText(labelText.get(0));
 
             }
         });

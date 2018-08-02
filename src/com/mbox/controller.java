@@ -3,6 +3,7 @@ package com.mbox;
 import com.sun.istack.internal.NotNull;
 import frontend.data.Course;
 import frontend.data.Person;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -308,5 +309,31 @@ public class controller {
         selectedCourse.setProfessor(updated.getProfessor());
 
     }
+
+    public static ArrayList<Image> tutorialImages() {
+        ArrayList<Image> images = new ArrayList<>();
+        images.add(new Image("frontend/media/search.png"));
+        images.add(new Image("frontend/media/icon.png"));
+        images.add(new Image("frontend/media/testGif.gif"));
+
+        return images;
+
+    }
+
+
+        public static ArrayList<String> tutorialText(){
+        ArrayList<String> retrunedList = new ArrayList<String>();
+
+        retrunedList.add("1. What do you first? \n 2. testing button\n");
+        retrunedList.add("1. What do you second? \n 2. testing button\n");
+        retrunedList.add("1. What do you third? \n 2. testing button\n");
+
+        return retrunedList;
+
+    }
+
+
+
+
 }
 
