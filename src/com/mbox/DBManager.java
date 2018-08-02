@@ -3514,7 +3514,13 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
             Statement statement = conn.createStatement();
             Statement statement2 = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+//            ResultSet rs = statement.executeQuery("SELECT * FROM RESOURCES WHERE TITLE LIKE '%"+name+"%' OR AUTHOR LIKE '%"+name+"%'");
+
+            String queryl = String.format("SELECT * FROM RESOURCES WHERE TITLE LIKE ? OR AUTHOR LIKE ?");
+            PreparedStatement stl = conn.prepareStatement(queryl);
+            stl.setString(1, "%" + name + "%");
+            stl.setString(2, "%" + name + "%");
+            ResultSet rs = stl.executeQuery();
 
 
             while(rs.next()) {
@@ -3556,8 +3562,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         try{
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE CNUMBER LIKE  '" +
-                        name + "%' AND TITLE LIKE '" + courseTitle+ "%' " );
+//            ResultSet rs = st.executeQuery("SELECT * FROM COURSECT WHERE CNUMBER LIKE  '" +
+//                        name + "%' AND TITLE LIKE '" + courseTitle+ "%' " );
+
+            String queryl = String.format("SELECT * FROM COURSECT WHERE CNUMBER LIKE ? AND TITLE LIKE ?");
+            PreparedStatement stl = conn.prepareStatement(queryl);
+            stl.setString(1, "%" + name + "%");
+            stl.setString(2, "%" + courseTitle + "%");
+            ResultSet rs = stl.executeQuery();
 
             while(rs.next()){
 
@@ -3714,7 +3726,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             Statement st2 = conn.createStatement();
             ResultSet rs2;
 
-            ResultSet rs = st.executeQuery("SELECT * FROM PERSON WHERE FIRSTNAME LIKE '%"+name+"%' OR LASTNAME LIKE '%"+name+"%'");
+            String queryl = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
+            PreparedStatement stl = conn.prepareStatement(queryl);
+            stl.setString(1, "%" + name + "%");
+            stl.setString(2, "%" + name + "%");
+            ResultSet rs = stl.executeQuery();
 
             while(rs.next()){
 
@@ -3758,17 +3774,19 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
         try{
 
-            Statement st = conn.createStatement();
-            Statement st2 = conn.createStatement();
 
-            ResultSet rs = st.executeQuery(String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = %d",
-                    id));
+            String query = String.format("SELECT * FROM RELATION_SEMESTER_COURSE WHERE ID = ?");
+            PreparedStatement stl = conn.prepareStatement(query);
+            stl.setString(1, String.valueOf(id));
+            ResultSet testing = stl.executeQuery();
 
-            while (rs.next()) {
+            while(testing.next()){
 
-                courseid = rs.getInt("COURSEID");
+                courseid = testing.getInt("COURSEID");
 
             }
+
+            Statement st2 = conn.createStatement();
 
 
             ResultSet rs2 = st.executeQuery(String.format("SELECT * FROM COURSECT WHERE ID = %d", courseid));

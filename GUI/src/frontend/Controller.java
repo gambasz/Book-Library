@@ -544,7 +544,7 @@ public class Controller {
             }
 
         } else {
-            showError("IDK M8", "IDK What is going on", "IDK");
+            showError("Search ERROR", "Error when searching", "Something went wrong when searching. This error should not show up.");
         }
         courseList.clear();
         courseList.addAll(tmp_courses);
