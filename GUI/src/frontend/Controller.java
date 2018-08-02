@@ -627,7 +627,7 @@ public class Controller {
             return false;
         } else if (cSplit.length != 2) {
 
-            showError("Inout Error",
+            showError("Input Error",
                     "Unable to insert because the course you title entered " +
                             "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
@@ -744,7 +744,7 @@ public class Controller {
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
                             selectedPublisher = null;
-
+                            event.consume();
                         }
                     }
                 });
