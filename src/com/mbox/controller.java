@@ -315,6 +315,7 @@ public class controller {
         images.add(new Image("frontend/media/search.png"));
         images.add(new Image("frontend/media/icon.png"));
         images.add(new Image("frontend/media/testGif.gif"));
+        images.add(new Image("frontend/media/firstView.png"));
 
         return images;
 
@@ -327,6 +328,7 @@ public class controller {
         retrunedList.add("1. What do you first? \n 2. testing button\n");
         retrunedList.add("1. What do you second? \n 2. testing button\n");
         retrunedList.add("1. What do you third? \n 2. testing button\n");
+        retrunedList.add("Need to add explanation");
 
         return retrunedList;
 
