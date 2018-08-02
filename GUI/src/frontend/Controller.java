@@ -177,11 +177,9 @@ public class Controller {
     @FXML
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
-        try
-        {
+        try {
             DBManager.openConnection();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
@@ -755,10 +753,7 @@ public class Controller {
                         if (index >= 0 && index < table.getItems().size() && table.getSelectionModel().isSelected(index)) {
                             table.getSelectionModel().clearSelection();
                             selectedPublisher = null;
-                            event.consume();
-                            if (table.equals(tableTV)) {
-                                updateRowSelected();
-                            }
+
                         }
                     }
                 });
@@ -1236,7 +1231,7 @@ public class Controller {
 
             } else {
                 img.setImage(images.get(images.size() - 1));
-                title.setText(labelText.get(labelText.size()-1));
+                title.setText(labelText.get(labelText.size() - 1));
 
 
             }
@@ -2055,8 +2050,6 @@ public class Controller {
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
         }
-        //updateRowSelected();
-
 
         resourceTitlePane.setContent(resourceEditPane);
         resourceTitlePane.setText("Resource Details and Management");
@@ -2087,6 +2080,7 @@ public class Controller {
 
                 return null;
             }
+            isPersonResourcesView = false;
             return null;
         });
 
