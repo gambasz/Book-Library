@@ -1192,8 +1192,8 @@ public class Controller {
         Button previousMediaBtn = new Button("<<");
         Button nextMediaBtn = new Button(">>");
 
-        img.setFitHeight(500);
-        img.setFitWidth(500);
+        img.setFitHeight(600);
+        img.setFitWidth(900);
 
         mediaNavBtnPane.getChildren().addAll(previousMediaBtn, nextMediaBtn);
         mediaNavBtnPane.setSpacing((500 / mediaNavBtnPane.getChildren().size()));
@@ -1235,9 +1235,9 @@ public class Controller {
 
         dlg.getDialogPane().setContent(mainPane);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        dlg.setHeight(760);
+        dlg.setHeight(800);
         dlg.setResizable(true);
-        dlg.setWidth(500);
+        dlg.setWidth(1200);
         dlg.show();
 
 
