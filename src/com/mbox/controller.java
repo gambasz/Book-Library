@@ -313,13 +313,14 @@ public class controller {
 
     public static ArrayList<Image> tutorialImages() {
         ArrayList<Image> images = new ArrayList<>();
-
-        images.add(new Image("frontend/media/firstView.png"));
+        images.add(new Image("frontend/media/mainView.png"));
         images.add(new Image("frontend/media/courseView.png"));
         images.add(new Image("frontend/media/profView.png"));
         images.add(new Image("frontend/media/resourceView.png"));
         images.add(new Image("frontend/media/pubView.png"));
         images.add(new Image("frontend/media/endView.png"));
+
+
 
         return images;
 
