@@ -1260,7 +1260,13 @@ public class Controller {
                                           Button delete) {
         try {
             Dialog dlg = new Dialog();
+            ImageView icon = new ImageView ("/frontend/media/icon.png");
+            icon.setFitHeight(75);
+            icon.setFitWidth(75);
 
+            dlg.setHeaderText("Search full-text books");
+
+            dlg.setGraphic(icon);
             Parent root = FXMLLoader.load(getClass().getResource("/frontend/booksSearchView.fxml"));
             dlg.getDialogPane().setMinWidth(650);
             dlg.getDialogPane().setContent(root);
@@ -1295,9 +1301,12 @@ public class Controller {
             try {
                 dlg.showAndWait();
             } catch (Exception ex) {
+                ex.printStackTrace();
+
                 showError("Could set state.", "State invaildco", ex.getCause().toString());
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             showError(
                     "Could not open the view",
                     "Unable to open the Search view",
