@@ -6,6 +6,7 @@ import com.mbox.DBManager;
 import com.mbox.controller;
 import frontend.data.*;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,10 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.util.Callback;
@@ -1217,7 +1215,7 @@ public class Controller {
         previousMediaBtn.setAlignment(Pos.CENTER_LEFT);
         nextMediaBtn.setAlignment(Pos.CENTER_RIGHT);
 
-        mainPane.getChildren().addAll(pageNumber,img, title, mediaNavBtnPane);
+        mainPane.getChildren().addAll(pageNumber, img, title, mediaNavBtnPane);
         mainPane.setAlignment(Pos.CENTER);
 
 
@@ -1227,7 +1225,7 @@ public class Controller {
         if (!images.isEmpty()) {
             img.setImage(images.get(0));
             title.setText(labelText.get(0));
-            pageNumber.setText(String.format(pageFormat,1,labelText.size()));
+            pageNumber.setText(String.format(pageFormat, 1, labelText.size()));
 
         }
         previousMediaBtn.setOnMouseClicked(e -> {
@@ -1235,14 +1233,13 @@ public class Controller {
             if (currentIndex != 0) {
                 img.setImage(images.get(--currentIndex));
                 title.setText(labelText.get(currentIndex));
-                pageNumber.setText(String.format(pageFormat,currentIndex+1,labelText.size()));
+                pageNumber.setText(String.format(pageFormat, currentIndex + 1, labelText.size()));
 
 
             } else {
                 img.setImage(images.get(images.size() - 1));
                 title.setText(labelText.get(labelText.size() - 1));
-                pageNumber.setText(String.format(pageFormat, labelText.size(),labelText.size()));
-
+                pageNumber.setText(String.format(pageFormat, labelText.size(), labelText.size()));
 
 
             }
@@ -1253,13 +1250,13 @@ public class Controller {
 
                 title.setText(labelText.get(++currentIndex));
                 img.setImage(images.get(currentIndex));
-                pageNumber.setText(String.format(pageFormat, currentIndex+1,labelText.size()));
+                pageNumber.setText(String.format(pageFormat, currentIndex + 1, labelText.size()));
 
 
             } else {
                 img.setImage(images.get(0));
                 title.setText(labelText.get(0));
-                pageNumber.setText(String.format(pageFormat, 1,labelText.size()));
+                pageNumber.setText(String.format(pageFormat, 1, labelText.size()));
 
 
             }
@@ -1284,7 +1281,7 @@ public class Controller {
                                           Button delete) {
         try {
             Dialog dlg = new Dialog();
-            ImageView icon = new ImageView ("/frontend/media/icon.png");
+            ImageView icon = new ImageView("/frontend/media/icon.png");
             icon.setFitHeight(75);
             icon.setFitWidth(75);
 
@@ -1782,7 +1779,7 @@ public class Controller {
         mainAddPane.getChildren().addAll(
                 new HBox(20, currentCBoxLbl, currentProfessors),
                 hiddenOptions,
-                new HBox(20, infoBtn, PersonResources,deleteBtn)
+                new HBox(20, infoBtn, PersonResources, deleteBtn)
         );
         for (Object tempElem : mainAddPane.getChildren()) {
             if (tempElem instanceof HBox) {
@@ -1849,8 +1846,10 @@ public class Controller {
         Dialog dlg = new Dialog();
         HBox tablePane = new HBox();
         VBox mainPane = new VBox(20);
+
+        resourceTable.getItems().clear();
         com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedPerson.initPersonBackend());
-        selectedPerson = tempPerson.initPersonGUI();
+        selectedPerson = Objects.requireNonNull(tempPerson).initPersonGUI();
         final Person finalSelectedPerson = selectedPerson;
 
         String title = selectedPerson.getFirstName().concat(" ").concat(selectedPerson.getLastName())
@@ -1874,12 +1873,12 @@ public class Controller {
 
         Button fillerResourcesBasedOnSemester = new Button("filter");
 
-        ListView<Resource> profResources = new ListView<>();
-        ListView<Resource> allResources = new ListView<>();
-        ListView<Resource> diffResources = new ListView<>();
-        setCellFactoryForProfDiffvView(profResources);
-        setCellFactoryForProfDiffvView(allResources);
-        setCellFactoryForProfDiffvView(diffResources);
+        TableView<Resource> profResources = new TableView<>();
+        TableView<Resource> allResources = new TableView<>();
+        TableView<Resource> diffResources = new TableView<>();
+        TableColumn profResourcesTC = createResourceColoumnForDiffView(profResources);
+        TableColumn allResourcesTC = createResourceColoumnForDiffView(allResources);
+        TableColumn diffResourcesTC = createResourceColoumnForDiffView(diffResources);
 
 
         ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
@@ -1905,8 +1904,6 @@ public class Controller {
                 allResources.getItems().clear();
                 diffResources.getItems().clear();
 
-                System.out.println("All Res :This must be empty" + allResources.getItems());
-                System.out.println("diff Res :This must be empty" + diffResources.getItems());
 
                 allResources.getItems().addAll(allRequiredResourcesRePulled);
                 diffResources.getItems().addAll(allRequiredResourcesRePulled);
@@ -1917,8 +1914,12 @@ public class Controller {
                 semesterStr = semesterStr.replace('_', ' ').toLowerCase();
                 dlg.setHeaderText(defaultHeader
                         + " for " + semesterStr
-                        + " in " + years.getSelectionModel().getSelectedItem()
-                );
+                        + " in " + years.getSelectionModel().getSelectedItem());
+
+                diffResources.refresh();
+                allResources.refresh();
+
+
             } else {
                 System.out.println("Please select filter data");
             }
@@ -1976,28 +1977,37 @@ public class Controller {
                 + " in " + years.getSelectionModel().getSelectedItem()
         );
         dlg.setGraphic(icon);
-
+        dlg.setResizable(true);
         dlg.show();
 
     }
 
-    private void setCellFactoryForProfDiffvView(ListView<Resource> diffListview) {
-        diffListview.setCellFactory(new Callback<ListView<Resource>, ListCell<Resource>>() {
+    private TableColumn createResourceColoumnForDiffView(TableView<Resource> diffTableView) {
+        diffTableView.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public ListCell<Resource> call(ListView<Resource> param) {
-                return new ListCell<Resource>() {
-                    @Override
-                    protected void updateItem(Resource item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setGraphic(null);
-                        } else {
-                            setText(item.getTitle());
-                        }
-                    }
-                };
+            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+                // Get the table header
+                Pane header = (Pane) diffTableView.lookup("TableHeaderRow");
+                if (header != null && header.isVisible()) {
+                    header.setMaxHeight(0);
+                    header.setMinHeight(0);
+                    header.setPrefHeight(0);
+                    header.setVisible(false);
+                    header.setManaged(false);
+                }
             }
         });
+        TableColumn<Resource, String> tableColumn = new TableColumn<>();
+        tableColumn.setMaxWidth(Double.MAX_VALUE);
+        tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Resource, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Resource, String> Res) {
+                String title = Res.getValue().getTitle();
+                return new SimpleStringProperty(title);
+            }
+        });
+        diffTableView.getColumns().add(tableColumn);
+        return tableColumn;
     }
 
     private void addNewProfessor(String firstName, String lastName, String type, ComboBox currentProfessors) {
