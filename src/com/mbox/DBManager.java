@@ -3239,14 +3239,14 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         for (frontend.data.Course course : allCourses) {
             sb.append(course.getID());
             sb.append(",");
-            sb.append(course.getTitle());
+            sb.append(course.getTitle().replace(",", ""));
             sb.append(",");
-            sb.append(course.getDescription());
+            sb.append(course.getDescription().replace(",", ""));
             sb.append(",");
-            sb.append(course.getDepartment());
+            sb.append(course.getDepartment().replace(",", ""));
             sb.append(",");
             for (frontend.data.Resource resource : course.getResource()) {
-                sb.append(resource.getTitle());
+                sb.append(resource.getTitle().replace(",", ""));
                 sb.append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
@@ -3273,11 +3273,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         for (Publisher publisher : allPublishers) {
             sb.append(publisher.getID());
             sb.append(",");
-            sb.append(publisher.getTitle());
+            sb.append(publisher.getTitle().replace(",", ""));
             sb.append(",");
-            sb.append(publisher.getContactInformation());
+            sb.append(publisher.getContactInformation().replace(",", ""));
             sb.append(",");
-            sb.append(publisher.getDescription());
+            sb.append(publisher.getDescription().replace(",", ""));
             sb.append("\n");
 
         }
@@ -3310,9 +3310,9 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(resource.getTYPE());
             sb.append(",");
-            sb.append(resource.getTitle());
+            sb.append(resource.getTitle().replace(",", ""));
             sb.append(",");
-            sb.append(resource.getAuthor());
+            sb.append(resource.getAuthor().replace(",", ""));
             sb.append(",");
             sb.append(resource.getISBN());
             sb.append(",");
@@ -3324,11 +3324,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             sb.append(",");
             sb.append(resource.getCurrentAmount());
             sb.append(",");
-            sb.append(resource.getDescription());
+            sb.append(resource.getDescription().replace(",", ""));
             sb.append(",");
-            sb.append(resource.getPublisher().getName());
+            sb.append(resource.getPublisher().getName().replace(",", ""));
             sb.append(",");
-            sb.append(resource.getPublisher().getContacts());
+            sb.append(resource.getPublisher().getContacts().replace(",", ""));
             sb.append("\n");
         }
         return sb.toString();
@@ -3349,11 +3349,11 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
         for (Person person : allPerson) {
             setResourcesForPerson(person);
             sb.append(person.getID() + ",");
-            sb.append(person.getFirstName() + ",");
-            sb.append(person.getLastName() + ",");
+            sb.append(person.getFirstName().replace(",", "") + ",");
+            sb.append(person.getLastName().replace(",", "") + ",");
             sb.append(person.getType() + ",");
             for (Resource resource : person.getResourceList()) {
-                sb.append(resource.getTitle() + ",");
+                sb.append(resource.getTitle().replace(",", "") + ",");
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append('\n');
