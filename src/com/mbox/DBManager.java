@@ -2247,7 +2247,6 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
 
     public static boolean availablePublisher(frontend.data.Publisher p) {
         try {
-            Statement st = conn.createStatement();
 
             String title;
             String info;
@@ -2257,40 +2256,50 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
             title = p.getName();
             info = p.getContacts();
             descrip = p.getDescription();
+            if (info.isEmpty()) {
+                info = " ";
+            }
+            if (descrip.isEmpty()) {
+                descrip = " ";
+            }
 
             String query = String.format("SELECT * FROM PUBLISHERS WHERE TITLE= ?");
             PreparedStatement stl = conn.prepareStatement(query);
             stl.setString(1,title);
             ResultSet rs = stl.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 pubID = rs.getInt(1);
+                p.setID(pubID);
+                if (!rs.getString("DESCRIPTION").equals(descrip) ||
+                        !rs.getString("CONTACT_INFO").equals(info))
+                {
+                    query = String.format( "UPDATE PUBLISHERS SET DESCRIPTION = ?, CONTACT_INFO = ?" +
+                            " WHERE ID = ?");
+                    stl = conn.prepareStatement(query);
+                    stl.setString(1,descrip);
+                    stl.setString(2,info);
+                    stl.setInt(3, rs.getInt("ID"));
+
+                    stl.executeQuery();
+                }
+                    rs.close();
+
+                return true;
             }
 
-            if (pubID == 0) {
-                //Errorrrrrrrrrr
-                if(info.isEmpty()){
-                    info = " ";
-                }
-                if(descrip.isEmpty()){
-                    descrip = " ";
-                }
-                System.out.println("info is " + info + "descrip is " + descrip);
+            else {
+
+
                 Publisher tempPub = new Publisher(0, title, info, descrip);
-                System.out.println(tempPub.getContactInformation() + "    " + tempPub.getDescription());
-
-
 
                 insertPublisher(tempPub);
 
-                // Errorrrrrrrr
-
-
                 String query1 = String.format("SELECT * FROM PUBLISHERS WHERE TITLE= ? AND CONTACT_INFO = ? AND DESCRIPTION = ?");
                 PreparedStatement stl1 = conn.prepareStatement(query1);
-                stl1.setString(1,title);
-                stl1.setString(2,info);
-                stl1.setString(3,descrip);
+                stl1.setString(1, title);
+                stl1.setString(2, info);
+                stl1.setString(3, descrip);
                 rs = stl1.executeQuery();
                 while (rs.next()) {
                     pubID = rs.getInt(1);
@@ -2298,13 +2307,12 @@ public static ArrayList<frontend.data.Resource> findResourcesCourse2(int courseI
                 }
                 p.setID(pubID);
                 rs.close();
+
                 return false;
 
-            } else {
-                p.setID(pubID);
-                rs.close();
-                return true;
+
             }
+
 
 
         } catch (Exception e) {
