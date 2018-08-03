@@ -1182,20 +1182,34 @@ public class Controller {
 
     private void showHelp() {
         Dialog dlg = new Dialog();
-        dlg.setTitle("HELP and Tutorials");
+        dlg.setTitle("Help and Tutorials");
+        dlg.setHeaderText("Welcome to the App Tutorial :-)");
+        ImageView icon = new ImageView("/frontend/media/icon.png");
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
         VBox mainPane = new VBox(20);
         HBox mediaNavBtnPane = new HBox(20);
 
         ImageView img = new ImageView();
         Label title = new Label("Hello");
+        String pageFormat = "Page %d of %d";
+        Label pageNumber = new Label("");
+
+        ImageView leftArr = new ImageView("/frontend/media/left.png");
+        ImageView rightArr = new ImageView("/frontend/media/right.png");
 
         Button previousMediaBtn = new Button("<<");
         Button nextMediaBtn = new Button(">>");
+        addGraphicToButtons(leftArr, previousMediaBtn);
+        addGraphicToButtons(rightArr, nextMediaBtn);
 
         img.setFitHeight(500);
         img.setFitWidth(900);
 
         title.setMinHeight(Region.USE_PREF_SIZE);
+        pageNumber.setMinHeight(Region.USE_PREF_SIZE);
+
         mediaNavBtnPane.getChildren().addAll(previousMediaBtn, nextMediaBtn);
         mediaNavBtnPane.setSpacing((500 / mediaNavBtnPane.getChildren().size()));
         mediaNavBtnPane.setAlignment(Pos.CENTER);
@@ -1203,7 +1217,7 @@ public class Controller {
         previousMediaBtn.setAlignment(Pos.CENTER_LEFT);
         nextMediaBtn.setAlignment(Pos.CENTER_RIGHT);
 
-        mainPane.getChildren().addAll(img, title, mediaNavBtnPane);
+        mainPane.getChildren().addAll(pageNumber,img, title, mediaNavBtnPane);
         mainPane.setAlignment(Pos.CENTER);
 
 
@@ -1213,16 +1227,22 @@ public class Controller {
         if (!images.isEmpty()) {
             img.setImage(images.get(0));
             title.setText(labelText.get(0));
+            pageNumber.setText(String.format(pageFormat,1,labelText.size()));
+
         }
         previousMediaBtn.setOnMouseClicked(e -> {
             int currentIndex = images.indexOf(img.getImage());
             if (currentIndex != 0) {
                 img.setImage(images.get(--currentIndex));
                 title.setText(labelText.get(currentIndex));
+                pageNumber.setText(String.format(pageFormat,currentIndex+1,labelText.size()));
+
 
             } else {
                 img.setImage(images.get(images.size() - 1));
                 title.setText(labelText.get(labelText.size() - 1));
+                pageNumber.setText(String.format(pageFormat, labelText.size(),labelText.size()));
+
 
 
             }
@@ -1233,10 +1253,14 @@ public class Controller {
 
                 title.setText(labelText.get(++currentIndex));
                 img.setImage(images.get(currentIndex));
+                pageNumber.setText(String.format(pageFormat, currentIndex+1,labelText.size()));
+
 
             } else {
                 img.setImage(images.get(0));
                 title.setText(labelText.get(0));
+                pageNumber.setText(String.format(pageFormat, 1,labelText.size()));
+
 
             }
         });
