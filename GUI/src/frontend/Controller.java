@@ -1816,6 +1816,9 @@ public class Controller {
         Dialog dlg = new Dialog();
         HBox tablePane = new HBox();
         VBox mainPane = new VBox(20);
+        com.mbox.Person tempPerson = DBManager.setResourcesForPerson(selectedPerson.initPersonBackend());
+        selectedPerson = tempPerson.initPersonGUI();
+        final Person finalSelectedPerson = selectedPerson;
 
         String title = selectedPerson.getFirstName().concat(" ").concat(selectedPerson.getLastName())
                 .concat(", ")
@@ -1862,7 +1865,7 @@ public class Controller {
             if (semester.getSelectionModel().getSelectedItem() != null && years.getSelectionModel().getSelectedItem() != null) {
 
 
-                ArrayList<Resource> allRequiredResourcesRePulled = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+                ArrayList<Resource> allRequiredResourcesRePulled = DBManager.getAllResourcesNeededForPerson(finalSelectedPerson,
                         semester.getSelectionModel().getSelectedItem().toString(),
                         years.getSelectionModel().getSelectedItem().toString());
 
@@ -1874,7 +1877,7 @@ public class Controller {
 
                 allResources.getItems().addAll(allRequiredResourcesRePulled);
                 diffResources.getItems().addAll(allRequiredResourcesRePulled);
-                diffResources.getItems().removeAll(selectedPerson.getResources());
+                diffResources.getItems().removeAll(finalSelectedPerson.getResources());
 
 
                 String semesterStr = semester.getSelectionModel().getSelectedItem().toString();
