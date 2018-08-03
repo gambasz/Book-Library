@@ -1648,8 +1648,8 @@ public class Controller {
 
         Dialog dlg = new Dialog();
 
-        profInfoFNameTf.setPromptText("EG. Alla");
-        profInfoLNameTf.setPromptText("EG. Webb");
+        profInfoFNameTf.setPromptText("e.g., Alla");
+        profInfoLNameTf.setPromptText("e.g., Webb");
 
 
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
@@ -1749,7 +1749,7 @@ public class Controller {
         mainAddPane.getChildren().addAll(
                 new HBox(20, currentCBoxLbl, currentProfessors),
                 hiddenOptions,
-                new HBox(20, deleteBtn, infoBtn, PersonResources)
+                new HBox(20, infoBtn, PersonResources,deleteBtn)
         );
         for (Object tempElem : mainAddPane.getChildren()) {
             if (tempElem instanceof HBox) {
