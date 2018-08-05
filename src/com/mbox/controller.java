@@ -3,6 +3,7 @@ package com.mbox;
 import com.sun.istack.internal.NotNull;
 import frontend.data.Course;
 import frontend.data.Person;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -254,6 +255,7 @@ public class controller {
         }
         catch (Exception e){
             e.printStackTrace();
+            result = s;
         }
         return result;
 
@@ -308,5 +310,72 @@ public class controller {
         selectedCourse.setProfessor(updated.getProfessor());
 
     }
+
+    public static ArrayList<Image> tutorialImages() {
+        ArrayList<Image> images = new ArrayList<>();
+        images.add(new Image("frontend/media/mainView.png"));
+        images.add(new Image("frontend/media/courseView.png"));
+        images.add(new Image("frontend/media/profView.png"));
+        images.add(new Image("frontend/media/resourceView.png"));
+        images.add(new Image("frontend/media/pubView.png"));
+        images.add(new Image("frontend/media/endView.png"));
+
+
+
+
+        return images;
+
+    }
+
+
+        public static ArrayList<String> tutorialText(){
+        ArrayList<String> retrunedList = new ArrayList<String>();
+//        retrunedList.add("1. What do you first? \n 2. testing button\n");
+//        retrunedList.add("1. What do you second? \n 2. testing button\n");
+//        retrunedList.add("1. What do you third? \n 2. testing button\n");
+        retrunedList.add(
+                "1. Current year & semester of all classes in the table \n" +
+                "2. Course & Professor information of chosen class are shown here, you can open course & professor dialogue to modify \n" +
+                "3. Resource list of the chosen classes, you can modify resources by clicking the Edit button \n" +
+                "4. You can search for any available class by entering information you know and press search button \n" +
+                "5. You can export data, import data or exit the program here.");
+        retrunedList.add(
+                "1. Press this button to open detailed course view \n" +
+                "2. You can choose available courses from the box \n" +
+                "3. These fields contain the detailed information of the course you choose \n" +
+                "4. You can press add if it is a new course, or delete if it does not exist anymore \n" +
+                "5. Press Fill to fulfill the text fields in the main view");
+        retrunedList.add(
+                "1. Press this button to open detailed professor view \n" +
+                "2. You can choose available professors from the box \n" +
+                "3. These fields contain the detailed information of the professor you choose \n" +
+                "4. You can add/delete professor or check for resources that the chosen professor now has \n" +
+                "5. Press Fill to fulfill the text fields in the main view");
+        retrunedList.add(
+                "1. Press Edit button to open detailed resources view \n" +
+                "2. These fields contain the information of the chosen resource on the right table \n" +
+                "3. You can search for new resources online by search button \n" +
+                "4. You can choose an available resources from database by Auto Fill button \n" +
+                "5. You can add/update/delete resources with the three buttons at the bottom \n" +
+                "6. After modifying all resources, press Assign the selected Resources to fulfill the resource Table ");
+        retrunedList.add(
+                "1. Press Publisher button in the publisher fields to open detailed publisher view \n" +
+                "2. You can choose available publishers in the box \n" +
+                "3. These fields contain the information of the chosen publisher \n" +
+                "4. You can delete publisher if the publisher is not available \n" +
+                "5. Press Create & Assigns to create new publisher or assign exist publisher for resource");
+        retrunedList.add(
+                "After adding/changing all the information in the left column" +
+                "\n" +
+                "press these buttons to add/update/delete the classes");
+
+
+        return retrunedList;
+
+    }
+
+
+
+
 }
 

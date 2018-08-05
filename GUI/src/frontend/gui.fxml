@@ -32,7 +32,7 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
                               <Label text="Title *" />
-                              <LimitedTextField fx:id="courseInfoTitle" alignment="CENTER" promptText="EG. CMSC 140"/>
+                              <LimitedTextField fx:id="courseInfoTitle" alignment="CENTER" promptText="e.g., CMSC 140"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -42,7 +42,7 @@
                            <children>
                               <Label text="Department *" />
                               <LimitedTextField fx:id="courseInfoDepart" alignment="CENTER"
-                                                promptText="EG.  Computer Science"/>
+                                                promptText="e.g.,  Computer Science"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -52,7 +52,7 @@
                            <children>
                               <Label text="Description *" />
                               <LimitedTextField fx:id="courseInfoDescrip" alignment="CENTER"
-                                                promptText="EG. Introduction to Programming"/>
+                                                promptText="e.g, Introduction to Programming"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -89,7 +89,7 @@
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="96.0" text="First Name:*" />
                                     <LimitedTextField fx:id="profInfoFName" alignment="CENTER" disable="true"
-                                                      promptText="EG. Alla">
+                                                      promptText="e.g., Alla">
                                        <HBox.margin>
                                           <Insets left="10.0"/>
                                        </HBox.margin>
@@ -104,7 +104,7 @@
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="100.0" text="Last Name:*" />
                                     <LimitedTextField fx:id="profInfoLName" alignment="CENTER" disable="true"
-                                                      promptText="EG. Web">
+                                                      promptText="e.g., Web">
                                        <HBox.margin>
                                           <Insets left="5.0"/>
                                        </HBox.margin>

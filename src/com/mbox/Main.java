@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        DBManager.openConnection();
+//        DBManager.openConnection();
 
         //Course[] mamali = DBManager.relationalReadByCourseID(11);
 //        ArrayList<Course> lopm = DBManager.returnEverything(57);
@@ -32,7 +32,7 @@ public class Main {
         frontend.data.Course c = new frontend.data.Course(19,19,2018,"FALL","CMSC214","Computer Science",p,"Advanced Java Programming",
                 resList);
         DBManager.relationalInsertByID2(c);
-        DBManager.closeConnection();
+//        DBManager.closeConnection();
         }
 
     }

@@ -16,7 +16,7 @@ public class CLI {
         Scanner scan = new Scanner(System.in);
 
         DBManager DB = new DBManager();
-        DB.openConnection();
+//        DB.openConnection();
         System.out.println("MBox CLI Version 1.0");
         System.out.println("Enter help for a list of commends.\n");
 

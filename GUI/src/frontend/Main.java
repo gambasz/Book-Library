@@ -1,5 +1,6 @@
 package frontend;
 
+import com.mbox.DBManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,9 @@ public class Main extends Application {
         primaryStage.setTitle("MC Books");
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.show();
+
+
+
     }
 
 
