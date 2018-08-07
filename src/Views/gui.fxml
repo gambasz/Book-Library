@@ -32,7 +32,8 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="27.0" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
                            <children>
                               <Label text="Title *" />
-                              <LimitedTextField fx:id="courseInfoTitle" alignment="CENTER" promptText="e.g., CMSC 140"/>
+                               <LimitedTextField fx:id="courseInfoTitle" alignment="CENTER"
+                                                 promptText="e.g., CMSC 140"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -41,8 +42,8 @@
                         <HBox alignment="CENTER" layoutX="10.0" layoutY="62.0" prefHeight="50.0" prefWidth="100.0" spacing="10.0">
                            <children>
                               <Label text="Department *" />
-                              <LimitedTextField fx:id="courseInfoDepart" alignment="CENTER"
-                                                promptText="e.g.,  Computer Science"/>
+                               <LimitedTextField fx:id="courseInfoDepart" alignment="CENTER"
+                                                 promptText="e.g.,  Computer Science"/>
                            </children>
                            <padding>
                               <Insets bottom="10.0" />
@@ -51,33 +52,41 @@
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="15.0">
                            <children>
                               <Label text="Description *" />
-                              <LimitedTextField fx:id="courseInfoDescrip" alignment="CENTER"
-                                                promptText="e.g, Introduction to Programming"/>
+                               <LimitedTextField fx:id="courseInfoDescrip" alignment="CENTER"
+                                                 promptText="e.g, Introduction to Programming"/>
                            </children>
                            <padding>
-                              <Insets bottom="10.0"/>
+                               <Insets bottom="10.0"/>
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="50.0" prefWidth="100.0"
-                              spacing="60.0">
-                           <children>
-                              <Label text="CRN"/>
-                              <LimitedTextField fx:id="courseInfoCRN" alignment="CENTER" promptText="e.g, 123456"/>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" layoutX="10.0" layoutY="145.0" prefHeight="50.0" prefWidth="100.0"
-                              spacing="50.0">
-                           <children>
-                              <Label text="Notes"/>
-                              <LimitedTextField fx:id="courseInfoNotes" alignment="CENTER" promptText="e.g, Notes"/>
-                           </children>
-                           <padding>
-                              <Insets bottom="10.0"/>
-                           </padding>
-                        </HBox>
+                         <TitledPane prefHeight="200.0" prefWidth="200.0" text="More">
+                             <content>
+                                 <VBox prefHeight="200.0" prefWidth="100.0">
+                                     <children>
+                                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="50.0">
+                                             <children>
+                                                 <Label text="Notes"/>
+                                                 <LimitedTextField fx:id="courseInfoNotes" alignment="CENTER"
+                                                                   promptText="e.g, Notes"/>
+                                             </children>
+                                             <padding>
+                                                 <Insets bottom="10.0"/>
+                                             </padding>
+                                         </HBox>
+                                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" spacing="60.0">
+                                             <children>
+                                                 <Label text="CRN"/>
+                                                 <LimitedTextField fx:id="courseInfoCRN" alignment="CENTER"
+                                                                   promptText="e.g, 123456"/>
+                                             </children>
+                                             <padding>
+                                                 <Insets bottom="10.0"/>
+                                             </padding>
+                                         </HBox>
+                                     </children>
+                                 </VBox>
+                             </content>
+                         </TitledPane>
                      </children>
                      <opaqueInsets>
                         <Insets />
@@ -91,11 +100,11 @@
                                  <effect>
                                     <ColorAdjust brightness="-1.0" contrast="1.0" hue="-1.0" saturation="-1.0" />
                                  </effect></Label>
-                              <Button fx:id="profInfoBtn" alignment="CENTER" contentDisplay="CENTER"
-                                      mnemonicParsing="false" onAction="#selectProfessor" prefHeight="25.0"
-                                      prefWidth="141.0" text="Find &amp; Auto Fill Info">
+                               <Button fx:id="profInfoBtn" alignment="CENTER" contentDisplay="CENTER"
+                                       mnemonicParsing="false" onAction="#selectProfessor" prefHeight="25.0"
+                                       prefWidth="141.0" text="Find &amp; Auto Fill Info">
                                  <HBox.margin>
-                                    <Insets left="50.0"/>
+                                     <Insets left="50.0"/>
                                  </HBox.margin>
                               </Button>
                            </children>
@@ -108,10 +117,10 @@
                               <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="100.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="96.0" text="First Name:*" />
-                                    <LimitedTextField fx:id="profInfoFName" alignment="CENTER" disable="true"
-                                                      promptText="e.g., Alla">
+                                     <LimitedTextField fx:id="profInfoFName" alignment="CENTER" disable="true"
+                                                       promptText="e.g., Alla">
                                        <HBox.margin>
-                                          <Insets left="10.0"/>
+                                           <Insets left="10.0"/>
                                        </HBox.margin>
                                     </LimitedTextField>
                                  </children>
@@ -119,14 +128,14 @@
                                     <Insets bottom="10.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0"
-                                    prefWidth="100.0">
+                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="50.0"
+                                     prefWidth="100.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="100.0" text="Last Name:*" />
-                                    <LimitedTextField fx:id="profInfoLName" alignment="CENTER" disable="true"
-                                                      promptText="e.g., Web">
+                                     <LimitedTextField fx:id="profInfoLName" alignment="CENTER" disable="true"
+                                                       promptText="e.g., Web">
                                        <HBox.margin>
-                                          <Insets left="5.0"/>
+                                           <Insets left="5.0"/>
                                        </HBox.margin>
                                     </LimitedTextField>
                                  </children>
@@ -134,13 +143,13 @@
                                     <Insets bottom="10.0" />
                                  </padding>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="50.0"
-                                    prefWidth="100.0">
+                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="50.0"
+                                     prefWidth="100.0">
                                  <children>
                                     <Label text="Type:*" />
                                     <ComboBox fx:id="profInfoType" prefWidth="150.0" promptText="Course Instructor">
                                        <HBox.margin>
-                                          <Insets left="73.0"/>
+                                           <Insets left="73.0"/>
                                        </HBox.margin>
                                     </ComboBox>
                                  </children>
@@ -238,21 +247,21 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Common IDs"
-                                           textAlignment="CENTER"/>
+                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Common IDs"
+                                            textAlignment="CENTER"/>
                                     <LimitedTextField fx:id="crnSearchTF" alignment="CENTER" promptText="5579" />
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </VBox>
-                              <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0"
-                                    prefWidth="125.0">
+                               <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0"
+                                     prefWidth="125.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Professors' Name"
-                                           textAlignment="CENTER"/>
-                                    <LimitedTextField fx:id="profSearchTF" alignment="CENTER" prefWidth="125.0"
-                                                      promptText="Alla Web &amp; David"/>
+                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Professors' Name"
+                                            textAlignment="CENTER"/>
+                                     <LimitedTextField fx:id="profSearchTF" alignment="CENTER" prefWidth="125.0"
+                                                       promptText="Alla Web &amp; David"/>
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -260,8 +269,8 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Courses' Name"
-                                           textAlignment="CENTER"/>
+                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Courses' Name"
+                                            textAlignment="CENTER"/>
                                     <LimitedTextField fx:id="courseSearchTF" alignment="CENTER" promptText="CMSC 140" />
                                  </children>
                                  <HBox.margin>
@@ -270,10 +279,10 @@
                               </VBox>
                               <VBox alignment="CENTER" layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="150.0">
                                  <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Departments"
-                                           textAlignment="CENTER"/>
-                                    <LimitedTextField fx:id="departSearchTF" alignment="CENTER" disable="true"
-                                                      promptText="Computer Science"/>
+                                     <Label alignment="CENTER" contentDisplay="CENTER" text="Departments"
+                                            textAlignment="CENTER"/>
+                                     <LimitedTextField fx:id="departSearchTF" alignment="CENTER" disable="true"
+                                                       promptText="Computer Science"/>
                                  </children>
                                  <HBox.margin>
                                     <Insets left="10.0" />
@@ -293,10 +302,10 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="helpBtn" alignment="TOP_RIGHT" contentDisplay="CENTER" graphicTextGap="0.0"
-                                      text="_?">
+                               <Button fx:id="helpBtn" alignment="TOP_RIGHT" contentDisplay="CENTER"
+                                       graphicTextGap="0.0" text="_?">
                                  <HBox.margin>
-                                    <Insets bottom="25.0" left="70.0"/>
+                                     <Insets bottom="25.0" left="70.0"/>
                                  </HBox.margin>
                               </Button>
                            </children>
@@ -343,9 +352,9 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <TableView fx:id="tableTV" editable="true" maxHeight="1.7976931348623157E308"
-                             maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="839.0"
-                             tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+                   <TableView fx:id="tableTV" editable="true" maxHeight="1.7976931348623157E308"
+                              maxWidth="1.7976931348623157E308" prefHeight="500.0" prefWidth="839.0"
+                              tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="timeCol" prefWidth="85.0" text="Semester" />
                       <TableColumn fx:id="profCol" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="75.0" text="Professor" />
