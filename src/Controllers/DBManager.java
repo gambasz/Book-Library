@@ -2043,10 +2043,9 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
         try {
 
             String query = String.format("DELETE FROM RELATION_COURSE_RESOURCES WHERE" +
-                    " COURSEID = ? AND COMMONID = ?");
+                    " COMMONID = ?");
             PreparedStatement stl = conn.prepareStatement(query);
-            stl.setInt(1,courseID);
-            stl.setInt(2,c.getCommonID());
+            stl.setInt(1,c.getCommonID());
             stl.executeQuery();
 
 //          DONOT TOUCH publiser resource relation! :| :|
