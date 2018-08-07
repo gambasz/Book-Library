@@ -13,6 +13,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,12 +27,15 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,7 +67,7 @@ public class ViewController {
     @FXML
     ListView<String> resInfoList;
     @FXML
-    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn, helpBtn;
+    Button infoBtn, searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn, helpBtn;
     @FXML
     TableView<Course> tableTV;
     @FXML
@@ -175,6 +182,7 @@ public class ViewController {
     @FXML
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
+        infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
         } catch (SQLException e) {
@@ -208,6 +216,51 @@ public class ViewController {
             departSearchTF.setText("Computer Science");
         }
         setTextFieldSMaxLength();
+
+    }
+
+    private void showInfo() {
+        Dialog dlg = new Dialog();
+        dlg.setTitle("INFO");
+        dlg.setHeaderText(
+                " MC Books Library Manager\n" +
+                        "Version 1.0.0");
+        VBox box = new VBox(25);
+        Label lbl = new Label("Found a bug or want to help?");
+        Label lbl1 = new Label("you can head to our Github issues page");
+        Button btn = new Button("Take to the Github page");
+        box.getChildren().addAll(lbl, lbl1, btn);
+        dlg.getDialogPane().setContent(box);
+        box.setAlignment(Pos.CENTER);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.setResizable(true);
+        dlg.setWidth(300);
+        dlg.setHeight(300);
+
+        btn.setOnMouseClicked(e -> {
+            String gitHubIssuePageURL = "https://github.com/mmohades/Book-Library/issues";
+            try {
+                if (Desktop.isDesktopSupported()) {
+
+                    Desktop.getDesktop().browse(URI.create(gitHubIssuePageURL));
+                } else {
+                    throw new IOException();
+                }
+            } catch (IOException exx) {
+                try {
+                    new ProcessBuilder("x-www-browser", gitHubIssuePageURL).start();
+                } catch (IOException e1) {
+                    Runtime runtime = Runtime.getRuntime();
+                    try {
+                        runtime.exec("xdg-open " + gitHubIssuePageURL);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+            }
+        });
+        dlg.showAndWait();
 
     }
 

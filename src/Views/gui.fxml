@@ -59,7 +59,8 @@
                                <Insets bottom="10.0"/>
                            </padding>
                         </HBox>
-                         <TitledPane prefHeight="200.0" prefWidth="200.0" text="More">
+                         <TitledPane alignment="CENTER" contentDisplay="CENTER" prefHeight="200.0" prefWidth="200.0"
+                                     text="More">
                              <content>
                                  <VBox prefHeight="200.0" prefWidth="100.0">
                                      <children>
@@ -308,6 +309,12 @@
                                      <Insets bottom="25.0" left="70.0"/>
                                  </HBox.margin>
                               </Button>
+                               <Button fx:id="infoBtn" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                       graphicTextGap="0.0" layoutX="821.0" layoutY="35.0" text="i">
+                                   <HBox.margin>
+                                       <Insets bottom="25.0"/>
+                                   </HBox.margin>
+                               </Button>
                            </children>
                            <VBox.margin>
                               <Insets />

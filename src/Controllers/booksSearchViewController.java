@@ -1,7 +1,7 @@
 package Controllers;
 
-import Models.Book;
 import Controllers.BookAPI.BookAPI;
+import Models.Book;
 import Models.frontend.LimitedTextField;
 import Models.frontend.Publisher;
 import javafx.animation.FadeTransition;
@@ -43,7 +43,6 @@ public class booksSearchViewController {
         icon = new Image(this.getClass().getResource(programIconImf).toString());
         debugging = false;
         setTableOFBooksCellProperty();
-//        addFakeBook();
         setSearch();
         searchTextF.setMaxLength(60);
     }
