@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import Models.frontend.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import Models.frontend.*?>
 <VBox maxHeight="25000.0" maxWidth="25000.0" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ViewController">
    <children>
       <HBox onMousePressed="#updateRowSelected" prefHeight="750.0" prefWidth="1200.0">
@@ -55,7 +55,27 @@
                                                 promptText="e.g, Introduction to Programming"/>
                            </children>
                            <padding>
+                              <Insets bottom="10.0"/>
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="50.0" prefWidth="100.0"
+                              spacing="60.0">
+                           <children>
+                              <Label text="CRN"/>
+                              <LimitedTextField fx:id="courseInfoCRN" alignment="CENTER" promptText="e.g, 123456"/>
+                           </children>
+                           <padding>
                               <Insets bottom="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="145.0" prefHeight="50.0" prefWidth="100.0"
+                              spacing="50.0">
+                           <children>
+                              <Label text="Notes"/>
+                              <LimitedTextField fx:id="courseInfoNotes" alignment="CENTER" promptText="e.g, Notes"/>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0"/>
                            </padding>
                         </HBox>
                      </children>

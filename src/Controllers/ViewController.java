@@ -1,7 +1,7 @@
 package Controllers;
 
-import Models.Book;
 import Controllers.BookAPI.BookAPI;
+import Models.Book;
 import Models.frontend.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -52,6 +52,7 @@ public class ViewController {
             profInfoLName = new LimitedTextField(), crnSearchTF = new LimitedTextField(),
             profSearchTF = new LimitedTextField(), courseSearchTF = new LimitedTextField(),
             departSearchTF = new LimitedTextField(), resourceSearchTF = new LimitedTextField(),
+            courseInfoCRN = new LimitedTextField(), courseInfoNotes = new LimitedTextField(),
             profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
     //promt text
 
