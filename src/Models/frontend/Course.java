@@ -21,6 +21,7 @@ public class Course {
     private Person professor;
     private ArrayList<Resource> resource;
     private int commonID;
+    private SimpleStringProperty notes;
 
 
     public Course() {
@@ -142,7 +143,6 @@ public class Course {
     public void setDepartment(String department) {
 
         this.department = new SimpleStringProperty(department);
-        ;
     }
 
     public Person getProfessor() {
@@ -165,6 +165,18 @@ public class Course {
         this.resource = resource;
     }
 
+    public String getNotes() {
+        return notes.get();
+    }
+
+    public void setNotes(String notes) {
+        this.notes.set(notes);
+    }
+
+    public SimpleStringProperty NotesProperty() {
+        return notes;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -179,7 +191,6 @@ public class Course {
                 ", resource=" + resource +
                 '}';
     }
-
 
 
 //    @Override
