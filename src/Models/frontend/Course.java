@@ -169,8 +169,9 @@ public class Course {
         return notes.get();
     }
 
-    public void setNotes(String notes) {
-        this.notes.set(notes);
+    public void setNotes(String notes)
+    {
+        this.notes = new SimpleStringProperty(notes);
     }
 
     public SimpleStringProperty NotesProperty() {

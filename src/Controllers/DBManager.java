@@ -1742,10 +1742,12 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
 
     public static ArrayList<Models.frontend.Course> relationalReadByCourseID2(Map<Integer, ArrayList<Integer>> courseIds, Semester semester ) {
         long startTime = System.nanoTime();
-       String tempSemester = semester.getSeason();
+       String tempSemester = semester.getSeason(),
+                courseNote = null;
        tempSemester = tempSemester.toUpperCase();
        tempSemester = tempSemester.replace(' ', '_');
        semester.setSeason(tempSemester);
+
 
         ArrayList<Models.frontend.Course> courseList = new ArrayList<>();
 
@@ -1756,6 +1758,7 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
 
 
         int personID = 0, i, cID = 0, courseID =0;
+        Integer CRN = null;
         ResultSet rs, rsTmp, rsTemp;
         Statement stTemp, stTemp2;
 
@@ -1795,6 +1798,7 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
 
                     rsTmp = stTemp2.executeQuery("SELECT * FROM RELATION_COURSE_PERSON WHERE COMMONID = " +
                             tempCommonID);
+
                     if(rsTmp.next()){
                         System.out.println("semester: " + semester.getSeason());
                         courseList.add(new Models.frontend.Course(cID, tempCommonID, semester.getYear(), semester.getSeason(),
@@ -1802,6 +1806,16 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
                         courseList.get(i).setCommonID(tempCommonID);
 
                         personID = rsTmp.getInt("PERSONID");
+
+
+                        rsTmp.getString("COURSENOTES");
+                        if(!rsTmp.wasNull())
+                             courseNote = rsTmp.getString("COURSENOTES");
+
+                        rsTmp.getObject("COURSECRN");
+                        if(!rsTmp.wasNull())
+                            CRN = rsTmp.getInt("COURSECRN");
+
 
                         if(cachedPersons.containsKey(personID))
 
@@ -1839,6 +1853,14 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
 
                         courseResources = findResourcesCourse2(courseID, tempCommonID, cachedResources);
                         courseList.get(i).setResource(courseResources);
+                        if(CRN != null){
+                            courseList.get(i).setCRN(CRN.intValue());
+                            CRN = null;
+                        }
+                        if(courseNote != null) {
+                            courseList.get(i).setNotes(courseNote);
+                            courseNote = null;
+                        }
                         i++;
 
                     }
