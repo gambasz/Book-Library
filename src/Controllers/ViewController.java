@@ -61,6 +61,7 @@ public class ViewController {
             departSearchTF = new LimitedTextField(), resourceSearchTF = new LimitedTextField(),
             courseInfoCRN = new LimitedTextField(), courseInfoNotes = new LimitedTextField(),
             profInfoFNameTf = new LimitedTextField(), profInfoLNameTf = new LimitedTextField();
+
     //promt text
 
 
@@ -675,7 +676,11 @@ public class ViewController {
                 yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return false;
-        } else if (cSplit.length != 2) {
+        }
+        else if(!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())){
+            showError("Error","CRN must be a number","Re-type CRN");
+            return false;
+        }else if (cSplit.length != 2) {
 
             showError("Input Error",
                     "Unable to insert because the course you title entered " +
@@ -726,6 +731,9 @@ public class ViewController {
             if (isClassInTheSameYear(tempCour)) {
                 courseList.add(tempCour);
             }
+
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCour.getCommonID());
+
 
         }
         updateCourseTable();
@@ -888,7 +896,10 @@ public class ViewController {
 
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
-        } else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+        }else if(!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())){
+            showError("Error","CRN must be a number","Re-type CRN");
+        }
+        else if (selectedCourse != null && checkFirstRequiredBoxes()) {
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
@@ -909,6 +920,8 @@ public class ViewController {
 
             DBManager.updateCoursePersonSemester(tempCourse);
             DBManager.updateRelationCourseResources(tempCourse);
+
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
 
             controller.copyCourse(selectedCourse, tempCourse);
 
