@@ -819,7 +819,7 @@ public class DBManager {
 
                 } else {
 
-                    statement.executeQuery(String.format("INSERT INTO RELATION)_COURSE_RESOURCES (COURSEID, RESOURCEID) VALUES (%d, %d)", new_id, c.getResource().get(0).getID()));
+                    statement.executeQuery(String.format("INSERT INTO RELATION_COURSE_RESOURCES (COURSEID, RESOURCEID) VALUES (%d, %d)", new_id, c.getResource().get(0).getID()));
 
                 }
 
@@ -4265,6 +4265,38 @@ public static ArrayList<Models.frontend.Resource> findResourcesCourse2(int cours
 
         return null;
 
+    }
+
+    public static void updateCRNAndNoteForClass(String CRN, String note, int commonID){
+        try{
+            if(!CRN.isEmpty() && !note.isEmpty()) {
+
+                int intCRN = Integer.parseInt(CRN);
+                String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSECRN = ?, COURSENOTES = ?" +
+                        " WHERE COMMONID = " + commonID);
+                PreparedStatement stl = conn.prepareStatement(query);
+                stl.setInt(1, intCRN);
+                stl.setString(2, note);
+                stl.executeQuery();
+            }else if(!note.isEmpty()) {
+
+                String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSENOTES = ?" +
+                        " WHERE COMMONID = " + commonID);
+                PreparedStatement stl = conn.prepareStatement(query);
+                stl.setString(1, note);
+                stl.executeQuery();
+            }else if(!CRN.isEmpty()){
+                String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSECRN = ?" +
+                        " WHERE COMMONID = " + commonID);
+                PreparedStatement stl = conn.prepareStatement(query);
+                stl.setString(1, CRN);
+                stl.executeQuery();
+            }
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
