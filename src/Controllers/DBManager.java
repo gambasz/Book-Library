@@ -21,7 +21,6 @@ public class DBManager {
     public static Connection conn;
 
     public DBManager() {
-        //Method is empty for now
     }
 
     public static String readFromFile() {

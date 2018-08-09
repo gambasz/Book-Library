@@ -6,7 +6,12 @@ import Models.frontend.Course;
 import Models.frontend.Resource;
 import com.sun.istack.internal.NotNull;
 import Models.frontend.Person;
+import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -378,7 +383,23 @@ public class controller {
     }
 
 
+public static void setTextStyle(Text t){
 
+//        t.setX(10.0f);
+//    t.setY(50.0f);
+//    t.setCache(true);
+    t.setFill(Color.web("#21618C"));
+    t.setFont(Font.font(null, FontWeight.BOLD, 18));
+
+//    Reflection r = new Reflection();
+//    r.setFraction(0.2f);
+//
+//    t.setEffect(r);
+
+//    t.setTranslateY(400);
+
+
+}
 
 }
 

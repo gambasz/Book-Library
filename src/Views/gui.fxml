@@ -358,6 +358,8 @@
                                                         <Insets bottom="25.0" left="70.0"/>
                                                     </HBox.margin>
                                                 </Button>
+                                                <Separator prefWidth="20.0"/>
+
                                                 <Button fx:id="infoBtn" alignment="TOP_CENTER" contentDisplay="CENTER"
                                                         graphicTextGap="0.0" layoutX="821.0" layoutY="35.0" text="i">
                                                     <HBox.margin>

@@ -3,6 +3,7 @@ package Controllers;
 import Controllers.BookAPI.BookAPI;
 import Models.Book;
 import Models.frontend.*;
+import com.sun.prism.paint.Paint;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.util.Callback;
@@ -222,15 +224,25 @@ public class ViewController {
 
     private void showInfo() {
         Dialog dlg = new Dialog();
-        dlg.setTitle("INFO");
+        dlg.setTitle("MC Books Library App Information");
+        ImageView icon = new ImageView(programeIconImg);
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
         dlg.setHeaderText(
-                " MC Books Library Manager\n" +
-                        "Version 1.0.0");
+                "MC Books Library Manager\n" +
+                        "\t\tVersion 1.0");
         VBox box = new VBox(25);
-        Label lbl = new Label("Found a bug or want to help?");
-        Label lbl1 = new Label("you can head to our Github issues page");
-        Button btn = new Button("Take to the Github page");
-        box.getChildren().addAll(lbl, lbl1, btn);
+        Button btn = new Button("Click here to open GitHub!");
+        btn.setTextFill(javafx.scene.paint.Paint.valueOf("#21618C"));
+        Text t = new Text();
+        t.setText("Found a bug or want to contribute?\n" +
+                "Feel free to fork the project, make changes, and make a pull request!");
+
+        controller.setTextStyle(t);
+
+
+        box.getChildren().addAll(t, btn);
         dlg.getDialogPane().setContent(box);
         box.setAlignment(Pos.CENTER);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
@@ -239,7 +251,7 @@ public class ViewController {
         dlg.setHeight(300);
 
         btn.setOnMouseClicked(e -> {
-            String gitHubIssuePageURL = "https://github.com/mmohades/Book-Library/issues";
+            String gitHubIssuePageURL = "https://github.com/mmohades/Book-Library";
             try {
                 if (Desktop.isDesktopSupported()) {
 
@@ -288,8 +300,10 @@ public class ViewController {
         ImageView updateImg = new ImageView(updateIconImg);
         String filterIconImg = "/Models/media/filter.png";
         ImageView filterImg = new ImageView(filterIconImg);
-        String tutoriaIconImg = "/Models/media/tutorial.png";
-        ImageView tutorialImg = new ImageView(tutoriaIconImg);
+
+        ImageView tutorialImg = new ImageView("/Models/media/tutorial.png");
+        ImageView infoImg = new ImageView("Models/media/info.png");
+
 
         addGraphicToButtons(searchImg, searchBtn);
         addGraphicToButtons(addImg, addBtn);
@@ -297,6 +311,7 @@ public class ViewController {
         addGraphicToButtons(updateImg, updateBtn);
         addGraphicToButtons(filterImg, filterBtn);
         addGraphicToButtons(tutorialImg, helpBtn);
+        addGraphicToButtons(infoImg, infoBtn);
 
 
     }
@@ -608,7 +623,7 @@ public class ViewController {
             }
 
         } else {
-            showError("Search ERROR", "Error when searching", "Something went wrong when searching. This error should not show up.");
+            showError("Search ERROR", "Error when searching", "Something went wrong when searching.");
         }
         courseList.clear();
         courseList.addAll(tmp_courses);
