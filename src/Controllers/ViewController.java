@@ -80,6 +80,8 @@ public class ViewController {
     ComboBox semesterComBox, semesterComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
+    @FXML
+    TitledPane moreInfoTP;
     private boolean debugging;
     private TableView<Resource> resourceTable;
     private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol, editionCol;
@@ -229,7 +231,7 @@ public class ViewController {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.setHeaderText(
-                controller.multiplyStr("\t", 6)+ "MC Books Library Manager\n" +
+                controller.multiplyStr("\t", 6) + "MC Books Library Manager\n" +
                         controller.multiplyStr("\t", 8) + "Version 1.0");
         VBox box = new VBox(25);
         Button btn = new Button("Click here to open GitHub!");
@@ -657,6 +659,11 @@ public class ViewController {
                     resInfoList.getItems().add(resource.getTitle());
                     resourceTable.getItems().add(resource);
                 }
+                moreInfoTP.setExpanded(false);
+
+                if (selectedCourse.getNotes() != null && !selectedCourse.getNotes().isEmpty()) {
+                    moreInfoTP.setExpanded(true);
+                }
             }
         }
         if (tableTV.getSelectionModel().getSelectedItems().isEmpty()) {
@@ -691,11 +698,10 @@ public class ViewController {
                 yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return false;
-        }
-        else if(!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())){
-            showError("Error","CRN must be a number","Re-type CRN");
+        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+            showError("Error", "CRN must be a number", "Re-type CRN");
             return false;
-        }else if (cSplit.length != 2) {
+        } else if (cSplit.length != 2) {
 
             showError("Input Error",
                     "Unable to insert because the course you title entered " +
@@ -747,7 +753,7 @@ public class ViewController {
                 courseList.add(tempCour);
             }
 
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCour.getCommonID());
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCour.getCommonID());
 
 
         }
@@ -911,10 +917,9 @@ public class ViewController {
 
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
-        }else if(!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())){
-            showError("Error","CRN must be a number","Re-type CRN");
-        }
-        else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+            showError("Error", "CRN must be a number", "Re-type CRN");
+        } else if (selectedCourse != null && checkFirstRequiredBoxes()) {
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
@@ -936,7 +941,7 @@ public class ViewController {
             DBManager.updateCoursePersonSemester(tempCourse);
             DBManager.updateRelationCourseResources(tempCourse);
 
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCourse.getCommonID());
 
             controller.copyCourse(selectedCourse, tempCourse);
 
