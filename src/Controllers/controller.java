@@ -61,7 +61,7 @@ public class controller {
         return modify;
     }
 
-    private static String multiplyStr(String string, int times) {
+    public static String multiplyStr(String string, int times) {
         String returned = "";
         for (int i = 0; i < times; i++) {
             returned += string;

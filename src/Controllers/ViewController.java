@@ -230,8 +230,8 @@ public class ViewController {
         icon.setFitWidth(75);
         dlg.setGraphic(icon);
         dlg.setHeaderText(
-                "MC Books Library Manager\n" +
-                        "\t\tVersion 1.0");
+                controller.multiplyStr("\t", 6)+ "MC Books Library Manager\n" +
+                        controller.multiplyStr("\t", 8) + "Version 1.0");
         VBox box = new VBox(25);
         Button btn = new Button("Click here to open GitHub!");
         btn.setTextFill(javafx.scene.paint.Paint.valueOf("#21618C"));
