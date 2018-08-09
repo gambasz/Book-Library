@@ -71,7 +71,7 @@ public class CLI {
                 }
                 case "read":  {
                     int courseID = Integer.parseInt(values[1]);
-                    DB.relationalReadByCourseID(courseID);
+//                    DB.relationalReadByCourseID(courseID);
                     break;
                 }
                 case "exit": {

@@ -13,22 +13,30 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,7 +69,7 @@ public class ViewController {
     @FXML
     ListView<String> resInfoList;
     @FXML
-    Button searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn, helpBtn;
+    Button infoBtn, searchBtn, profInfoBtn, resEditBtn, addBtn, updateBtn, deleteBtn, filterBtn, helpBtn;
     @FXML
     TableView<Course> tableTV;
     @FXML
@@ -72,6 +80,8 @@ public class ViewController {
     ComboBox semesterComBox, semesterComBoxEdit, profInfoType;
     @FXML
     CheckBox profCB, courseCB, departCB, resCB;
+    @FXML
+    TitledPane moreInfoTP;
     private boolean debugging;
     private TableView<Resource> resourceTable;
     private TableColumn<Resource, String> publisherCol, nameCol, authorCol, idcCol, editionCol;
@@ -176,6 +186,7 @@ public class ViewController {
     @FXML
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
+        infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
         } catch (SQLException e) {
@@ -212,6 +223,61 @@ public class ViewController {
 
     }
 
+    private void showInfo() {
+        Dialog dlg = new Dialog();
+        dlg.setTitle("MC Books Library App Information");
+        ImageView icon = new ImageView(programeIconImg);
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+        dlg.setHeaderText(
+                controller.multiplyStr("\t", 6) + "MC Books Library Manager\n" +
+                        controller.multiplyStr("\t", 8) + "Version 1.0");
+        VBox box = new VBox(25);
+        Button btn = new Button("Click here to open GitHub!");
+        btn.setTextFill(javafx.scene.paint.Paint.valueOf("#21618C"));
+        Text t = new Text();
+        t.setText("Found a bug or want to contribute?\n" +
+                "Feel free to fork the project, make changes, and make a pull request!");
+
+        controller.setTextStyle(t);
+
+
+        box.getChildren().addAll(t, btn);
+        dlg.getDialogPane().setContent(box);
+        box.setAlignment(Pos.CENTER);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.setResizable(true);
+        dlg.setWidth(300);
+        dlg.setHeight(300);
+
+        btn.setOnMouseClicked(e -> {
+            String gitHubIssuePageURL = "https://github.com/mmohades/Book-Library";
+            try {
+                if (Desktop.isDesktopSupported()) {
+
+                    Desktop.getDesktop().browse(URI.create(gitHubIssuePageURL));
+                } else {
+                    throw new IOException();
+                }
+            } catch (IOException exx) {
+                try {
+                    new ProcessBuilder("x-www-browser", gitHubIssuePageURL).start();
+                } catch (IOException e1) {
+                    Runtime runtime = Runtime.getRuntime();
+                    try {
+                        runtime.exec("xdg-open " + gitHubIssuePageURL);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+            }
+        });
+        dlg.showAndWait();
+
+    }
+
     private void setTextFieldSMaxLength() {
 
         courseInfoTitle.setMaxLength(8);
@@ -235,8 +301,10 @@ public class ViewController {
         ImageView updateImg = new ImageView(updateIconImg);
         String filterIconImg = "/Models/media/filter.png";
         ImageView filterImg = new ImageView(filterIconImg);
-        String tutoriaIconImg = "/Models/media/tutorial.png";
-        ImageView tutorialImg = new ImageView(tutoriaIconImg);
+
+        ImageView tutorialImg = new ImageView("/Models/media/tutorial.png");
+        ImageView infoImg = new ImageView("Models/media/info.png");
+
 
         addGraphicToButtons(searchImg, searchBtn);
         addGraphicToButtons(addImg, addBtn);
@@ -244,6 +312,7 @@ public class ViewController {
         addGraphicToButtons(updateImg, updateBtn);
         addGraphicToButtons(filterImg, filterBtn);
         addGraphicToButtons(tutorialImg, helpBtn);
+        addGraphicToButtons(infoImg, infoBtn);
 
 
     }
@@ -555,7 +624,7 @@ public class ViewController {
             }
 
         } else {
-            showError("Search ERROR", "Error when searching", "Something went wrong when searching. This error should not show up.");
+            showError("Search ERROR", "Error when searching", "Something went wrong when searching.");
         }
         courseList.clear();
         courseList.addAll(tmp_courses);
@@ -578,6 +647,8 @@ public class ViewController {
                 selectedPerson = selectedCourse.getProfessor();
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
+                courseInfoNotes.setText(selectedCourse.getNotes());
+                courseInfoCRN.setText("" + selectedCourse.getCRN());
                 semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
                 yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
                 ArrayList<Resource> tempRes = selectedCourse.getResource();
@@ -588,7 +659,11 @@ public class ViewController {
                     resInfoList.getItems().add(resource.getTitle());
                     resourceTable.getItems().add(resource);
                 }
+                moreInfoTP.setExpanded(false);
 
+                if (selectedCourse.getNotes() != null && !selectedCourse.getNotes().isEmpty()) {
+                    moreInfoTP.setExpanded(true);
+                }
             }
         }
         if (tableTV.getSelectionModel().getSelectedItems().isEmpty()) {
@@ -623,11 +698,10 @@ public class ViewController {
                 yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return false;
-        }
-        else if(!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())){
-            showError("Error","CRN must be a number","Re-type CRN");
+        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+            showError("Error", "CRN must be a number", "Re-type CRN");
             return false;
-        }else if (cSplit.length != 2) {
+        } else if (cSplit.length != 2) {
 
             showError("Input Error",
                     "Unable to insert because the course you title entered " +
@@ -679,7 +753,9 @@ public class ViewController {
             }
 
 
+
             DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCour.getCommonID());
+
 
 
         }
@@ -843,10 +919,9 @@ public class ViewController {
 
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
-        }else if(!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())){
-            showError("Error","CRN must be a number","Re-type CRN");
-        }
-        else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+            showError("Error", "CRN must be a number", "Re-type CRN");
+        } else if (selectedCourse != null && checkFirstRequiredBoxes()) {
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
@@ -867,9 +942,10 @@ public class ViewController {
 
             DBManager.updateCoursePersonSemester(tempCourse);
             DBManager.updateRelationCourseResources(tempCourse);
+
             controller.addNoteAndCRN(tempCourse, courseInfoNotes.getText(),courseInfoCRN.getText());
             DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
-
+            
             controller.copyCourse(selectedCourse, tempCourse);
 
             if (!isClassInTheSameYear(selectedCourse)) {
@@ -1467,7 +1543,9 @@ public class ViewController {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
         } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
-        } else {
+        }
+
+        else {
 
 
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
@@ -1483,20 +1561,26 @@ public class ViewController {
             temp.setISBN13(isbn13.getText());
             temp.setISBN(isbn10.getText());
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
+            DBManager.setIDforResource(temp);
 
-            if (!isPersonResourcesView) {
-                DBManager.setIDforResource(temp);
-                resList.add(temp);
-                resourceTable.getItems().add(temp);
-                DBManager.insertRelationResourcePublisher(temp);
+            if(!resourceTable.getItems().contains(temp)) {
 
-            } else {
+                if (!isPersonResourcesView) {
+                    resList.add(temp);
+                    resourceTable.getItems().add(temp);
+                    DBManager.insertRelationResourcePublisher(temp);
 
-                resourceTable.getItems().add(temp);
-                DBManager.setIDforResource(temp);
-                selectedPerson.getResources().add(temp);
-                DBManager.insertRelationResourcePublisher(temp);
+                } else {
 
+                    resourceTable.getItems().add(temp);
+                    selectedPerson.getResources().add(temp);
+                    DBManager.insertRelationResourcePublisher(temp);
+
+                }
+            }
+            else{
+                showError("Repetitive resource", "The resource is already exists",
+                        "Please make sure you are not adding repetitive resource in one class.");
             }
         }
 
