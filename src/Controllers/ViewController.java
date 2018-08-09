@@ -672,12 +672,12 @@ public class ViewController {
                     courseInfoDescrip.getText(),
                     tempRes);
             tempCour.setID(DBManager.insertCourseQuery(tempCour));
-
-
+            controller.addNoteAndCRN(tempCour, courseInfoNotes.getText(),courseInfoCRN.getText());
             tempCour = DBManager.relationalInsertByID2(tempCour);
             if (isClassInTheSameYear(tempCour)) {
                 courseList.add(tempCour);
             }
+
 
             DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCour.getCommonID());
 
@@ -867,7 +867,7 @@ public class ViewController {
 
             DBManager.updateCoursePersonSemester(tempCourse);
             DBManager.updateRelationCourseResources(tempCourse);
-
+            controller.addNoteAndCRN(tempCourse, courseInfoNotes.getText(),courseInfoCRN.getText());
             DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
 
             controller.copyCourse(selectedCourse, tempCourse);
