@@ -1,9 +1,222 @@
 package Controllers;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 public class JunkClass {
 
 
+// **********************
 
+
+
+
+
+
+
+
+
+
+
+    // Relationship Tables
+    public static void printTableCoursePerson() {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getTableCoursePersonQuery());
+            while (rs.next()) {
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTableCoursePerson() method.");
+        }
+
+    }
+
+    public static void printTableCourseResource() {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getTableCourseResourceQuery());
+            while (rs.next()) {
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTableCourseResource() method.");
+        }
+    }
+
+    public static void printTableCourseSemester() {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getTableCourseSemesterQuery());
+            while (rs.next()) {
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2) + "|" + rs.getInt(3));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTableCourseSemester() method.");
+        }
+
+    }
+
+    public static void printTablePersonResource() {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getTablePersonResourceQuery());
+            while (rs.next()) {
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTablePersonResource() method.");
+        }
+
+    }
+
+    public static void printTablePublisherResource() {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getTablePublisherResourceQuery());
+            while (rs.next()) {
+
+                System.out.println(rs.getInt(1) + "|" + rs.getInt(2));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("Exception when executing printTablePublisherResource() method.");
+        }
+
+    }
+
+    //===========================================PRINTS MATCHING ID=====================================================
+
+    public static void printPersonInTable(int id) {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getPersonInTableQuery(id));
+            while (rs.next()) {
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printPersonInTable() method.");
+        }
+
+
+        // return String.format("SELECT * FROM PERSON WHERE ID = %d", id);
+    }
+
+    public static void printCourseInTable(int id) {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getCourseInTableQuery(id));
+
+            while (rs.next()) {
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4) + "|" + rs.getString(5));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printCourseInTable() method.");
+
+        }
+    }
+
+    public static void printResourcesInTable(int id) {
+
+        try {
+
+            ResultSet rs = getResourceInTableQuery(id).executeQuery();
+
+            while (rs.next()) {
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4) + rs.getInt(5) +
+                        rs.getInt(6) + rs.getString(7));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printResourcesInTable() method.");
+        }
+
+    }
+
+    public static void printPublisherInTable(int id) {
+
+        try {
+
+            ResultSet rs = st.executeQuery(getPublisherInTableQuery(id));
+
+            while (rs.next()) {
+                System.out.println(rs.getInt(1) + "|" + rs.getString(2) +
+                        rs.getString(3) + rs.getString(4));
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.out.println("ERROR: Exception when trying to execute printPublisherInTable() method.");
+        }
+    }
+
+
+
+    //================================================= QUERIES ========================================================
+
+    //===========================================SELECT METHODS (QUERIES)===============================================
+
+    //===========================================SELECT WHOLE TABLE QUERY===============================================
+
+    //Regular Tables
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //**
 
 
 
