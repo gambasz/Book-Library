@@ -1540,7 +1540,9 @@ public class ViewController {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
         } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
-        } else {
+        }
+
+        else {
 
 
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
@@ -1556,20 +1558,26 @@ public class ViewController {
             temp.setISBN13(isbn13.getText());
             temp.setISBN(isbn10.getText());
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
+            DBManager.setIDforResource(temp);
 
-            if (!isPersonResourcesView) {
-                DBManager.setIDforResource(temp);
-                resList.add(temp);
-                resourceTable.getItems().add(temp);
-                DBManager.insertRelationResourcePublisher(temp);
+            if(!resourceTable.getItems().contains(temp)) {
 
-            } else {
+                if (!isPersonResourcesView) {
+                    resList.add(temp);
+                    resourceTable.getItems().add(temp);
+                    DBManager.insertRelationResourcePublisher(temp);
 
-                resourceTable.getItems().add(temp);
-                DBManager.setIDforResource(temp);
-                selectedPerson.getResources().add(temp);
-                DBManager.insertRelationResourcePublisher(temp);
+                } else {
 
+                    resourceTable.getItems().add(temp);
+                    selectedPerson.getResources().add(temp);
+                    DBManager.insertRelationResourcePublisher(temp);
+
+                }
+            }
+            else{
+                showError("Repetitive resource", "The resource is already exists",
+                        "Please make sure you are not adding repetitive resource in one class.");
             }
         }
 

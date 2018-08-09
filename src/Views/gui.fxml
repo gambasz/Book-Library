@@ -88,7 +88,7 @@
                                                                 <Label text="Notes"/>
                                                                 <LimitedTextField fx:id="courseInfoNotes"
                                                                                   alignment="CENTER"
-                                                                                  promptText="e.g, Notes"/>
+                                                                                  promptText="e.g, Z Course"/>
                                                             </children>
                                                             <padding>
                                                                 <Insets bottom="10.0"/>
@@ -100,7 +100,7 @@
                                                                 <Label text="CRN"/>
                                                                 <LimitedTextField fx:id="courseInfoCRN"
                                                                                   alignment="CENTER"
-                                                                                  promptText="e.g, 123456"/>
+                                                                                  promptText="e.g, 896"/>
                                                             </children>
                                                             <padding>
                                                                 <Insets bottom="10.0"/>
