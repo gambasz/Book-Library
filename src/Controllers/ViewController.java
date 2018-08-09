@@ -3,7 +3,6 @@ package Controllers;
 import Controllers.BookAPI.BookAPI;
 import Models.Book;
 import Models.frontend.*;
-import com.sun.prism.paint.Paint;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -646,6 +645,8 @@ public class ViewController {
                 selectedPerson = selectedCourse.getProfessor();
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
+                courseInfoNotes.setText(selectedCourse.getNotes());
+                courseInfoCRN.setText("" + selectedCourse.getCRN());
                 semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
                 yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
                 ArrayList<Resource> tempRes = selectedCourse.getResource();
@@ -656,7 +657,6 @@ public class ViewController {
                     resInfoList.getItems().add(resource.getTitle());
                     resourceTable.getItems().add(resource);
                 }
-
             }
         }
         if (tableTV.getSelectionModel().getSelectedItems().isEmpty()) {

@@ -76,7 +76,8 @@
                                                 <Insets bottom="10.0"/>
                                             </padding>
                                         </HBox>
-                                        <TitledPane alignment="CENTER" contentDisplay="CENTER" expanded="false"
+                                        <TitledPane fx:id="moreInfoTP" alignment="CENTER" contentDisplay="CENTER"
+                                                    expanded="false"
                                                     prefHeight="59.0" prefWidth="275.0" text="More">
                                             <content>
                                                 <VBox prefHeight="200.0" prefWidth="100.0">

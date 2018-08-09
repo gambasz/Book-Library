@@ -32,6 +32,7 @@ public class Course {
         this.CRN = new SimpleIntegerProperty(CRN);
         this.YEAR = new SimpleIntegerProperty(YEAR);
         this.SEMESTER = Semester.valueOf(SEMESTER);
+        this.notes = new SimpleStringProperty();
     }
 
     public Course(int ID, String title, String department, String description) {
@@ -39,6 +40,8 @@ public class Course {
         this.title = new SimpleStringProperty(title);
         this.department = new SimpleStringProperty(department);
         this.description = new SimpleStringProperty(description);
+        this.notes = new SimpleStringProperty();
+
     }
 
     public Course(int ID, int CRN, int YEAR, String semester, String title, String department, Person professor, String description, ArrayList<Resource> resource) {
@@ -49,6 +52,7 @@ public class Course {
         this.title = new SimpleStringProperty(title);
         this.department = new SimpleStringProperty(department);
         this.description = new SimpleStringProperty(description);
+        this.notes = new SimpleStringProperty();
         this.professor = professor;
         this.resource = resource;
     }
