@@ -317,6 +317,8 @@ public class controller {
         selectedCourse.setResource(updated.getResource());
         selectedCourse.setProfessor(updated.getProfessor());
 
+
+
     }
 
     public static ArrayList<Image> tutorialImages() {

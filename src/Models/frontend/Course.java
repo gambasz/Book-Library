@@ -97,7 +97,7 @@ public class Course {
     }
 
     public void setCRN(int CRN) {
-        this.CRN.set(CRN);
+        this.CRN = new SimpleIntegerProperty(CRN);
     }
 
     public int getYEAR() {

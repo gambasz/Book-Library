@@ -943,11 +943,11 @@ public class ViewController {
             DBManager.updateCoursePersonSemester(tempCourse);
             DBManager.updateRelationCourseResources(tempCourse);
 
-            controller.addNoteAndCRN(tempCourse, courseInfoNotes.getText(),courseInfoCRN.getText());
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
-            
-            controller.copyCourse(selectedCourse, tempCourse);
 
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
+
+            controller.copyCourse(selectedCourse, tempCourse);
+            controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(),courseInfoCRN.getText());
             if (!isClassInTheSameYear(selectedCourse)) {
                 courseList.remove(selectedCourse);
             }
