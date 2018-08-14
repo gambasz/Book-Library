@@ -1,5 +1,7 @@
 package Controllers.DatabaseControllers;
 
+import Controllers.DBManager;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +19,7 @@ public class DBInitialize {
     public static void InitDBTables(){
         try {
             connect();
+            dropTables();
             createTables();
 
         } catch (SQLException e) {
@@ -24,8 +27,12 @@ public class DBInitialize {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
-
+    private static void connect() throws SQLException, ClassNotFoundException{
+        String url = DBManager.readDBinfo();
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        conn = DriverManager.getConnection(url);
     }
 
     private static String[] readQueries(String fileName) {
@@ -52,13 +59,31 @@ public class DBInitialize {
         return null;
     }
 
-    private static void connect() throws SQLException, ClassNotFoundException{
+    private static boolean dropTables(){
+        String fileName = "Drop_Tables.sql";
 
-        String url = "PUT_DATABSE_URL_HERE";
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-        conn = DriverManager.getConnection(url);
+        try {
+            String content = new String ( Files.readAllBytes( Paths.get(fileName) ) );
+            PreparedStatement delTables;
+            delTables = conn.prepareStatement(content);
+            delTables.executeQuery();
 
+            System.out.println("All tables successfully dropped!");
+            return true;
+        } catch (FileNotFoundException ex) {
+            System.out.println(
+                    "Unable to open file '" +
+                            fileName + "'");
+        } catch (IOException ex) {
+            System.out.println(
+                    "Error reading file '"
+                            + fileName + "'");
+        }
+        catch (SQLException ex){
+            ex.printStackTrace();
 
+        }
+        return false;
 
     }
 
@@ -69,18 +94,17 @@ public class DBInitialize {
 
         try {
             for (String query : queries) {
-
                 inTables = conn.prepareStatement(query);
                 inTables.executeQuery();
             }
+            System.out.println("All tables successfully created! :-)");
         }
-
-
         catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
+
+
     public static void main(String[] args) {
         InitDBTables();
     }

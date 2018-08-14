@@ -23,7 +23,7 @@ public class DBManager {
     public DBManager() {
     }
 
-    public static String readFromFile() {
+    public static String readDBinfo() {
         // The name of the file to open.
         String fileName = "DBinformation.txt";
 
@@ -61,7 +61,7 @@ public class DBManager {
 
 
     public static void openConnection() throws SQLException, ClassNotFoundException {
-        String url = readFromFile();
+        String url = readDBinfo();
         Class.forName("oracle.jdbc.driver.OracleDriver");
         conn = DriverManager.getConnection(url);
 
