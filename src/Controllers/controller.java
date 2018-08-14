@@ -385,12 +385,10 @@ public class controller {
     }
 
     public static void addNoteAndCRN(Models.frontend.Course c, String note, String CRN){
-        if(!CRN.isEmpty() && !note.isEmpty()) {
-            c.setCRN(Integer.parseInt(CRN));
+       if(note!=null&&!note.isEmpty()) {
             c.setNotes(note);
-        }else if(!note.isEmpty()) {
-            c.setNotes(note);
-        }else if(!CRN.isEmpty()){
+        }
+        if(CRN!=null&&!CRN.isEmpty()){
             c.setCRN(Integer.parseInt(CRN));
         }
     }
