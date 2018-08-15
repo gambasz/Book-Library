@@ -118,6 +118,14 @@ public class DBInitialize {
 
         System.out.print("Drop all Sequences method ");
         return runQueryList(queries, false);
+    }
+
+    private static boolean createCommonIDTriggers(){
+        String fileName = "commonID Triggers.sql";
+        String[] queries = readQueries(fileName);
+
+        System.out.print("Drop all Sequences method ");
+        return runQueryList(queries, false);
 
     }
 
