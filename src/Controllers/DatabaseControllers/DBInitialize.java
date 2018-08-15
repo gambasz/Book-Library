@@ -21,6 +21,7 @@ public class DBInitialize {
             connect();
             dropTables();
             createTables();
+            dropSequences();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,6 +89,14 @@ public class DBInitialize {
         String[] queries = readQueries(fileName);
 
         System.out.print("Create all tables method ");
+        return runQueryList(queries);
+
+    }
+    private static boolean dropSequences(){
+        String fileName = "drop Sequences.sql";
+        String[] queries = readQueries(fileName);
+
+        System.out.print("Drop all Sequences method ");
         return runQueryList(queries);
 
     }
