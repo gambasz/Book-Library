@@ -6,10 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class DBInitialize {
@@ -22,6 +19,7 @@ public class DBInitialize {
             dropTables();
             createTables();
             dropSequences();
+            createIDTriggers();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,14 +57,27 @@ public class DBInitialize {
         }
         return null;
     }
-    private static boolean runQueryList(String[] queries){
+    private static boolean runQueryList(String[] queries, boolean runPrepared){
 
-        PreparedStatement exQuery;
         try {
-            for (String query : queries) {
+            if(runPrepared) {
+
+                PreparedStatement exQuery;
+                for (String query : queries) {
+                    System.out.println("\n\n" + query +"\n---------\n");
                 exQuery = conn.prepareStatement(query);
                 exQuery.executeQuery();
+                }
             }
+
+            else{
+                Statement exQuery = conn.createStatement();
+                for (String query : queries) {
+                    System.out.println("\n\n" + query +"\n---------\n");
+                    exQuery.executeQuery(query);
+                }
+            }
+
             System.out.println(" Successfully worked! :-)");
             return true;
         }
@@ -81,7 +92,7 @@ public class DBInitialize {
         String[] queries = readQueries(fileName);
 
         System.out.print("Drop table method ");
-        return runQueryList(queries);
+        return runQueryList(queries, true);
     }
 
     private static boolean createTables(){
@@ -89,7 +100,7 @@ public class DBInitialize {
         String[] queries = readQueries(fileName);
 
         System.out.print("Create all tables method ");
-        return runQueryList(queries);
+        return runQueryList(queries, true);
 
     }
     private static boolean dropSequences(){
@@ -97,13 +108,41 @@ public class DBInitialize {
         String[] queries = readQueries(fileName);
 
         System.out.print("Drop all Sequences method ");
-        return runQueryList(queries);
+        return runQueryList(queries, true);
+
+    }
+
+    private static boolean createIDTriggers(){
+        String fileName = "IDTriggers.sql";
+        String[] queries = readQueries(fileName);
+
+        System.out.print("Drop all Sequences method ");
+        return runQueryList(queries, false);
 
     }
 
 
     public static void main(String[] args) {
         InitDBTables();
+//
+//        String lol = "CREATE OR REPLACE TRIGGER coursect_tr\n" +
+//                "  BEFORE INSERT ON coursect\n" +
+//                "  FOR EACH ROW\n" +
+//                "BEGIN\n" +
+//                "  SELECT course_sequence.nextval\n" +
+//                "  INTO :new.id\n" +
+//                "  FROM dual;\n" +
+//                "END";
+//        try {
+//            connect();
+//            PreparedStatement test = conn.prepareStatement(lol);
+//
+//            test.executeQuery();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 }
 
