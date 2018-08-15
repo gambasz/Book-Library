@@ -8,7 +8,7 @@ BEGIN
   SELECT course_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE person_sequence
 @
@@ -19,7 +19,7 @@ BEGIN
   SELECT person_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE resource_sequence
 @
@@ -30,7 +30,7 @@ BEGIN
   SELECT resource_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE publisher_sequence
 @
@@ -41,7 +41,7 @@ BEGIN
   SELECT publisher_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE semester_sequence
 @
@@ -52,7 +52,7 @@ BEGIN
   SELECT semester_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE rpres_sequence
 @
@@ -63,7 +63,7 @@ BEGIN
   SELECT rpres_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE rcper_sequence
 @
@@ -74,7 +74,7 @@ BEGIN
   SELECT rcper_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE rcres_sequence
 @
@@ -85,7 +85,7 @@ BEGIN
   SELECT rcres_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE pubres_sequence
 @
@@ -96,7 +96,7 @@ BEGIN
   SELECT pubres_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @
 CREATE SEQUENCE rscou_sequence
 @
@@ -107,5 +107,5 @@ BEGIN
   SELECT rscou_sequence.nextval
   INTO :new.id
   FROM dual;
-END
+END;
 @

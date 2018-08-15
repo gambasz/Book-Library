@@ -20,6 +20,7 @@ public class DBInitialize {
             createTables();
             dropSequences();
             createIDTriggers();
+            createCommonIDTriggers();
 
         } catch (SQLException e) {
             e.printStackTrace();
