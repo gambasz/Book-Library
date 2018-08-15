@@ -41,7 +41,7 @@ public class DBInitialize {
         try {
             String content = new String ( Files.readAllBytes( Paths.get(fileName) ) );
 
-            queries = content.split(";");
+            queries = content.split("@");
 
             return queries;
 
@@ -58,50 +58,38 @@ public class DBInitialize {
         }
         return null;
     }
+    private static boolean runQueryList(String[] queries){
 
-    private static boolean dropTables(){
-        String fileName = "Drop_Tables.sql";
-
-        try {
-            String content = new String ( Files.readAllBytes( Paths.get(fileName) ) );
-            PreparedStatement delTables;
-            delTables = conn.prepareStatement(content);
-            delTables.executeQuery();
-
-            System.out.println("All tables successfully dropped!");
-            return true;
-        } catch (FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" +
-                            fileName + "'");
-        } catch (IOException ex) {
-            System.out.println(
-                    "Error reading file '"
-                            + fileName + "'");
-        }
-        catch (SQLException ex){
-            ex.printStackTrace();
-
-        }
-        return false;
-
-    }
-
-    private static void createTables(){
-        String fileName = "Tables creating.sql";
-        String[] queries = readQueries(fileName);
-        PreparedStatement inTables;
-
+        PreparedStatement exQuery;
         try {
             for (String query : queries) {
-                inTables = conn.prepareStatement(query);
-                inTables.executeQuery();
+                exQuery = conn.prepareStatement(query);
+                exQuery.executeQuery();
             }
-            System.out.println("All tables successfully created! :-)");
+            System.out.println(" Successfully worked! :-)");
+            return true;
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println(" failed! :-(");
+        return false;
+    }
+    private static boolean dropTables(){
+        String fileName = "Drop_Tables.sql";
+        String[] queries = readQueries(fileName);
+
+        System.out.print("Drop table method ");
+        return runQueryList(queries);
+    }
+
+    private static boolean createTables(){
+        String fileName = "Tables creating.sql";
+        String[] queries = readQueries(fileName);
+
+        System.out.print("Create all tables method ");
+        return runQueryList(queries);
+
     }
 
 
