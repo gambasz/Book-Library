@@ -23,7 +23,7 @@ public class DBManager {
     public DBManager() {
     }
 
-    public static String readFromFile() {
+    public static String readFromFile() throws FileNotFoundException {
         // The name of the file to open.
         String fileName = "DBinformation.txt";
 
@@ -45,23 +45,22 @@ public class DBManager {
 
             // Always close files.
             bufferedReader.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" +
-                            fileName + "'");
         } catch (IOException ex) {
             System.out.println(
                     "Error reading file '"
                             + fileName + "'");
-            // Or we could just do this:
-            // ex.printStackTrace();
+
         }
         return null;
     }
 
 
     public static void openConnection() throws SQLException, ClassNotFoundException {
-        String url = readFromFile();
+        try {
+            String url = readFromFile();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         Class.forName("oracle.jdbc.driver.OracleDriver");
         conn = DriverManager.getConnection(url);
 
