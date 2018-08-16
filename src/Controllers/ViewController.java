@@ -30,6 +30,7 @@ import javafx.util.StringConverter;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -189,7 +190,13 @@ public class ViewController {
         infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
-        } catch (SQLException e) {
+        }catch (FileNotFoundException e){
+            showError("DBinformation not found",
+                    "The DBinformation.txt file was not found",
+                    "The DBinformation.txt file was not found. please Ok to continue so we can add information about the server to create the file");
+            createModelConnetionFile();
+            initialize();
+        }catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
@@ -199,6 +206,7 @@ public class ViewController {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         defaultSemest = controller.findDefaultSemester();
         debugging = true;
         courseList = new ArrayList<>();
@@ -221,6 +229,24 @@ public class ViewController {
         }
         setTextFieldSMaxLength();
 
+    }
+
+    private void createModelConnetionFile() {
+        try {
+            File file = new File("DBinformation.txt");
+
+            boolean fvar = file.createNewFile();
+            if (fvar){
+                System.out.println("File has been created successfully");
+            }
+            else{
+                System.out.println("File already present at the specified location");
+            }
+        } catch (IOException e) {
+            System.out.println("Exception Occurred:");
+            e.printStackTrace();
+        }
+    }
     }
 
     private void showInfo() {

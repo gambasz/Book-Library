@@ -55,12 +55,10 @@ public class DBManager {
     }
 
 
-    public static void openConnection() throws SQLException, ClassNotFoundException {
-        try {
+    public static void openConnection() throws SQLException,FileNotFoundException, ClassNotFoundException {
+
             String url = readFromFile();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
         Class.forName("oracle.jdbc.driver.OracleDriver");
         conn = DriverManager.getConnection(url);
 
