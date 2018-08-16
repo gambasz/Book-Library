@@ -23,7 +23,7 @@ public class DBManager {
     public DBManager() {
     }
 
-    public static String readFromFile() throws FileNotFoundException {
+    public static String readDBinfo() throws FileNotFoundException {
         // The name of the file to open.
         String fileName = "DBinformation.txt";
 
@@ -57,7 +57,7 @@ public class DBManager {
 
     public static void openConnection() throws SQLException, FileNotFoundException, ClassNotFoundException {
 
-        String url = readFromFile();
+        String url = readDBinfo();
         if (url == null) {
             throw new FileNotFoundException();
         }
