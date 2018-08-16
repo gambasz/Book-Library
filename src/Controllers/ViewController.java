@@ -190,13 +190,13 @@ public class ViewController {
         infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             showError("DBinformation not found",
                     "The DBinformation.txt file was not found",
-                    "The DBinformation.txt file was not found. please Ok to continue so we can add information about the server to create the file");
-            createModelConnetionFile();
+                    "The DBinformation.txt file was not found. please Ok to continue so we can add information about the server to create the file.");
+            createModelConnectionFile();
             initialize();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
@@ -231,23 +231,37 @@ public class ViewController {
 
     }
 
-    private void createModelConnetionFile() {
-        try {
-            File file = new File("DBinformation.txt");
+    private void createModelConnectionFile() {
 
-            boolean fvar = file.createNewFile();
-            if (fvar){
-                System.out.println("File has been created successfully");
-            }
-            else{
-                System.out.println("File already present at the specified location");
-            }
-        } catch (IOException e) {
-            System.out.println("Exception Occurred:");
-            e.printStackTrace();
+        final String serverPath;
+        File file = new File("DBinformation.txt");
+        Dialog dlg = new Dialog();
+        dlg.setTitle("Add server information");
+        dlg.setHeaderText("Add server Information");
+        HBox mainpane = new HBox(20);
+        TextField input = new TextField("");
+        input.setPromptText("Ex: jdbc:oracle:thin:math15486/Math14583@acoracle.JamesGrantcollege.edu:1990521:password");
+        input.setMaxWidth(Double.MAX_VALUE);
+        input.setMinWidth(500);
+        mainpane.getChildren().addAll(new Label("Server Path :"), input);
+        dlg.getDialogPane().setContent(mainpane);
+        ButtonType done = ButtonType.FINISH;
+        dlg.getDialogPane().getButtonTypes().addAll(done);
+        dlg.setWidth(1000);
+        dlg.showAndWait();
+        serverPath = input.getText();
+
+
+        try {
+            FileWriter fw = new FileWriter(file, true); //the true will append the new data
+            fw.write(serverPath);//appends the string to the file
+            fw.close();
+
+        } catch (IOException ioe) {
+            System.err.println("IOException: " + ioe.getMessage());
         }
     }
-    }
+
 
     private void showInfo() {
         Dialog dlg = new Dialog();
@@ -772,16 +786,14 @@ public class ViewController {
                     courseInfoDescrip.getText(),
                     tempRes);
             tempCour.setID(DBManager.insertCourseQuery(tempCour));
-            controller.addNoteAndCRN(tempCour, courseInfoNotes.getText(),courseInfoCRN.getText());
+            controller.addNoteAndCRN(tempCour, courseInfoNotes.getText(), courseInfoCRN.getText());
             tempCour = DBManager.relationalInsertByID2(tempCour);
             if (isClassInTheSameYear(tempCour)) {
                 courseList.add(tempCour);
             }
 
 
-
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCour.getCommonID());
-
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCour.getCommonID());
 
 
         }
@@ -970,10 +982,10 @@ public class ViewController {
             DBManager.updateRelationCourseResources(tempCourse);
 
 
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCourse.getCommonID());
 
             controller.copyCourse(selectedCourse, tempCourse);
-            controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(),courseInfoCRN.getText());
+            controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(), courseInfoCRN.getText());
             if (!isClassInTheSameYear(selectedCourse)) {
                 courseList.remove(selectedCourse);
             }
@@ -1569,9 +1581,7 @@ public class ViewController {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
         } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
-        }
-
-        else {
+        } else {
 
 
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
@@ -1589,7 +1599,7 @@ public class ViewController {
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
             DBManager.setIDforResource(temp);
 
-            if(!resourceTable.getItems().contains(temp)) {
+            if (!resourceTable.getItems().contains(temp)) {
 
                 if (!isPersonResourcesView) {
                     resList.add(temp);
@@ -1603,8 +1613,7 @@ public class ViewController {
                     DBManager.insertRelationResourcePublisher(temp);
 
                 }
-            }
-            else{
+            } else {
                 showError("Repetitive resource", "The resource is already exists",
                         "Please make sure you are not adding repetitive resource in one class.");
             }
