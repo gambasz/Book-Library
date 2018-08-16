@@ -26,10 +26,13 @@ public class DBInitialize {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-    private static void connect() throws SQLException, ClassNotFoundException{
+    private static void connect() throws SQLException, FileNotFoundException, ClassNotFoundException {
+
         String url = DBManager.readDBinfo();
         Class.forName("oracle.jdbc.driver.OracleDriver");
         conn = DriverManager.getConnection(url);
