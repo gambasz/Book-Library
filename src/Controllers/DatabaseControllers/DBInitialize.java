@@ -11,7 +11,8 @@ import java.sql.*;
 
 public class DBInitialize {
 
-    public static Connection conn;
+    private static Connection conn;
+    private static String directory = "src/Controllers/DatabaseControllers/Initializing db/";
 
     public static void InitDBTables(){
         try {
@@ -68,7 +69,7 @@ public class DBInitialize {
 
                 PreparedStatement exQuery;
                 for (String query : queries) {
-                    System.out.println("\n\n" + query +"\n---------\n");
+//                    System.out.println("\n\n" + query +"\n---------\n");
                 exQuery = conn.prepareStatement(query);
                 exQuery.executeQuery();
                 }
@@ -77,7 +78,7 @@ public class DBInitialize {
             else{
                 Statement exQuery = conn.createStatement();
                 for (String query : queries) {
-                    System.out.println("\n\n" + query +"\n---------\n");
+//                    System.out.println("\n\n" + query +"\n---------\n");
                     exQuery.executeQuery(query);
                 }
             }
@@ -92,7 +93,7 @@ public class DBInitialize {
         return false;
     }
     private static boolean dropTables(){
-        String fileName = "Drop_Tables.sql";
+        String fileName = directory + "Drop_Tables.sql";
         String[] queries = readQueries(fileName);
 
         System.out.print("Drop table method ");
@@ -100,7 +101,7 @@ public class DBInitialize {
     }
 
     private static boolean createTables(){
-        String fileName = "Tables creating.sql";
+        String fileName = directory + "Tables creating.sql";
         String[] queries = readQueries(fileName);
 
         System.out.print("Create all tables method ");
@@ -108,7 +109,7 @@ public class DBInitialize {
 
     }
     private static boolean dropSequences(){
-        String fileName = "drop Sequences.sql";
+        String fileName =  directory + "drop Sequences.sql";
         String[] queries = readQueries(fileName);
 
         System.out.print("Drop all Sequences method ");
@@ -117,18 +118,18 @@ public class DBInitialize {
     }
 
     private static boolean createIDTriggers(){
-        String fileName = "IDTriggers.sql";
+        String fileName =  directory + "IDTriggers.sql";
         String[] queries = readQueries(fileName);
 
-        System.out.print("Drop all Sequences method ");
+        System.out.print("Create all Triggers method ");
         return runQueryList(queries, false);
     }
 
     private static boolean createCommonIDTriggers(){
-        String fileName = "commonID Triggers.sql";
+        String fileName =  directory + "commonID Triggers.sql";
         String[] queries = readQueries(fileName);
 
-        System.out.print("Drop all Sequences method ");
+        System.out.print("Create all Common IDs method ");
         return runQueryList(queries, false);
 
     }
