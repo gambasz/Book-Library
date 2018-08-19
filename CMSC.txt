@@ -1,0 +1,27 @@
+CMSC 207 - Introduction to Discrete Structures
+CMSC 243 - Systems Analysis and Design
+CMSC 100 - Fundamentals of Computer Programming
+CMSC 246 - Introduction to SQL Using Oracle
+CMSC 110 - Computer Concepts
+CMSC 250 - UNIX/LINUX Operating System
+CMSC 140 - Introduction to Programming
+CMSC 253 - UNIX/LINUX System Administration
+CMSC 201 - Java Programming Language
+CMSC 260 - Computer Security
+CMSC 203 - Computer Science I
+CMSC 269 - Computer Science and Technologies Internship
+CMSC 204 - Computer Science II
+CMSC 299 - Special Topics in Computer Science and Technologies
+CMSC 214 - Advanced Java Programming
+CMSC 141 - Intermediate Programming
+CMSC 220 - Client-Server Programming with Java
+CMSC 266 - Programming for Digital Devices
+CMSC 222 - Visual Programming
+CMSC 295 - Research Topics in Information Security
+CMSC 224 - Developing Web Applications Using C# and ASP.NET
+CMSC 135 - Introduction to Scripting
+CMSC 226 - Introduction to Object-Oriented Programming with C++
+CMSC 230 - Advanced Object-Oriented Programming with C++
+CMSC 234 - Mobile Game and Application Programming
+CMSC 237 - Introduction to iPhone Programming Using Objective C
+CMSC 240 - Advanced Mobile App and Game Development

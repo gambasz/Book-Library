@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.io.*;
 
 
 public class DBInitialize {
@@ -22,6 +23,8 @@ public class DBInitialize {
             dropSequences();
             createIDTriggers();
             createCommonIDTriggers();
+            initCourseTable();
+            initSemesterTable();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,6 +135,48 @@ public class DBInitialize {
         System.out.print("Create all Common IDs method ");
         return runQueryList(queries, false);
 
+    }
+
+    private static void initCourseTable(){
+        try {
+            String line, title, CNUMBER, description;
+
+            Statement stmt = conn.createStatement();
+
+            InputStreamReader reader = new InputStreamReader(new FileInputStream("CMSC.txt"));
+
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+            //read and put to database
+            while ((line = bufferedReader.readLine()) != null ) {
+                title = line.substring(0,4);
+                CNUMBER = line.substring(5,8);
+                description = line.substring(11);
+
+                stmt.execute("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION,DEPARTMENT) " +
+                        "VALUES ('" +  title + "','"+ CNUMBER +"','" + description+"','Computer Science')");
+            }
+
+            bufferedReader.close();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void initSemesterTable(){
+        try {
+            String[] semester = {"Spring","Summer 1","Summer 2","Fall","Winter"};
+            Statement stmt = conn.createStatement();
+            int year = 2018;
+            for (int i = 0; i < 13; i++) {
+                for (int a = 0; a < 5; a++) {
+                    stmt.execute("INSERT INTO SEMESTER (SEASON, YEAR) VALUES ('" + semester[a] + "','" + year + "')");
+                }
+                year++;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
