@@ -54,6 +54,7 @@ public class ViewController {
     private final String deleteIconImg = "/Models/media/delete.png";
     private final String programeIconImg = "/Models/media/icon.png";
 
+    private int runningLimit = 0;
 
     @FXML
     private LimitedTextField courseInfoTitle = new LimitedTextField(), courseInfoDepart = new LimitedTextField(),
@@ -188,7 +189,6 @@ public class ViewController {
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
         infoBtn.setOnMouseClicked(e -> showInfo());
-        int runningLimit = 0;
         try {
             DBManager.openConnection();
         } catch (FileNotFoundException e) {
@@ -243,23 +243,66 @@ public class ViewController {
         Dialog dlg = new Dialog();
         dlg.setTitle("Add server information");
         dlg.setHeaderText("Add server Information");
-        HBox mainpane = new HBox(20);
-        TextField input = new TextField("");
-        input.setPromptText("Ex: jdbc:oracle:thin:math15486/Math14583@acoracle.JamesGrantcollege.edu:1990521:password");
-        input.setMaxWidth(Double.MAX_VALUE);
-        input.setMinWidth(500);
-        mainpane.getChildren().addAll(new Label("Server Path :"), input);
+        VBox mainpane = new VBox(20);
+
+        TextField host = new TextField();
+        host.setPromptText("Ex: Math14583@acoracle.JamesGrantcollege.edu");
+        host.setMaxWidth(Double.MAX_VALUE);
+        host.setMinWidth(500);
+
+        TextField port = new TextField();
+        port.setPromptText("Ex: 1515");
+        port.setMaxWidth(Double.MAX_VALUE);
+        port.setMinWidth(500);
+
+        TextField userName = new TextField();
+        userName.setPromptText("Ex: root");
+        userName.setMaxWidth(Double.MAX_VALUE);
+        userName.setMinWidth(500);
+
+        TextField password = new TextField();
+        password.setPromptText("Ex: password");
+        password.setMaxWidth(Double.MAX_VALUE);
+        password.setMinWidth(500);
+
+        TextField SID = new TextField("XE");
+        SID.setPromptText("Ex: XE");
+        SID.setMaxWidth(Double.MAX_VALUE);
+        SID.setMinWidth(500);
+
+        mainpane.getChildren().addAll(
+                new HBox(25, new Label("Host: "), host),
+                new HBox(25, new Label("Username: "), userName),
+                new HBox(25, new Label("Password: "), password),
+                new HBox(25, new Label("Port: "), port),
+                new HBox(25, new Label("SID: "), SID)
+        );
         dlg.getDialogPane().setContent(mainpane);
         ButtonType done = ButtonType.FINISH;
         dlg.getDialogPane().getButtonTypes().addAll(done);
         dlg.setWidth(1000);
         dlg.showAndWait();
-        serverPath = input.getText();
-
+        if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") && !port.getText().equals("") && !SID.getText().equals("")) {
+            serverPath = "jdbc:oracle:thin:"
+                    + userName.getText()
+                    + "//"
+                    + password.getText()
+                    + "@"
+                    + host.getText()
+                    + ":"
+                    + port.getText()
+                    + ":" + SID.getText();
+        } else {
+            serverPath = null;
+        }
 
         try {
             FileWriter fw = new FileWriter(file, true); //the true will append the new data
-            fw.write(serverPath);//appends the string to the file
+            if (serverPath != null) {
+                fw.write(serverPath);//appends the string to the file
+            } else {
+                throw new IOException("invaild serverpath");
+            }
             fw.close();
 
         } catch (IOException ioe) {
@@ -2076,9 +2119,7 @@ public class ViewController {
         tablePane.setAlignment(Pos.CENTER);
         tablePane.setStyle("-fx-border-radius: 10px;");
         for (
-                Node temp : tablePane.getChildren())
-
-        {
+                Node temp : tablePane.getChildren()) {
             if (temp.getClass().equals(VBox.class)) {
                 VBox child = (VBox) temp;
                 child.setAlignment(Pos.CENTER);
