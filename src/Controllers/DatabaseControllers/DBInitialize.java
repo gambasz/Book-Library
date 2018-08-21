@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.io.*;
 
 
 public class DBInitialize {
 
-    public static Connection conn;
+    private static Connection conn;
+    private static String directory = "src/Controllers/DatabaseControllers/Initializing db/";
 
     public static void InitDBTables(){
         try {
@@ -21,6 +23,8 @@ public class DBInitialize {
             dropSequences();
             createIDTriggers();
             createCommonIDTriggers();
+            initCourseTable();
+            initSemesterTable();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -68,7 +72,7 @@ public class DBInitialize {
 
                 PreparedStatement exQuery;
                 for (String query : queries) {
-                    System.out.println("\n\n" + query +"\n---------\n");
+//                    System.out.println("\n\n" + query +"\n---------\n");
                 exQuery = conn.prepareStatement(query);
                 exQuery.executeQuery();
                 }
@@ -77,7 +81,7 @@ public class DBInitialize {
             else{
                 Statement exQuery = conn.createStatement();
                 for (String query : queries) {
-                    System.out.println("\n\n" + query +"\n---------\n");
+//                    System.out.println("\n\n" + query +"\n---------\n");
                     exQuery.executeQuery(query);
                 }
             }
@@ -92,7 +96,7 @@ public class DBInitialize {
         return false;
     }
     private static boolean dropTables(){
-        String fileName = "Drop_Tables.sql";
+        String fileName = directory + "Drop_Tables.sql";
         String[] queries = readQueries(fileName);
 
         System.out.print("Drop table method ");
@@ -100,7 +104,7 @@ public class DBInitialize {
     }
 
     private static boolean createTables(){
-        String fileName = "Tables creating.sql";
+        String fileName = directory + "Tables creating.sql";
         String[] queries = readQueries(fileName);
 
         System.out.print("Create all tables method ");
@@ -108,7 +112,7 @@ public class DBInitialize {
 
     }
     private static boolean dropSequences(){
-        String fileName = "drop Sequences.sql";
+        String fileName =  directory + "drop Sequences.sql";
         String[] queries = readQueries(fileName);
 
         System.out.print("Drop all Sequences method ");
@@ -117,20 +121,62 @@ public class DBInitialize {
     }
 
     private static boolean createIDTriggers(){
-        String fileName = "IDTriggers.sql";
+        String fileName =  directory + "IDTriggers.sql";
         String[] queries = readQueries(fileName);
 
-        System.out.print("Drop all Sequences method ");
+        System.out.print("Create all Triggers method ");
         return runQueryList(queries, false);
     }
 
     private static boolean createCommonIDTriggers(){
-        String fileName = "commonID Triggers.sql";
+        String fileName =  directory + "commonID Triggers.sql";
         String[] queries = readQueries(fileName);
 
-        System.out.print("Drop all Sequences method ");
+        System.out.print("Create all Common IDs method ");
         return runQueryList(queries, false);
 
+    }
+
+    private static void initCourseTable(){
+        try {
+            String line, title, CNUMBER, description;
+
+            Statement stmt = conn.createStatement();
+
+            InputStreamReader reader = new InputStreamReader(new FileInputStream("CMSC.txt"));
+
+            BufferedReader bufferedReader = new BufferedReader(reader);
+
+            //read and put to database
+            while ((line = bufferedReader.readLine()) != null ) {
+                title = line.substring(0,4);
+                CNUMBER = line.substring(5,8);
+                description = line.substring(11);
+
+                stmt.execute("INSERT INTO COURSECT (TITLE, CNUMBER, DESCRIPTION,DEPARTMENT) " +
+                        "VALUES ('" +  title + "','"+ CNUMBER +"','" + description+"','Computer Science')");
+            }
+
+            bufferedReader.close();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void initSemesterTable(){
+        try {
+            String[] semester = {"Spring","Summer 1","Summer 2","Fall","Winter"};
+            Statement stmt = conn.createStatement();
+            int year = 2018;
+            for (int i = 0; i < 13; i++) {
+                for (int a = 0; a < 5; a++) {
+                    stmt.execute("INSERT INTO SEMESTER (SEASON, YEAR) VALUES ('" + semester[a] + "','" + year + "')");
+                }
+                year++;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
