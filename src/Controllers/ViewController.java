@@ -188,12 +188,17 @@ public class ViewController {
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> showHelp());
         infoBtn.setOnMouseClicked(e -> showInfo());
+        int runningLimit = 0;
         try {
             DBManager.openConnection();
         } catch (FileNotFoundException e) {
             showError("DBinformation not found",
                     "The DBinformation.txt file was not found",
                     "The DBinformation.txt file was not found. please Ok to continue so we can add information about the server to create the file.");
+            runningLimit++;
+            if (runningLimit >= 4) {
+                System.exit(15);
+            }
             createModelConnectionFile();
             initialize();
         } catch (SQLException e) {
