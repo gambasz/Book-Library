@@ -371,8 +371,12 @@ public class ViewController {
         courseInfoTitle.setMaxLength(8);
         courseInfoDepart.setMaxLength(120);
         courseInfoDescrip.setMaxLength(250);
+        courseInfoCRN.setMaxLength(16);
+        courseInfoNotes.setMaxLength(120);
+
         profInfoFName.setMaxLength(25);
         profInfoLName.setMaxLength(25);
+
         courseSearchTF.setMaxLength(8);
         departSearchTF.setMaxLength(120);
         profSearchTF.setMaxLength(50);
@@ -735,11 +739,15 @@ public class ViewController {
                 selectedPerson = selectedCourse.getProfessor();
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
-                courseInfoNotes.setText(selectedCourse.getNotes());
+                if (selectedCourse.getNotes() != (null))
+                    courseInfoNotes.setText(selectedCourse.getNotes());
+                else
+                    courseInfoNotes.setText("");
+
                 if (selectedCourse.getCRN() != (null))
                     courseInfoCRN.setText(String.format("%d", selectedCourse.getCRN().intValue()));
                     else
-                        courseInfoCRN.setText(null);
+                        courseInfoCRN.setText("");
                 semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
                 yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
                 ArrayList<Resource> tempRes = selectedCourse.getResource();
@@ -1259,9 +1267,9 @@ public class ViewController {
         currentAmTF.setPromptText("Ex. 90");
         descriptionTF.setPromptText("Description for resource");
 
-        Label counter = new Label();
-        counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
-        titleTF.setCounter(counter);
+//        Label counter = new Label();
+//        counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
+//        titleTF.setCounter(counter);
         titleTF.setMaxLength(250);
 
         authorTF.setMaxLength(250);
