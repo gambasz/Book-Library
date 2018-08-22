@@ -385,6 +385,7 @@ public class controller {
     }
 
     public static void addNoteAndCRN(Models.frontend.Course c, String note, String CRN){
+        c.setNotes(null);
        if(note!=null&&!note.isEmpty()) {
             c.setNotes(note);
         }
