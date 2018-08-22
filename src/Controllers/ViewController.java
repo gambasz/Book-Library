@@ -736,9 +736,10 @@ public class ViewController {
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
                 courseInfoNotes.setText(selectedCourse.getNotes());
-                System.out.println("in yaro hast: " + selectedCourse.getCRN());
                 if (selectedCourse.getCRN() != (null))
                     courseInfoCRN.setText(String.format("%d", selectedCourse.getCRN().intValue()));
+                    else
+                        courseInfoCRN.setText(null);
                 semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
                 yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
                 ArrayList<Resource> tempRes = selectedCourse.getResource();
@@ -788,10 +789,8 @@ public class ViewController {
                 yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return false;
-        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
-            showError("Error", "CRN must be a number", "Re-type CRN");
-            return false;
-        } else if (cSplit.length != 2) {
+        }
+        else if (cSplit.length != 2) {
 
             showError("Input Error",
                     "Unable to insert because the course you title entered " +
@@ -806,8 +805,15 @@ public class ViewController {
                     "Correct format examples --> CMSC 100, MATH 181 ");
             return false;
 
-        } else
+        }
+        else {
+            if (courseInfoCRN.getText() != null)
+                if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+                    showError("Error", "CRN must be a number", "Re-type CRN");
+                    return false;
+                }
             return true;
+        }
     }
 
     public void add() {
@@ -1007,9 +1013,15 @@ public class ViewController {
 
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
-        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
-            showError("Error", "CRN must be a number", "Re-type CRN");
-        } else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+        }
+
+        else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+
+//            if (courseInfoCRN.getText() != null)
+//                if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+//                showError("Error", "CRN must be a number", "Re-type CRN");
+//                return;
+//            }
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
