@@ -760,7 +760,8 @@ public class ViewController {
                 }
                 moreInfoTP.setExpanded(false);
 
-                if (selectedCourse.getNotes() != null && !selectedCourse.getNotes().isEmpty()) {
+                if ((selectedCourse.getNotes() != null && !selectedCourse.getNotes().isEmpty()) ||
+                        selectedCourse.getCRN() != null ) {
                     moreInfoTP.setExpanded(true);
                 }
             }
