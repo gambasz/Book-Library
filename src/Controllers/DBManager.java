@@ -2391,23 +2391,35 @@ public class DBManager {
 
     }
 
-    public static void updateCRNAndNoteForClass(String CRN, String note, int commonID) {
+    public static void updateCRNAndNoteForClass(String CRN, String note, Models.frontend.Course c) {
         try {
+            String queryx = String.format("UPDATE RELATION_COURSE_PERSON SET COURSENOTES = ?" +
+            ", COURSECRN = ? WHERE COMMONID = " + c.getCommonID());
+            PreparedStatement stlx = conn.prepareStatement(queryx);
+            stlx.setNull(1,Types.VARCHAR);
+            stlx.setNull(2,Types.INTEGER);
+            stlx.executeQuery();
+
+
+
+
             if (note != null && !note.isEmpty()) {
 
                 String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSENOTES = ?" +
-                        " WHERE COMMONID = " + commonID);
+                        " WHERE COMMONID = " + c.getCommonID());
                 PreparedStatement stl = conn.prepareStatement(query);
                 stl.setString(1, note);
                 stl.executeQuery();
             }
             if (CRN != null && !CRN.isEmpty()) {
                 String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSECRN = ?" +
-                        " WHERE COMMONID = " + commonID);
+                        " WHERE COMMONID = " + c.getCommonID());
                 PreparedStatement stl = conn.prepareStatement(query);
                 stl.setString(1, CRN);
                 stl.executeQuery();
             }
+
+
 
 
         } catch (

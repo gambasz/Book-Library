@@ -843,7 +843,7 @@ public class ViewController {
             }
 
 
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCour.getCommonID());
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCour);
 
 
         }
@@ -1032,10 +1032,12 @@ public class ViewController {
             DBManager.updateRelationCourseResources(tempCourse);
 
 
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCourse.getCommonID());
-
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), selectedCourse);
             controller.copyCourse(selectedCourse, tempCourse);
             controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(), courseInfoCRN.getText());
+
+
+
             if (!isClassInTheSameYear(selectedCourse)) {
                 courseList.remove(selectedCourse);
             }
