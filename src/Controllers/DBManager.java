@@ -818,7 +818,7 @@ public class DBManager {
 
                     if (rsTmp.next()) {
                         System.out.println("semester: " + semester.getSeason());
-                        courseList.add(new Models.frontend.Course(cID, tempCommonID, semester.getYear(), semester.getSeason(),
+                        courseList.add(new Models.frontend.Course(cID, null, semester.getYear(), semester.getSeason(),
                                 cTitle, cDepartment, personTmp, cDescription, courseResources));
                         courseList.get(i).setCommonID(tempCommonID);
 
@@ -877,7 +877,7 @@ public class DBManager {
                         courseResources = findResourcesCourse2(courseID, tempCommonID, cachedResources);
                         courseList.get(i).setResource(courseResources);
                         if (CRN != null) {
-                            courseList.get(i).setCRN(CRN.intValue());
+                            courseList.get(i).setCRN(CRN);
                             CRN = null;
                         }
                         if (courseNote != null) {

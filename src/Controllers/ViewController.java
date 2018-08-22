@@ -736,7 +736,9 @@ public class ViewController {
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
                 courseInfoNotes.setText(selectedCourse.getNotes());
-                courseInfoCRN.setText("" + selectedCourse.getCRN());
+                System.out.println("in yaro hast: " + selectedCourse.getCRN());
+                if (selectedCourse.getCRN() != (null))
+                    courseInfoCRN.setText(String.format("%d", selectedCourse.getCRN().intValue()));
                 semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
                 yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
                 ArrayList<Resource> tempRes = selectedCourse.getResource();
@@ -825,7 +827,7 @@ public class ViewController {
 
             tempCour = new Course(
                     0,
-                    0,
+                    null,
                     Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                     semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                     courseInfoTitle.getText(),

@@ -389,7 +389,7 @@ public class controller {
             c.setNotes(note);
         }
         if(CRN!=null&&!CRN.isEmpty()){
-            c.setCRN(Integer.parseInt(CRN));
+            c.setCRN(Integer.valueOf(CRN));
         }
     }
 

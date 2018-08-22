@@ -54,7 +54,7 @@ public class Course {
         ArrayList <Models.frontend.Resource> tmpResource = new ArrayList<Models.frontend.Resource>();
         tmpResource.add(this.resourceInstance[0].initResourceGUI());
 
-        Models.frontend.Course tmp = new Models.frontend.Course(this.id, this.id, 2018,"FALL", this.title, this.department,
+        Models.frontend.Course tmp = new Models.frontend.Course(this.id, null, 2018,"FALL", this.title, this.department,
                 this.personInstance.initPersonGUI(), this.description, tmpResource);
         tmp.setCommonID(this.commonID);
         return tmp;
@@ -79,7 +79,7 @@ public class Course {
         //tmpResource.add(this.resourceInstance[0].initResourceGUI());
 
 
-        Models.frontend.Course tmp = new Models.frontend.Course(this.id, this.id, year,semester, this.title, this.department,
+        Models.frontend.Course tmp = new Models.frontend.Course(this.id, null, year,semester, this.title, this.department,
                 this.personInstance.initPersonGUI(), this.description, tmpResource);
         tmp.setCommonID(this.commonID);
         return tmp;
