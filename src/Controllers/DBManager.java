@@ -10,10 +10,6 @@ import java.util.*;
 
 public class DBManager {
     public static Statement st;
-    public static Statement stt;
-    public static Statement st3;
-    public static Statement st4;
-    public static Statement st5;
 
     public static Connection conn;
 
@@ -64,12 +60,6 @@ public class DBManager {
 
         System.out.println("Successfully connected to the database");
         st = conn.createStatement();
-        stt = conn.createStatement();
-        st3 = conn.createStatement();
-        st4 = conn.createStatement();
-        st5 = conn.createStatement();
-
-
     }
 
     public static void closeConnection() {

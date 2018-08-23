@@ -6,13 +6,16 @@ import Models.frontend.Course;
 import Models.frontend.Resource;
 import com.sun.istack.internal.NotNull;
 import Models.frontend.Person;
-import javafx.scene.effect.Reflection;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -396,20 +399,61 @@ public class controller {
     }
 
 
-public static void setTextStyle(Text t){
+    public static void setTextStyle(Text t){
 
-//        t.setX(10.0f);
-//    t.setY(50.0f);
-//    t.setCache(true);
-    t.setFill(Color.web("#21618C"));
-    t.setFont(Font.font(null, FontWeight.BOLD, 18));
+    //        t.setX(10.0f);
+    //    t.setY(50.0f);
+    //    t.setCache(true);
+        t.setFill(Color.web("#21618C"));
+        t.setFont(Font.font(null, FontWeight.BOLD, 18));
 
-//    Reflection r = new Reflection();
-//    r.setFraction(0.2f);
-//
-//    t.setEffect(r);
+    //    Reflection r = new Reflection();
+    //    r.setFraction(0.2f);
+    //
+    //    t.setEffect(r);
 
-//    t.setTranslateY(400);
+    //    t.setTranslateY(400);
+
+
+    }
+
+
+    public static boolean writeDBTxt(TextField userName, TextField password, TextField host, TextField port, TextField SID){
+
+        String serverPath;
+        File file = new File("DBinformation.txt");
+
+        if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") &&
+                !port.getText().equals("") && !SID.getText().equals("")) {
+
+            serverPath = "jdbc:oracle:thin:"
+                    + userName.getText()
+                    + "//"
+                    + password.getText()
+                    + "@"
+                    + host.getText()
+                    + ":"
+                    + port.getText()
+                    + ":" + SID.getText();
+        } else {
+            return false;
+        }
+
+        try {
+
+            FileWriter fw = new FileWriter(file, true); //the true will append the new data
+            fw.write(serverPath);//appends the string to the file
+            fw.close();
+            return true;
+
+        }
+        catch (IOException ioe) {
+            System.err.println("IOException: " + ioe.getMessage());
+
+        }
+
+        return false;
+
 
 
 }

@@ -1,6 +1,7 @@
 package Controllers;
 
 import Controllers.BookAPI.BookAPI;
+import Controllers.DatabaseControllers.DBInitialize;
 import Models.Book;
 import Models.frontend.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -199,14 +200,16 @@ public class ViewController {
             if (runningLimit >= 4) {
                 System.exit(15);
             }
-            if (createModelConnectionFile())
-                initialize();
-            else{
-                showError("DBinformation txt file", "Failed to add DBinfo file",
-                        "");
-                return;
 
-            }
+            databaseInit();
+            initialize();
+
+//            else{
+//                showError("Warning", "Failed to add DB information text file!",
+//                        "");
+//                exit();
+//
+//            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -243,17 +246,17 @@ public class ViewController {
 
     }
 
-    private boolean createModelConnectionFile() {
+    private void databaseInit() {
 
-        final String serverPath;
-        File file = new File("DBinformation.txt");
+//        final String serverPath;
+//        File file = new File("DBinformation.txt");
         Dialog dlg = new Dialog();
         dlg.setTitle("Add server information");
         dlg.setHeaderText("Add server Information");
         VBox mainpane = new VBox(20);
 
         TextField host = new TextField();
-        host.setPromptText("e.g., Math14583@acoracle.JamesGrantcollege.edu");
+        host.setPromptText("e.g., acoracle.host.edu");
         host.setMaxWidth(Double.MAX_VALUE);
         host.setMinWidth(500);
 
@@ -286,47 +289,112 @@ public class ViewController {
         );
         dlg.getDialogPane().setContent(mainpane);
         ButtonType addTxtBtn = new ButtonType("Add DB Info text File");
-        ButtonType initBtn = new ButtonType("Add file and Install DB");
+        ButtonType initBtn = new ButtonType("Add file and Install DB",ButtonBar.ButtonData.NEXT_FORWARD);
         ButtonType cancelBtn = ButtonType.CANCEL;
 
 
         dlg.getDialogPane().getButtonTypes().addAll(cancelBtn, addTxtBtn, initBtn );
         dlg.setWidth(1000);
+        dlg.setResultConverter(dialogButton -> {
+
+            if (dialogButton == addTxtBtn || dialogButton == initBtn) {
+                System.out.println("init or addTxt button pressed!");
+
+                if(!controller.writeDBTxt(userName, password, host, port, SID)) {
+
+                    showError("Warning", "Failed to add DB information text file!",
+                            "");
+                    exit();
+                }
+
+                boolean error = false;
+                try{
+                    DBManager.openConnection();
+                }
+                catch (FileNotFoundException e){
+//                    e.printStackTrace();
+                    error = true;
+                }
+                catch (SQLException e){
+//                    e.printStackTrace();
+                    error = true;
+                } catch (ClassNotFoundException e) {
+//                    e.printStackTrace();
+                    error = true;
+                }
+
+                if (error){
+                    showError("Connection Error", "Setting up the database failed!",
+                            "There was a problem with connecting to the DB! Please try again!");
+                    exit();
+                }
+
+                if(dialogButton == initBtn)
+//                    DBInitialize.InitDBTables();
+                    askForPassword();
+            }
+
+            return null;
+        });
+
         dlg.showAndWait();
-        if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") && !port.getText().equals("") && !SID.getText().equals("")) {
-            serverPath = "jdbc:oracle:thin:"
-                    + userName.getText()
-                    + "//"
-                    + password.getText()
-                    + "@"
-                    + host.getText()
-                    + ":"
-                    + port.getText()
-                    + ":" + SID.getText();
-        } else {
-            serverPath = null;
-        }
 
-        try {
-            FileWriter fw = new FileWriter(file, true); //the true will append the new data
-            if (serverPath != null) {
-                fw.write(serverPath);//appends the string to the file
-                fw.close();
-                return true;
+
+    }
+
+
+    private final void askForPassword() {
+        Dialog dlg = new Dialog();
+        HBox mainPane = new HBox();
+
+        dlg.setTitle("Enter the password");
+        dlg.setHeaderText("Please enter the password for initializing the database!"+
+                "(Remember, initializing db will delete all the current data on database)");
+        ImageView icon = new ImageView(programeIconImg);
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+
+        Label passwordLB = new Label("Admin Password:  ");
+        LimitedTextField passwordTxt = new LimitedTextField();
+
+        ButtonType next = new ButtonType("Next", ButtonBar.ButtonData.NEXT_FORWARD);
+
+        mainPane.getChildren().
+
+                addAll(
+                        new VBox(passwordLB),
+                        new VBox(10, passwordTxt)
+                );
+
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setStyle("-fx-border-radius: 10px;");
+
+        dlg.getDialogPane().
+
+                setContent(mainPane);
+        dlg.getDialogPane().
+
+                getButtonTypes().removeAll();
+
+        dlg.getDialogPane().getButtonTypes().addAll(next);
+
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == next) {
+               if(passwordTxt.getText().equals("9090"))
+               {
+
+                   DBInitialize.InitDBTables();
+
+               }
+               else{
+                   System.out.println("Password is wrong! Try again.");
+               }
             }
-            else {
-                fw.close();
-//                throw new IOException("invaild serverpath");
-                return false;
-            }
+            return null;
+        });
 
-        } catch (IOException ioe) {
-            System.err.println("IOException: " + ioe.getMessage());
-            showError("Something went wrong!", "DBinformation.txt file", "There was a problem while writing the DBinformation.txt file! ");
-
-        }
-
-        return false;
+        dlg.showAndWait();
     }
 
 
@@ -1727,7 +1795,7 @@ public class ViewController {
         ComboBox<Resource> resources = new ComboBox<Resource>();
         resources.getItems().addAll(resList);
         Label currentCBoxLbl = new Label("Resources : ");
-        ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
+        ButtonType  fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
         ImageView deletImgg = new ImageView(deleteIconImg);
         addGraphicToButtons(deletImgg, deleteBtn);
