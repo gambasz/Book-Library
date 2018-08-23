@@ -192,15 +192,22 @@ public class ViewController {
         try {
             DBManager.openConnection();
         } catch (FileNotFoundException e) {
-            showError("DBinformation not found",
+            showError("DBinformation file not found",
                     "The DBinformation.txt file was not found",
-                    "The DBinformation.txt file was not found. please Ok to continue so we can add information about the server to create the file.");
+                    "The DBinformation.txt file was not found. Press Ok to continue to add Database information.");
             runningLimit++;
             if (runningLimit >= 4) {
                 System.exit(15);
             }
-            createModelConnectionFile();
-            initialize();
+            if (createModelConnectionFile())
+                initialize();
+            else{
+                showError("DBinformation txt file", "Failed to add DBinfo file",
+                        "");
+                return;
+
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
@@ -236,7 +243,7 @@ public class ViewController {
 
     }
 
-    private void createModelConnectionFile() {
+    private boolean createModelConnectionFile() {
 
         final String serverPath;
         File file = new File("DBinformation.txt");
@@ -246,27 +253,27 @@ public class ViewController {
         VBox mainpane = new VBox(20);
 
         TextField host = new TextField();
-        host.setPromptText("Ex: Math14583@acoracle.JamesGrantcollege.edu");
+        host.setPromptText("e.g., Math14583@acoracle.JamesGrantcollege.edu");
         host.setMaxWidth(Double.MAX_VALUE);
         host.setMinWidth(500);
 
         TextField port = new TextField();
-        port.setPromptText("Ex: 1515");
+        port.setPromptText("e.g., 1515");
         port.setMaxWidth(Double.MAX_VALUE);
         port.setMinWidth(500);
 
         TextField userName = new TextField();
-        userName.setPromptText("Ex: root");
+        userName.setPromptText("e.g., admin");
         userName.setMaxWidth(Double.MAX_VALUE);
         userName.setMinWidth(500);
 
         TextField password = new TextField();
-        password.setPromptText("Ex: password");
+        password.setPromptText("e.g., password");
         password.setMaxWidth(Double.MAX_VALUE);
         password.setMinWidth(500);
 
         TextField SID = new TextField("XE");
-        SID.setPromptText("Ex: XE");
+        SID.setPromptText("e.g., XE");
         SID.setMaxWidth(Double.MAX_VALUE);
         SID.setMinWidth(500);
 
@@ -278,8 +285,12 @@ public class ViewController {
                 new HBox(25, new Label("SID: "), SID)
         );
         dlg.getDialogPane().setContent(mainpane);
-        ButtonType done = ButtonType.FINISH;
-        dlg.getDialogPane().getButtonTypes().addAll(done);
+        ButtonType addTxtBtn = new ButtonType("Add DB Info text File");
+        ButtonType initBtn = new ButtonType("Add file and Install DB");
+        ButtonType cancelBtn = ButtonType.CANCEL;
+
+
+        dlg.getDialogPane().getButtonTypes().addAll(cancelBtn, addTxtBtn, initBtn );
         dlg.setWidth(1000);
         dlg.showAndWait();
         if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") && !port.getText().equals("") && !SID.getText().equals("")) {
@@ -300,14 +311,22 @@ public class ViewController {
             FileWriter fw = new FileWriter(file, true); //the true will append the new data
             if (serverPath != null) {
                 fw.write(serverPath);//appends the string to the file
-            } else {
-                throw new IOException("invaild serverpath");
+                fw.close();
+                return true;
             }
-            fw.close();
+            else {
+                fw.close();
+//                throw new IOException("invaild serverpath");
+                return false;
+            }
 
         } catch (IOException ioe) {
             System.err.println("IOException: " + ioe.getMessage());
+            showError("Something went wrong!", "DBinformation.txt file", "There was a problem while writing the DBinformation.txt file! ");
+
         }
+
+        return false;
     }
 
 
@@ -885,7 +904,7 @@ public class ViewController {
 
             if (coursesPulledDatabase == null) {
                 showError("Connection Error", "The database did not return any  data",
-                        "Check your connection,and database settings in DBinformation.txt file");
+                        "Check your connection,and database credentials in DBinformation.txt file");
                 coursesPulledDatabase = new ArrayList<>();
             }
 
@@ -910,7 +929,7 @@ public class ViewController {
         } catch (Exception e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
-                    "Check your internet connection, and database settings provided" +
+                    "Check your internet connection, and database credentials provided" +
                             " in DBinformation.txt file");
 
         }
