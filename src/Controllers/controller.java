@@ -428,7 +428,7 @@ public class controller {
 
             serverPath = "jdbc:oracle:thin:"
                     + userName.getText()
-                    + "//"
+                    + "/"
                     + password.getText()
                     + "@"
                     + host.getText()
