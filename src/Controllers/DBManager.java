@@ -3,6 +3,7 @@ package Controllers;
 import Models.backend.*;
 import Models.frontend.PersonType;
 import javafx.scene.control.ComboBox;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.io.*;
 import java.sql.*;
@@ -1941,32 +1942,58 @@ public class DBManager {
 
             Statement st = conn.createStatement();
             Statement st2 = conn.createStatement();
-            ResultSet rs2;
-
-            String queryl = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
-            PreparedStatement stl = conn.prepareStatement(queryl);
-            stl.setString(1, "%" + name + "%");
-            stl.setString(2, "%" + name + "%");
-            ResultSet rs = stl.executeQuery();
-
-            while (rs.next()) {
-
-                personids.add(rs.getInt("ID"));
-            }
-
-            rs.close();
 
 
-            for (int i = 0; i < personids.size(); i++) {
+            if(name.contains(" ")){
 
-                rs2 = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+                String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
+                PreparedStatement stl = conn.prepareStatement(query);
+
+                String[] splited = name.split("\\s+");
+
+                stl.setString(1, splited[0]);
+                stl.setString(2, splited[1]);
+
+                splited[1] = splited[1].substring(0, 1).toUpperCase() + splited[1].substring(1);
+                
+                ResultSet rs = stl.executeQuery();
+
+                while(rs.next()){
+
+                    personids.add(rs.getInt("ID"));
+
+                }
+
+                rs.close();
+
+            }else{
+
+                String queryl = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
+                PreparedStatement stl2 = conn.prepareStatement(queryl);
+                stl2.setString(1, "%" + name + "%");
+                stl2.setString(2, "%" + name + "%");
+
+                ResultSet rs2 = stl2.executeQuery();
 
                 while (rs2.next()) {
 
-                    courseids.add(rs2.getInt("COMMONID"));
+                    personids.add(rs2.getInt("ID"));
                 }
 
                 rs2.close();
+
+            }
+
+            for (int i = 0; i < personids.size(); i++) {
+
+                ResultSet rs3 = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+
+                while (rs3.next()) {
+
+                    courseids.add(rs3.getInt("COMMONID"));
+                }
+
+                rs3.close();
             }
 
             return courseids;
