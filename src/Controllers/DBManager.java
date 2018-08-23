@@ -6,10 +6,7 @@ import javafx.scene.control.ComboBox;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DBManager {
     public static Statement st;
@@ -1788,7 +1785,9 @@ public class DBManager {
         ArrayList<Integer> resourceids = new ArrayList<>();
         ArrayList<Integer> classids = new ArrayList<>();
 
-        try {
+        Set<Integer> hashset = new HashSet<>();
+
+        try{
 
             Statement statement = conn.createStatement();
             Statement statement2 = conn.createStatement();
@@ -1801,7 +1800,7 @@ public class DBManager {
             ResultSet rs = stl.executeQuery();
 
 
-            while (rs.next()) {
+            while(rs.next()) {
 
                 resourceids.add(rs.getInt("ID"));
             }
@@ -1810,24 +1809,24 @@ public class DBManager {
 
             ResultSet rs2;
 
-            for (int i = 0; i < resourceids.size(); i++) {
+            for(int i = 0; i < resourceids.size(); i++) {
 
                 rs2 = statement2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID = %d", resourceids.get(i)));
 
                 while (rs2.next()) {
 
-                    classids.add(rs2.getInt("COMMONID"));
+                    hashset.add(rs2.getInt("COMMONID"));
                 }
 
                 rs2.close();
             }
 
+            classids.addAll(hashset);
+
 
             return classids;
 
-        } catch (SQLException e) {
-            System.out.println("Something went wrong with find_classids_by_resource_name()");
-        }
+        }catch(SQLException e) { System.out.println("Something went wrong with find_classids_by_resource_name()"); }
 
         return classids;
     }
