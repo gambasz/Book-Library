@@ -197,7 +197,7 @@ public class ViewController {
                     "The DBinformation.txt file was not found",
                     "The DBinformation.txt file was not found. Press Ok to continue to add Database information.");
             runningLimit++;
-            if (runningLimit >= 4) {
+            if (runningLimit >= 2) {
                 System.exit(15);
             }
 
@@ -325,7 +325,8 @@ public class ViewController {
 
                 if (error){
                     showError("Connection Error", "Setting up the database failed!",
-                            "There was a problem with connecting to the DB! Please try again!");
+                            "There was a problem with connecting to the DB! Please try again and make sure" +
+                                    "you are putting the credentials correctly!");
                     exit();
                 }
 
