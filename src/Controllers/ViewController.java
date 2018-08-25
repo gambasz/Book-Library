@@ -4,7 +4,6 @@ import Controllers.BookAPI.BookAPI;
 import Controllers.DatabaseControllers.DBInitialize;
 import Models.Book;
 import Models.frontend.*;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -30,7 +30,6 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -190,7 +189,7 @@ public class ViewController {
 
     @FXML
     public void initialize() {
-        helpBtn.setOnMouseClicked(e -> showHelp());
+        helpBtn.setOnMouseClicked(e -> ShowHelpContextMenuOnHelpBtnClick());
         infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
@@ -243,6 +242,22 @@ public class ViewController {
         setTextFieldSMaxLength();
 
     }
+
+    private void ShowHelpContextMenuOnHelpBtnClick() {
+        helpBtn.setOnMouseClicked(e -> {
+            final ContextMenu contextMenu = new ContextMenu();
+            MenuItem showHelpMenuItem = new MenuItem("Show Tutorials");
+            MenuItem showDBinitMenuItem = new MenuItem("Init new DB");
+            showDBinitMenuItem.setOnAction(localEvent -> databaseInit());
+            showHelpMenuItem.setOnAction(localEvent -> showHelp());
+            contextMenu.getItems().addAll(showHelpMenuItem, showDBinitMenuItem);
+            contextMenu.show(helpBtn, e.getScreenX(), e.getScreenY());
+        });
+
+
+    }
+
+  
 
     private void databaseInit() {
 
