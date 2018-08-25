@@ -191,8 +191,12 @@ public class ViewController {
     public void initialize() {
         helpBtn.setOnMouseClicked(e -> ShowHelpContextMenuOnHelpBtnClick());
         infoBtn.setOnMouseClicked(e -> showInfo());
+
         try {
             DBManager.openConnection();
+            defaultSemest = controller.findDefaultSemester();
+
+
         } catch (FileNotFoundException e) {
             showError("DBinformation file not found",
                     "The DBinformation.txt file was not found",
@@ -211,15 +215,15 @@ public class ViewController {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
-                            " in DBinformation.txt file");
+                            " in DBinformation.txt file\n (hint: You can click on Help button (Question mark button " +
+                            "in the app) and click init db to manage the database.)");
             // a pop up window ask if she wants to re-install db?
-            return;
+//            return;
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        defaultSemest = controller.findDefaultSemester();
         debugging = true;
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
@@ -1989,8 +1993,12 @@ public class ViewController {
     public void selectProfessor() {
         VBox mainAddPane = new VBox(2);
         profList.clear();
-        profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
-
+        try {
+            profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
 
         Dialog dlg = new Dialog();
 
@@ -2400,7 +2408,14 @@ public class ViewController {
 
     public void selectCourse() {
         ArrayList<Course> tempCourses = new ArrayList<>();
+
+        try{
         templateList = controller.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            templateList = new ArrayList<Course>();
+        }
         VBox mainAddPane = new VBox(2);
         VBox dataInfoPane = new VBox(2);
 
