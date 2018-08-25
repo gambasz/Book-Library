@@ -17,7 +17,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -189,7 +188,7 @@ public class ViewController {
 
     @FXML
     public void initialize() {
-        helpBtn.setOnMouseClicked(e -> ShowHelpContextMenuOnHelpBtnClick());
+        ShowHelpContextMenuOnHelpBtnClick();
         infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
@@ -244,14 +243,10 @@ public class ViewController {
     }
 
     private void ShowHelpContextMenuOnHelpBtnClick() {
+
         helpBtn.setOnMouseClicked(e -> {
-            final ContextMenu contextMenu = new ContextMenu();
-            MenuItem showHelpMenuItem = new MenuItem("Show Tutorials");
-            MenuItem showDBinitMenuItem = new MenuItem("Init new DB");
-            showDBinitMenuItem.setOnAction(localEvent -> databaseInit());
-            showHelpMenuItem.setOnAction(localEvent -> showHelp());
-            contextMenu.getItems().addAll(showHelpMenuItem, showDBinitMenuItem);
             contextMenu.show(helpBtn, e.getScreenX(), e.getScreenY());
+
         });
 
 
