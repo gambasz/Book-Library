@@ -2711,12 +2711,14 @@ public class ViewController {
     }
 
     private boolean isClassInTheSameYear(Course tempCour) {
-        if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-            System.out.println("This is null year COm BOx");
+        if(!courseList.isEmpty()){
+            return (tempCour.getYEAR() == courseList.get(0).getYEAR() &&
+                    tempCour.getSEMESTER().equals(courseList.get(0).getSEMESTER()));
+        }
+        else if (yearComBox.getSelectionModel().getSelectedItem() == null) {
             return (tempCour.getYEAR() == defaultSemest.getYear() && tempCour.getSEMESTER().equals(defaultSemest.getSeason()));
 
         } else {
-            System.out.println("This is not null year combox");
             return (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString()) &&
                     tempCour.getSEMESTER().equals(semesterComBox.getSelectionModel().getSelectedItem().toString()));
         }
