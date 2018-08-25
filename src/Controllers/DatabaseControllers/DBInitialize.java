@@ -1,6 +1,7 @@
 package Controllers.DatabaseControllers;
 
 import Controllers.DBManager;
+import Controllers.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -181,26 +182,8 @@ public class DBInitialize {
 
 
     public static void main(String[] args) {
-        InitDBTables();
-//
-//        String lol = "CREATE OR REPLACE TRIGGER coursect_tr\n" +
-//                "  BEFORE INSERT ON coursect\n" +
-//                "  FOR EACH ROW\n" +
-//                "BEGIN\n" +
-//                "  SELECT course_sequence.nextval\n" +
-//                "  INTO :new.id\n" +
-//                "  FROM dual;\n" +
-//                "END";
-//        try {
-//            connect();
-//            PreparedStatement test = conn.prepareStatement(lol);
-//
-//            test.executeQuery();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+//        InitDBTables();
+
     }
 }
 

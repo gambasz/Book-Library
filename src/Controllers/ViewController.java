@@ -29,6 +29,7 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -204,18 +205,14 @@ public class ViewController {
             databaseInit();
             initialize();
 
-//            else{
-//                showError("Warning", "Failed to add DB information text file!",
-//                        "");
-//                exit();
-//
-//            }
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
                             " in DBinformation.txt file");
+            // a pop up window ask if she wants to re-install db?
             return;
 
         } catch (ClassNotFoundException e) {
@@ -250,9 +247,11 @@ public class ViewController {
 
 //        final String serverPath;
 //        File file = new File("DBinformation.txt");
+
         Dialog dlg = new Dialog();
-        dlg.setTitle("Add server information");
-        dlg.setHeaderText("Add server Information");
+        dlg.setTitle("Database Information");
+        dlg.setHeaderText("Add the database information or Install the database\n\nWarning: Installing the Database will" +
+                " delete everything from the it!\nPlease contact your administrator if needed.");
         VBox mainpane = new VBox(20);
 
         TextField host = new TextField();
@@ -275,17 +274,19 @@ public class ViewController {
         password.setMaxWidth(Double.MAX_VALUE);
         password.setMinWidth(500);
 
-        TextField SID = new TextField("XE");
+        TextField SID = new TextField("acoradb");
+
+
         SID.setPromptText("e.g., XE");
         SID.setMaxWidth(Double.MAX_VALUE);
         SID.setMinWidth(500);
 
         mainpane.getChildren().addAll(
-                new HBox(25, new Label("Host: "), host),
-                new HBox(25, new Label("Username: "), userName),
-                new HBox(25, new Label("Password: "), password),
-                new HBox(25, new Label("Port: "), port),
-                new HBox(25, new Label("SID: "), SID)
+                new HBox(25, new Label("Host:* "), host),
+                new HBox(25, new Label("Username:* "), userName),
+                new HBox(25, new Label("Password:* "), password),
+                new HBox(25, new Label("Port:* "), port),
+                new HBox(25, new Label("SID:* "), SID)
         );
         dlg.getDialogPane().setContent(mainpane);
         ButtonType addTxtBtn = new ButtonType("Add DB Info text File");
@@ -299,40 +300,43 @@ public class ViewController {
 
             if (dialogButton == addTxtBtn || dialogButton == initBtn) {
                 System.out.println("init or addTxt button pressed!");
+                //Check for textBoxes
 
-                if(!controller.writeDBTxt(userName, password, host, port, SID)) {
+                if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") &&
+                        !port.getText().equals("") && !SID.getText().equals("")) {
+                    if (!controller.writeDBTxt(userName, password, host, port, SID)) {
 
-                    showError("Warning", "Failed to add DB information text file!",
+                        showError("Warning", "Failed to add DB information text file!",
+                                "");
+                        exit();
+                    }
+
+
+                    boolean error = false;
+                    try {
+                        DBManager.openConnection();
+                    } catch (FileNotFoundException e) {
+                        error = true;
+                    } catch (SQLException e) {
+                        error = true;
+                    } catch (ClassNotFoundException e) {
+                        error = true;
+                    }
+
+                    if (error) {
+                        showError("Connection Error", "Setting up the database failed!",
+                                "There was a problem with connecting to the DB! Please try again and make sure" +
+                                        "you are putting the credentials correctly!");
+                        exit();
+                    }
+
+
+                    if (dialogButton == initBtn)
+                        askForPassword();
+                }
+                else
+                    showError("Missing data", "Please make sure to add all the data and try agian!",
                             "");
-                    exit();
-                }
-
-                boolean error = false;
-                try{
-                    DBManager.openConnection();
-                }
-                catch (FileNotFoundException e){
-//                    e.printStackTrace();
-                    error = true;
-                }
-                catch (SQLException e){
-//                    e.printStackTrace();
-                    error = true;
-                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-                    error = true;
-                }
-
-                if (error){
-                    showError("Connection Error", "Setting up the database failed!",
-                            "There was a problem with connecting to the DB! Please try again and make sure" +
-                                    "you are putting the credentials correctly!");
-                    exit();
-                }
-
-                if(dialogButton == initBtn)
-//                    DBInitialize.InitDBTables();
-                    askForPassword();
             }
 
             return null;
@@ -345,6 +349,8 @@ public class ViewController {
 
 
     private final void askForPassword() {
+
+
         Dialog dlg = new Dialog();
         HBox mainPane = new HBox();
 
@@ -384,12 +390,11 @@ public class ViewController {
             if (dialogButton == next) {
                if(passwordTxt.getText().equals("9090"))
                {
-
-                   DBInitialize.InitDBTables();
-
+                   if (controller.confirmation())
+                        DBInitialize.InitDBTables();
                }
                else{
-                   System.out.println("Password is wrong! Try again.");
+                   showError("Password is Wrong!", "The password entered is wrong!","");
                }
             }
             return null;

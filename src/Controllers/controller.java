@@ -6,20 +6,21 @@ import Models.frontend.Course;
 import Models.frontend.Resource;
 import com.sun.istack.internal.NotNull;
 import Models.frontend.Person;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class controller {
 
@@ -423,9 +424,6 @@ public class controller {
         String serverPath;
         File file = new File("DBinformation.txt");
 
-        if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") &&
-                !port.getText().equals("") && !SID.getText().equals("")) {
-
             serverPath = "jdbc:oracle:thin:"
                     + userName.getText()
                     + "/"
@@ -435,9 +433,6 @@ public class controller {
                     + ":"
                     + port.getText()
                     + ":" + SID.getText();
-        } else {
-            return false;
-        }
 
         try {
 
@@ -454,9 +449,24 @@ public class controller {
 
         return false;
 
-
-
 }
+
+    public static boolean confirmation(){
+
+        Alert alert = new Alert(Alert.AlertType.WARNING , "Depending on your internet speed," +
+                " this process may tak up to 2 minutes! So please sit back and be patient :-)", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Warning!");
+        alert.setHeaderText("Are you sure you want to delete all the data and re-install the database?");
+
+        Window alertWindow = alert.getDialogPane().getScene().getWindow();
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if("YES".equals(result.get().getText().toUpperCase()))
+            return true;
+        else
+            return false;
+    }
 
 }
 
