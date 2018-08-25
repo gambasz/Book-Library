@@ -1,6 +1,7 @@
 package Controllers;
 
 import Controllers.BookAPI.BookAPI;
+import Controllers.DatabaseControllers.DBInitialize;
 import Models.Book;
 import Models.frontend.*;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,8 +29,10 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -53,6 +56,7 @@ public class ViewController {
     private final String deleteIconImg = "/Models/media/delete.png";
     private final String programeIconImg = "/Models/media/icon.png";
 
+    private int runningLimit = 0;
 
     @FXML
     private LimitedTextField courseInfoTitle = new LimitedTextField(), courseInfoDepart = new LimitedTextField(),
@@ -189,16 +193,32 @@ public class ViewController {
         infoBtn.setOnMouseClicked(e -> showInfo());
         try {
             DBManager.openConnection();
-        } catch (SQLException e) {
+        } catch (FileNotFoundException e) {
+            showError("DBinformation file not found",
+                    "The DBinformation.txt file was not found",
+                    "The DBinformation.txt file was not found. Press Ok to continue to add Database information.");
+            runningLimit++;
+            if (runningLimit >= 2) {
+                System.exit(15);
+            }
+
+            databaseInit();
+            initialize();
+
+
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
                             " in DBinformation.txt file");
+            // a pop up window ask if she wants to re-install db?
             return;
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         defaultSemest = controller.findDefaultSemester();
         debugging = true;
         courseList = new ArrayList<>();
@@ -222,6 +242,167 @@ public class ViewController {
         setTextFieldSMaxLength();
 
     }
+
+    private void databaseInit() {
+
+//        final String serverPath;
+//        File file = new File("DBinformation.txt");
+
+        Dialog dlg = new Dialog();
+        dlg.setTitle("Database Information");
+        dlg.setHeaderText("Add the database information or Install the database\n\nWarning: Installing the Database will" +
+                " delete everything from the it!\nPlease contact your administrator if needed.");
+        VBox mainpane = new VBox(20);
+
+        TextField host = new TextField();
+        host.setPromptText("e.g., acoracle.host.edu");
+        host.setMaxWidth(Double.MAX_VALUE);
+        host.setMinWidth(500);
+
+        TextField port = new TextField();
+        port.setPromptText("e.g., 1515");
+        port.setMaxWidth(Double.MAX_VALUE);
+        port.setMinWidth(500);
+
+        TextField userName = new TextField();
+        userName.setPromptText("e.g., admin");
+        userName.setMaxWidth(Double.MAX_VALUE);
+        userName.setMinWidth(500);
+
+        TextField password = new TextField();
+        password.setPromptText("e.g., password");
+        password.setMaxWidth(Double.MAX_VALUE);
+        password.setMinWidth(500);
+
+        TextField SID = new TextField("acoradb");
+
+
+        SID.setPromptText("e.g., XE");
+        SID.setMaxWidth(Double.MAX_VALUE);
+        SID.setMinWidth(500);
+
+        mainpane.getChildren().addAll(
+                new HBox(25, new Label("Host:* "), host),
+                new HBox(25, new Label("Username:* "), userName),
+                new HBox(25, new Label("Password:* "), password),
+                new HBox(25, new Label("Port:* "), port),
+                new HBox(25, new Label("SID:* "), SID)
+        );
+        dlg.getDialogPane().setContent(mainpane);
+        ButtonType addTxtBtn = new ButtonType("Add DB Info text File");
+        ButtonType initBtn = new ButtonType("Add file and Install DB",ButtonBar.ButtonData.NEXT_FORWARD);
+        ButtonType cancelBtn = ButtonType.CANCEL;
+
+
+        dlg.getDialogPane().getButtonTypes().addAll(cancelBtn, addTxtBtn, initBtn );
+        dlg.setWidth(1000);
+        dlg.setResultConverter(dialogButton -> {
+
+            if (dialogButton == addTxtBtn || dialogButton == initBtn) {
+                System.out.println("init or addTxt button pressed!");
+                //Check for textBoxes
+
+                if (!userName.getText().equals("") && !password.getText().equals("") && !host.getText().equals("") &&
+                        !port.getText().equals("") && !SID.getText().equals("")) {
+                    if (!controller.writeDBTxt(userName, password, host, port, SID)) {
+
+                        showError("Warning", "Failed to add DB information text file!",
+                                "");
+                        exit();
+                    }
+
+
+                    boolean error = false;
+                    try {
+                        DBManager.openConnection();
+                    } catch (FileNotFoundException e) {
+                        error = true;
+                    } catch (SQLException e) {
+                        error = true;
+                    } catch (ClassNotFoundException e) {
+                        error = true;
+                    }
+
+                    if (error) {
+                        showError("Connection Error", "Setting up the database failed!",
+                                "There was a problem with connecting to the DB! Please try again and make sure" +
+                                        "you are putting the credentials correctly!");
+                        exit();
+                    }
+
+
+                    if (dialogButton == initBtn)
+                        askForPassword();
+                }
+                else
+                    showError("Missing data", "Please make sure to add all the data and try agian!",
+                            "");
+            }
+
+            return null;
+        });
+
+        dlg.showAndWait();
+
+
+    }
+
+
+    private final void askForPassword() {
+
+
+        Dialog dlg = new Dialog();
+        HBox mainPane = new HBox();
+
+        dlg.setTitle("Enter the password");
+        dlg.setHeaderText("Please enter the password for initializing the database!"+
+                "(Remember, initializing db will delete all the current data on database)");
+        ImageView icon = new ImageView(programeIconImg);
+        icon.setFitHeight(75);
+        icon.setFitWidth(75);
+        dlg.setGraphic(icon);
+
+        Label passwordLB = new Label("Admin Password:  ");
+        LimitedTextField passwordTxt = new LimitedTextField();
+
+        ButtonType next = new ButtonType("Next", ButtonBar.ButtonData.NEXT_FORWARD);
+
+        mainPane.getChildren().
+
+                addAll(
+                        new VBox(passwordLB),
+                        new VBox(10, passwordTxt)
+                );
+
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.setStyle("-fx-border-radius: 10px;");
+
+        dlg.getDialogPane().
+
+                setContent(mainPane);
+        dlg.getDialogPane().
+
+                getButtonTypes().removeAll();
+
+        dlg.getDialogPane().getButtonTypes().addAll(next);
+
+        dlg.setResultConverter(dialogButton -> {
+            if (dialogButton == next) {
+               if(passwordTxt.getText().equals("9090"))
+               {
+                   if (controller.confirmation())
+                        DBInitialize.InitDBTables();
+               }
+               else{
+                   showError("Password is Wrong!", "The password entered is wrong!","");
+               }
+            }
+            return null;
+        });
+
+        dlg.showAndWait();
+    }
+
 
     private void showInfo() {
         Dialog dlg = new Dialog();
@@ -283,8 +464,12 @@ public class ViewController {
         courseInfoTitle.setMaxLength(8);
         courseInfoDepart.setMaxLength(120);
         courseInfoDescrip.setMaxLength(250);
+        courseInfoCRN.setMaxLength(16);
+        courseInfoNotes.setMaxLength(120);
+
         profInfoFName.setMaxLength(25);
         profInfoLName.setMaxLength(25);
+
         courseSearchTF.setMaxLength(8);
         departSearchTF.setMaxLength(120);
         profSearchTF.setMaxLength(50);
@@ -647,8 +832,15 @@ public class ViewController {
                 selectedPerson = selectedCourse.getProfessor();
                 courseInfoTitle.setText(selectedCourse.getTitle());
                 courseInfoDepart.setText(selectedCourse.getDepartment());
-                courseInfoNotes.setText(selectedCourse.getNotes());
-                courseInfoCRN.setText("" + selectedCourse.getCRN());
+                if (selectedCourse.getNotes() != (null))
+                    courseInfoNotes.setText(selectedCourse.getNotes());
+                else
+                    courseInfoNotes.setText("");
+
+                if (selectedCourse.getCRN() != (null))
+                    courseInfoCRN.setText(String.format("%d", selectedCourse.getCRN().intValue()));
+                    else
+                        courseInfoCRN.setText("");
                 semesterComBoxEdit.getSelectionModel().select(selectedCourse.getSEMESTER());
                 yearComBoxEdit.getSelectionModel().select(new Integer(selectedCourse.getYEAR()));
                 ArrayList<Resource> tempRes = selectedCourse.getResource();
@@ -661,7 +853,8 @@ public class ViewController {
                 }
                 moreInfoTP.setExpanded(false);
 
-                if (selectedCourse.getNotes() != null && !selectedCourse.getNotes().isEmpty()) {
+                if ((selectedCourse.getNotes() != null && !selectedCourse.getNotes().isEmpty()) ||
+                        selectedCourse.getCRN() != null ) {
                     moreInfoTP.setExpanded(true);
                 }
             }
@@ -698,10 +891,8 @@ public class ViewController {
                 yearComBoxEdit.getSelectionModel().getSelectedItem() == null || semesterComBoxEdit.getSelectionModel().getSelectedItem() == null) {
             showError("Error", "Missing info", "You need to fulfill all sections");
             return false;
-        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
-            showError("Error", "CRN must be a number", "Re-type CRN");
-            return false;
-        } else if (cSplit.length != 2) {
+        }
+        else if (cSplit.length != 2) {
 
             showError("Input Error",
                     "Unable to insert because the course you title entered " +
@@ -716,8 +907,15 @@ public class ViewController {
                     "Correct format examples --> CMSC 100, MATH 181 ");
             return false;
 
-        } else
+        }
+        else {
+            if (courseInfoCRN.getText() != null)
+                if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+                    showError("Error", "CRN must be a number", "Re-type CRN");
+                    return false;
+                }
             return true;
+        }
     }
 
     public void add() {
@@ -737,7 +935,7 @@ public class ViewController {
 
             tempCour = new Course(
                     0,
-                    0,
+                    null,
                     Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()),
                     semesterComBoxEdit.getSelectionModel().getSelectedItem().toString(),
                     courseInfoTitle.getText(),
@@ -746,16 +944,14 @@ public class ViewController {
                     courseInfoDescrip.getText(),
                     tempRes);
             tempCour.setID(DBManager.insertCourseQuery(tempCour));
-            controller.addNoteAndCRN(tempCour, courseInfoNotes.getText(),courseInfoCRN.getText());
+            controller.addNoteAndCRN(tempCour, courseInfoNotes.getText(), courseInfoCRN.getText());
             tempCour = DBManager.relationalInsertByID2(tempCour);
             if (isClassInTheSameYear(tempCour)) {
                 courseList.add(tempCour);
             }
 
 
-
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCour.getCommonID());
-
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCour);
 
 
         }
@@ -782,7 +978,7 @@ public class ViewController {
 
             if (coursesPulledDatabase == null) {
                 showError("Connection Error", "The database did not return any  data",
-                        "Check your connection,and database settings in DBinformation.txt file");
+                        "Check your connection,and database credentials in DBinformation.txt file");
                 coursesPulledDatabase = new ArrayList<>();
             }
 
@@ -807,7 +1003,7 @@ public class ViewController {
         } catch (Exception e) {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
-                    "Check your internet connection, and database settings provided" +
+                    "Check your internet connection, and database credentials provided" +
                             " in DBinformation.txt file");
 
         }
@@ -919,9 +1115,15 @@ public class ViewController {
 
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to Update");
-        } else if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
-            showError("Error", "CRN must be a number", "Re-type CRN");
-        } else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+        }
+
+        else if (selectedCourse != null && checkFirstRequiredBoxes()) {
+
+//            if (courseInfoCRN.getText() != null)
+//                if (!courseInfoCRN.getText().isEmpty() && !controller.isInteger(courseInfoCRN.getText())) {
+//                showError("Error", "CRN must be a number", "Re-type CRN");
+//                return;
+//            }
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
@@ -944,10 +1146,12 @@ public class ViewController {
             DBManager.updateRelationCourseResources(tempCourse);
 
 
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(),courseInfoNotes.getText(),tempCourse.getCommonID());
-
+            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), selectedCourse);
             controller.copyCourse(selectedCourse, tempCourse);
-            controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(),courseInfoCRN.getText());
+            controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(), courseInfoCRN.getText());
+
+
+
             if (!isClassInTheSameYear(selectedCourse)) {
                 courseList.remove(selectedCourse);
             }
@@ -1157,9 +1361,9 @@ public class ViewController {
         currentAmTF.setPromptText("Ex. 90");
         descriptionTF.setPromptText("Description for resource");
 
-        Label counter = new Label();
-        counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
-        titleTF.setCounter(counter);
+//        Label counter = new Label();
+//        counter.textProperty().bind(titleTF.textProperty().length().asString("  Char Counter: %d"));
+//        titleTF.setCounter(counter);
         titleTF.setMaxLength(250);
 
         authorTF.setMaxLength(250);
@@ -1543,9 +1747,7 @@ public class ViewController {
             showError("ISBN error", "Missing ISBN", "Please add ISBN");
         } else if (isbnFormat && typeCB.getSelectionModel().getSelectedItem().equals("Book")) {
             showError("ISBN error", "Wrong ISBN format", "ISBN must have 10 digits, ISBN13 must have 13 digits");
-        }
-
-        else {
+        } else {
 
 
             Resource temp = new Resource(typeCB.getSelectionModel().getSelectedItem(),
@@ -1563,7 +1765,7 @@ public class ViewController {
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
             DBManager.setIDforResource(temp);
 
-            if(!resourceTable.getItems().contains(temp)) {
+            if (!resourceTable.getItems().contains(temp)) {
 
                 if (!isPersonResourcesView) {
                     resList.add(temp);
@@ -1577,8 +1779,7 @@ public class ViewController {
                     DBManager.insertRelationResourcePublisher(temp);
 
                 }
-            }
-            else{
+            } else {
                 showError("Repetitive resource", "The resource is already exists",
                         "Please make sure you are not adding repetitive resource in one class.");
             }
@@ -1600,7 +1801,7 @@ public class ViewController {
         ComboBox<Resource> resources = new ComboBox<Resource>();
         resources.getItems().addAll(resList);
         Label currentCBoxLbl = new Label("Resources : ");
-        ButtonType fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
+        ButtonType  fill = new ButtonType("Fill", ButtonBar.ButtonData.OK_DONE);
         Button deleteBtn = new Button("Delete");
         ImageView deletImgg = new ImageView(deleteIconImg);
         addGraphicToButtons(deletImgg, deleteBtn);
@@ -2036,9 +2237,7 @@ public class ViewController {
         tablePane.setAlignment(Pos.CENTER);
         tablePane.setStyle("-fx-border-radius: 10px;");
         for (
-                Node temp : tablePane.getChildren())
-
-        {
+                Node temp : tablePane.getChildren()) {
             if (temp.getClass().equals(VBox.class)) {
                 VBox child = (VBox) temp;
                 child.setAlignment(Pos.CENTER);
@@ -2517,10 +2716,16 @@ public class ViewController {
     }
 
     private boolean isClassInTheSameYear(Course tempCour) {
-        if (yearComBox.getSelectionModel().getSelectedItem() == null) {
-            return tempCour.getYEAR() == defaultSemest.getYear();
+        if(!courseList.isEmpty()){
+            return (tempCour.getYEAR() == courseList.get(0).getYEAR() &&
+                    tempCour.getSEMESTER().equals(courseList.get(0).getSEMESTER()));
+        }
+        else if (yearComBox.getSelectionModel().getSelectedItem() == null) {
+            return (tempCour.getYEAR() == defaultSemest.getYear() && tempCour.getSEMESTER().equals(defaultSemest.getSeason()));
+
         } else {
-            return tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString());
+            return (tempCour.getYEAR() == Integer.parseInt(yearComBox.getSelectionModel().getSelectedItem().toString()) &&
+                    tempCour.getSEMESTER().equals(semesterComBox.getSelectionModel().getSelectedItem().toString()));
         }
     }
 }

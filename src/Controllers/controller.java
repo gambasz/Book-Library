@@ -6,17 +6,21 @@ import Models.frontend.Course;
 import Models.frontend.Resource;
 import com.sun.istack.internal.NotNull;
 import Models.frontend.Person;
-import javafx.scene.effect.Reflection;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Window;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class controller {
 
@@ -385,32 +389,84 @@ public class controller {
     }
 
     public static void addNoteAndCRN(Models.frontend.Course c, String note, String CRN){
+        c.setNotes(null);
+        c.setCRN(null);
        if(note!=null&&!note.isEmpty()) {
             c.setNotes(note);
         }
         if(CRN!=null&&!CRN.isEmpty()){
-            c.setCRN(Integer.parseInt(CRN));
+            c.setCRN(Integer.valueOf(CRN));
         }
     }
 
 
-public static void setTextStyle(Text t){
+    public static void setTextStyle(Text t){
 
-//        t.setX(10.0f);
-//    t.setY(50.0f);
-//    t.setCache(true);
-    t.setFill(Color.web("#21618C"));
-    t.setFont(Font.font(null, FontWeight.BOLD, 18));
+    //        t.setX(10.0f);
+    //    t.setY(50.0f);
+    //    t.setCache(true);
+        t.setFill(Color.web("#21618C"));
+        t.setFont(Font.font(null, FontWeight.BOLD, 18));
 
-//    Reflection r = new Reflection();
-//    r.setFraction(0.2f);
-//
-//    t.setEffect(r);
+    //    Reflection r = new Reflection();
+    //    r.setFraction(0.2f);
+    //
+    //    t.setEffect(r);
 
-//    t.setTranslateY(400);
+    //    t.setTranslateY(400);
 
+
+    }
+
+
+    public static boolean writeDBTxt(TextField userName, TextField password, TextField host, TextField port, TextField SID){
+
+        String serverPath;
+        File file = new File("DBinformation.txt");
+
+            serverPath = "jdbc:oracle:thin:"
+                    + userName.getText()
+                    + "/"
+                    + password.getText()
+                    + "@"
+                    + host.getText()
+                    + ":"
+                    + port.getText()
+                    + ":" + SID.getText();
+
+        try {
+
+            FileWriter fw = new FileWriter(file, true); //the true will append the new data
+            fw.write(serverPath);//appends the string to the file
+            fw.close();
+            return true;
+
+        }
+        catch (IOException ioe) {
+            System.err.println("IOException: " + ioe.getMessage());
+
+        }
+
+        return false;
 
 }
+
+    public static boolean confirmation(){
+
+        Alert alert = new Alert(Alert.AlertType.WARNING , "Depending on your internet speed," +
+                " this process may tak up to 2 minutes! So please sit back and be patient :-)", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Warning!");
+        alert.setHeaderText("Are you sure you want to delete all the data and re-install the database?");
+
+        Window alertWindow = alert.getDialogPane().getScene().getWindow();
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if("YES".equals(result.get().getText().toUpperCase()))
+            return true;
+        else
+            return false;
+    }
 
 }
 

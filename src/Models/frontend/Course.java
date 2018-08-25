@@ -15,7 +15,8 @@ import java.util.ArrayList;
 public class Course {
 
     private int ID;
-    private SimpleIntegerProperty CRN, YEAR;
+    private SimpleIntegerProperty YEAR;
+    private Integer CRN;
     private Enum SEMESTER;
     private SimpleStringProperty title, department, description;
     private Person professor;
@@ -28,8 +29,8 @@ public class Course {
         commonID = 0;
     }
 
-    public Course(int CRN, int YEAR, String SEMESTER) {
-        this.CRN = new SimpleIntegerProperty(CRN);
+    public Course(Integer CRN, int YEAR, String SEMESTER) {
+        this.CRN = CRN;
         this.YEAR = new SimpleIntegerProperty(YEAR);
         this.SEMESTER = Semester.valueOf(SEMESTER);
         this.notes = new SimpleStringProperty();
@@ -44,9 +45,9 @@ public class Course {
 
     }
 
-    public Course(int ID, int CRN, int YEAR, String semester, String title, String department, Person professor, String description, ArrayList<Resource> resource) {
+    public Course(int ID, Integer CRN, int YEAR, String semester, String title, String department, Person professor, String description, ArrayList<Resource> resource) {
         this.ID = ID;
-        this.CRN = new SimpleIntegerProperty(CRN);
+        this.CRN = CRN;
         this.YEAR = new SimpleIntegerProperty(YEAR);
         this.SEMESTER = Semester.valueOf(semester.toUpperCase());
         this.title = new SimpleStringProperty(title);
@@ -88,16 +89,12 @@ public class Course {
         this.ID = ID;
     }
 
-    public int getCRN() {
-        return CRN.get();
-    }
-
-    public SimpleIntegerProperty CRNProperty() {
+    public Integer getCRN() {
         return CRN;
     }
 
-    public void setCRN(int CRN) {
-        this.CRN = new SimpleIntegerProperty(CRN);
+    public void setCRN(Integer CRN) {
+        this.CRN = CRN;
     }
 
     public int getYEAR() {
@@ -186,7 +183,7 @@ public class Course {
     public String toString() {
         return "Course{" +
                 "ID=" + ID +
-                ", CRN=" + CRN +
+                ", CRN=" + this.getCRN() +
                 ", YEAR=" + YEAR +
                 ", SEMESTER=" + SEMESTER +
                 ", title=" + title +

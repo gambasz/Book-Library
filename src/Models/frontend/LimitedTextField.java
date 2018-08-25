@@ -2,10 +2,8 @@ package Models.frontend;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.paint.Color;
 
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -13,12 +11,10 @@ import java.util.function.UnaryOperator;
 public class LimitedTextField extends TextField {
 
     private final IntegerProperty maxLength;
-    private Label counter;
 
     public LimitedTextField() {
         super();
         this.maxLength = new SimpleIntegerProperty(0);
-        counter = null;
     }
 
 
@@ -32,45 +28,27 @@ public class LimitedTextField extends TextField {
         this.checkMaxLength();
     }
 
-    public void setCounter(Label counter){
-        this.counter = counter;
-        counter.setTextFill(Color.web("#0076a3"));
-
-    }
-
-    private void maxCharLabel(){
-        if (counter != null)
-            counter.setTextFill(Color.web("#FF0000"));
-
-
-    }
 
     private void checkMaxLength() {
 
         UnaryOperator<TextFormatter.Change> rejectChange = change -> {
-            if (change.isContentChange()) {
-//                if (counter !=null)
-//                    this.counter.setVisible(true);
-                if (change.getControlNewText().length() > this.getMaxLength()) {
-                    if(counter!=null)
-                        maxCharLabel();
-                    this.setStyle("-fx-focus-color: red;");
+                if (change.isContentChange()) {
 
-                    return null;
+                    if (change.getControlNewText().length() > this.getMaxLength()) {
+
+                        this.setStyle("-fx-focus-color: red;");
+
+                        return null;
+                    }
                 }
-            }
-            if(counter!=null)
-            {
-//                this.counter.setVisible(false);
-                counter.setTextFill(Color.web("#0076a3"));
-            }
+
             this.setStyle("-fx-text-inner-color: black;");
 
             return change;
+
         };
         this.setTextFormatter(new TextFormatter(rejectChange));
-//        if(counter!=null)
-//            this.counter.setVisible(false);
+
 
 
     }

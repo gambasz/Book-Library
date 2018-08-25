@@ -3,27 +3,21 @@ package Controllers;
 import Models.backend.*;
 import Models.frontend.PersonType;
 import javafx.scene.control.ComboBox;
+import oracle.jdbc.proxy.annotation.Pre;
 
 import java.io.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class DBManager {
     public static Statement st;
-    public static Statement stt;
-    public static Statement st3;
-    public static Statement st4;
-    public static Statement st5;
 
     public static Connection conn;
 
     public DBManager() {
     }
 
-    public static String readDBinfo() {
+    public static String readDBinfo() throws FileNotFoundException {
         // The name of the file to open.
         String fileName = "DBinformation.txt";
 
@@ -45,35 +39,28 @@ public class DBManager {
 
             // Always close files.
             bufferedReader.close();
-        } catch (FileNotFoundException ex) {
-            System.out.println(
-                    "Unable to open file '" +
-                            fileName + "'");
         } catch (IOException ex) {
             System.out.println(
                     "Error reading file '"
                             + fileName + "'");
-            // Or we could just do this:
-            // ex.printStackTrace();
+
         }
         return null;
     }
 
 
-    public static void openConnection() throws SQLException, ClassNotFoundException {
+    public static void openConnection() throws SQLException, FileNotFoundException, ClassNotFoundException {
+
         String url = readDBinfo();
+        if (url == null) {
+            throw new FileNotFoundException();
+        }
         Class.forName("oracle.jdbc.driver.OracleDriver");
         conn = DriverManager.getConnection(url);
 
 
         System.out.println("Successfully connected to the database");
         st = conn.createStatement();
-        stt = conn.createStatement();
-        st3 = conn.createStatement();
-        st4 = conn.createStatement();
-        st5 = conn.createStatement();
-
-
     }
 
     public static void closeConnection() {
@@ -819,7 +806,7 @@ public class DBManager {
 
                     if (rsTmp.next()) {
                         System.out.println("semester: " + semester.getSeason());
-                        courseList.add(new Models.frontend.Course(cID, tempCommonID, semester.getYear(), semester.getSeason(),
+                        courseList.add(new Models.frontend.Course(cID, null, semester.getYear(), semester.getSeason(),
                                 cTitle, cDepartment, personTmp, cDescription, courseResources));
                         courseList.get(i).setCommonID(tempCommonID);
 
@@ -878,7 +865,7 @@ public class DBManager {
                         courseResources = findResourcesCourse2(courseID, tempCommonID, cachedResources);
                         courseList.get(i).setResource(courseResources);
                         if (CRN != null) {
-                            courseList.get(i).setCRN(CRN.intValue());
+                            courseList.get(i).setCRN(CRN);
                             CRN = null;
                         }
                         if (courseNote != null) {
@@ -1789,7 +1776,9 @@ public class DBManager {
         ArrayList<Integer> resourceids = new ArrayList<>();
         ArrayList<Integer> classids = new ArrayList<>();
 
-        try {
+        Set<Integer> hashset = new HashSet<>();
+
+        try{
 
             Statement statement = conn.createStatement();
             Statement statement2 = conn.createStatement();
@@ -1802,7 +1791,7 @@ public class DBManager {
             ResultSet rs = stl.executeQuery();
 
 
-            while (rs.next()) {
+            while(rs.next()) {
 
                 resourceids.add(rs.getInt("ID"));
             }
@@ -1811,24 +1800,24 @@ public class DBManager {
 
             ResultSet rs2;
 
-            for (int i = 0; i < resourceids.size(); i++) {
+            for(int i = 0; i < resourceids.size(); i++) {
 
                 rs2 = statement2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_RESOURCES WHERE RESOURCEID = %d", resourceids.get(i)));
 
                 while (rs2.next()) {
 
-                    classids.add(rs2.getInt("COMMONID"));
+                    hashset.add(rs2.getInt("COMMONID"));
                 }
 
                 rs2.close();
             }
 
+            classids.addAll(hashset);
+
 
             return classids;
 
-        } catch (SQLException e) {
-            System.out.println("Something went wrong with find_classids_by_resource_name()");
-        }
+        }catch(SQLException e) { System.out.println("Something went wrong with find_classids_by_resource_name()"); }
 
         return classids;
     }
@@ -1943,32 +1932,58 @@ public class DBManager {
 
             Statement st = conn.createStatement();
             Statement st2 = conn.createStatement();
-            ResultSet rs2;
-
-            String queryl = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
-            PreparedStatement stl = conn.prepareStatement(queryl);
-            stl.setString(1, "%" + name + "%");
-            stl.setString(2, "%" + name + "%");
-            ResultSet rs = stl.executeQuery();
-
-            while (rs.next()) {
-
-                personids.add(rs.getInt("ID"));
-            }
-
-            rs.close();
 
 
-            for (int i = 0; i < personids.size(); i++) {
+            if(name.contains(" ")){
 
-                rs2 = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+                String query = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
+                PreparedStatement stl = conn.prepareStatement(query);
+
+                String[] splited = name.split("\\s+");
+
+                stl.setString(1, splited[0]);
+                stl.setString(2, splited[1]);
+
+                splited[1] = splited[1].substring(0, 1).toUpperCase() + splited[1].substring(1);
+                
+                ResultSet rs = stl.executeQuery();
+
+                while(rs.next()){
+
+                    personids.add(rs.getInt("ID"));
+
+                }
+
+                rs.close();
+
+            }else{
+
+                String queryl = String.format("SELECT * FROM PERSON WHERE FIRSTNAME LIKE ? OR LASTNAME LIKE ?");
+                PreparedStatement stl2 = conn.prepareStatement(queryl);
+                stl2.setString(1, "%" + name + "%");
+                stl2.setString(2, "%" + name + "%");
+
+                ResultSet rs2 = stl2.executeQuery();
 
                 while (rs2.next()) {
 
-                    courseids.add(rs2.getInt("COMMONID"));
+                    personids.add(rs2.getInt("ID"));
                 }
 
                 rs2.close();
+
+            }
+
+            for (int i = 0; i < personids.size(); i++) {
+
+                ResultSet rs3 = st2.executeQuery(String.format("SELECT * FROM RELATION_COURSE_PERSON WHERE PERSONID = %d", personids.get(i)));
+
+                while (rs3.next()) {
+
+                    courseids.add(rs3.getInt("COMMONID"));
+                }
+
+                rs3.close();
             }
 
             return courseids;
@@ -2392,23 +2407,35 @@ public class DBManager {
 
     }
 
-    public static void updateCRNAndNoteForClass(String CRN, String note, int commonID) {
+    public static void updateCRNAndNoteForClass(String CRN, String note, Models.frontend.Course c) {
         try {
+            String queryx = String.format("UPDATE RELATION_COURSE_PERSON SET COURSENOTES = ?" +
+            ", COURSECRN = ? WHERE COMMONID = " + c.getCommonID());
+            PreparedStatement stlx = conn.prepareStatement(queryx);
+            stlx.setNull(1,Types.VARCHAR);
+            stlx.setNull(2,Types.INTEGER);
+            stlx.executeQuery();
+
+
+
+
             if (note != null && !note.isEmpty()) {
 
                 String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSENOTES = ?" +
-                        " WHERE COMMONID = " + commonID);
+                        " WHERE COMMONID = " + c.getCommonID());
                 PreparedStatement stl = conn.prepareStatement(query);
                 stl.setString(1, note);
                 stl.executeQuery();
             }
             if (CRN != null && !CRN.isEmpty()) {
                 String query = String.format("UPDATE RELATION_COURSE_PERSON SET COURSECRN = ?" +
-                        " WHERE COMMONID = " + commonID);
+                        " WHERE COMMONID = " + c.getCommonID());
                 PreparedStatement stl = conn.prepareStatement(query);
                 stl.setString(1, CRN);
                 stl.executeQuery();
             }
+
+
 
 
         } catch (
