@@ -144,7 +144,7 @@ public class DBInitialize {
 
             Statement stmt = conn.createStatement();
 
-            InputStreamReader reader = new InputStreamReader(new FileInputStream("CMSC.txt"));
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(directory+"CMSC.txt"));
 
             BufferedReader bufferedReader = new BufferedReader(reader);
 
