@@ -4,6 +4,7 @@ import Controllers.BookAPI.BookAPI;
 import Controllers.DatabaseControllers.DBInitialize;
 import Models.Book;
 import Models.frontend.*;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -1430,14 +1431,17 @@ public class ViewController {
                     publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
         });
         try {
-            Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
-            onResourceTableSelect(tempRes, titleTF, authorTF, isbn10TF,
-                    isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
-                    addNAssignNewResource, update, delete);
+            if (!resourceTable.getSelectionModel().isEmpty()) {
+                Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
+                onResourceTableSelect(tempRes, titleTF, authorTF, isbn10TF,
+                        isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
+                        addNAssignNewResource, update, delete);
+            }
 
         } catch (Exception ex) {
             if (debugging) {
-                showError("Resource data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                showError("Resource data temp", "RES ERROR CODE 588 ",
+                        ex.getStackTrace().toString());
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
