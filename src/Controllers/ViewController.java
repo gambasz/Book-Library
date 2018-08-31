@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -29,7 +30,6 @@ import javafx.stage.Modality;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -189,10 +189,14 @@ public class ViewController {
 
     @FXML
     public void initialize() {
-        helpBtn.setOnMouseClicked(e -> showHelp());
+        ShowHelpContextMenuOnHelpBtnClick();
         infoBtn.setOnMouseClicked(e -> showInfo());
+
         try {
             DBManager.openConnection();
+            defaultSemest = controller.findDefaultSemester();
+
+
         } catch (FileNotFoundException e) {
             showError("DBinformation file not found",
                     "The DBinformation.txt file was not found",
@@ -211,15 +215,15 @@ public class ViewController {
             e.printStackTrace();
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
-                            " in DBinformation.txt file");
+                            " in DBinformation.txt file\n (hint: You can click on Help button (Question mark button " +
+                            "in the app) and click init db to manage the database.)");
             // a pop up window ask if she wants to re-install db?
-            return;
+//            return;
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        defaultSemest = controller.findDefaultSemester();
         debugging = true;
         courseList = new ArrayList<>();
         profList = new ArrayList<>();
@@ -242,6 +246,23 @@ public class ViewController {
         setTextFieldSMaxLength();
 
     }
+
+    private void ShowHelpContextMenuOnHelpBtnClick() {
+        final ContextMenu contextMenu = new ContextMenu();
+        MenuItem showHelpMenuItem = new MenuItem("Show Tutorials");
+        MenuItem showDBinitMenuItem = new MenuItem("Init new DB");
+        showDBinitMenuItem.setOnAction(localEvent -> databaseInit());
+        showHelpMenuItem.setOnAction(localEvent -> showHelp());
+        contextMenu.getItems().addAll(showHelpMenuItem, showDBinitMenuItem);
+        helpBtn.setOnMouseClicked(e -> {
+            contextMenu.show(helpBtn, e.getScreenX(), e.getScreenY());
+
+        });
+
+
+    }
+
+  
 
     private void databaseInit() {
 
@@ -1430,14 +1451,17 @@ public class ViewController {
                     publisherBtn, typeCB, editionCB, addNAssignNewResource, update, delete);
         });
         try {
-            Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
-            onResourceTableSelect(tempRes, titleTF, authorTF, isbn10TF,
-                    isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
-                    addNAssignNewResource, update, delete);
+            if (!resourceTable.getSelectionModel().isEmpty()) {
+                Resource tempRes = resourceTable.getSelectionModel().getSelectedItems().get(0);
+                onResourceTableSelect(tempRes, titleTF, authorTF, isbn10TF,
+                        isbn13TF, totalAmTF, currentAmTF, descriptionTF, publisherBtn, typeCB, editionCB,
+                        addNAssignNewResource, update, delete);
+            }
 
         } catch (Exception ex) {
             if (debugging) {
-                showError("Resource data temp", "RES ERROR CODE 588 ", "Hey the resourceTable.getSelectionModel().getSelectedItems().get(0) is not working");
+                showError("Resource data temp", "RES ERROR CODE 588 ",
+                        ex.getStackTrace().toString());
             }
         }
         autoFillBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -1970,8 +1994,12 @@ public class ViewController {
     public void selectProfessor() {
         VBox mainAddPane = new VBox(2);
         profList.clear();
-        profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
-
+        try {
+            profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
 
         Dialog dlg = new Dialog();
 
@@ -2381,7 +2409,14 @@ public class ViewController {
 
     public void selectCourse() {
         ArrayList<Course> tempCourses = new ArrayList<>();
+
+        try{
         templateList = controller.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            templateList = new ArrayList<Course>();
+        }
         VBox mainAddPane = new VBox(2);
         VBox dataInfoPane = new VBox(2);
 
