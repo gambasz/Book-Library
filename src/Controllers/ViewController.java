@@ -55,6 +55,7 @@ public class ViewController {
     private final String updateIconImg = "/Models/media/upload.png";
     private final String deleteIconImg = "/Models/media/delete.png";
     private final String programeIconImg = "/Models/media/icon.png";
+    private boolean isConnected = true;
 
     private int runningLimit = 0;
 
@@ -195,9 +196,11 @@ public class ViewController {
         try {
             DBManager.openConnection();
             defaultSemest = controller.findDefaultSemester();
+            isConnected = true;
 
 
         } catch (FileNotFoundException e) {
+            isConnected = false;
             showError("DBinformation file not found",
                     "The DBinformation.txt file was not found",
                     "The DBinformation.txt file was not found. Press Ok to continue to add Database information.");
@@ -213,6 +216,7 @@ public class ViewController {
         }
         catch (SQLException e) {
             e.printStackTrace();
+            isConnected = false;
             showError("Connection Error", "The database did not return any  data",
                     "Check your internet connection, and database settings provided" +
                             " in DBinformation.txt file\n (hint: You can click on Help button (Question mark button " +
@@ -221,6 +225,7 @@ public class ViewController {
 //            return;
 
         } catch (ClassNotFoundException e) {
+            isConnected = false;
             e.printStackTrace();
         }
 
@@ -336,11 +341,16 @@ public class ViewController {
                     boolean error = false;
                     try {
                         DBManager.openConnection();
+                        isConnected = true;
+
                     } catch (FileNotFoundException e) {
+                        isConnected = false;
                         error = true;
                     } catch (SQLException e) {
+                        isConnected = false;
                         error = true;
                     } catch (ClassNotFoundException e) {
+                        isConnected = false;
                         error = true;
                     }
 
@@ -614,6 +624,9 @@ public class ViewController {
 
     public void search() {
 
+        if (!isConnected)
+            return;
+
         // Searching professor individually: works
         // Searching course individually: works
         // Seraching resource individually: does not work
@@ -646,7 +659,8 @@ public class ViewController {
         semester = semester.toLowerCase();
         semester = semester.substring(0, 1).toUpperCase() + semester.substring(1);
         semester = semester.replace('_', ' ');
-        int semesterid = DBManager.getSemesterIDByName(semester, year);
+
+           int semesterid = DBManager.getSemesterIDByName(semester, year);
 
         semester_ids.addAll(Objects.requireNonNull(DBManager.find_classids_by_semester_id(semesterid)));
 //        Boolean[] searchPattern = getSearchPattern(crnSearchTF, courseSearchTF, profSearchTF, departSearchTF, resourceSearchTF);
@@ -952,7 +966,8 @@ public class ViewController {
             String type = profInfoType.getSelectionModel().getSelectedItem().toString();
 
             tempPers = new Person(lastName, firstName, type);
-            tempPers.setID(DBManager.insertPersonQuery(tempPers));
+            if (isConnected)
+                tempPers.setID(DBManager.insertPersonQuery(tempPers));
 
             tempCour = new Course(
                     0,
@@ -964,14 +979,17 @@ public class ViewController {
                     tempPers,
                     courseInfoDescrip.getText(),
                     tempRes);
-            tempCour.setID(DBManager.insertCourseQuery(tempCour));
+            if (isConnected)
+                tempCour.setID(DBManager.insertCourseQuery(tempCour));
             controller.addNoteAndCRN(tempCour, courseInfoNotes.getText(), courseInfoCRN.getText());
-            tempCour = DBManager.relationalInsertByID2(tempCour);
+            if (isConnected)
+                tempCour = DBManager.relationalInsertByID2(tempCour);
+
             if (isClassInTheSameYear(tempCour)) {
                 courseList.add(tempCour);
             }
 
-
+            if (isConnected)
             DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), tempCour);
 
 
@@ -993,9 +1011,12 @@ public class ViewController {
 
             setTablesSelectionProperty(tableTV);
             setTablesSelectionProperty(resourceTable);
-//            DBManager.openConnection();
 
-            ArrayList<Course> coursesPulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
+
+            ArrayList<Course> coursesPulledDatabase = null;
+
+            if (isConnected)
+                coursesPulledDatabase = DBManager.returnEverything2(defaultSemest.getId());
 
             if (coursesPulledDatabase == null) {
                 showError("Connection Error", "The database did not return any  data",
@@ -1115,7 +1136,8 @@ public class ViewController {
     }
 
     public void exit() {
-        DBManager.closeConnection();
+        if (isConnected)
+            DBManager.closeConnection();
         System.exit(0);
     }
 
@@ -1124,7 +1146,8 @@ public class ViewController {
         if (selectedCourse == null) {
             showError("Error", "Nothing is selected", "Choose a course to delete");
         } else {
-            DBManager.delete_relation_course(selectedCourse);
+            if (isConnected)
+                DBManager.delete_relation_course(selectedCourse);
             courseList.remove(selectedCourse);
             selectedCourse = null;
             updateCourseTable();
@@ -1148,7 +1171,9 @@ public class ViewController {
 
             Course tempCourse = new Course(0, courseInfoTitle.getText(), courseInfoDepart.getText(),
                     courseInfoDescrip.getText());
-            tempCourse.setID(DBManager.insertCourseQuery(tempCourse));
+
+            if (isConnected)
+                tempCourse.setID(DBManager.insertCourseQuery(tempCourse));
             tempCourse.setCommonID(selectedCourse.getCommonID());
 
             ArrayList<Resource> tempResource = new ArrayList<>(resourceTable.getItems());
@@ -1156,18 +1181,19 @@ public class ViewController {
 
             Person updatedPerson = new Person(profInfoLName.getText(), profInfoFName.getText(),
                     profInfoType.getSelectionModel().getSelectedItem().toString());
-            updatedPerson.setID(DBManager.insertPersonQuery(updatedPerson));
+            if (isConnected)
+                updatedPerson.setID(DBManager.insertPersonQuery(updatedPerson));
             tempCourse.setProfessor(updatedPerson);
 
             tempCourse.setYEAR(Integer.parseInt(yearComBoxEdit.getSelectionModel().getSelectedItem().toString()));
             tempCourse.setSEMESTER(semesterComBoxEdit.getSelectionModel().getSelectedItem().toString());
 
+            if (isConnected) {
 
-            DBManager.updateCoursePersonSemester(tempCourse);
-            DBManager.updateRelationCourseResources(tempCourse);
-
-
-            DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), selectedCourse);
+                DBManager.updateCoursePersonSemester(tempCourse);
+                DBManager.updateRelationCourseResources(tempCourse);
+                DBManager.updateCRNAndNoteForClass(courseInfoCRN.getText(), courseInfoNotes.getText(), selectedCourse);
+            }
             controller.copyCourse(selectedCourse, tempCourse);
             controller.addNoteAndCRN(selectedCourse, courseInfoNotes.getText(), courseInfoCRN.getText());
 
@@ -1196,7 +1222,8 @@ public class ViewController {
 
     private void selectPublisher(Button publisherBtn) {
         Dialog dlg = new Dialog();
-        pubList = controller.convertArrayPubPub(Objects.requireNonNull(DBManager.getPublisherFromTable()));
+        if (isConnected)
+            pubList = controller.convertArrayPubPub(Objects.requireNonNull(DBManager.getPublisherFromTable()));
 
         dlg.setTitle("Publisher");
         dlg.setHeaderText("Select Publisher");
@@ -1296,7 +1323,8 @@ public class ViewController {
             } else {
                 deletePublisher(publishersCB.getSelectionModel().getSelectedItem(), nameTF, contactsTF, descriptionTF, publishersCB);
                 publishersCB.getItems().clear();
-                publishersCB.getItems().addAll(controller.convertArrayPubPub(DBManager.getPublisherFromTable()));
+                if (isConnected)
+                    publishersCB.getItems().addAll(controller.convertArrayPubPub(DBManager.getPublisherFromTable()));
 
             }
             //Then refresh the combo boxes
@@ -1313,7 +1341,9 @@ public class ViewController {
 
 
                 //TODO: Khanh, put this thing in if statement
-                if (!DBManager.availablePublisher(selectedPublisher)) {
+
+                if (isConnected)
+                    if (!DBManager.availablePublisher(selectedPublisher)) {
                     pubList.add(selectedPublisher);
                 }
 
@@ -1328,16 +1358,20 @@ public class ViewController {
         if (publisher.getID() == 0) {
             showError("Error", "Missing Publisher", "Please choose publisher in the box");
         } else {
-            DBManager.deletePublisherInDB(publisher);
+            if (isConnected)
+                DBManager.deletePublisherInDB(publisher);
 
             resourceTable.getItems().clear();
-            for (Resource r : resourceTable.getItems()) {
-                DBManager.setPublisherForResource2(r);
+
+            if (isConnected)
+                for (Resource r : resourceTable.getItems()) {
+                    DBManager.setPublisherForResource2(r);
             }
 
-            for (Person p : profList) {
+            if (isConnected)
+                for (Person p : profList) {
                 for (Resource res1 : p.getResources()) {
-                    DBManager.setPublisherForResource2(res1);
+                        DBManager.setPublisherForResource2(res1);
                 }
             }
             publisherComboBox.getItems().remove(publisher);
@@ -1346,8 +1380,11 @@ public class ViewController {
             contacTF.clear();
             descripTF.clear();
             pubList.remove(publisher);
-            courseList = DBManager.returnEverything2(DBManager.getSemesterIDByName(selectedCourse.getSEMESTER(),
+
+            if (isConnected)
+                courseList = DBManager.returnEverything2(DBManager.getSemesterIDByName(selectedCourse.getSEMESTER(),
                     Integer.toString(selectedCourse.getYEAR())));
+
             updateCourseTable();
             resourceTable.getItems().addAll(tableTV.getSelectionModel().getSelectedItem().getResource());
         }
@@ -1708,7 +1745,8 @@ public class ViewController {
                     && selectedResource.getISBN().equals(isbn) && selectedResource.getISBN13().equals(isbn13)
                     && selectedResource.getTotalAmount() == (new_total) && selectedResource.getDescription().equals(new_descrip)
                     && selectedResource.getEdition().equals(new_edition)) {
-                DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
+                if (isConnected)
+                    DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
                 selectedResource.setPublisher(selectedPublisher);
                 tempResArr.add(selectedResource);
 
@@ -1717,8 +1755,12 @@ public class ViewController {
                 tempRes.setIsbn13(isbn13);
                 tempRes.setEdition(new_edition);
                 selectedResource = tempRes.initResourceGUI();
-                DBManager.updateResource(tempRes);
-                DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
+
+                if (isConnected) {
+                    DBManager.updateResource(tempRes);
+                    DBManager.updatePublisherForResource(selectedResource, selectedPublisher);
+                }
+
                 selectedResource.setPublisher(selectedPublisher);
                 tempResArr.add(selectedResource);
             }
@@ -1787,20 +1829,24 @@ public class ViewController {
             temp.setISBN13(isbn13.getText());
             temp.setISBN(isbn10.getText());
             temp.setEdition(editionCB.getSelectionModel().getSelectedItem());
-            DBManager.setIDforResource(temp);
+            if (isConnected)
+                DBManager.setIDforResource(temp);
 
             if (!resourceTable.getItems().contains(temp)) {
 
                 if (!isPersonResourcesView) {
                     resList.add(temp);
                     resourceTable.getItems().add(temp);
-                    DBManager.insertRelationResourcePublisher(temp);
+
+                    if (isConnected)
+                        DBManager.insertRelationResourcePublisher(temp);
 
                 } else {
 
                     resourceTable.getItems().add(temp);
                     selectedPerson.getResources().add(temp);
-                    DBManager.insertRelationResourcePublisher(temp);
+                    if (isConnected)
+                        DBManager.insertRelationResourcePublisher(temp);
 
                 }
             } else {
@@ -1818,7 +1864,8 @@ public class ViewController {
         VBox mainAddPane = new VBox(2);
         Dialog dlg = new Dialog();
 
-        resList = DBManager.getResourceList();
+        if (isConnected)
+            resList = DBManager.getResourceList();
         ImageView icon = new ImageView(this.getClass().getResource(programeIconImg).toString());
         icon.setFitHeight(100);
         icon.setFitWidth(100);
@@ -1865,7 +1912,8 @@ public class ViewController {
 
     private void deleteResource(Resource res) {
         resList.remove(res);
-        DBManager.deleteResourceInDB(res);
+        if (isConnected)
+            DBManager.deleteResourceInDB(res);
         resourceTable.getItems().remove(res);
         for (Course c : courseList) {
             c.getResource().remove(res);
@@ -1911,7 +1959,7 @@ public class ViewController {
             descriptionTF.setText(tempRes.getDescription());
             publisherBtn.setText(tempRes.getPublisher() != null ? tempRes.getPublisher().toString() : "No publisher assigned.Click here.");
 
-
+            if (isConnected)
             if (tempRes.getPublisher() != null && !tempRes.getPublisher().getName().isEmpty()) {
                 if (!DBManager.availablePublisher(tempRes.getPublisher())) {
                     pubList.add(tempRes.getPublisher());
@@ -1995,7 +2043,8 @@ public class ViewController {
         VBox mainAddPane = new VBox(2);
         profList.clear();
         try {
-            profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
+            if (isConnected)
+                profList = controller.convertBackendPersonToFrontendPerson(Objects.requireNonNull(DBManager.getPersonFromTable()));
         }
         catch(Exception e){
             e.printStackTrace();
@@ -2147,7 +2196,8 @@ public class ViewController {
         professor.setFirstName(firstName);
         professor.setLastName(lastName);
         professor.setType(profInfoType.getSelectionModel().getSelectedItem().toString());
-        DBManager.updatePersonGUI(professor);
+
+            DBManager.updatePersonGUI(professor);
 
         refreshTable();
     }
@@ -2173,7 +2223,11 @@ public class ViewController {
         VBox mainPane = new VBox(20);
 
         resourceTable.getItems().clear();
-        Models.backend.Person tempPerson = DBManager.setResourcesForPerson(selectedPerson.initPersonBackend());
+
+        Models.backend.Person tempPerson = null;
+        if (isConnected)
+            tempPerson = DBManager.setResourcesForPerson(selectedPerson.initPersonBackend());
+
         selectedPerson = Objects.requireNonNull(tempPerson).initPersonGUI();
         final Person finalSelectedPerson = selectedPerson;
 
@@ -2206,9 +2260,13 @@ public class ViewController {
         TableColumn diffResourcesTC = createResourceColoumnForDiffView(diffResources);
 
 
-        ArrayList<Resource> allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
+        ArrayList<Resource> allRequiredResources = null;
+
+        if (isConnected)
+            allRequiredResources = DBManager.getAllResourcesNeededForPerson(selectedPerson,
                 semester.getSelectionModel().getSelectedItem().toString(),
                 years.getSelectionModel().getSelectedItem().toString());
+
         profResources.getItems().addAll(selectedPerson.getResources());
         allResources.getItems().addAll(allRequiredResources);
         diffResources.getItems().addAll(allRequiredResources);
@@ -2222,7 +2280,10 @@ public class ViewController {
             if (semester.getSelectionModel().getSelectedItem() != null && years.getSelectionModel().getSelectedItem() != null) {
 
 
-                ArrayList<Resource> allRequiredResourcesRePulled = DBManager.getAllResourcesNeededForPerson(finalSelectedPerson,
+                ArrayList<Resource> allRequiredResourcesRePulled = null;
+
+                if (isConnected)
+                    DBManager.getAllResourcesNeededForPerson(finalSelectedPerson,
                         semester.getSelectionModel().getSelectedItem().toString(),
                         years.getSelectionModel().getSelectedItem().toString());
 
@@ -2337,7 +2398,9 @@ public class ViewController {
         Person tempNewPerson = new Person(lastName, firstName, type
         );
         profList.add(tempNewPerson);
-        DBManager.insertPersonQuery(tempNewPerson);
+        if (isConnected)
+            DBManager.insertPersonQuery(tempNewPerson);
+
         currentProfessors.getSelectionModel().select(tempNewPerson);
     }
 
@@ -2355,8 +2418,11 @@ public class ViewController {
         ButtonType assign = new ButtonType("Assign the Selected Resources", ButtonBar.ButtonData.OK_DONE);
 
         resourceTable.getItems().clear();
-        Models.backend.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
-        selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
+
+        if (isConnected) {
+            Models.backend.Person tempPerson = DBManager.setResourcesForPerson(selectedItem.initPersonBackend());
+            selectedItem = Objects.requireNonNull(tempPerson).initPersonGUI();
+        }
         selectedPerson = selectedItem;
         if (selectedItem.getResources() != null) {
             resourceTable.getItems().addAll(selectedItem.getResources());
@@ -2388,7 +2454,8 @@ public class ViewController {
         dlg.setResultConverter(dialogButton -> {
             if (dialogButton == assign) {
 
-                DBManager.insertPersonResources(selectedPerson);
+                if (isConnected)
+                    DBManager.insertPersonResources(selectedPerson);
 
                 return null;
             }
@@ -2399,8 +2466,9 @@ public class ViewController {
     }
 
     private void deleteProfessor() {
+        if (isConnected)
+            DBManager.deletePersonEveyrwhere(selectedPerson);
 
-        DBManager.deletePersonEveyrwhere(selectedPerson);
         profList.remove(selectedPerson);
         selectedPerson = null;
         refreshTable();
@@ -2411,7 +2479,8 @@ public class ViewController {
         ArrayList<Course> tempCourses = new ArrayList<>();
 
         try{
-        templateList = controller.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
+            if(isConnected)
+                templateList = controller.convertArrayCCBasic(Objects.requireNonNull(DBManager.getCourseFromTable()));
         }
         catch (Exception e){
             e.printStackTrace();
@@ -2553,14 +2622,16 @@ public class ViewController {
                             "is not valid.",
                     "Correct format examples --> CMSC 100, MATH 181 ");
         } else {
-            tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
+            if(isConnected)
+                tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
             templateList.add(tempNewCourseTemplate);
         }
     }
 
     private void deleteCourseTemplate(Course selectedCourseTemplate) {
+        if(isConnected)
+            DBManager.delete_course(selectedCourseTemplate);
 
-        DBManager.delete_course(selectedCourseTemplate);
         templateList.remove(selectedCourseTemplate);
         selectedCourseTemplate = null;
         refreshTable();
@@ -2594,7 +2665,9 @@ public class ViewController {
             course.setDepartment(courseDepart.getText());
             course.setDescription(courseDescrip.getText());
 
-            DBManager.updateCourseGUI(course);
+            if(isConnected)
+                DBManager.updateCourseGUI(course);
+
             refreshTable();
         }
 
@@ -2685,7 +2758,11 @@ public class ViewController {
     }
 
     private void exportData(Boolean[] checkBoxes) {
-        if (checkBoxes[0]) {
+
+            if(!isConnected)
+                return;
+
+            if (checkBoxes[0]) {
             File exportFile = pickSaveFile("All Publishers");
             saveFile(DBManager.exportCSVPublisherInfo(), exportFile);
         }
@@ -2734,6 +2811,9 @@ public class ViewController {
     }
 
     private void refreshTable() {
+
+        if(!isConnected)
+            return;
 
         if (semesterComBox.getValue() == null || yearComBox.getValue() == null)
             courseList = DBManager.returnEverything2(defaultSemest.getId());
