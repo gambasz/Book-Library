@@ -2516,14 +2516,17 @@ public class ViewController {
         departmentTf.setMaxLength(120);
 
         setCourseTemplatesCellValue(courseTemplates);
-        courseTemplates.getItems().addAll(templateList);
+        if (templateList != null)
+            courseTemplates.getItems().addAll(templateList);
         descriptionTf.setMinWidth(150);
 
         addBtn.setOnMouseClicked(e -> {
             Course tempNewCourseTemplate = new Course(-1, tileTf.getText(), departmentTf.getText(), descriptionTf.getText());
+
             addNewCourseTemplate(tempNewCourseTemplate);
             courseTemplates.getItems().clear();
-            courseTemplates.getItems().addAll(templateList);
+            if(templateList != null)
+                courseTemplates.getItems().addAll(templateList);
             courseTemplates.getSelectionModel().select(tempNewCourseTemplate);
 
         });
@@ -2624,7 +2627,8 @@ public class ViewController {
         } else {
             if(isConnected)
                 tempNewCourseTemplate.setID(DBManager.insertCourseQuery(tempNewCourseTemplate));
-            templateList.add(tempNewCourseTemplate);
+            if(templateList != null)
+                templateList.add(tempNewCourseTemplate);
         }
     }
 
