@@ -1,5 +1,4 @@
 # Book Library Manager
-
 Book Library Manager is a project that helps you to create personal book libraries for various people. Also, since it was a project for college, a user can manage prerequisite course textbook/resources. Thus, the application assists program coordinators to keep track of resources required and used by professors during different semesters.
 
 
@@ -11,6 +10,7 @@ Book Library Manager is a project that helps you to create personal book librari
 
 ## Built With
 
+* [JavaFX](https://docs.oracle.com/javase/8/javafx/api/toc.htm) - Used for GUI programming
 * [Google Books API](https://developers.google.com/books/docs/v1/using) - The Searching Books API used
 * [ojdbc8](https://www.oracle.com/technetwork/database/features/jdbc/jdbc-ucp-122-3110062.html) - Oracle SQL database driver
 * [JSON-java](https://github.com/stleary/JSON-java) - Used to parse JSON
