@@ -1,4 +1,5 @@
-# Book Library Manager
+# Book Library Manager ![Build-Status](https://travis-ci.org/sindresorhus/sindresorhus.svg?branch=master )
+
 Book Library Manager is a project that helps you to create personal book libraries for various people. Also, since it was a project for college, a user can manage prerequisite course textbook/resources. Thus, the application assists program coordinators to keep track of resources required and used by professors during different semesters.
 
 
